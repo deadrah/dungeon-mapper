@@ -340,7 +340,7 @@ const Canvas = ({
       if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
         newGrid[actualRow] = [...newGrid[actualRow]]
         // Use gray color for DARK_ZONE, otherwise use selected color
-        const colorToUse = appState.activeTool === TOOLS.DARK_ZONE ? '#808080' : selectedColor
+        const colorToUse = appState.activeTool === TOOLS.DARK_ZONE ? '#b0b0b0' : selectedColor
         newGrid[actualRow][col] = colorToUse
         updateCurrentFloorData('grid', newGrid)
       }
@@ -432,7 +432,7 @@ const Canvas = ({
     const lineTools = ['line'];
     const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
     const fillTools = [TOOLS.BLOCK_COLOR, TOOLS.DARK_ZONE];
-    const otherGridTools = ['chest', 'warp_point', 'pit_trap', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
+    const otherGridTools = ['chest', 'warp_point', 'shute', 'elevator', 'stairs_up_svg', 'stairs_down_svg', 'current_position', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
     
     if (fillTools.includes(appState.activeTool)) {
       // Fill category: Remove fill color only
