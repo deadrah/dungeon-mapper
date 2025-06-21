@@ -11,6 +11,7 @@ const ITEM_ICONS = {
   [TOOLS.ELEVATOR]: 'E',
   [TOOLS.STAIRS_UP_SVG]: '▲',
   [TOOLS.STAIRS_DOWN_SVG]: '▼',
+  [TOOLS.CURRENT_POSITION]: '●',
   [TOOLS.EVENT_MARKER]: '!',
   [TOOLS.NOTE]: '📝',
   [TOOLS.DOOR]: '┤',
@@ -52,8 +53,11 @@ const Items = ({ items, zoom, offset, gridSize }) => {
         const isElevator = item.type === TOOLS.ELEVATOR
         const isStairs = item.type === TOOLS.STAIRS_UP_SVG || item.type === TOOLS.STAIRS_DOWN_SVG
         const isChest = item.type === TOOLS.CHEST
+        const isCurrentPosition = item.type === TOOLS.CURRENT_POSITION
         
         let textColor = 'black'
+        let fontSize = Math.max(12, cellSize * 0.6)
+        
         if (item.type === TOOLS.EVENT_MARKER) {
           textColor = '#ca0101'
         } else if (isElevator) {
@@ -62,6 +66,9 @@ const Items = ({ items, zoom, offset, gridSize }) => {
           textColor = '#0000ff'
         } else if (isChest) {
           textColor = '#ff8c00'  // Dark orange
+        } else if (isCurrentPosition) {
+          textColor = '#dc143c'  // Crimson red
+          fontSize = Math.max(8, cellSize * 0.4)  // Smaller size for current position
         }
         
         const fontWeight = isElevator ? '900' : 'bold'
@@ -75,7 +82,7 @@ const Items = ({ items, zoom, offset, gridSize }) => {
               top: offset.y + (gridSize.rows - 1 - item.row) * cellSize + 24,
               width: cellSize,
               height: cellSize,
-              fontSize: Math.max(12, cellSize * 0.6),
+              fontSize: fontSize,
               backgroundColor: 'transparent',
               color: textColor,
               fontWeight: fontWeight

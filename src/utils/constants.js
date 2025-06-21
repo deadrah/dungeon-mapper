@@ -10,6 +10,7 @@ export const TOOLS = {
   ELEVATOR: 'elevator',
   STAIRS_UP_SVG: 'stairs_up_svg',
   STAIRS_DOWN_SVG: 'stairs_down_svg',
+  CURRENT_POSITION: 'current_position',
   EVENT_MARKER: 'event_marker',
   NOTE: 'note',
   DOOR_OPEN: 'door_open',

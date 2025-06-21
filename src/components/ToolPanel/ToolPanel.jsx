@@ -25,6 +25,7 @@ const TOOL_GROUPS = [
       { id: TOOLS.ELEVATOR, name: 'Elevator', icon: 'E', description: 'Elevator' },
       { id: TOOLS.STAIRS_UP_SVG, name: 'Stairs Up', icon: '▲', description: 'Stairs going up' },
       { id: TOOLS.STAIRS_DOWN_SVG, name: 'Stairs Down', icon: '▼', description: 'Stairs going down' },
+      { id: TOOLS.CURRENT_POSITION, name: 'Current Position', icon: '●', description: 'Current position marker' },
       { id: TOOLS.EVENT_MARKER, name: 'Event', icon: '!', description: 'Event marker' },
       { id: TOOLS.NOTE, name: 'Note', icon: '📝', description: 'Text memo' },
       { id: TOOLS.ARROW_NORTH, name: '↑ Arrow', icon: '↑', description: 'North arrow' },
