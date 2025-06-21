@@ -165,10 +165,16 @@ const Canvas = ({
     
     const actualRow = appState.gridSize.rows - 1 - row;
     
-    const existingWallIndex = floorData.walls.findIndex(wall => 
-      wall.startRow === actualRow && wall.startCol === col &&
-      ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol))
-    )
+    const existingWallIndex = floorData.walls.findIndex(wall => {
+      // Exact match for position and direction
+      if (isVertical) {
+        // Vertical wall: must start at this position and be vertical
+        return wall.startRow === actualRow && wall.startCol === col && wall.endRow === actualRow + 1 && wall.endCol === col
+      } else {
+        // Horizontal wall: must start at this position and be horizontal  
+        return wall.startRow === actualRow && wall.startCol === col && wall.endRow === actualRow && wall.endCol === col + 1
+      }
+    })
     
     if (appState.activeTool === 'line') {
       if (existingWallIndex === -1) {
@@ -318,35 +324,8 @@ const Canvas = ({
         newGrid[actualRow][col] = selectedColor
         updateCurrentFloorData('grid', newGrid)
       }
-    } else if (appState.activeTool === 'door_open' || appState.activeTool === 'door_closed' || 
-               appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south' ||
-               appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west') {
-      // Door tool - place doors on existing walls
-      const existingWall = floorData.walls.find(wall => 
-        wall.startRow === actualRow && wall.startCol === col &&
-        ((wall.startCol === wall.endCol) || (wall.startRow === wall.endRow))
-      )
-      
-      if (existingWall) {
-        // Check if there's already a door on this wall
-        const existingDoorIndex = floorData.doors?.findIndex(door => 
-          door.startRow === actualRow && door.startCol === col
-        ) ?? -1
-        
-        if (existingDoorIndex === -1) {
-          // Add new door on the wall
-          const newDoor = {
-            type: appState.activeTool,
-            startRow: actualRow,
-            startCol: col,
-            endRow: existingWall.endRow,
-            endCol: existingWall.endCol,
-            id: Date.now() + Math.random()
-          }
-          const newDoors = [...(floorData.doors || []), newDoor]
-          updateCurrentFloorData('doors', newDoors)
-        }
-      }
+      // Note: Door tools should be handled via handleLineClick, not handleGridClick
+      // Grid clicks are only for items that go in cell centers
     } else if (appState.activeTool === TOOLS.NOTE) {
       // Special handling for NOTE tool - open dialog
       const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
