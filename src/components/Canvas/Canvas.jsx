@@ -358,29 +358,45 @@ const Canvas = ({
         text: existingText
       })
     } else if (Object.values(TOOLS).includes(appState.activeTool) && appState.activeTool !== TOOLS.DARK_ZONE) {
-      // Check if there's already an item at this position
-      const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col)
-      
-      if (existingItemIndex === -1) {
-        // Add new item
+      // Special handling for CURRENT_POSITION - only one per floor
+      if (appState.activeTool === TOOLS.CURRENT_POSITION) {
+        // Remove any existing current position markers on this floor
+        const itemsWithoutCurrentPos = floorData.items.filter(item => item.type !== TOOLS.CURRENT_POSITION)
+        
+        // Add new current position marker
         const newItem = {
           type: appState.activeTool,
           row: actualRow,
           col,
           id: Date.now() + Math.random()
         }
-        const newItems = [...floorData.items, newItem]
+        const newItems = [...itemsWithoutCurrentPos, newItem]
         updateCurrentFloorData('items', newItems)
       } else {
-        // Replace existing item with new type
-        const newItems = [...floorData.items]
-        newItems[existingItemIndex] = {
-          type: appState.activeTool,
-          row: actualRow,
-          col,
-          id: Date.now() + Math.random()
+        // Check if there's already an item at this position
+        const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col)
+        
+        if (existingItemIndex === -1) {
+          // Add new item
+          const newItem = {
+            type: appState.activeTool,
+            row: actualRow,
+            col,
+            id: Date.now() + Math.random()
+          }
+          const newItems = [...floorData.items, newItem]
+          updateCurrentFloorData('items', newItems)
+        } else {
+          // Replace existing item with new type
+          const newItems = [...floorData.items]
+          newItems[existingItemIndex] = {
+            type: appState.activeTool,
+            row: actualRow,
+            col,
+            id: Date.now() + Math.random()
+          }
+          updateCurrentFloorData('items', newItems)
         }
-        updateCurrentFloorData('items', newItems)
       }
     }
   }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, updateCurrentFloorData])
