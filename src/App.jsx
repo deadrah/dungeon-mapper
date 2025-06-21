@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react'
 import { useAppState } from './hooks/useAppState'
 import Header from './components/Header/Header'
-import ToolPanel from './components/ToolPanel/ToolPanel'
+import ToolPanel, { getToolKeyMappings } from './components/ToolPanel/ToolPanel'
 import Canvas from './components/Canvas/Canvas'
 import { TOOLS } from './utils/constants'
 
@@ -45,13 +45,15 @@ function App() {
             redo()
             break
         }
-      }
-      
-      // Tool selection with number keys
-      const toolKeys = Object.values(TOOLS)
-      const num = parseInt(e.key)
-      if (num >= 1 && num <= toolKeys.length) {
-        setActiveTool(toolKeys[num - 1])
+      } else {
+        // Tool selection with custom key mappings
+        const keyMappings = getToolKeyMappings()
+        const pressedKey = e.key.toLowerCase()
+        
+        if (keyMappings[pressedKey]) {
+          e.preventDefault()
+          setActiveTool(keyMappings[pressedKey])
+        }
       }
     }
 
