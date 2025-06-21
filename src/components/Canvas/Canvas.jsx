@@ -163,8 +163,21 @@ const Canvas = ({
       }
     }
     
-    const actualRow = appState.gridSize.rows - 1 - row;
+    // Coordinate transformation
+    let actualRow;
+    if (isVertical) {
+      actualRow = appState.gridSize.rows - 1 - row;
+    } else {
+      // For horizontal lines: row = gridSize.rows represents the top boundary line
+      // This should create a wall at the top of the topmost cell (actualRow = gridSize.rows - 1)
+      if (row === appState.gridSize.rows) {
+        actualRow = appState.gridSize.rows - 1; // Top boundary
+      } else {
+        actualRow = appState.gridSize.rows - 1 - row;
+      }
+    }
     
+
     const existingWallIndex = floorData.walls.findIndex(wall => {
       // Exact match for position and direction
       if (isVertical) {
@@ -217,14 +230,19 @@ const Canvas = ({
         // Found existing wall, place door/arrow on it
         const existingWall = floorData.walls[existingWallIndex]
         
-        // Check if there's already a door on this wall
-        const existingDoorIndex = floorData.doors?.findIndex(door => 
-          door.startRow === actualRow && door.startCol === col
-        ) ?? -1
+        // Check if there's already a door on this specific wall (same position AND direction)
+        const wallIsVertical = existingWall.startCol === existingWall.endCol
+        const existingDoorIndex = floorData.doors?.findIndex(door => {
+          if (door.startRow === actualRow && door.startCol === col) {
+            // Same position, check if same wall direction
+            const doorIsVertical = door.startCol === door.endCol
+            return doorIsVertical === wallIsVertical
+          }
+          return false
+        }) ?? -1
         
         if (existingDoorIndex === -1) {
           // Check if the arrow tool is compatible with the wall direction
-          const wallIsVertical = existingWall.startCol === existingWall.endCol
           const isArrowTool = appState.activeTool.startsWith('line_arrow_')
           
           let canPlace = true

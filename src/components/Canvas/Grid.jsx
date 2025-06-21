@@ -222,6 +222,7 @@ const Grid = ({
             {/* Horizontal line areas */}
             {(!isDraggingLine || dragLineType === 'horizontal') && Array.from({ length: Math.min(endRow - startRow + 1, gridSize.rows + 1) }, (_, i) => startRow + i).map(row =>
               Array.from({ length: Math.min(endCol - startCol, gridSize.cols) }, (_, i) => startCol + i).map(col => {
+                // Allow horizontal lines at gridSize.rows (top boundary line)
                 if (row > gridSize.rows || col >= gridSize.cols) return null;
                 
                 // During horizontal line dragging, only enable areas in the same row
