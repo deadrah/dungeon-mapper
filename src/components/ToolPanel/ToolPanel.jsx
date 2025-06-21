@@ -18,8 +18,8 @@ const TOOL_GROUPS = [
     name: 'Grid Tools',
     tools: [
       { id: TOOLS.BLOCK_COLOR, name: 'Fill', icon: '■', description: 'Fill grid blocks' },
-      { id: TOOLS.CHEST, name: 'Chest', icon: '□', description: 'Treasure chest' },
       { id: TOOLS.DARK_ZONE, name: 'Dark Zone', icon: '●', description: 'Dark area' },
+      { id: TOOLS.CHEST, name: 'Chest', icon: '□', description: 'Treasure chest' },
       { id: TOOLS.WARP_POINT, name: 'Warp', icon: '◊', description: 'Teleport point' },
       { id: TOOLS.PIT_TRAP, name: 'Pit Trap', icon: '○', description: 'Pit trap' },
       { id: TOOLS.EVENT_MARKER, name: 'Event', icon: '!', description: 'Event marker' },
