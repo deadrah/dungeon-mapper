@@ -26,7 +26,7 @@ const Doors = ({ doors, zoom, offset, gridSize }) => {
         }
         
         if (isVertical) {
-          // Vertical door: centered on vertical line
+          // Vertical door: centered on vertical line (use coordinate transformation)
           const displayRow = gridSize.rows - 1 - door.startRow;
           const centerX = offset.x + door.startCol * cellSize + 24;
           const centerY = offset.y + displayRow * cellSize + 24;
@@ -71,8 +71,8 @@ const Doors = ({ doors, zoom, offset, gridSize }) => {
             </div>
           )
         } else {
-          // Horizontal door: centered on horizontal line
-          const displayRow = gridSize.rows - 1 - door.startRow;
+          // Horizontal door: centered on horizontal line (no coordinate transformation)
+          const displayRow = door.startRow;
           const centerX = offset.x + door.startCol * cellSize + 24;
           const centerY = offset.y + displayRow * cellSize + 24;
           const doorWidth = isArrow ? cellSize * 0.5 : cellSize * 0.4;
