@@ -11,15 +11,15 @@ const TOOL_GROUPS = [
       { id: TOOLS.DOOR_CLOSED, name: 'Door Closed [3]', icon: '█', description: 'Closed door (black)', key: '3' },
       { id: TOOLS.LINE_ARROW_NORTH, name: 'Line Arrow', icon: '↑', description: 'One-way door north', key: '' },
       { id: TOOLS.LINE_ARROW_SOUTH, name: 'Line Arrow', icon: '↓', description: 'One-way door south', key: '' },
-      { id: TOOLS.LINE_ARROW_EAST, name: 'Line Arrow', icon: '→', description: 'One-way door east', key: '' },
       { id: TOOLS.LINE_ARROW_WEST, name: 'Line Arrow', icon: '←', description: 'One-way door west', key: '' },
+      { id: TOOLS.LINE_ARROW_EAST, name: 'Line Arrow', icon: '→', description: 'One-way door east', key: '' },
     ]
   },
   {
     name: 'Grid Tools',
     tools: [
       { id: TOOLS.BLOCK_COLOR, name: 'Fill [4]', icon: '■', description: 'Fill grid blocks', key: '4' },
-      { id: TOOLS.DARK_ZONE, name: 'Dark Zone', icon: '●', description: 'Dark area', key: '' },
+      { id: TOOLS.DARK_ZONE, name: 'Dark Zone', icon: 'Ξ', description: 'Dark area', key: '' },
       { id: TOOLS.CHEST, name: 'Chest [5]', icon: '□', description: 'Treasure chest', key: '5' },
       { id: TOOLS.WARP_POINT, name: 'Warp', icon: '◊', description: 'Teleport point', key: '' },
       { id: TOOLS.SHUTE, name: 'Shute', icon: '●', description: 'Shute', key: 'E' },
@@ -30,8 +30,8 @@ const TOOL_GROUPS = [
       { id: TOOLS.NOTE, name: 'Note', icon: '📝', description: 'Text memo', key: '' },
       { id: TOOLS.ARROW_NORTH, name: 'Arrow', icon: '↑', description: 'North arrow', key: '' },
       { id: TOOLS.ARROW_SOUTH, name: 'Arrow', icon: '↓', description: 'South arrow', key: '' },
-      { id: TOOLS.ARROW_EAST, name: 'Arrow', icon: '→', description: 'East arrow', key: '' },
       { id: TOOLS.ARROW_WEST, name: 'Arrow', icon: '←', description: 'West arrow', key: '' },
+      { id: TOOLS.ARROW_EAST, name: 'Arrow', icon: '→', description: 'East arrow', key: '' },
       { id: TOOLS.CURRENT_POSITION, name: 'Current Position [q]', icon: '●', description: 'Current position marker', key: 'q' }
     ]
   }
