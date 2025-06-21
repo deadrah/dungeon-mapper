@@ -311,7 +311,7 @@ const Canvas = ({
     
     const actualRow = appState.gridSize.rows - 1 - row;
     
-    if (appState.activeTool === 'block_color') {
+    if (appState.activeTool === TOOLS.BLOCK_COLOR) {
       const newGrid = [...floorData.grid]
       if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
         newGrid[actualRow] = [...newGrid[actualRow]]
@@ -432,7 +432,7 @@ const Canvas = ({
     // Define tool categories
     const lineTools = ['line'];
     const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
-    const fillTools = ['block_color'];
+    const fillTools = [TOOLS.BLOCK_COLOR];
     const otherGridTools = ['chest', 'dark_zone', 'warp_point', 'pit_trap', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
     
     if (fillTools.includes(appState.activeTool)) {
@@ -570,8 +570,8 @@ const Canvas = ({
       </div>
       
       {/* Color picker for block color tool */}
-      {appState.activeTool === 'block_color' && (
-        <div className="absolute top-4 right-4 bg-white p-2 rounded shadow-lg">
+      {appState.activeTool === TOOLS.BLOCK_COLOR && (
+        <div className="absolute top-4 right-4 bg-white p-2 rounded shadow-lg z-50">
           <input
             type="color"
             value={selectedColor}

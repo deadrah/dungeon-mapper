@@ -1,5 +1,5 @@
 import React from 'react'
-import { GRID_SIZE } from '../../utils/constants'
+import { GRID_SIZE, TOOLS } from '../../utils/constants'
 
 const Grid = ({ 
   gridSize, 
@@ -176,9 +176,9 @@ const Grid = ({
         )}
 
         {/* Grid cell clickable areas - only for non-line tools */}
-        {(activeTool !== 'line' && activeTool !== 'door_open' && activeTool !== 'door_closed' && 
-          activeTool !== 'line_arrow_north' && activeTool !== 'line_arrow_south' &&
-          activeTool !== 'line_arrow_east' && activeTool !== 'line_arrow_west') && 
+        {(activeTool !== TOOLS.LINE && activeTool !== TOOLS.DOOR_OPEN && activeTool !== TOOLS.DOOR_CLOSED && 
+          activeTool !== TOOLS.LINE_ARROW_NORTH && activeTool !== TOOLS.LINE_ARROW_SOUTH &&
+          activeTool !== TOOLS.LINE_ARROW_EAST && activeTool !== TOOLS.LINE_ARROW_WEST) && 
          Array.from({ length: Math.min(endRow - startRow, gridSize.rows) }, (_, i) => startRow + i).map(row =>
           Array.from({ length: Math.min(endCol - startCol, gridSize.cols) }, (_, i) => startCol + i).map(col => {
             if (row >= gridSize.rows || col >= gridSize.cols) return null;
