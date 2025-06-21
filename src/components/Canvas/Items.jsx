@@ -4,7 +4,7 @@ import { GRID_SIZE, TOOLS } from '../../utils/constants'
 const ITEM_ICONS = {
   [TOOLS.STAIRS_UP]: '↑',
   [TOOLS.STAIRS_DOWN]: '↓',
-  [TOOLS.CHEST]: '□',
+  [TOOLS.CHEST]: '🧰',
   [TOOLS.DARK_ZONE]: '●',
   [TOOLS.WARP_POINT]: '◊',
   [TOOLS.SHUTE]: '●',
