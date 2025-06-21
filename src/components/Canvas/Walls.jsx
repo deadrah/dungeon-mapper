@@ -15,7 +15,7 @@ const Walls = ({ walls, zoom, offset, gridSize }) => {
           const isVertical = wall.startCol === wall.endCol;
           
           if (isVertical) {
-            // Vertical line: startRow and endRow represent the grid line positions
+            // Vertical line: startRow and endRow represent the grid line positions with coordinate transformation
             const displayRow = gridSize.rows - 1 - wall.startRow;
             return (
               <line
@@ -30,8 +30,8 @@ const Walls = ({ walls, zoom, offset, gridSize }) => {
               />
             )
           } else {
-            // Horizontal line: use normal coordinate transformation
-            const displayRow = gridSize.rows - 1 - wall.startRow;
+            // Horizontal line: startRow is already in the correct coordinate system
+            const displayRow = wall.startRow;
             return (
               <line
                 key={wall.id || index}

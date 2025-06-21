@@ -104,7 +104,13 @@ const Canvas = ({
       }
     }
     
-    const actualRow = appState.gridSize.rows - 1 - row;
+    // Use consistent coordinate transformation
+    let actualRow;
+    if (isVertical) {
+      actualRow = appState.gridSize.rows - 1 - row;
+    } else {
+      actualRow = row;
+    }
     
     if (isDraggingErase) {
       // Remove wall at this position
@@ -168,13 +174,9 @@ const Canvas = ({
     if (isVertical) {
       actualRow = appState.gridSize.rows - 1 - row;
     } else {
-      // For horizontal lines: row = gridSize.rows represents the top boundary line
-      // This should create a wall at the top of the topmost cell (actualRow = gridSize.rows - 1)
-      if (row === appState.gridSize.rows) {
-        actualRow = appState.gridSize.rows - 1; // Top boundary
-      } else {
-        actualRow = appState.gridSize.rows - 1 - row;
-      }
+      // For horizontal lines, use direct mapping without special cases
+      // row represents the actual row position in the data model
+      actualRow = row;
     }
     
 
@@ -289,7 +291,13 @@ const Canvas = ({
       }
     }
     
-    const actualRow = appState.gridSize.rows - 1 - row;
+    // Use consistent coordinate transformation with handleLineClick
+    let actualRow;
+    if (isVertical) {
+      actualRow = appState.gridSize.rows - 1 - row;
+    } else {
+      actualRow = row;
+    }
     
     // Start erase dragging mode - wait for mouse movement to determine direction
     setIsDraggingErase(true)
