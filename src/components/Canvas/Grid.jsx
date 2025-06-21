@@ -108,6 +108,91 @@ const Grid = ({
         ))}
       </div>
 
+      {/* Right row headers */}
+      <div className="absolute z-10 bg-gray-100 border-l" style={{ left: offset.x + gridSize.cols * cellSize + 24 }}>
+        {Array.from({ length: endRow - startRow }, (_, i) => startRow + i).map(row => {
+          const displayRow = gridSize.rows - 1 - row;
+          return (
+            <div
+              key={`row-header-right-${row}`}
+              className="text-xs text-gray-600 px-1 border-b flex items-center justify-center font-mono"
+              style={{
+                position: 'absolute',
+                top: offset.y + row * cellSize + 24,
+                height: cellSize,
+                width: '24px',
+                fontSize: Math.max(8, Math.min(12, cellSize * 0.3))
+              }}
+            >
+              {displayRow < 10 ? `0${displayRow}` : displayRow}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Bottom column headers */}
+      <div className="absolute z-10 bg-gray-100 border-t" style={{ top: offset.y + gridSize.rows * cellSize + 24 }}>
+        {Array.from({ length: endCol - startCol }, (_, i) => startCol + i).map(col => (
+          <div
+            key={`col-header-bottom-${col}`}
+            className="text-xs text-gray-600 py-1 border-r flex items-center justify-center font-mono"
+            style={{
+              position: 'absolute',
+              left: offset.x + col * cellSize + 24,
+              width: cellSize,
+              height: '24px',
+              fontSize: Math.max(8, Math.min(12, cellSize * 0.3))
+            }}
+          >
+            {col < 10 ? `0${col}` : col}
+          </div>
+        ))}
+      </div>
+
+      {/* Corner decorations */}
+      {/* Top-left corner */}
+      <div 
+        className="absolute z-10 bg-gray-200 border-r border-b" 
+        style={{
+          left: offset.x,
+          top: offset.y,
+          width: '24px',
+          height: '24px'
+        }}
+      />
+      
+      {/* Top-right corner */}
+      <div 
+        className="absolute z-10 bg-gray-200 border-l border-b" 
+        style={{
+          left: offset.x + gridSize.cols * cellSize + 24,
+          top: offset.y,
+          width: '24px',
+          height: '24px'
+        }}
+      />
+      
+      {/* Bottom-left corner */}
+      <div 
+        className="absolute z-10 bg-gray-200 border-r border-t" 
+        style={{
+          left: offset.x,
+          top: offset.y + gridSize.rows * cellSize + 24,
+          width: '24px',
+          height: '24px'
+        }}
+      />
+      
+      {/* Bottom-right corner */}
+      <div 
+        className="absolute z-10 bg-gray-200 border-l border-t" 
+        style={{
+          left: offset.x + gridSize.cols * cellSize + 24,
+          top: offset.y + gridSize.rows * cellSize + 24,
+          width: '24px',
+          height: '24px'
+        }}
+      />
 
       <svg
         width={viewportSize.width}
