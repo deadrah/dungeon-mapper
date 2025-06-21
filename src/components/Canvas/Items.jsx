@@ -32,12 +32,11 @@ const Items = ({ items, zoom, offset, gridSize }) => {
             width: cellSize,
             height: cellSize,
             fontSize: Math.max(12, cellSize * 0.6),
-            backgroundColor: item.type === TOOLS.DARK_ZONE ? 'rgba(0,0,0,0.3)' : 'transparent',
-            color: item.type === TOOLS.DARK_ZONE ? 'white' : 
-                   item.type === TOOLS.EVENT_MARKER ? '#ca0101' : 'black'
+            backgroundColor: 'transparent',
+            color: item.type === TOOLS.EVENT_MARKER ? '#ca0101' : 'black'
           }}
         >
-          {item.type === TOOLS.DARK_ZONE ? '' : (ITEM_ICONS[item.type] || '?')}
+          {ITEM_ICONS[item.type] || '?'}
         </div>
       ))}
     </div>

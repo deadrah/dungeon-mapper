@@ -335,11 +335,13 @@ const Canvas = ({
     
     const actualRow = appState.gridSize.rows - 1 - row;
     
-    if (appState.activeTool === TOOLS.BLOCK_COLOR) {
+    if (appState.activeTool === TOOLS.BLOCK_COLOR || appState.activeTool === TOOLS.DARK_ZONE) {
       const newGrid = [...floorData.grid]
       if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
         newGrid[actualRow] = [...newGrid[actualRow]]
-        newGrid[actualRow][col] = selectedColor
+        // Use gray color for DARK_ZONE, otherwise use selected color
+        const colorToUse = appState.activeTool === TOOLS.DARK_ZONE ? '#808080' : selectedColor
+        newGrid[actualRow][col] = colorToUse
         updateCurrentFloorData('grid', newGrid)
       }
       // Note: Door tools should be handled via handleLineClick, not handleGridClick
@@ -355,7 +357,7 @@ const Canvas = ({
         col,
         text: existingText
       })
-    } else if (Object.values(TOOLS).includes(appState.activeTool)) {
+    } else if (Object.values(TOOLS).includes(appState.activeTool) && appState.activeTool !== TOOLS.DARK_ZONE) {
       // Check if there's already an item at this position
       const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col)
       
@@ -429,8 +431,8 @@ const Canvas = ({
     // Define tool categories
     const lineTools = ['line'];
     const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
-    const fillTools = [TOOLS.BLOCK_COLOR];
-    const otherGridTools = ['chest', 'dark_zone', 'warp_point', 'pit_trap', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
+    const fillTools = [TOOLS.BLOCK_COLOR, TOOLS.DARK_ZONE];
+    const otherGridTools = ['chest', 'warp_point', 'pit_trap', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
     
     if (fillTools.includes(appState.activeTool)) {
       // Fill category: Remove fill color only

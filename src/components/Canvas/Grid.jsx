@@ -109,7 +109,7 @@ const Grid = ({
       </div>
 
       {/* Right row headers */}
-      <div className="absolute z-10 bg-gray-100 border-l" style={{ left: offset.x + gridSize.cols * cellSize + 24 }}>
+      <div className="absolute left-0 top-0 z-10 bg-gray-100 border-l">
         {Array.from({ length: endRow - startRow }, (_, i) => startRow + i).map(row => {
           const displayRow = gridSize.rows - 1 - row;
           return (
@@ -118,6 +118,7 @@ const Grid = ({
               className="text-xs text-gray-600 px-1 border-b flex items-center justify-center font-mono"
               style={{
                 position: 'absolute',
+                left: offset.x + gridSize.cols * cellSize + 24,
                 top: offset.y + row * cellSize + 24,
                 height: cellSize,
                 width: '24px',
