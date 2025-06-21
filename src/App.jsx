@@ -8,7 +8,9 @@ import { TOOLS } from './utils/constants'
 function App() {
   const {
     state,
+    setCurrentMap,
     setCurrentFloor,
+    setMapName,
     setZoom,
     setActiveTool,
     setGridSize,
@@ -60,9 +62,12 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-100">
       <Header
+        currentMap={state.currentMap}
         currentFloor={state.currentFloor}
-        maxFloors={state.maxFloors}
+        setCurrentMap={setCurrentMap}
         setCurrentFloor={setCurrentFloor}
+        mapNames={state.mapNames || {}}
+        setMapName={setMapName}
         zoom={state.zoom}
         setZoom={setZoom}
         gridSize={state.gridSize}

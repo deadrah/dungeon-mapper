@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { MAX_FLOORS, MAX_MAPS } from '../../utils/constants'
 
 const Header = ({ 
+  currentMap,
   currentFloor, 
-  maxFloors, 
-  setCurrentFloor, 
+  setCurrentMap,
+  setCurrentFloor,
+  mapNames,
+  setMapName,
   zoom, 
   setZoom,
   onExport,
@@ -14,6 +18,9 @@ const Header = ({
   onGridSizeChange,
   onResetFloor
 }) => {
+  const [editingMapId, setEditingMapId] = useState(null)
+  const [editingMapName, setEditingMapName] = useState('')
+
   const handleZoomIn = () => setZoom(Math.min(5, zoom * 1.2))
   const handleZoomOut = () => setZoom(Math.max(0.1, zoom * 0.8))
   const handleZoomReset = () => setZoom(1)
@@ -22,6 +29,24 @@ const Header = ({
     if (window.confirm(`Floor ${currentFloor}のすべてのデータを削除しますか？この操作は元に戻せません。`)) {
       onResetFloor()
     }
+  }
+
+  const handleMapNameEdit = (mapId) => {
+    setEditingMapId(mapId)
+    setEditingMapName(mapNames[mapId] || `Map ${mapId}`)
+  }
+
+  const handleMapNameSave = () => {
+    if (editingMapName.trim()) {
+      setMapName(editingMapId, editingMapName.trim())
+    }
+    setEditingMapId(null)
+    setEditingMapName('')
+  }
+
+  const handleMapNameCancel = () => {
+    setEditingMapId(null)
+    setEditingMapName('')
   }
   
   const handleImportClick = () => {
@@ -43,13 +68,35 @@ const Header = ({
         <h1 className="text-lg font-bold">DMapper</h1>
         
         <div className="flex items-center space-x-2">
+          <span className="text-sm">Map:</span>
+          <select
+            value={currentMap}
+            onChange={(e) => setCurrentMap(parseInt(e.target.value))}
+            className="bg-gray-600 text-white px-2 py-1 rounded text-sm"
+          >
+            {Array.from({ length: MAX_MAPS }, (_, i) => i + 1).map(mapId => (
+              <option key={mapId} value={mapId}>
+                {mapNames[mapId] || `Map ${mapId}`}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={() => handleMapNameEdit(currentMap)}
+            className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded text-sm"
+            title="Rename Current Map"
+          >
+            Rename
+          </button>
+        </div>
+
+        <div className="flex items-center space-x-2">
           <span className="text-sm">Floor:</span>
           <select
             value={currentFloor}
             onChange={(e) => setCurrentFloor(parseInt(e.target.value))}
             className="bg-gray-600 text-white px-2 py-1 rounded text-sm"
           >
-            {Array.from({ length: maxFloors }, (_, i) => i + 1).map(floor => (
+            {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floor => (
               <option key={floor} value={floor}>
                 {floor}
               </option>
@@ -156,6 +203,46 @@ const Header = ({
           </button>
         </div>
       </div>
+      
+      {/* Map Rename Dialog */}
+      {editingMapId && (
+        <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <div className="bg-white rounded-lg p-6 w-96 max-w-full mx-4">
+            <h2 className="text-lg font-bold mb-4 text-black">Rename Map</h2>
+            
+            <input
+              type="text"
+              value={editingMapName}
+              onChange={(e) => setEditingMapName(e.target.value)}
+              placeholder="Map name..."
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleMapNameSave()
+                } else if (e.key === 'Escape') {
+                  handleMapNameCancel()
+                }
+              }}
+            />
+            
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={handleMapNameCancel}
+                className="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleMapNameSave}
+                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

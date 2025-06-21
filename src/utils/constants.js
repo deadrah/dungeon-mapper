@@ -39,3 +39,5 @@ export const COLORS = [
 export const GRID_SIZE = 40 // Size of each grid cell in pixels
 export const MIN_ZOOM = 0.1
 export const MAX_ZOOM = 5
+export const MAX_FLOORS = 30
+export const MAX_MAPS = 10

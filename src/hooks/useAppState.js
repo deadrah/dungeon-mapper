@@ -1,18 +1,35 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { MAX_FLOORS, MAX_MAPS } from '../utils/constants'
+
+const createEmptyFloor = (gridSize) => ({
+  grid: new Array(gridSize.rows).fill(null).map(() => new Array(gridSize.cols).fill(null)),
+  walls: [],
+  items: [],
+  doors: []
+})
+
+const createEmptyMap = (gridSize) => {
+  const floors = {}
+  for (let i = 1; i <= MAX_FLOORS; i++) {
+    floors[i] = createEmptyFloor(gridSize)
+  }
+  return floors
+}
 
 const INITIAL_STATE = {
+  currentMap: 1,
   currentFloor: 1,
-  maxFloors: 10,
   gridSize: { rows: 20, cols: 20 },
   zoom: 1.0,
   activeTool: 'block_color',
-  floors: {
+  maps: {
     1: {
-      grid: new Array(20).fill(null).map(() => new Array(20).fill(null)),
-      walls: [],
-      items: [],
-      doors: []
+      name: 'Map 1',
+      floors: createEmptyMap({ rows: 20, cols: 20 })
     }
+  },
+  mapNames: {
+    1: 'Map 1'
   }
 }
 
@@ -24,12 +41,60 @@ const loadStateFromStorage = () => {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
       const parsedState = JSON.parse(saved)
-      // Ensure doors property exists for all floors
-      Object.keys(parsedState.floors).forEach(floorKey => {
-        if (!parsedState.floors[floorKey].doors) {
-          parsedState.floors[floorKey].doors = []
+      
+      // Check if it's old format (has floors property directly)
+      if (parsedState.floors && !parsedState.maps) {
+        // Convert old format to new format
+        const convertedState = {
+          currentMap: 1,
+          currentFloor: parsedState.currentFloor || 1,
+          gridSize: parsedState.gridSize || { rows: 20, cols: 20 },
+          zoom: parsedState.zoom || 1.0,
+          activeTool: parsedState.activeTool || 'block_color',
+          maps: {
+            1: {
+              name: 'Map 1',
+              floors: {}
+            }
+          },
+          mapNames: {
+            1: 'Map 1'
+          }
         }
-      })
+        
+        // Convert old floors to new format and ensure doors property exists
+        Object.keys(parsedState.floors).forEach(floorKey => {
+          const floor = parsedState.floors[floorKey]
+          if (!floor.doors) {
+            floor.doors = []
+          }
+          convertedState.maps[1].floors[floorKey] = floor
+        })
+        
+        // Fill missing floors up to MAX_FLOORS
+        for (let i = 1; i <= MAX_FLOORS; i++) {
+          if (!convertedState.maps[1].floors[i]) {
+            convertedState.maps[1].floors[i] = createEmptyFloor(convertedState.gridSize)
+          }
+        }
+        
+        return convertedState
+      }
+      
+      // New format - ensure doors property exists for all floors in all maps
+      if (parsedState.maps) {
+        Object.keys(parsedState.maps).forEach(mapKey => {
+          const map = parsedState.maps[mapKey]
+          if (map.floors) {
+            Object.keys(map.floors).forEach(floorKey => {
+              if (!map.floors[floorKey].doors) {
+                map.floors[floorKey].doors = []
+              }
+            })
+          }
+        })
+      }
+      
       return parsedState
     }
   } catch (error) {
@@ -95,46 +160,75 @@ export const useAppState = () => {
     }
   }, [])
 
+  const setCurrentMap = useCallback((mapId) => {
+    updateState(state => {
+      if (!state.maps[mapId]) {
+        state.maps[mapId] = {
+          name: `Map ${mapId}`,
+          floors: createEmptyMap(state.gridSize)
+        }
+        state.mapNames[mapId] = `Map ${mapId}`
+      }
+      return { ...state, currentMap: mapId }
+    })
+  }, [updateState])
+
   const setCurrentFloor = useCallback((floor) => {
     updateState(state => {
-      if (!state.floors[floor]) {
-        state.floors[floor] = {
-          grid: new Array(state.gridSize.rows).fill(null).map(() => new Array(state.gridSize.cols).fill(null)),
-          walls: [],
-          items: [],
-          doors: []
-        }
+      const currentMap = state.maps[state.currentMap]
+      if (!currentMap.floors[floor]) {
+        currentMap.floors[floor] = createEmptyFloor(state.gridSize)
       }
       return { ...state, currentFloor: floor }
     })
+  }, [updateState])
+
+  const setMapName = useCallback((mapId, name) => {
+    updateState(state => ({
+      ...state,
+      maps: {
+        ...state.maps,
+        [mapId]: {
+          ...state.maps[mapId],
+          name
+        }
+      },
+      mapNames: {
+        ...state.mapNames,
+        [mapId]: name
+      }
+    }))
   }, [updateState])
 
   const setGridSize = useCallback((newSize) => {
     updateState(state => {
       const newState = { ...state, gridSize: newSize }
       
-      // Update all floors to match new grid size
-      Object.keys(newState.floors).forEach(floorKey => {
-        const oldGrid = newState.floors[floorKey].grid
-        const newGrid = new Array(newSize.rows).fill(null).map(() => new Array(newSize.cols).fill(null))
-        
-        // Copy existing data that fits in new grid
-        for (let row = 0; row < Math.min(oldGrid.length, newSize.rows); row++) {
-          for (let col = 0; col < Math.min(oldGrid[row].length, newSize.cols); col++) {
-            newGrid[row][col] = oldGrid[row][col]
+      // Update all floors in all maps to match new grid size
+      Object.keys(newState.maps).forEach(mapKey => {
+        const map = newState.maps[mapKey]
+        Object.keys(map.floors).forEach(floorKey => {
+          const oldGrid = map.floors[floorKey].grid
+          const newGrid = new Array(newSize.rows).fill(null).map(() => new Array(newSize.cols).fill(null))
+          
+          // Copy existing data that fits in new grid
+          for (let row = 0; row < Math.min(oldGrid.length, newSize.rows); row++) {
+            for (let col = 0; col < Math.min(oldGrid[row].length, newSize.cols); col++) {
+              newGrid[row][col] = oldGrid[row][col]
+            }
           }
-        }
-        
-        // Filter items to fit within new grid bounds
-        const filteredItems = newState.floors[floorKey].items.filter(
-          item => item.row < newSize.rows && item.col < newSize.cols
-        )
-        
-        newState.floors[floorKey] = {
-          ...newState.floors[floorKey],
-          grid: newGrid,
-          items: filteredItems
-        }
+          
+          // Filter items to fit within new grid bounds
+          const filteredItems = map.floors[floorKey].items.filter(
+            item => item.row < newSize.rows && item.col < newSize.cols
+          )
+          
+          newState.maps[mapKey].floors[floorKey] = {
+            ...map.floors[floorKey],
+            grid: newGrid,
+            items: filteredItems
+          }
+        })
       })
       
       return newState
@@ -152,23 +246,27 @@ export const useAppState = () => {
   const updateCurrentFloorData = useCallback((dataType, data) => {
     updateState(state => ({
       ...state,
-      floors: {
-        ...state.floors,
-        [state.currentFloor]: {
-          ...state.floors[state.currentFloor],
-          [dataType]: data
+      maps: {
+        ...state.maps,
+        [state.currentMap]: {
+          ...state.maps[state.currentMap],
+          floors: {
+            ...state.maps[state.currentMap].floors,
+            [state.currentFloor]: {
+              ...state.maps[state.currentMap].floors[state.currentFloor],
+              [dataType]: data
+            }
+          }
         }
       }
     }))
   }, [updateState])
 
   const getCurrentFloorData = useCallback(() => {
-    return state.floors[state.currentFloor] || {
-      grid: new Array(state.gridSize.rows).fill(null).map(() => new Array(state.gridSize.cols).fill(null)),
-      walls: [],
-      items: [],
-      doors: []
-    }
+    const currentMap = state.maps[state.currentMap]
+    if (!currentMap) return createEmptyFloor(state.gridSize)
+    
+    return currentMap.floors[state.currentFloor] || createEmptyFloor(state.gridSize)
   }, [state])
 
   // Export state as JSON file
@@ -228,27 +326,29 @@ export const useAppState = () => {
 
   // Reset current floor data
   const resetCurrentFloor = useCallback(() => {
-    const newState = {
+    updateState(state => ({
       ...state,
-      floors: {
-        ...state.floors,
-        [state.currentFloor]: {
-          grid: new Array(state.gridSize.rows).fill(null).map(() => new Array(state.gridSize.cols).fill(null)),
-          walls: [],
-          items: [],
-          doors: []
+      maps: {
+        ...state.maps,
+        [state.currentMap]: {
+          ...state.maps[state.currentMap],
+          floors: {
+            ...state.maps[state.currentMap].floors,
+            [state.currentFloor]: createEmptyFloor(state.gridSize)
+          }
         }
       }
-    }
-    updateState(newState)
-  }, [state, updateState])
+    }))
+  }, [updateState])
 
   return {
     state,
     updateState,
     undo,
     redo,
+    setCurrentMap,
     setCurrentFloor,
+    setMapName,
     setZoom,
     setActiveTool,
     setGridSize,
