@@ -25,6 +25,7 @@ const Canvas = ({
   const [dragStartCol, setDragStartCol] = useState(null)
   const [dragStartMousePos, setDragStartMousePos] = useState(null)
   const [dragDirectionDetected, setDragDirectionDetected] = useState(false)
+  const [isRightMouseDown, setIsRightMouseDown] = useState(false)
   const [noteDialog, setNoteDialog] = useState({ isOpen: false, row: null, col: null, text: '' })
 
   const floorData = getCurrentFloorData()
@@ -155,6 +156,7 @@ const Canvas = ({
     setDragStartCol(null)
     setDragStartMousePos(null)
     setDragDirectionDetected(false)
+    setIsRightMouseDown(false) // Reset right mouse button state
   }, [])
 
   const handleLineClick = useCallback((row, col, isVertical, event = null) => {
@@ -299,9 +301,7 @@ const Canvas = ({
       actualRow = row;
     }
     
-    // Start erase dragging mode - wait for mouse movement to determine direction
-    setIsDraggingErase(true)
-    setDragLineType(null) // Will be determined by mouse movement
+    // Store initial mouse position for potential drag operation (but don't start dragging yet)
     setDragStartRow(row)
     setDragStartCol(col)
     setDragDirectionDetected(false)
@@ -487,7 +487,47 @@ const Canvas = ({
   }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, updateCurrentFloorData])
 
   useEffect(() => {
+    const handleGlobalMouseDown = (e) => {
+      if (e.button === 2) { // Right mouse button
+        setIsRightMouseDown(true)
+      }
+    }
+
+    const handleGlobalMouseUp = (e) => {
+      if (e.button === 2) { // Right mouse button
+        setIsRightMouseDown(false)
+        // Also clear drag states when right button is released
+        if (isDraggingErase) {
+          setIsDraggingErase(false)
+          setDragLineType(null)
+          setDragStartRow(null)
+          setDragStartCol(null)
+          setDragStartMousePos(null)
+          setDragDirectionDetected(false)
+        }
+      }
+    }
+
     const handleGlobalMouseMove = (e) => {
+      // Handle potential drag start for right-click erase (when not yet in dragging mode)
+      // Only allow drag start if right mouse button is still pressed
+      if (!isDraggingErase && !isDraggingLine && isRightMouseDown && dragStartMousePos && canvasRef.current) {
+        const rect = canvasRef.current.getBoundingClientRect()
+        const mouseX = e.clientX - rect.left
+        const mouseY = e.clientY - rect.top
+        
+        const deltaX = Math.abs(mouseX - dragStartMousePos.x)
+        const deltaY = Math.abs(mouseY - dragStartMousePos.y)
+        const threshold = 5 // Minimum movement to start drag
+        
+        if (deltaX > threshold || deltaY > threshold) {
+          // Start dragging mode only when mouse actually moves AND right button is still pressed
+          setIsDraggingErase(true)
+          setDragLineType(null) // Will be determined by direction
+          setDragDirectionDetected(false)
+        }
+      }
+      
       if ((isDraggingLine || isDraggingErase) && canvasRef.current) {
         // Handle line dragging with mouse coordinates
         const rect = canvasRef.current.getBoundingClientRect()
@@ -533,16 +573,20 @@ const Canvas = ({
       }
     }
 
+    document.addEventListener('mousedown', handleGlobalMouseDown)
+    document.addEventListener('mouseup', handleGlobalMouseUp)
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mousemove', handleGlobalMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
     
     return () => {
+      document.removeEventListener('mousedown', handleGlobalMouseDown)
+      document.removeEventListener('mouseup', handleGlobalMouseUp)
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mousemove', handleGlobalMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [handleMouseMove, handleMouseUp, isDraggingLine, isDraggingErase, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
+  }, [handleMouseMove, handleMouseUp, isDraggingLine, isDraggingErase, isRightMouseDown, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
 
   return (
     <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: '#f8f8f8' }}>
