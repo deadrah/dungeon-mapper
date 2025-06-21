@@ -3,6 +3,7 @@ import Grid from './Grid'
 import Items from './Items'
 import Walls from './Walls'
 import Doors from './Doors'
+import NoteDialog from '../Dialog/NoteDialog'
 import { GRID_SIZE, MIN_ZOOM, MAX_ZOOM, TOOLS } from '../../utils/constants'
 
 const Canvas = ({ 
@@ -24,8 +25,16 @@ const Canvas = ({
   const [dragStartCol, setDragStartCol] = useState(null)
   const [dragStartMousePos, setDragStartMousePos] = useState(null)
   const [dragDirectionDetected, setDragDirectionDetected] = useState(false)
+  const [noteDialog, setNoteDialog] = useState({ isOpen: false, row: null, col: null, text: '' })
 
   const floorData = getCurrentFloorData()
+
+  const handleWheel = useCallback((e) => {
+    e.preventDefault()
+    const delta = e.deltaY > 0 ? 0.9 : 1.1
+    const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, appState.zoom * delta))
+    setZoom(newZoom)
+  }, [appState.zoom, setZoom])
 
   useEffect(() => {
     const updateViewportSize = () => {
@@ -37,15 +46,20 @@ const Canvas = ({
 
     updateViewportSize()
     window.addEventListener('resize', updateViewportSize)
-    return () => window.removeEventListener('resize', updateViewportSize)
-  }, [])
+    
+    // Add wheel event listener with passive: false to allow preventDefault
+    if (canvasRef.current) {
+      canvasRef.current.addEventListener('wheel', handleWheel, { passive: false })
+    }
+    
+    return () => {
+      window.removeEventListener('resize', updateViewportSize)
+      if (canvasRef.current) {
+        canvasRef.current.removeEventListener('wheel', handleWheel)
+      }
+    }
+  }, [handleWheel])
 
-  const handleWheel = useCallback((e) => {
-    e.preventDefault()
-    const delta = e.deltaY > 0 ? 0.9 : 1.1
-    const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, appState.zoom * delta))
-    setZoom(newZoom)
-  }, [appState.zoom, setZoom])
 
   const handleMouseDown = useCallback((e) => {
     if (e.button === 1 || e.shiftKey) { // Middle mouse or Shift+click for panning
@@ -71,6 +85,9 @@ const Canvas = ({
 
   const handleLineEnter = useCallback((row, col, isVertical) => {
     if (!isDraggingLine && !isDraggingErase) return;
+    
+    // Only allow line tool for dragging operations
+    if (appState.activeTool !== 'line') return;
     
     // Skip if dragging different line type
     const currentLineType = isVertical ? 'vertical' : 'horizontal';
@@ -121,7 +138,7 @@ const Canvas = ({
         updateCurrentFloorData('walls', newWalls)
       }
     }
-  }, [isDraggingLine, isDraggingErase, dragLineType, appState.gridSize.rows, appState.gridSize.cols, floorData.walls, updateCurrentFloorData])
+  }, [isDraggingLine, isDraggingErase, dragLineType, appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.walls, updateCurrentFloorData])
 
   const handleMouseUp = useCallback(() => {
     setIsPanning(false)
@@ -200,17 +217,37 @@ const Canvas = ({
         ) ?? -1
         
         if (existingDoorIndex === -1) {
-          // Add new door on the wall
-          const newDoor = {
-            type: appState.activeTool,
-            startRow: actualRow,
-            startCol: col,
-            endRow: existingWall.endRow,
-            endCol: existingWall.endCol,
-            id: Date.now() + Math.random()
+          // Check if the arrow tool is compatible with the wall direction
+          const wallIsVertical = existingWall.startCol === existingWall.endCol
+          const isArrowTool = appState.activeTool.startsWith('line_arrow_')
+          
+          let canPlace = true
+          if (isArrowTool) {
+            const isHorizontalArrow = appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west'
+            const isVerticalArrow = appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south'
+            
+            // Vertical walls can only have horizontal arrows (east/west)
+            // Horizontal walls can only have vertical arrows (north/south)
+            if (wallIsVertical && !isHorizontalArrow) {
+              canPlace = false
+            } else if (!wallIsVertical && !isVerticalArrow) {
+              canPlace = false
+            }
           }
-          const newDoors = [...(floorData.doors || []), newDoor]
-          updateCurrentFloorData('doors', newDoors)
+          
+          if (canPlace) {
+            // Add new door on the wall
+            const newDoor = {
+              type: appState.activeTool,
+              startRow: actualRow,
+              startCol: col,
+              endRow: existingWall.endRow,
+              endCol: existingWall.endCol,
+              id: Date.now() + Math.random()
+            }
+            const newDoors = [...(floorData.doors || []), newDoor]
+            updateCurrentFloorData('doors', newDoors)
+          }
         }
       }
     }
@@ -258,7 +295,7 @@ const Canvas = ({
       )
       updateCurrentFloorData('walls', newWalls)
     } else if (otherLineTools.includes(appState.activeTool)) {
-      // Door tools: Remove doors only
+      // Door tools: Remove doors only (regardless of wall existence)
       const newDoors = (floorData.doors || []).filter(door => 
         !(door.startRow === actualRow && door.startCol === col)
       )
@@ -310,6 +347,17 @@ const Canvas = ({
           updateCurrentFloorData('doors', newDoors)
         }
       }
+    } else if (appState.activeTool === TOOLS.NOTE) {
+      // Special handling for NOTE tool - open dialog
+      const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
+      const existingText = existingItemIndex >= 0 ? floorData.items[existingItemIndex].text || '' : ''
+      
+      setNoteDialog({
+        isOpen: true,
+        row: actualRow,
+        col,
+        text: existingText
+      })
     } else if (Object.values(TOOLS).includes(appState.activeTool)) {
       // Check if there's already an item at this position
       const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col)
@@ -338,6 +386,41 @@ const Canvas = ({
     }
   }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, updateCurrentFloorData])
 
+  const handleNoteDialogSave = useCallback((text) => {
+    const { row, col } = noteDialog
+    const existingItemIndex = floorData.items.findIndex(item => item.row === row && item.col === col && item.type === TOOLS.NOTE)
+    
+    if (text.trim()) {
+      // Save note with text
+      const noteItem = {
+        type: TOOLS.NOTE,
+        row,
+        col,
+        text: text.trim(),
+        id: Date.now() + Math.random()
+      }
+      
+      if (existingItemIndex >= 0) {
+        // Update existing note
+        const newItems = [...floorData.items]
+        newItems[existingItemIndex] = noteItem
+        updateCurrentFloorData('items', newItems)
+      } else {
+        // Add new note
+        const newItems = [...floorData.items, noteItem]
+        updateCurrentFloorData('items', newItems)
+      }
+    } else if (existingItemIndex >= 0) {
+      // Remove note if text is empty
+      const newItems = floorData.items.filter((_, index) => index !== existingItemIndex)
+      updateCurrentFloorData('items', newItems)
+    }
+  }, [noteDialog, floorData.items, updateCurrentFloorData])
+
+  const handleNoteDialogClose = useCallback(() => {
+    setNoteDialog({ isOpen: false, row: null, col: null, text: '' })
+  }, [])
+
   const handleGridRightClick = useCallback((row, col) => {
     // Ensure coordinates are within bounds
     if (row < 0 || row >= appState.gridSize.rows || col < 0 || col >= appState.gridSize.cols) {
@@ -350,7 +433,7 @@ const Canvas = ({
     const lineTools = ['line'];
     const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
     const fillTools = ['block_color'];
-    const otherGridTools = ['chest', 'dark_zone', 'warp_point', 'pit_trap', 'event_marker', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
+    const otherGridTools = ['chest', 'dark_zone', 'warp_point', 'pit_trap', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
     
     if (fillTools.includes(appState.activeTool)) {
       // Fill category: Remove fill color only
@@ -442,7 +525,6 @@ const Canvas = ({
       <div
         ref={canvasRef}
         className="w-full h-full"
-        onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onContextMenu={(e) => e.preventDefault()}
       >
@@ -503,6 +585,14 @@ const Canvas = ({
       <div className="absolute bottom-4 right-4 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-sm">
         {Math.round(appState.zoom * 100)}%
       </div>
+      
+      {/* Note dialog */}
+      <NoteDialog
+        isOpen={noteDialog.isOpen}
+        onClose={handleNoteDialogClose}
+        onSave={handleNoteDialogSave}
+        initialText={noteDialog.text}
+      />
     </div>
   )
 }

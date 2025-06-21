@@ -9,6 +9,7 @@ const ITEM_ICONS = {
   [TOOLS.WARP_POINT]: '◊',
   [TOOLS.PIT_TRAP]: '○',
   [TOOLS.EVENT_MARKER]: '!',
+  [TOOLS.NOTE]: '📝',
   [TOOLS.DOOR]: '┤',
   [TOOLS.ARROW_NORTH]: '↑',
   [TOOLS.ARROW_SOUTH]: '↓',

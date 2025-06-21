@@ -226,6 +226,23 @@ export const useAppState = () => {
     }
   }, [])
 
+  // Reset current floor data
+  const resetCurrentFloor = useCallback(() => {
+    const newState = {
+      ...state,
+      floors: {
+        ...state.floors,
+        [state.currentFloor]: {
+          grid: new Array(state.gridSize.rows).fill(null).map(() => new Array(state.gridSize.cols).fill(null)),
+          walls: [],
+          items: [],
+          doors: []
+        }
+      }
+    }
+    updateState(newState)
+  }, [state, updateState])
+
   return {
     state,
     updateState,
@@ -237,6 +254,7 @@ export const useAppState = () => {
     setGridSize,
     updateCurrentFloorData,
     getCurrentFloorData,
+    resetCurrentFloor,
     exportState,
     importState
   }

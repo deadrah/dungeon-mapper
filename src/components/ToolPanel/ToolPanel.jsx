@@ -23,6 +23,7 @@ const TOOL_GROUPS = [
       { id: TOOLS.WARP_POINT, name: 'Warp', icon: '◊', description: 'Teleport point' },
       { id: TOOLS.PIT_TRAP, name: 'Pit Trap', icon: '○', description: 'Pit trap' },
       { id: TOOLS.EVENT_MARKER, name: 'Event', icon: '!', description: 'Event marker' },
+      { id: TOOLS.NOTE, name: 'Note', icon: '📝', description: 'Text memo' },
       { id: TOOLS.ARROW_NORTH, name: '↑ Arrow', icon: '↑', description: 'North arrow' },
       { id: TOOLS.ARROW_SOUTH, name: '↓ Arrow', icon: '↓', description: 'South arrow' },
       { id: TOOLS.ARROW_EAST, name: '→ Arrow', icon: '→', description: 'East arrow' },
@@ -61,20 +62,10 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                   <button
                     key={tool.id}
                     onClick={() => setActiveTool(tool.id)}
-                    className={`h-12 flex flex-col items-center justify-center text-xs border-b border-gray-700 transition-colors ${
+                    className={`h-12 flex flex-col items-center justify-center text-xs border-b border-gray-700 transition-colors hover:bg-gray-600 ${
                       activeTool === tool.id ? 'text-white' : ''
                     }`}
                     style={activeTool === tool.id ? { backgroundColor: '#496fc1' } : {}}
-                    onMouseEnter={(e) => {
-                      if (activeTool !== tool.id) {
-                        e.target.style.backgroundColor = '#d2d2d2'
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (activeTool !== tool.id) {
-                        e.target.style.backgroundColor = ''
-                      }
-                    }}
                     title={`${tool.name} - ${tool.description}${toolWithKey?.keyIndex ? ` (${toolWithKey.keyIndex})` : ''}`}
                   >
                     <span className="text-lg">{tool.icon}</span>

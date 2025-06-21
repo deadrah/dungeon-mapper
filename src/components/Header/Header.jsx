@@ -11,11 +11,18 @@ const Header = ({
   onUndo,
   onRedo,
   gridSize,
-  onGridSizeChange
+  onGridSizeChange,
+  onResetFloor
 }) => {
   const handleZoomIn = () => setZoom(Math.min(5, zoom * 1.2))
   const handleZoomOut = () => setZoom(Math.max(0.1, zoom * 0.8))
   const handleZoomReset = () => setZoom(1)
+  
+  const handleResetFloor = () => {
+    if (window.confirm(`Floor ${currentFloor}のすべてのデータを削除しますか？この操作は元に戻せません。`)) {
+      onResetFloor()
+    }
+  }
   
   const handleImportClick = () => {
     const input = document.createElement('input')
@@ -48,6 +55,13 @@ const Header = ({
               </option>
             ))}
           </select>
+          <button
+            onClick={handleResetFloor}
+            className="bg-red-500 hover:bg-red-400 text-white px-2 py-1 rounded text-sm"
+            title={`Reset Floor ${currentFloor}`}
+          >
+            Reset
+          </button>
         </div>
         
         <div className="flex items-center space-x-2">

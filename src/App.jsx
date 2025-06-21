@@ -16,6 +16,7 @@ function App() {
     getCurrentFloorData,
     undo,
     redo,
+    resetCurrentFloor,
     exportState,
     importState
   } = useAppState()
@@ -70,6 +71,7 @@ function App() {
         onImport={importState}
         onUndo={undo}
         onRedo={redo}
+        onResetFloor={resetCurrentFloor}
       />
       
       <div className="flex flex-1 overflow-hidden">
