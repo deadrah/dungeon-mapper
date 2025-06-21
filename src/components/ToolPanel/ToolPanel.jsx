@@ -19,7 +19,7 @@ const TOOL_GROUPS = [
     tools: [
       { id: TOOLS.BLOCK_COLOR, name: 'Fill', icon: '■', description: 'Fill grid blocks' },
       { id: TOOLS.DARK_ZONE, name: 'Dark Zone', icon: '●', description: 'Dark area' },
-      { id: TOOLS.CHEST, name: 'Chest', icon: '🧰', description: 'Treasure chest' },
+      { id: TOOLS.CHEST, name: 'Chest', icon: '📦', description: 'Treasure chest' },
       { id: TOOLS.WARP_POINT, name: 'Warp', icon: '◊', description: 'Teleport point' },
       { id: TOOLS.SHUTE, name: 'Shute', icon: '●', description: 'Shute' },
       { id: TOOLS.ELEVATOR, name: 'Elevator', icon: 'E', description: 'Elevator' },
