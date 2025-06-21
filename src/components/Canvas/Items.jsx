@@ -7,10 +7,10 @@ const ITEM_ICONS = {
   [TOOLS.CHEST]: '□',
   [TOOLS.DARK_ZONE]: '●',
   [TOOLS.WARP_POINT]: '◊',
-  [TOOLS.SHUTE]: '○',
+  [TOOLS.SHUTE]: '●',
   [TOOLS.ELEVATOR]: 'E',
-  [TOOLS.STAIRS_UP_SVG]: '↑',
-  [TOOLS.STAIRS_DOWN_SVG]: '↓',
+  [TOOLS.STAIRS_UP_SVG]: '▲',
+  [TOOLS.STAIRS_DOWN_SVG]: '▼',
   [TOOLS.EVENT_MARKER]: '!',
   [TOOLS.NOTE]: '📝',
   [TOOLS.DOOR]: '┤',
@@ -24,23 +24,6 @@ const Items = ({ items, zoom, offset, gridSize }) => {
   const cellSize = GRID_SIZE * zoom
 
   const renderItem = (item) => {
-    // Special rendering for SVG stairs
-    if (item.type === TOOLS.STAIRS_UP_SVG) {
-      return (
-        <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 20 20" fill="none">
-          <path d="M2 18 L18 18 L18 15 L15 15 L15 12 L12 12 L12 9 L9 9 L9 6 L6 6 L6 3 L3 3 L3 6 L6 6 L6 9 L9 9 L9 12 L12 12 L12 15 L15 15 L15 18" stroke="#000" strokeWidth="1" fill="#ccc"/>
-        </svg>
-      )
-    }
-    
-    if (item.type === TOOLS.STAIRS_DOWN_SVG) {
-      return (
-        <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 20 20" fill="none">
-          <path d="M18 2 L2 2 L2 5 L5 5 L5 8 L8 8 L8 11 L11 11 L11 14 L14 14 L14 17 L17 17 L17 14 L14 14 L14 11 L11 11 L11 8 L8 8 L8 5 L5 5 L5 2" stroke="#000" strokeWidth="1" fill="#ccc"/>
-        </svg>
-      )
-    }
-    
     // Default text rendering
     return ITEM_ICONS[item.type] || '?'
   }
@@ -48,10 +31,19 @@ const Items = ({ items, zoom, offset, gridSize }) => {
   return (
     <div className="absolute inset-0" style={{ zIndex: 7, pointerEvents: 'none' }}>
       {items.map((item, index) => {
-        // Special styling for elevator
+        // Special styling for different items
         const isElevator = item.type === TOOLS.ELEVATOR
-        const textColor = item.type === TOOLS.EVENT_MARKER ? '#ca0101' : 
-                         isElevator ? '#ffff00' : 'black'
+        const isStairs = item.type === TOOLS.STAIRS_UP_SVG || item.type === TOOLS.STAIRS_DOWN_SVG
+        
+        let textColor = 'black'
+        if (item.type === TOOLS.EVENT_MARKER) {
+          textColor = '#ca0101'
+        } else if (isElevator) {
+          textColor = '#ffff00'
+        } else if (isStairs) {
+          textColor = '#0000ff'
+        }
+        
         const fontWeight = isElevator ? '900' : 'bold'
         
         return (
