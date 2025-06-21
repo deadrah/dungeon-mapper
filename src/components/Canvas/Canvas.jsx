@@ -595,7 +595,7 @@ const Canvas = ({
       
       {/* Color picker for block color tool */}
       {appState.activeTool === TOOLS.BLOCK_COLOR && (
-        <div className="absolute bottom-16 right-4 bg-white p-2 rounded shadow-lg z-50">
+        <div className="absolute bottom-16 right-4 bg-gray-900 p-2 rounded shadow-lg z-50">
           <input
             type="color"
             value={selectedColor}

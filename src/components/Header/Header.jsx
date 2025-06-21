@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { MAX_FLOORS, MAX_MAPS } from '../../utils/constants'
+import HelpDialog from '../Dialog/HelpDialog'
 
 const Header = ({ 
   currentMap,
@@ -20,6 +21,7 @@ const Header = ({
 }) => {
   const [editingMapId, setEditingMapId] = useState(null)
   const [editingMapName, setEditingMapName] = useState('')
+  const [isHelpOpen, setIsHelpOpen] = useState(false)
 
   const handleZoomIn = () => setZoom(Math.min(5, zoom * 1.2))
   const handleZoomOut = () => setZoom(Math.max(0.1, zoom * 0.8))
@@ -202,6 +204,14 @@ const Header = ({
             Import
           </button>
         </div>
+
+        <button
+          onClick={() => setIsHelpOpen(true)}
+          className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm ml-2"
+          title="ヘルプ"
+        >
+          ?
+        </button>
       </div>
       
       {/* Map Rename Dialog */}
@@ -243,6 +253,12 @@ const Header = ({
           </div>
         </div>
       )}
+      
+      {/* Help Dialog */}
+      <HelpDialog
+        isOpen={isHelpOpen}
+        onClose={() => setIsHelpOpen(false)}
+      />
     </div>
   )
 }
