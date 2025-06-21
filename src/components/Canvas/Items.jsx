@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GRID_SIZE, TOOLS } from '../../utils/constants'
 
 const ITEM_ICONS = {
@@ -9,6 +9,7 @@ const ITEM_ICONS = {
   [TOOLS.WARP_POINT]: '◊',
   [TOOLS.PIT_TRAP]: '○',
   [TOOLS.EVENT_MARKER]: '!',
+  [TOOLS.DOOR]: '┤',
   [TOOLS.ARROW_NORTH]: '↑',
   [TOOLS.ARROW_SOUTH]: '↓',
   [TOOLS.ARROW_EAST]: '→',
@@ -19,7 +20,7 @@ const Items = ({ items, zoom, offset, gridSize }) => {
   const cellSize = GRID_SIZE * zoom
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0" style={{ zIndex: 7, pointerEvents: 'none' }}>
       {items.map((item, index) => (
         <div
           key={index}

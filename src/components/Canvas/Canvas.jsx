@@ -246,13 +246,25 @@ const Canvas = ({
       })
     }
     
-    // Remove wall at this position
-    const newWalls = floorData.walls.filter(wall => 
-      !(wall.startRow === actualRow && wall.startCol === col &&
-        ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
-    )
-    updateCurrentFloorData('walls', newWalls)
-  }, [appState.gridSize.rows, appState.gridSize.cols, floorData.walls, updateCurrentFloorData])
+    // Handle deletion based on active tool
+    const lineTools = ['line'];
+    const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
+    
+    if (lineTools.includes(appState.activeTool)) {
+      // Line tool: Remove walls only
+      const newWalls = floorData.walls.filter(wall => 
+        !(wall.startRow === actualRow && wall.startCol === col &&
+          ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
+      )
+      updateCurrentFloorData('walls', newWalls)
+    } else if (otherLineTools.includes(appState.activeTool)) {
+      // Door tools: Remove doors only
+      const newDoors = (floorData.doors || []).filter(door => 
+        !(door.startRow === actualRow && door.startCol === col)
+      )
+      updateCurrentFloorData('doors', newDoors)
+    }
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.walls, floorData.doors, updateCurrentFloorData])
 
   const handleGridClick = useCallback((row, col, event = null) => {
     // Ensure coordinates are within bounds
@@ -312,6 +324,16 @@ const Canvas = ({
         }
         const newItems = [...floorData.items, newItem]
         updateCurrentFloorData('items', newItems)
+      } else {
+        // Replace existing item with new type
+        const newItems = [...floorData.items]
+        newItems[existingItemIndex] = {
+          type: appState.activeTool,
+          row: actualRow,
+          col,
+          id: Date.now() + Math.random()
+        }
+        updateCurrentFloorData('items', newItems)
       }
     }
   }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, updateCurrentFloorData])
@@ -324,21 +346,34 @@ const Canvas = ({
     
     const actualRow = appState.gridSize.rows - 1 - row;
     
-    if (appState.activeTool === 'block_color') {
+    // Define tool categories
+    const lineTools = ['line'];
+    const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
+    const fillTools = ['block_color'];
+    const otherGridTools = ['chest', 'dark_zone', 'warp_point', 'pit_trap', 'event_marker', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
+    
+    if (fillTools.includes(appState.activeTool)) {
+      // Fill category: Remove fill color only
       const newGrid = [...floorData.grid]
       if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
         newGrid[actualRow] = [...newGrid[actualRow]]
         newGrid[actualRow][col] = null
         updateCurrentFloorData('grid', newGrid)
       }
-    } else if (appState.activeTool === 'door_open' || appState.activeTool === 'door_closed' || 
-               appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south' ||
-               appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west') {
-      // Remove door at this position
-      const newDoors = (floorData.doors || []).filter(door => !(door.startRow === actualRow && door.startCol === col))
+    } else if (lineTools.includes(appState.activeTool)) {
+      // Line category: Remove walls only
+      const newWalls = floorData.walls.filter(wall => 
+        !(wall.startRow === actualRow && wall.startCol === col)
+      )
+      updateCurrentFloorData('walls', newWalls)
+    } else if (otherLineTools.includes(appState.activeTool)) {
+      // Other Line tools category: Remove doors only
+      const newDoors = (floorData.doors || []).filter(door => 
+        !(door.startRow === actualRow && door.startCol === col)
+      )
       updateCurrentFloorData('doors', newDoors)
-    } else {
-      // Remove item at this position
+    } else if (otherGridTools.includes(appState.activeTool)) {
+      // Other Grid tools category: Remove items only
       const newItems = floorData.items.filter(item => !(item.row === actualRow && item.col === col))
       updateCurrentFloorData('items', newItems)
     }

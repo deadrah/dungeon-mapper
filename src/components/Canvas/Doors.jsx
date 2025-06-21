@@ -5,7 +5,7 @@ const Doors = ({ doors, zoom, offset, gridSize }) => {
   const cellSize = GRID_SIZE * zoom
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 12 }}>
       {doors.map((door, index) => {
         // Determine if door is on vertical or horizontal line
         const isVertical = door.startCol === door.endCol;
@@ -27,9 +27,9 @@ const Doors = ({ doors, zoom, offset, gridSize }) => {
             case 'line_arrow_west': arrowSymbol = '←'; break;
           }
         } else if (isOpen) {
-          doorStyle = { backgroundColor: 'transparent', border: '2px solid #000000' };
+          doorStyle = { backgroundColor: '#d0d0d0', border: '2px solid #000000' };
         } else {
-          doorStyle = { backgroundColor: '#000000', border: '1px solid #000000' };
+          doorStyle = { backgroundColor: '#000000', border: '2px solid #000000' };
         }
         
         if (isVertical) {
@@ -37,16 +37,18 @@ const Doors = ({ doors, zoom, offset, gridSize }) => {
           const displayRow = gridSize.rows - 1 - door.startRow;
           const centerX = offset.x + door.startCol * cellSize + 24;
           const centerY = offset.y + displayRow * cellSize + 24;
+          const doorWidth = cellSize * 0.2;
+          const doorHeight = cellSize * 0.4;
           
           return (
             <div
               key={door.id || index}
               className="absolute"
               style={{
-                left: centerX - cellSize * 0.1 + (isOpen ? -2 : isArrow ? -2 : -3),
-                top: centerY + cellSize * 0.2 + (isOpen ? 0 : isArrow ? 0 : -2),
-                width: isOpen ? cellSize * 0.2 : cellSize * 0.2 + 4,
-                height: isOpen ? cellSize * 0.6 : cellSize * 0.6 + 4,
+                left: centerX - doorWidth / 2,
+                top: centerY + cellSize * 0.3,
+                width: doorWidth,
+                height: doorHeight,
                 ...doorStyle,
                 borderRadius: '2px'
               }}
@@ -59,16 +61,18 @@ const Doors = ({ doors, zoom, offset, gridSize }) => {
           const displayRow = gridSize.rows - 1 - door.startRow;
           const centerX = offset.x + door.startCol * cellSize + 24;
           const centerY = offset.y + displayRow * cellSize + 24;
+          const doorWidth = cellSize * 0.4;
+          const doorHeight = cellSize * 0.2;
           
           return (
             <div
               key={door.id || index}
               className="absolute"
               style={{
-                left: centerX + cellSize * 0.2 + (isOpen ? 0 : isArrow ? 0 : -2),
-                top: centerY - cellSize * 0.1 + (isOpen ? -2 : isArrow ? -2 : -3),
-                width: isOpen ? cellSize * 0.6 : cellSize * 0.6 + 4,
-                height: isOpen ? cellSize * 0.2 : cellSize * 0.2 + 4,
+                left: centerX + cellSize * 0.3,
+                top: centerY - doorHeight / 2,
+                width: doorWidth,
+                height: doorHeight,
                 ...doorStyle,
                 borderRadius: '2px'
               }}

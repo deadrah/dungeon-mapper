@@ -5,7 +5,7 @@ const Walls = ({ walls, zoom, offset, gridSize }) => {
   const cellSize = GRID_SIZE * zoom
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
       <svg
         className="absolute inset-0 w-full h-full"
         style={{ pointerEvents: 'none' }}

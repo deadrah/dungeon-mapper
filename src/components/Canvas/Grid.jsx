@@ -52,7 +52,6 @@ const Grid = ({
 
   const handleLineClick = (e, row, col, isVertical) => {
     e.preventDefault()
-    e.stopPropagation()
     if (e.button === 0) {
       onLineClick(row, col, isVertical, e)
     } else if (e.button === 2) {
@@ -114,7 +113,7 @@ const Grid = ({
         width={viewportSize.width}
         height={viewportSize.height}
         className="absolute inset-0"
-        style={{ pointerEvents: 'auto' }}
+        style={{ pointerEvents: 'auto', zIndex: 5 }}
         onContextMenu={(e) => e.preventDefault()}
       >
         {/* Grid lines */}
@@ -176,7 +175,7 @@ const Grid = ({
           })
         )}
 
-        {/* Grid cell clickable areas - only when not using line tools */}
+        {/* Grid cell clickable areas - only for non-line tools */}
         {(activeTool !== 'line' && activeTool !== 'door_open' && activeTool !== 'door_closed' && 
           activeTool !== 'line_arrow_north' && activeTool !== 'line_arrow_south' &&
           activeTool !== 'line_arrow_east' && activeTool !== 'line_arrow_west') && 
@@ -191,7 +190,23 @@ const Grid = ({
                 width={cellSize}
                 height={cellSize}
                 fill="transparent"
-                onMouseDown={(e) => handleCellClick(e, row, col)}
+                style={{ 
+                  pointerEvents: 'all',
+                  cursor: 'pointer'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleCellClick(e, row, col)
+                }}
+                onMouseDown={(e) => {
+                  e.stopPropagation()
+                  handleCellClick(e, row, col)
+                }}
+                onContextMenu={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onGridRightClick(row, col)
+                }}
                 onMouseEnter={(e) => handleCellMouseEnter(e, row, col)}
                 onMouseOver={(e) => handleCellMouseOver(e, row, col)}
               />
@@ -221,6 +236,11 @@ const Grid = ({
                     height={12}
                     fill="transparent"
                     onMouseDown={isEnabled ? (e) => handleLineClick(e, row, col, false) : undefined}
+                    onContextMenu={isEnabled ? (e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      onLineRightClick(row, col, false, e)
+                    } : undefined}
                     onMouseEnter={isEnabled ? (e) => handleLineEnter(e, row, col, false) : undefined}
                     style={{ 
                       cursor: isEnabled ? 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" fill="black"/></svg>) 8 8, crosshair' : 'default',
@@ -248,6 +268,11 @@ const Grid = ({
                     height={cellSize}
                     fill="transparent"
                     onMouseDown={isEnabled ? (e) => handleLineClick(e, row, col, true) : undefined}
+                    onContextMenu={isEnabled ? (e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      onLineRightClick(row, col, true, e)
+                    } : undefined}
                     onMouseEnter={isEnabled ? (e) => handleLineEnter(e, row, col, true) : undefined}
                     style={{ 
                       cursor: isEnabled ? 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" fill="black"/></svg>) 8 8, crosshair' : 'default',

@@ -29,10 +29,6 @@ const loadStateFromStorage = () => {
         if (!parsedState.floors[floorKey].doors) {
           parsedState.floors[floorKey].doors = []
         }
-        // Remove any note items if they exist (cleanup for backward compatibility)
-        if (parsedState.floors[floorKey].items) {
-          parsedState.floors[floorKey].items = parsedState.floors[floorKey].items.filter(item => item.type !== 'note')
-        }
       })
       return parsedState
     }
@@ -209,10 +205,6 @@ export const useAppState = () => {
             Object.keys(importedState.floors).forEach(floorKey => {
               if (!importedState.floors[floorKey].doors) {
                 importedState.floors[floorKey].doors = []
-              }
-              // Remove any note items if they exist (cleanup for backward compatibility)
-              if (importedState.floors[floorKey].items) {
-                importedState.floors[floorKey].items = importedState.floors[floorKey].items.filter(item => item.type !== 'note')
               }
             })
           }
