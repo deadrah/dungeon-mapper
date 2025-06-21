@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom color classes for missing Tailwind colors */
+.bg-gray-800 { background-color: #1f2937; }
+.bg-gray-900 { background-color: #111827; }
+.bg-gray-700 { background-color: #374151; }
+.bg-gray-600 { background-color: #4b5563; }
+.bg-gray-200 { background-color: #e5e7eb; }
+.bg-gray-100 { background-color: #f3f4f6; }
+.bg-blue-600 { background-color: #2563eb; }
+.bg-blue-500 { background-color: #3b82f6; }
+.bg-green-600 { background-color: #16a34a; }
+.bg-green-500 { background-color: #22c55e; }
+.bg-black { background-color: #000000; }
+.bg-white { background-color: #ffffff; }
+
+.text-white { color: #ffffff; }
+.text-black { color: #000000; }
+.text-gray-600 { color: #4b5563; }
+.text-gray-500 { color: #6b7280; }
+
+.border-gray-600 { border-color: #4b5563; }
+.border-gray-700 { border-color: #374151; }
+
+.hover\:bg-gray-700:hover { background-color: #374151; }
+.hover\:bg-gray-600:hover { background-color: #4b5563; }
+.hover\:bg-blue-500:hover { background-color: #3b82f6; }
+.hover\:bg-green-500:hover { background-color: #22c55e; }
+
+/* Spacing classes */
+.w-16 { width: 4rem; }
+.w-8 { width: 2rem; }
+.w-12 { width: 3rem; }
+.h-8 { height: 2rem; }
+.h-12 { height: 3rem; }
+
+.px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+
+.space-x-1 > * + * { margin-left: 0.25rem; }
+.space-x-2 > * + * { margin-left: 0.5rem; }
+.space-x-4 > * + * { margin-left: 1rem; }
+
+/* Text sizes */
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+
+.font-bold { font-weight: 700; }
+.font-mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+.rounded { border-radius: 0.25rem; }
+.rounded-shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); }
+
+.inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+.top-4 { top: 1rem; }
+.right-4 { right: 1rem; }
+.bottom-4 { bottom: 1rem; }
+.left-0 { left: 0; }
+
+/* Additional utility classes */
+.min-5 { min-width: 1.25rem; min-height: 1.25rem; }
+.max-50 { max-width: 12.5rem; max-height: 12.5rem; }
+
+/* Button cursor */
+button { cursor: pointer; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  width: 100vw;
+}
