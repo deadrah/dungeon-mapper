@@ -355,7 +355,7 @@ const Canvas = ({
         isOpen: true,
         row: actualRow,
         col,
-        text: existingText
+        text: existingText  // Only use existing text if there's already a note at this exact position
       })
     } else if (Object.values(TOOLS).includes(appState.activeTool) && appState.activeTool !== TOOLS.DARK_ZONE) {
       // Special handling for CURRENT_POSITION - only one per floor
@@ -433,6 +433,7 @@ const Canvas = ({
   }, [noteDialog, floorData.items, updateCurrentFloorData])
 
   const handleNoteDialogClose = useCallback(() => {
+    // Reset dialog state completely
     setNoteDialog({ isOpen: false, row: null, col: null, text: '' })
   }, [])
 

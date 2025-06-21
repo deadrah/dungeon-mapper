@@ -4,8 +4,10 @@ const NoteDialog = ({ isOpen, onClose, onSave, initialText = '' }) => {
   const [text, setText] = useState(initialText)
 
   useEffect(() => {
-    setText(initialText)
-  }, [initialText])
+    if (isOpen) {
+      setText(initialText)
+    }
+  }, [isOpen, initialText])
 
   const handleSave = () => {
     onSave(text)
