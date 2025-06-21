@@ -4,7 +4,7 @@ import { GRID_SIZE, TOOLS } from '../../utils/constants'
 const ITEM_ICONS = {
   [TOOLS.STAIRS_UP]: '↑',
   [TOOLS.STAIRS_DOWN]: '↓',
-  [TOOLS.CHEST]: '📦',
+  [TOOLS.CHEST]: '□',
   [TOOLS.DARK_ZONE]: '●',
   [TOOLS.WARP_POINT]: '◊',
   [TOOLS.SHUTE]: '●',
@@ -24,6 +24,23 @@ const Items = ({ items, zoom, offset, gridSize }) => {
   const cellSize = GRID_SIZE * zoom
 
   const renderItem = (item) => {
+    // Special rendering for Chest with SVG
+    if (item.type === TOOLS.CHEST) {
+      return (
+        <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 24 24" fill="none">
+          {/* Chest base */}
+          <rect x="4" y="12" width="16" height="8" stroke="#8B4513" strokeWidth="1.5" fill="none" rx="1"/>
+          {/* Chest lid */}
+          <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke="#8B4513" strokeWidth="1.5" fill="none"/>
+          {/* Chest lock */}
+          <circle cx="12" cy="12" r="1.5" stroke="#FFD700" strokeWidth="1" fill="#FFD700"/>
+          {/* Chest hinges */}
+          <rect x="6" y="11" width="1" height="2" fill="#654321"/>
+          <rect x="17" y="11" width="1" height="2" fill="#654321"/>
+        </svg>
+      )
+    }
+    
     // Default text rendering
     return ITEM_ICONS[item.type] || '?'
   }
