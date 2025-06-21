@@ -34,14 +34,17 @@ const Items = ({ items, zoom, offset, gridSize }) => {
         // Special styling for different items
         const isElevator = item.type === TOOLS.ELEVATOR
         const isStairs = item.type === TOOLS.STAIRS_UP_SVG || item.type === TOOLS.STAIRS_DOWN_SVG
+        const isChest = item.type === TOOLS.CHEST
         
         let textColor = 'black'
         if (item.type === TOOLS.EVENT_MARKER) {
           textColor = '#ca0101'
         } else if (isElevator) {
-          textColor = '#ffff00'
+          textColor = '#b8860b'  // Dark goldenrod - darker yellow for better visibility
         } else if (isStairs) {
           textColor = '#0000ff'
+        } else if (isChest) {
+          textColor = '#ff8c00'  // Dark orange
         }
         
         const fontWeight = isElevator ? '900' : 'bold'
