@@ -255,8 +255,10 @@ const Canvas = ({
   }, [appState.gridSize.rows, appState.gridSize.cols, floorData.walls, updateCurrentFloorData])
 
   const handleGridClick = useCallback((row, col, event = null) => {
+    console.log('handleGridClick called:', { row, col, activeTool: appState.activeTool })
     // Ensure coordinates are within bounds
     if (row < 0 || row >= appState.gridSize.rows || col < 0 || col >= appState.gridSize.cols) {
+      console.log('handleGridClick: coordinates out of bounds')
       return;
     }
     

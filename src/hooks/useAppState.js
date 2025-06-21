@@ -48,8 +48,10 @@ const saveStateToStorage = (state) => {
 }
 
 export const useAppState = () => {
-  const [state, setState] = useState(loadStateFromStorage)
-  const historyRef = useRef([JSON.parse(JSON.stringify(loadStateFromStorage()))])
+  // Temporarily disable localStorage for debugging
+  console.log('useAppState: Initializing with INITIAL_STATE')
+  const [state, setState] = useState(INITIAL_STATE)
+  const historyRef = useRef([JSON.parse(JSON.stringify(INITIAL_STATE))])
   const historyIndexRef = useRef(0)
   const isUndoRedoRef = useRef(false)
 
