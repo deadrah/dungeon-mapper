@@ -48,20 +48,16 @@ const saveStateToStorage = (state) => {
 }
 
 export const useAppState = () => {
-  // Temporarily disable localStorage for debugging
-  console.log('useAppState: Initializing with INITIAL_STATE')
-  const [state, setState] = useState(INITIAL_STATE)
-  const historyRef = useRef([JSON.parse(JSON.stringify(INITIAL_STATE))])
+  const [state, setState] = useState(loadStateFromStorage)
+  const historyRef = useRef([JSON.parse(JSON.stringify(loadStateFromStorage()))])
   const historyIndexRef = useRef(0)
   const isUndoRedoRef = useRef(false)
 
   // Auto-save whenever state changes (except during undo/redo)
   useEffect(() => {
-    // Temporarily disable auto-save for debugging
-    console.log('useAppState: State changed, but auto-save disabled for debugging')
-    // if (!isUndoRedoRef.current) {
-    //   saveStateToStorage(state)
-    // }
+    if (!isUndoRedoRef.current) {
+      saveStateToStorage(state)
+    }
     isUndoRedoRef.current = false
   }, [state])
 
@@ -150,7 +146,6 @@ export const useAppState = () => {
   }, [updateState])
 
   const setActiveTool = useCallback((tool) => {
-    console.log('useAppState: setActiveTool called with:', tool)
     updateState(state => ({ ...state, activeTool: tool }))
   }, [updateState])
 

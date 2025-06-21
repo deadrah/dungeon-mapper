@@ -255,10 +255,8 @@ const Canvas = ({
   }, [appState.gridSize.rows, appState.gridSize.cols, floorData.walls, updateCurrentFloorData])
 
   const handleGridClick = useCallback((row, col, event = null) => {
-    console.log('handleGridClick called:', { row, col, activeTool: appState.activeTool })
     // Ensure coordinates are within bounds
     if (row < 0 || row >= appState.gridSize.rows || col < 0 || col >= appState.gridSize.cols) {
-      console.log('handleGridClick: coordinates out of bounds')
       return;
     }
     
@@ -443,11 +441,6 @@ const Canvas = ({
           zoom={appState.zoom}
           offset={offset}
           gridSize={appState.gridSize}
-          onUpdateItem={(index, updatedItem) => {
-            const newItems = [...floorData.items]
-            newItems[index] = updatedItem
-            updateCurrentFloorData('items', newItems)
-          }}
         />
         
         <Doors

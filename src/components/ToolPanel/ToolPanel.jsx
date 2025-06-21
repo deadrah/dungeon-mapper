@@ -23,7 +23,6 @@ const TOOL_GROUPS = [
       { id: TOOLS.WARP_POINT, name: 'Warp', icon: '◊', description: 'Teleport point' },
       { id: TOOLS.PIT_TRAP, name: 'Pit Trap', icon: '○', description: 'Pit trap' },
       { id: TOOLS.EVENT_MARKER, name: 'Event', icon: '!', description: 'Event marker' },
-      { id: TOOLS.NOTE, name: 'Note', icon: 'N', description: 'Text note' },
       { id: TOOLS.ARROW_NORTH, name: '↑ Arrow', icon: '↑', description: 'North arrow' },
       { id: TOOLS.ARROW_SOUTH, name: '↓ Arrow', icon: '↓', description: 'South arrow' },
       { id: TOOLS.ARROW_EAST, name: '→ Arrow', icon: '→', description: 'East arrow' },

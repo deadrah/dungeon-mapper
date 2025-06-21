@@ -26,10 +26,9 @@ const Grid = ({
   const endRow = Math.min(gridSize.rows, Math.ceil((-offset.y + viewportSize.height) / cellSize))
 
   const handleCellClick = (e, row, col) => {
-    console.log('Grid: handleCellClick called', { row, col, button: e.button })
     e.preventDefault()
     if (e.button === 0) {
-      onGridClick(row, col, e)
+      onGridClick(row, col)
     } else if (e.button === 2) {
       onGridRightClick(row, col)
     }
@@ -52,7 +51,6 @@ const Grid = ({
   }
 
   const handleLineClick = (e, row, col, isVertical) => {
-    console.log('Grid: handleLineClick called', { row, col, isVertical, button: e.button })
     e.preventDefault()
     e.stopPropagation()
     if (e.button === 0) {

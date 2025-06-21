@@ -8,7 +8,6 @@ export const TOOLS = {
   WARP_POINT: 'warp_point',
   PIT_TRAP: 'pit_trap',
   EVENT_MARKER: 'event_marker',
-  NOTE: 'note',
   DOOR_OPEN: 'door_open',
   DOOR_CLOSED: 'door_closed',
   LINE_ARROW_NORTH: 'line_arrow_north',
