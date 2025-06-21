@@ -57,9 +57,11 @@ export const useAppState = () => {
 
   // Auto-save whenever state changes (except during undo/redo)
   useEffect(() => {
-    if (!isUndoRedoRef.current) {
-      saveStateToStorage(state)
-    }
+    // Temporarily disable auto-save for debugging
+    console.log('useAppState: State changed, but auto-save disabled for debugging')
+    // if (!isUndoRedoRef.current) {
+    //   saveStateToStorage(state)
+    // }
     isUndoRedoRef.current = false
   }, [state])
 
@@ -148,6 +150,7 @@ export const useAppState = () => {
   }, [updateState])
 
   const setActiveTool = useCallback((tool) => {
+    console.log('useAppState: setActiveTool called with:', tool)
     updateState(state => ({ ...state, activeTool: tool }))
   }, [updateState])
 
