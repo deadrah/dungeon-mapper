@@ -27,7 +27,7 @@ const TOOL_GROUPS = [
       { id: TOOLS.STAIRS_UP_SVG, name: 'Stairs Up', icon: '▲', description: 'Stairs going up', key: '' },
       { id: TOOLS.STAIRS_DOWN_SVG, name: 'Stairs Down', icon: '▼', description: 'Stairs going down', key: '' },
       { id: TOOLS.EVENT_MARKER, name: 'Event', icon: '!', description: 'Event marker', key: '' },
-      { id: TOOLS.NOTE, name: 'Note', icon: '📝', description: 'Text memo', key: '' },
+      { id: TOOLS.NOTE, name: 'Note', icon: 'NOTE_SVG', description: 'Text memo', key: '' },
       { id: TOOLS.ARROW_NORTH, name: 'Arrow', icon: '↑', description: 'North arrow', key: '' },
       { id: TOOLS.ARROW_SOUTH, name: 'Arrow', icon: '↓', description: 'South arrow', key: '' },
       { id: TOOLS.ARROW_WEST, name: 'Arrow', icon: '←', description: 'West arrow', key: '' },
@@ -59,7 +59,7 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
   }
 
   return (
-    <div className="md:w-64 w-full bg-gray-800 text-white flex flex-col md:max-h-none max-h-44">
+    <div className="md:w-56 w-full bg-gray-800 text-white flex flex-col md:max-h-none max-h-44">
       <div className="p-2 text-center text-sm font-bold border-b border-gray-600 md:block hidden">
         Tools
       </div>
@@ -85,7 +85,16 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                         group.name === 'Grid Tools' ? 'md:min-w-0' : 'md:min-w-0 min-w-12'
                       }`}
                     >
-                      <span className="text-lg">{tool.icon}</span>
+                      <span className="text-lg">
+                      {tool.icon === 'NOTE_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                          <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                          <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                          <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                          <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon}
+                    </span>
                       <span className="text-xs truncate w-full text-center px-1 md:block hidden">{tool.name}</span>
                     </div>
                   )
@@ -103,7 +112,16 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                     style={activeTool === tool.id ? { backgroundColor: '#496fc1' } : {}}
                     title={`${tool.name} - ${tool.description}${tool.key ? ` (${tool.key})` : ''}`}
                   >
-                    <span className="text-lg">{tool.icon}</span>
+                    <span className="text-lg">
+                      {tool.icon === 'NOTE_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                          <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                          <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                          <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                          <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon}
+                    </span>
                     <span className="text-xs truncate w-full text-center px-1 md:block hidden">{tool.name}</span>
                   </button>
                 )

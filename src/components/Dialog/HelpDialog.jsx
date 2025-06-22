@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.3.0',
+      version: 'バージョン 1.3.1',
       close: '閉じる',
       sections: {
         about: {
@@ -18,21 +18,20 @@ const HelpDialog = ({ isOpen, onClose }) => {
         controls: {
           title: '基本操作',
           items: [
-            { label: 'マウスホイール:', desc: 'ズームイン/アウト' },
-            { label: 'Shift + ドラッグ:', desc: 'パン（画面移動）' },
-            { label: '左クリック:', desc: 'アイテム配置・色塗り・壁描画' },
-            { label: '右クリック:', desc: 'アイテム削除・色消去・壁削除' },
-            { label: 'スマホ:', desc: '消去したい場合は消去ツール（⌫）を選択してタップ' }
+            { label: 'ズームイン/アウト:', desc: 'マウスホイール / ピンチインアウト' },
+            { label: 'パン（画面移動）:', desc: 'Shift + ドラッグ / 2本指フリック' },
+            { label: 'アイテム配置・色塗り・壁描画:', desc: '左クリック / タップ' },
+            { label: 'アイテム削除・色消去・壁削除:', desc: '右クリック / 消去ツール' }
           ]
         },
         keyboard: {
           title: 'キーボードショートカット',
           items: [
-            { label: '1-5, Q, E:', desc: 'ツール選択' },
-            { label: 'Ctrl + S:', desc: 'マップエクスポート' },
-            { label: 'Ctrl + L:', desc: 'マップインポート' },
-            { label: 'Ctrl + Z:', desc: '元に戻す' },
-            { label: 'Ctrl + Y:', desc: 'やり直し' }
+            { label: 'ツール選択:', desc: '1-5, Q, E' },
+            { label: 'マップエクスポート:', desc: 'Ctrl + S' },
+            { label: 'マップインポート:', desc: 'Ctrl + L' },
+            { label: '元に戻す:', desc: 'Ctrl + Z' },
+            { label: 'やり直し:', desc: 'Ctrl + Y' }
           ]
         },
         tools: {
@@ -53,21 +52,21 @@ const HelpDialog = ({ isOpen, onClose }) => {
         mapManagement: {
           title: 'マップ管理',
           items: [
-            { label: 'Map選択:', desc: '複数のマップを管理できます（最大10個）' },
-            { label: 'Rename:', desc: 'マップに名前を付けることができます' },
-            { label: 'Floor選択:', desc: '各マップにつき30階層まで対応' },
-            { label: 'Reset:', desc: '現在のフロアのデータを全削除' },
-            { label: 'Grid Size:', desc: 'グリッドサイズを5x5から50x50まで調整可能' },
-            { label: 'Note:', desc: 'メモのツールチップ表示をオン/オフ切り替え（常時表示）' }
+            { label: '複数マップ管理（最大10個）:', desc: 'Map選択' },
+            { label: 'マップ名前付け:', desc: 'Renameボタン' },
+            { label: '階層切り替え（最大30階）:', desc: 'Floor選択' },
+            { label: '現在フロア全削除:', desc: 'Resetボタン' },
+            { label: 'グリッドサイズ調整（5x5〜50x50）:', desc: 'Grid Sizeスライダー' },
+            { label: 'メモ常時表示切り替え:', desc: 'Noteボタン' }
           ]
         },
         dataSaving: {
           title: 'データ保存',
           items: [
-            { label: '自動保存:', desc: '操作は自動的にブラウザのローカルストレージに保存されます' },
-            { label: 'Export:', desc: 'JSONファイルとしてマップデータをダウンロード' },
-            { label: 'Import:', desc: 'JSONファイルからマップデータを読み込み' },
-            { label: 'SVG:', desc: '現在のフロアをSVG画像ファイルとしてダウンロード' }
+            { label: '自動保存:', desc: 'ブラウザのローカルストレージに自動保存' },
+            { label: 'JSONダウンロード:', desc: 'Exportボタン' },
+            { label: 'JSONファイル読み込み:', desc: 'Importボタン' },
+            { label: 'SVG画像ダウンロード:', desc: 'SVGボタン' }
           ]
         },
         notes: {
@@ -82,6 +81,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.3.1', date: '2025-06-22', changes: ['スマホタッチ操作を改善', '1本指はツール操作専用、2本指でマップ移動・ズーム', 'ヘルプの操作説明を「機能：操作方法」形式に統一'] },
             { version: 'v1.3.0', date: '2025-06-22', changes: ['スマホ表示対応'] },
             { version: 'v1.2.0', date: '2025-06-22', changes: ['メモのツールチップ常時表示機能を追加', 'Noteボタンでツールチップのオン/オフ切り替え', 'DoorOpenの色を白に変更'] },
             { version: 'v1.1.1', date: '2025-06-22', changes: ['SVGエクスポートの表示品質を改善', '宝箱デザインをメインキャンバスと統一', 'Grid Arrowをシンプルな文字矢印に統一', 'Line Arrowの位置とデザインを修正'] },
@@ -93,7 +93,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.3.0',
+      version: 'Version 1.3.1',
       close: 'Close',
       sections: {
         about: {
@@ -103,11 +103,10 @@ const HelpDialog = ({ isOpen, onClose }) => {
         controls: {
           title: 'Basic Controls',
           items: [
-            { label: 'Mouse Wheel:', desc: 'Zoom in/out' },
-            { label: 'Shift + Drag:', desc: 'Pan (move view)' },
-            { label: 'Left Click:', desc: 'Place items, fill colors, draw walls' },
-            { label: 'Right Click:', desc: 'Remove items, clear colors, erase walls' },
-            { label: 'Mobile:', desc: 'To erase, select the Eraser tool (⌫) and tap' }
+            { label: 'Zoom in/out:', desc: 'Mouse wheel / Pinch gestures' },
+            { label: 'Pan (move view):', desc: 'Shift + drag / Two-finger drag' },
+            { label: 'Place items, fill colors, draw walls:', desc: 'Left click / Tap' },
+            { label: 'Remove items, clear colors, erase walls:', desc: 'Right click / Eraser tool' }
           ]
         },
         keyboard: {
@@ -206,7 +205,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
                     : 'text-gray-700 hover:bg-gray-300'
                 }`}
               >
-                日本語
+                JP
               </button>
               <button
                 onClick={() => setLanguage('en')}

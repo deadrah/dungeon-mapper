@@ -80,7 +80,7 @@ const Header = ({
           <select
             value={currentMap}
             onChange={(e) => setCurrentMap(parseInt(e.target.value))}
-            className="bg-gray-600 text-white px-2 py-1 rounded text-sm"
+            className="bg-gray-600 text-white px-2 py-1.5 rounded text-sm h-8"
           >
             {Array.from({ length: MAX_MAPS }, (_, i) => i + 1).map(mapId => (
               <option key={mapId} value={mapId}>
@@ -90,11 +90,16 @@ const Header = ({
           </select>
           <button
             onClick={() => handleMapNameEdit(currentMap)}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded text-sm"
+            className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1.5 rounded text-sm h-8"
             title="Rename Current Map"
           >
             <span className="md:inline hidden">Rename</span>
-            <span className="md:hidden">✏️</span>
+            <span className="md:hidden">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.5 2L14 4.5L5 13.5H2.5V11L11.5 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M10 3.5L12.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
           </button>
         </div>
 
@@ -103,7 +108,7 @@ const Header = ({
           <select
             value={currentFloor}
             onChange={(e) => setCurrentFloor(parseInt(e.target.value))}
-            className="bg-gray-600 text-white px-2 py-1 rounded text-sm"
+            className="bg-gray-600 text-white px-2 py-1.5 rounded text-sm h-8"
           >
             {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floor => (
               <option key={floor} value={floor}>
@@ -113,11 +118,23 @@ const Header = ({
           </select>
           <button
             onClick={handleResetFloor}
-            className="bg-red-500 hover:bg-red-400 text-white px-2 py-1 rounded text-sm"
+            className="bg-red-500 hover:bg-red-400 text-white px-2 py-1.5 rounded text-sm h-8"
             title={`Reset Floor ${currentFloor}`}
           >
             <span className="md:inline hidden">Reset</span>
-            <span className="md:hidden">🗑️</span>
+            <span className="md:hidden">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="2" fill="currentColor"/>
+                <path d="M8 1V3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M8 13V15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M15 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M3 8H1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M12.95 3.05L11.54 4.46" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M4.46 11.54L3.05 12.95" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M12.95 12.95L11.54 11.54" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <path d="M4.46 4.46L3.05 3.05" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </span>
           </button>
         </div>
         
@@ -152,13 +169,19 @@ const Header = ({
 
         <button
           onClick={onToggleNoteTooltips}
-          className={`px-2 py-1 rounded text-sm w-16 md:w-16 w-12 transition-colors md:inline hidden ${
+          className={`px-2 py-1.5 rounded text-sm w-20 h-8 transition-colors md:inline-flex hidden items-center justify-center gap-1 ${
             showNoteTooltips 
               ? 'bg-green-600 hover:bg-green-500 text-white' 
               : 'bg-gray-600 hover:bg-gray-500 text-white'
           }`}
           title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
         >
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+            <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
           Note
         </button>
       </div>
@@ -237,13 +260,31 @@ const Header = ({
           </button>
         </div>
 
-        <button
-          onClick={() => setIsHelpOpen(true)}
-          className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm w-8"
-          title="ヘルプ"
-        >
-          ?
-        </button>
+        <div className="flex items-center space-x-1">
+          <button
+            onClick={onToggleNoteTooltips}
+            className={`px-2 py-1 rounded text-sm w-8 transition-colors md:hidden ${
+              showNoteTooltips 
+                ? 'bg-green-600 hover:bg-green-500 text-white' 
+                : 'bg-gray-600 hover:bg-gray-500 text-white'
+            }`}
+            title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.4em'}}>
+              <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+              <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </button>
+          <button
+            onClick={() => setIsHelpOpen(true)}
+            className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm w-8"
+            title="ヘルプ"
+          >
+            ?
+          </button>
+        </div>
       </div>
       
       {/* Map Rename Dialog */}

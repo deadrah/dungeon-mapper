@@ -30,6 +30,7 @@ const Canvas = ({
   const [noteDialog, setNoteDialog] = useState({ isOpen: false, row: null, col: null, text: '' })
   const [initialPinchDistance, setInitialPinchDistance] = useState(null)
   const [initialZoom, setInitialZoom] = useState(1)
+  const [isTwoFingerActive, setIsTwoFingerActive] = useState(false)
 
   const floorData = getCurrentFloorData()
 
@@ -110,6 +111,7 @@ const Canvas = ({
       
       setIsPanning(true)
       setLastMousePos({ x: centerX, y: centerY })
+      setIsTwoFingerActive(true)
       
       e.preventDefault()
     }
@@ -150,11 +152,13 @@ const Canvas = ({
       setIsPanning(false)
       setInitialPinchDistance(null)
       setInitialZoom(1)
+      setIsTwoFingerActive(false)
     } else if (e.touches.length < 2) {
       // Less than 2 fingers (end of pinch/two-finger pan)
       setIsPanning(false)
       setInitialPinchDistance(null)
       setInitialZoom(1)
+      setIsTwoFingerActive(false)
     }
   }, [])
 
@@ -720,6 +724,7 @@ const Canvas = ({
           dragLineType={dragLineType}
           dragStartRow={dragStartRow}
           dragStartCol={dragStartCol}
+          isTwoFingerActive={isTwoFingerActive}
         />
         
         <Walls
