@@ -14,7 +14,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     <style>
       .grid-line { stroke: #d1d5db; stroke-width: 1; opacity: 0.7; }
       .wall-line { stroke: #1f2937; stroke-width: 3; stroke-linecap: round; }
-      .door-open { fill: #d1d5db; stroke: #1f2937; stroke-width: 2; }
+      .door-open { fill: #ffffff; stroke: #1f2937; stroke-width: 2; }
       .door-closed { fill: #1f2937; stroke: #1f2937; stroke-width: 2; }
       .chest { fill: #8B4513; stroke: #8B4513; stroke-width: 1; }
       .chest-lock { fill: #FFD700; stroke: #FFD700; stroke-width: 1; }

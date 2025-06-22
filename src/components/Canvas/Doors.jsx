@@ -20,7 +20,7 @@ const Doors = ({ doors, zoom, offset, gridSize }) => {
           // Arrow doors: no border, just arrow SVG
           doorStyle = { backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' };
         } else if (isOpen) {
-          doorStyle = { backgroundColor: '#d0d0d0', border: '2px solid #000000' };
+          doorStyle = { backgroundColor: '#ffffff', border: '2px solid #000000' };
         } else {
           doorStyle = { backgroundColor: '#000000', border: '2px solid #000000' };
         }
