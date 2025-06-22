@@ -72,10 +72,10 @@ const Header = ({
 
   return (
     <div className="md:h-12 h-auto bg-gray-900 text-white md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0">
-      <div className="flex md:items-center md:space-x-4 flex-wrap gap-2 md:gap-0 justify-between md:justify-start">
+      <div className="flex md:items-center md:space-x-4 gap-2 md:gap-0 justify-between md:justify-start">
         <h1 className="text-lg font-bold md:mb-0 mb-1">DMapper</h1>
         
-        <div className="flex items-center space-x-2 md:flex-row flex-wrap">
+        <div className="flex items-center space-x-2 md:flex-row">
           <span className="text-sm md:inline hidden">Map:</span>
           <select
             value={currentMap}
@@ -187,7 +187,7 @@ const Header = ({
       </div>
 
       <div className="flex items-center md:space-x-2 space-x-1 justify-between md:justify-end mt-2 md:mt-0">
-        <div className="flex items-center space-x-1 md:block hidden">
+        <div className="flex items-center space-x-1 md:flex hidden ml-2">
           <button
             onClick={handleZoomOut}
             className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm"
@@ -236,7 +236,7 @@ const Header = ({
           <span className="text-sm text-blue-300">{toolName}</span>
         </div>
 
-        <div className="flex items-center space-x-1 md:block hidden">
+        <div className="flex items-center space-x-1 md:flex hidden">
           <button
             onClick={onExport}
             className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm w-16"
