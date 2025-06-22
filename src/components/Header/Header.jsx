@@ -286,7 +286,7 @@ const Header = ({
         <div className="flex items-center space-x-1">
           <button
             onClick={onToggleNoteTooltips}
-            className={`px-2 py-1 rounded text-sm w-8 transition-colors md:hidden ${
+            className={`px-2 py-1.5 rounded text-sm w-8 h-8 transition-colors md:hidden ${
               showNoteTooltips 
                 ? 'bg-green-600 hover:bg-green-500 text-white' 
                 : 'bg-gray-600 hover:bg-gray-500 text-white'
