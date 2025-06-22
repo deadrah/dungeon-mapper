@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.2.0',
+      version: 'バージョン 1.3.0',
       close: '閉じる',
       sections: {
         about: {
@@ -21,7 +21,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'マウスホイール:', desc: 'ズームイン/アウト' },
             { label: 'Shift + ドラッグ:', desc: 'パン（画面移動）' },
             { label: '左クリック:', desc: 'アイテム配置・色塗り・壁描画' },
-            { label: '右クリック:', desc: 'アイテム削除・色消去・壁削除' }
+            { label: '右クリック:', desc: 'アイテム削除・色消去・壁削除' },
+            { label: 'スマホ:', desc: '消去したい場合は消去ツール（⌫）を選択してタップ' }
           ]
         },
         keyboard: {
@@ -81,6 +82,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.3.0', date: '2025-06-22', changes: ['スマホ表示対応'] },
             { version: 'v1.2.0', date: '2025-06-22', changes: ['メモのツールチップ常時表示機能を追加', 'Noteボタンでツールチップのオン/オフ切り替え', 'DoorOpenの色を白に変更'] },
             { version: 'v1.1.1', date: '2025-06-22', changes: ['SVGエクスポートの表示品質を改善', '宝箱デザインをメインキャンバスと統一', 'Grid Arrowをシンプルな文字矢印に統一', 'Line Arrowの位置とデザインを修正'] },
             { version: 'v1.1.0', date: '2025-06-22', changes: ['SVGエクスポート機能を追加', '消去ツール（Eraser）を追加 - スマホ仮対応', 'ファイル名にタイムスタンプを追加'] },
@@ -91,7 +93,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.2.0',
+      version: 'Version 1.3.0',
       close: 'Close',
       sections: {
         about: {
@@ -104,7 +106,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'Mouse Wheel:', desc: 'Zoom in/out' },
             { label: 'Shift + Drag:', desc: 'Pan (move view)' },
             { label: 'Left Click:', desc: 'Place items, fill colors, draw walls' },
-            { label: 'Right Click:', desc: 'Remove items, clear colors, erase walls' }
+            { label: 'Right Click:', desc: 'Remove items, clear colors, erase walls' },
+            { label: 'Mobile:', desc: 'To erase, select the Eraser tool (⌫) and tap' }
           ]
         },
         keyboard: {
@@ -164,6 +167,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.3.0', date: '2025-06-22', changes: ['Mobile support'] },
             { version: 'v1.2.0', date: '2025-06-22', changes: ['Added always-visible note tooltips', 'Note button to toggle tooltip display on/off', 'Changed DoorOpen color to white'] },
             { version: 'v1.1.1', date: '2025-06-22', changes: ['Improved SVG export visual quality', 'Unified chest design with main canvas', 'Unified Grid Arrows to simple text arrows', 'Fixed Line Arrow positioning and design'] },
             { version: 'v1.1.0', date: '2025-06-22', changes: ['Added SVG export functionality', 'Added Eraser tool - mobile-friendly', 'Added timestamps to file names', 'Improved SVG output color accuracy'] },
@@ -177,8 +181,15 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const currentContent = content[language]
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-      <div className="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+    <div 
+      className="fixed inset-0 flex items-center justify-center z-50" 
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex justify-between items-center mb-4">
           <div>
             <h2 className="text-2xl font-bold text-black">{currentContent.title}</h2>

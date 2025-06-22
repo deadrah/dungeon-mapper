@@ -85,6 +85,48 @@ const Canvas = ({
     }
   }, [isPanning, lastMousePos])
 
+  // Touch event handlers for mobile
+  const handleTouchStart = useCallback((e) => {
+    if (e.touches.length === 2) {
+      // Two-finger touch for panning
+      const touch1 = e.touches[0]
+      const touch2 = e.touches[1]
+      const centerX = (touch1.clientX + touch2.clientX) / 2
+      const centerY = (touch1.clientY + touch2.clientY) / 2
+      
+      setIsPanning(true)
+      setLastMousePos({ x: centerX, y: centerY })
+      e.preventDefault()
+    }
+  }, [])
+
+  const handleTouchMove = useCallback((e) => {
+    if (e.touches.length === 2 && isPanning) {
+      // Two-finger pan
+      const touch1 = e.touches[0]
+      const touch2 = e.touches[1]
+      const centerX = (touch1.clientX + touch2.clientX) / 2
+      const centerY = (touch1.clientY + touch2.clientY) / 2
+      
+      const deltaX = centerX - lastMousePos.x
+      const deltaY = centerY - lastMousePos.y
+      
+      setOffset(prev => ({
+        x: prev.x + deltaX,
+        y: prev.y + deltaY
+      }))
+      
+      setLastMousePos({ x: centerX, y: centerY })
+      e.preventDefault()
+    }
+  }, [isPanning, lastMousePos])
+
+  const handleTouchEnd = useCallback((e) => {
+    if (e.touches.length < 2) {
+      setIsPanning(false)
+    }
+  }, [])
+
   const handleLineEnter = useCallback((row, col, isVertical) => {
     if (!isDraggingLine && !isDraggingErase) return;
     
@@ -625,7 +667,11 @@ const Canvas = ({
         ref={canvasRef}
         className="w-full h-full"
         onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onContextMenu={(e) => e.preventDefault()}
+        style={{ touchAction: 'none' }}
       >
         <Grid
           gridSize={appState.gridSize}

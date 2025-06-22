@@ -59,28 +59,34 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
   }
 
   return (
-    <div className="w-64 bg-gray-800 text-white flex flex-col">
-      <div className="p-2 text-center text-sm font-bold border-b border-gray-600">
+    <div className="md:w-64 w-full bg-gray-800 text-white flex flex-col md:max-h-none max-h-44">
+      <div className="p-2 text-center text-sm font-bold border-b border-gray-600 md:block hidden">
         Tools
       </div>
       
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
         {TOOL_GROUPS.map((group, groupIndex) => (
-          <div key={group.name}>
-            <div className="px-2 py-1 text-xs font-bold bg-gray-700 border-b border-gray-600">
+          <div key={group.name} className="md:block">
+            <div className="px-2 py-1 text-xs font-bold bg-gray-700 border-b border-gray-600 md:block hidden">
               {group.name}
             </div>
-            <div className="grid grid-cols-2 gap-px">
+            <div className={`md:grid md:grid-cols-2 md:gap-px md:p-0 p-2 ${
+              group.name === 'Grid Tools' 
+                ? 'grid grid-cols-8 gap-1' // モバイルでGrid Toolsは8列グリッド（16個のツールを2行で表示）
+                : 'flex gap-1' // Line Toolsは従来通り横スクロール
+            }`}>
               {group.tools.map((tool) => {
                 // Handle spacer items (non-interactive)
                 if (tool.isDisabled) {
                   return (
                     <div
                       key={tool.id}
-                      className="py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 bg-gray-800"
+                      className={`md:py-2 py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 bg-gray-800 ${
+                        group.name === 'Grid Tools' ? 'md:min-w-0' : 'md:min-w-0 min-w-12'
+                      }`}
                     >
                       <span className="text-lg">{tool.icon}</span>
-                      <span className="text-xs truncate w-full text-center px-1">{tool.name}</span>
+                      <span className="text-xs truncate w-full text-center px-1 md:block hidden">{tool.name}</span>
                     </div>
                   )
                 }
@@ -89,14 +95,16 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                   <button
                     key={tool.id}
                     onClick={() => setActiveTool(tool.id)}
-                    className={`py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 transition-colors hover:bg-gray-600 ${
-                      activeTool === tool.id ? 'text-white' : ''
-                    }`}
+                    className={`md:py-2 py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 transition-colors hover:bg-gray-600 rounded md:rounded-none ${
+                      group.name === 'Grid Tools' 
+                        ? 'md:min-w-0' // Grid Toolsはグリッド表示
+                        : 'md:min-w-0 min-w-12' // Line Toolsは最小幅設定
+                    } ${activeTool === tool.id ? 'text-white' : ''}`}
                     style={activeTool === tool.id ? { backgroundColor: '#496fc1' } : {}}
                     title={`${tool.name} - ${tool.description}${tool.key ? ` (${tool.key})` : ''}`}
                   >
                     <span className="text-lg">{tool.icon}</span>
-                    <span className="text-xs truncate w-full text-center px-1">{tool.name}</span>
+                    <span className="text-xs truncate w-full text-center px-1 md:block hidden">{tool.name}</span>
                   </button>
                 )
               })}
@@ -119,6 +127,19 @@ export const getToolKeyMappings = () => {
     })
   })
   return keyMap
+}
+
+// Export function to get tool name by ID
+export const getToolName = (toolId) => {
+  let foundTool = null
+  TOOL_GROUPS.forEach(group => {
+    group.tools.forEach(tool => {
+      if (tool.id === toolId && !tool.isDisabled) {
+        foundTool = tool
+      }
+    })
+  })
+  return foundTool ? foundTool.name : 'Unknown Tool'
 }
 
 export default ToolPanel

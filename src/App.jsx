@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react'
 import { useAppState } from './hooks/useAppState'
 import Header from './components/Header/Header'
-import ToolPanel, { getToolKeyMappings } from './components/ToolPanel/ToolPanel'
+import ToolPanel, { getToolKeyMappings, getToolName } from './components/ToolPanel/ToolPanel'
 import Canvas from './components/Canvas/Canvas'
 import { TOOLS } from './utils/constants'
 
@@ -84,9 +84,11 @@ function App() {
         onExportSVG={exportFloorSVG}
         showNoteTooltips={state.showNoteTooltips}
         onToggleNoteTooltips={toggleNoteTooltips}
+        activeTool={state.activeTool}
+        toolName={getToolName(state.activeTool)}
       />
       
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden md:flex-row flex-col">
         <ToolPanel
           activeTool={state.activeTool}
           setActiveTool={setActiveTool}

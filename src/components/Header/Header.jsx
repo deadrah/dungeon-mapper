@@ -20,7 +20,9 @@ const Header = ({
   onResetFloor,
   onExportSVG,
   showNoteTooltips,
-  onToggleNoteTooltips
+  onToggleNoteTooltips,
+  activeTool,
+  toolName
 }) => {
   const [editingMapId, setEditingMapId] = useState(null)
   const [editingMapName, setEditingMapName] = useState('')
@@ -66,14 +68,15 @@ const Header = ({
     }
     input.click()
   }
+  
 
   return (
-    <div className="h-12 bg-gray-900 text-white flex items-center justify-between px-4">
-      <div className="flex items-center space-x-4">
-        <h1 className="text-lg font-bold">DMapper</h1>
+    <div className="md:h-12 h-auto bg-gray-900 text-white md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0">
+      <div className="flex md:items-center md:space-x-4 flex-wrap gap-2 md:gap-0 justify-between md:justify-start">
+        <h1 className="text-lg font-bold md:mb-0 mb-1">DMapper</h1>
         
-        <div className="flex items-center space-x-2">
-          <span className="text-sm">Map:</span>
+        <div className="flex items-center space-x-2 md:flex-row flex-wrap">
+          <span className="text-sm md:inline hidden">Map:</span>
           <select
             value={currentMap}
             onChange={(e) => setCurrentMap(parseInt(e.target.value))}
@@ -90,12 +93,13 @@ const Header = ({
             className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded text-sm"
             title="Rename Current Map"
           >
-            Rename
+            <span className="md:inline hidden">Rename</span>
+            <span className="md:hidden">✏️</span>
           </button>
         </div>
 
         <div className="flex items-center space-x-2">
-          <span className="text-sm">Floor:</span>
+          <span className="text-sm md:inline hidden">Floor:</span>
           <select
             value={currentFloor}
             onChange={(e) => setCurrentFloor(parseInt(e.target.value))}
@@ -112,11 +116,12 @@ const Header = ({
             className="bg-red-500 hover:bg-red-400 text-white px-2 py-1 rounded text-sm"
             title={`Reset Floor ${currentFloor}`}
           >
-            Reset
+            <span className="md:inline hidden">Reset</span>
+            <span className="md:hidden">🗑️</span>
           </button>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="md:flex items-center space-x-2 hidden">
           <span className="text-sm">Grid:</span>
           <input
             type="number"
@@ -147,7 +152,7 @@ const Header = ({
 
         <button
           onClick={onToggleNoteTooltips}
-          className={`px-2 py-1 rounded text-sm ml-2 w-16 transition-colors ${
+          className={`px-2 py-1 rounded text-sm w-16 md:w-16 w-12 transition-colors md:inline hidden ${
             showNoteTooltips 
               ? 'bg-green-600 hover:bg-green-500 text-white' 
               : 'bg-gray-600 hover:bg-gray-500 text-white'
@@ -158,8 +163,8 @@ const Header = ({
         </button>
       </div>
 
-      <div className="flex items-center space-x-2">
-        <div className="flex items-center space-x-1">
+      <div className="flex items-center md:space-x-2 space-x-1 justify-between md:justify-end mt-2 md:mt-0">
+        <div className="flex items-center space-x-1 md:block hidden">
           <button
             onClick={handleZoomOut}
             className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm"
@@ -203,7 +208,12 @@ const Header = ({
           </button>
         </div>
 
-        <div className="flex items-center space-x-1">
+        {/* スマホでは選択中のツール名を中央表示 */}
+        <div className="md:hidden flex-1 text-center">
+          <span className="text-sm text-blue-300">{toolName}</span>
+        </div>
+
+        <div className="flex items-center space-x-1 md:block hidden">
           <button
             onClick={onExport}
             className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm w-16"
@@ -229,7 +239,7 @@ const Header = ({
 
         <button
           onClick={() => setIsHelpOpen(true)}
-          className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm ml-2 w-8"
+          className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm w-8"
           title="ヘルプ"
         >
           ?
