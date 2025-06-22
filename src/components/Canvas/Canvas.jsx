@@ -28,8 +28,20 @@ const Canvas = ({
   const [dragDirectionDetected, setDragDirectionDetected] = useState(false)
   const [isRightMouseDown, setIsRightMouseDown] = useState(false)
   const [noteDialog, setNoteDialog] = useState({ isOpen: false, row: null, col: null, text: '' })
+  const [initialPinchDistance, setInitialPinchDistance] = useState(null)
+  const [initialZoom, setInitialZoom] = useState(1)
+  const [isSingleTouchPanning, setIsSingleTouchPanning] = useState(false)
+  const [singleTouchStart, setSingleTouchStart] = useState(null)
+  const [panThreshold] = useState(10) // Minimum movement to start panning
 
   const floorData = getCurrentFloorData()
+
+  // Calculate distance between two touch points
+  const getDistance = useCallback((touch1, touch2) => {
+    const dx = touch1.clientX - touch2.clientX
+    const dy = touch1.clientY - touch2.clientY
+    return Math.sqrt(dx * dx + dy * dy)
+  }, [])
 
   const handleWheel = useCallback((e) => {
     e.preventDefault()
@@ -87,27 +99,82 @@ const Canvas = ({
 
   // Touch event handlers for mobile
   const handleTouchStart = useCallback((e) => {
-    if (e.touches.length === 2) {
-      // Two-finger touch for panning
+    if (e.touches.length === 1) {
+      // Single finger touch - prepare for potential panning
+      const touch = e.touches[0]
+      setSingleTouchStart({ 
+        x: touch.clientX, 
+        y: touch.clientY, 
+        time: Date.now() 
+      })
+      setIsSingleTouchPanning(false)
+    } else if (e.touches.length === 2) {
+      // Two-finger touch for panning and pinch zoom
       const touch1 = e.touches[0]
       const touch2 = e.touches[1]
       const centerX = (touch1.clientX + touch2.clientX) / 2
       const centerY = (touch1.clientY + touch2.clientY) / 2
+      
+      // Initialize pinch zoom
+      const distance = getDistance(touch1, touch2)
+      setInitialPinchDistance(distance)
+      setInitialZoom(appState.zoom)
       
       setIsPanning(true)
       setLastMousePos({ x: centerX, y: centerY })
+      
+      // Clear single touch state when two fingers detected
+      setSingleTouchStart(null)
+      setIsSingleTouchPanning(false)
       e.preventDefault()
     }
-  }, [])
+  }, [getDistance, appState.zoom])
 
   const handleTouchMove = useCallback((e) => {
-    if (e.touches.length === 2 && isPanning) {
-      // Two-finger pan
+    if (e.touches.length === 1 && singleTouchStart) {
+      // Single finger movement
+      const touch = e.touches[0]
+      const deltaX = touch.clientX - singleTouchStart.x
+      const deltaY = touch.clientY - singleTouchStart.y
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+      
+      // Start panning if movement exceeds threshold
+      if (distance > panThreshold && !isSingleTouchPanning) {
+        setIsSingleTouchPanning(true)
+        setLastMousePos({ x: singleTouchStart.x, y: singleTouchStart.y })
+        e.preventDefault()
+      }
+      
+      // Continue panning if already started
+      if (isSingleTouchPanning) {
+        const currentX = touch.clientX
+        const currentY = touch.clientY
+        const panDeltaX = currentX - lastMousePos.x
+        const panDeltaY = currentY - lastMousePos.y
+        
+        setOffset(prev => ({
+          x: prev.x + panDeltaX,
+          y: prev.y + panDeltaY
+        }))
+        
+        setLastMousePos({ x: currentX, y: currentY })
+        e.preventDefault()
+      }
+    } else if (e.touches.length === 2 && isPanning) {
       const touch1 = e.touches[0]
       const touch2 = e.touches[1]
       const centerX = (touch1.clientX + touch2.clientX) / 2
       const centerY = (touch1.clientY + touch2.clientY) / 2
       
+      // Handle pinch zoom
+      if (initialPinchDistance !== null) {
+        const currentDistance = getDistance(touch1, touch2)
+        const scale = currentDistance / initialPinchDistance
+        const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, initialZoom * scale))
+        setZoom(newZoom)
+      }
+      
+      // Handle pan
       const deltaX = centerX - lastMousePos.x
       const deltaY = centerY - lastMousePos.y
       
@@ -119,11 +186,21 @@ const Canvas = ({
       setLastMousePos({ x: centerX, y: centerY })
       e.preventDefault()
     }
-  }, [isPanning, lastMousePos])
+  }, [singleTouchStart, isSingleTouchPanning, panThreshold, lastMousePos, isPanning, initialPinchDistance, initialZoom, getDistance, setZoom])
 
   const handleTouchEnd = useCallback((e) => {
-    if (e.touches.length < 2) {
+    if (e.touches.length === 0) {
+      // All fingers lifted
       setIsPanning(false)
+      setInitialPinchDistance(null)
+      setInitialZoom(1)
+      setSingleTouchStart(null)
+      setIsSingleTouchPanning(false)
+    } else if (e.touches.length < 2) {
+      // Less than 2 fingers (end of pinch/two-finger pan)
+      setIsPanning(false)
+      setInitialPinchDistance(null)
+      setInitialZoom(1)
     }
   }, [])
 
