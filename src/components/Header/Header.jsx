@@ -309,7 +309,7 @@ const Header = ({
           </button>
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-sm w-8 md:hidden"
+            className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden"
             title="メニュー"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
