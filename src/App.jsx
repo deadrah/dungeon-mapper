@@ -14,6 +14,7 @@ function App() {
     setZoom,
     setActiveTool,
     setGridSize,
+    toggleNoteTooltips,
     updateCurrentFloorData,
     getCurrentFloorData,
     undo,
@@ -81,6 +82,8 @@ function App() {
         onRedo={redo}
         onResetFloor={resetCurrentFloor}
         onExportSVG={exportFloorSVG}
+        showNoteTooltips={state.showNoteTooltips}
+        onToggleNoteTooltips={toggleNoteTooltips}
       />
       
       <div className="flex flex-1 overflow-hidden">
@@ -94,6 +97,7 @@ function App() {
           setZoom={setZoom}
           updateCurrentFloorData={updateCurrentFloorData}
           getCurrentFloorData={getCurrentFloorData}
+          showNoteTooltips={state.showNoteTooltips}
         />
       </div>
     </div>

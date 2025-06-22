@@ -23,6 +23,7 @@ const INITIAL_STATE = {
   gridSize: { rows: 20, cols: 20 },
   zoom: 1.0,
   activeTool: 'block_color',
+  showNoteTooltips: true,
   maps: {
     1: {
       name: 'Map 1',
@@ -244,6 +245,10 @@ export const useAppState = () => {
     updateState(state => ({ ...state, activeTool: tool }))
   }, [updateState])
 
+  const toggleNoteTooltips = useCallback(() => {
+    updateState(state => ({ ...state, showNoteTooltips: !state.showNoteTooltips }))
+  }, [updateState])
+
   const updateCurrentFloorData = useCallback((dataType, data) => {
     updateState(state => ({
       ...state,
@@ -370,6 +375,7 @@ export const useAppState = () => {
     setZoom,
     setActiveTool,
     setGridSize,
+    toggleNoteTooltips,
     updateCurrentFloorData,
     getCurrentFloorData,
     resetCurrentFloor,

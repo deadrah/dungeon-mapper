@@ -10,7 +10,8 @@ const Canvas = ({
   appState, 
   setZoom, 
   updateCurrentFloorData,
-  getCurrentFloorData 
+  getCurrentFloorData,
+  showNoteTooltips = true
 }) => {
   const canvasRef = useRef(null)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
@@ -656,6 +657,7 @@ const Canvas = ({
           zoom={appState.zoom}
           offset={offset}
           gridSize={appState.gridSize}
+          showNoteTooltips={showNoteTooltips}
         />
         
         <Doors

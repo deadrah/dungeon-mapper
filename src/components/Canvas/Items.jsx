@@ -21,7 +21,7 @@ const ITEM_ICONS = {
   [TOOLS.ARROW_WEST]: '←'
 }
 
-const Items = ({ items, zoom, offset, gridSize }) => {
+const Items = ({ items, zoom, offset, gridSize, showNoteTooltips = true }) => {
   const cellSize = GRID_SIZE * zoom
 
   const renderItem = (item) => {
@@ -47,7 +47,7 @@ const Items = ({ items, zoom, offset, gridSize }) => {
   }
 
   return (
-    <div className="absolute inset-0" style={{ zIndex: 7, pointerEvents: 'none' }}>
+    <div className="absolute inset-0" style={{ zIndex: 15, pointerEvents: 'none' }}>
       {items.map((item, index) => {
         // Special styling for different items
         const isElevator = item.type === TOOLS.ELEVATOR
@@ -74,21 +74,45 @@ const Items = ({ items, zoom, offset, gridSize }) => {
         const fontWeight = isElevator ? '900' : 'bold'
         
         return (
-          <div
-            key={index}
-            className="absolute flex items-center justify-center pointer-events-none"
-            style={{
-              left: offset.x + item.col * cellSize + 24,
-              top: offset.y + (gridSize.rows - 1 - item.row) * cellSize + 24,
-              width: cellSize,
-              height: cellSize,
-              fontSize: fontSize,
-              backgroundColor: 'transparent',
-              color: textColor,
-              fontWeight: fontWeight
-            }}
-          >
-            {renderItem(item)}
+          <div key={index} className="absolute pointer-events-none">
+            {/* Main item */}
+            <div
+              className="flex items-center justify-center"
+              style={{
+                left: offset.x + item.col * cellSize + 24,
+                top: offset.y + (gridSize.rows - 1 - item.row) * cellSize + 24,
+                width: cellSize,
+                height: cellSize,
+                fontSize: fontSize,
+                backgroundColor: 'transparent',
+                color: textColor,
+                fontWeight: fontWeight,
+                position: 'absolute'
+              }}
+            >
+              {renderItem(item)}
+            </div>
+            
+            {/* Tooltip for notes */}
+            {item.type === TOOLS.NOTE && showNoteTooltips && item.text && (
+              <div
+                className="bg-yellow-100 border border-yellow-300 rounded px-2 py-1 text-black shadow-lg"
+                style={{
+                  position: 'absolute',
+                  left: offset.x + item.col * cellSize + 14,
+                  top: offset.y + (gridSize.rows - 1 - item.row) * cellSize + 20,
+                  fontSize: '8px',
+                  whiteSpace: 'nowrap',
+                  maxWidth: `${cellSize * 2}px`,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  zIndex: 100
+                }}
+                title={item.text}
+              >
+                {item.text.length > 6 ? `${item.text.slice(0, 6)}...` : item.text}
+              </div>
+            )}
           </div>
         )
       })}

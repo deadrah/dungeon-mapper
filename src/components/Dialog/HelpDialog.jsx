@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.1.1',
+      version: 'バージョン 1.2.0',
       close: '閉じる',
       sections: {
         about: {
@@ -65,7 +65,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: '自動保存:', desc: '操作は自動的にブラウザのローカルストレージに保存されます' },
             { label: 'Export:', desc: 'JSONファイルとしてマップデータをダウンロード' },
             { label: 'Import:', desc: 'JSONファイルからマップデータを読み込み' },
-            { label: 'SVG:', desc: '現在のフロアをSVG画像ファイルとしてダウンロード' }
+            { label: 'SVG:', desc: '現在のフロアをSVG画像ファイルとしてダウンロード' },
+            { label: 'Note:', desc: 'メモのツールチップ表示をオン/オフ切り替え（常時表示）' }
           ]
         },
         notes: {
@@ -80,6 +81,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.2.0', date: '2025-06-22', changes: ['メモのツールチップ常時表示機能を追加', 'Noteボタンでツールチップのオン/オフ切り替え', 'DoorOpenの色を白に変更'] },
             { version: 'v1.1.1', date: '2025-06-22', changes: ['SVGエクスポートの表示品質を改善', '宝箱デザインをメインキャンバスと統一', 'Grid Arrowをシンプルな文字矢印に統一', 'Line Arrowの位置とデザインを修正'] },
             { version: 'v1.1.0', date: '2025-06-22', changes: ['SVGエクスポート機能を追加', '消去ツール（Eraser）を追加 - スマホ仮対応', 'ファイル名にタイムスタンプを追加'] },
             { version: 'v1.0.0', date: '2025-06-21', changes: ['初回リリース', '基本的なマッピング機能', 'マルチフロア・マルチマップ対応', 'JSONエクスポート/インポート機能'] }
@@ -89,7 +91,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.1.1',
+      version: 'Version 1.2.0',
       close: 'Close',
       sections: {
         about: {
@@ -146,7 +148,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'Auto-save:', desc: 'All changes are automatically saved to browser local storage' },
             { label: 'Export:', desc: 'Download map data as JSON file' },
             { label: 'Import:', desc: 'Load map data from JSON file' },
-            { label: 'SVG:', desc: 'Download current floor as SVG image file' }
+            { label: 'SVG:', desc: 'Download current floor as SVG image file' },
+            { label: 'Note:', desc: 'Toggle note tooltip display on/off (always visible when on)' }
           ]
         },
         notes: {
@@ -161,6 +164,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.2.0', date: '2025-06-22', changes: ['Added always-visible note tooltips', 'Note button to toggle tooltip display on/off', 'Changed DoorOpen color to white'] },
             { version: 'v1.1.1', date: '2025-06-22', changes: ['Improved SVG export visual quality', 'Unified chest design with main canvas', 'Unified Grid Arrows to simple text arrows', 'Fixed Line Arrow positioning and design'] },
             { version: 'v1.1.0', date: '2025-06-22', changes: ['Added SVG export functionality', 'Added Eraser tool - mobile-friendly', 'Added timestamps to file names', 'Improved SVG output color accuracy'] },
             { version: 'v1.0.0', date: '2025-06-21', changes: ['Initial release', 'Basic mapping functionality', 'Multi-floor and multi-map support', 'JSON export/import functionality'] }

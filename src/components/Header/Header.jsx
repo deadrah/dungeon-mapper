@@ -18,7 +18,9 @@ const Header = ({
   gridSize,
   onGridSizeChange,
   onResetFloor,
-  onExportSVG
+  onExportSVG,
+  showNoteTooltips,
+  onToggleNoteTooltips
 }) => {
   const [editingMapId, setEditingMapId] = useState(null)
   const [editingMapName, setEditingMapName] = useState('')
@@ -142,6 +144,18 @@ const Header = ({
             title="Grid Size (5-50)"
           />
         </div>
+
+        <button
+          onClick={onToggleNoteTooltips}
+          className={`px-2 py-1 rounded text-sm ml-2 w-16 transition-colors ${
+            showNoteTooltips 
+              ? 'bg-green-600 hover:bg-green-500 text-white' 
+              : 'bg-gray-600 hover:bg-gray-500 text-white'
+          }`}
+          title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
+        >
+          Note
+        </button>
       </div>
 
       <div className="flex items-center space-x-2">
