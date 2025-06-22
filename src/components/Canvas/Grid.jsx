@@ -278,7 +278,8 @@ const Grid = ({
                 fill="transparent"
                 style={{ 
                   pointerEvents: 'all',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  touchAction: 'manipulation'
                 }}
                 onClick={(e) => {
                   e.stopPropagation()
@@ -331,7 +332,8 @@ const Grid = ({
                     onMouseEnter={isEnabled ? (e) => handleLineEnter(e, row, col, false) : undefined}
                     style={{ 
                       cursor: isEnabled ? 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" fill="black"/></svg>) 8 8, crosshair' : 'default',
-                      pointerEvents: isEnabled ? 'auto' : 'none'
+                      pointerEvents: isEnabled ? 'auto' : 'none',
+                      touchAction: 'manipulation'
                     }}
                   />
                 )
@@ -363,7 +365,8 @@ const Grid = ({
                     onMouseEnter={isEnabled ? (e) => handleLineEnter(e, row, col, true) : undefined}
                     style={{ 
                       cursor: isEnabled ? 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" fill="black"/></svg>) 8 8, crosshair' : 'default',
-                      pointerEvents: isEnabled ? 'auto' : 'none'
+                      pointerEvents: isEnabled ? 'auto' : 'none',
+                      touchAction: 'manipulation'
                     }}
                   />
                 )
