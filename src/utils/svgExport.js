@@ -158,7 +158,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           // Arrow on vertical line - same design as main canvas
           const arrowSize = cellSize * 0.5
           const scale = arrowSize / 20 // Scale factor to match original viewBox 0 0 20 20
-          svg += `      <g transform="translate(${centerX - arrowSize/2}, ${centerY + cellSize * 0.3 - arrowSize/2}) scale(${scale})">\n`
+          svg += `      <g transform="translate(${centerX - arrowSize/2}, ${centerY - arrowSize/2}) scale(${scale})">\n`
           
           if (door.type === 'line_arrow_north') {
             svg += `        <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" class="line-arrow"/>\n`
@@ -187,7 +187,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           // Arrow on horizontal line - same design as main canvas
           const arrowSize = cellSize * 0.5
           const scale = arrowSize / 20 // Scale factor to match original viewBox 0 0 20 20
-          svg += `      <g transform="translate(${centerX + cellSize * 0.3 - arrowSize/2}, ${centerY - arrowSize/2}) scale(${scale})">\n`
+          svg += `      <g transform="translate(${centerX - arrowSize/2}, ${centerY - arrowSize/2}) scale(${scale})">\n`
           
           if (door.type === 'line_arrow_north') {
             svg += `        <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" class="line-arrow"/>\n`
