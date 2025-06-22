@@ -29,15 +29,16 @@ const Grid = ({
   const handleCellClick = (e, row, col) => {
     e.preventDefault()
     if (e.button === 0) {
-      onGridClick(row, col)
+      onGridClick(row, col, e)
     } else if (e.button === 2) {
       onGridRightClick(row, col)
     }
   }
 
+
   const handleCellMouseEnter = (e, row, col) => {
     if (e.buttons === 1) { // Left mouse button is pressed
-      onGridClick(row, col)
+      onGridClick(row, col, e)
     } else if (e.buttons === 2) { // Right mouse button is pressed
       onGridRightClick(row, col)
     }
@@ -45,7 +46,7 @@ const Grid = ({
 
   const handleCellMouseOver = (e, row, col) => {
     if (e.buttons === 1) { // Left mouse button is pressed
-      onGridClick(row, col)
+      onGridClick(row, col, e)
     } else if (e.buttons === 2) { // Right mouse button is pressed
       onGridRightClick(row, col)
     }

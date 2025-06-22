@@ -436,6 +436,20 @@ const Canvas = ({
     
     const actualRow = appState.gridSize.rows - 1 - row;
     
+    // Check if there's an existing note at this location
+    const existingNote = floorData.items.find(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
+    
+    // If there's an existing note, open the note dialog regardless of current tool (except Eraser)
+    if (existingNote && appState.activeTool !== TOOLS.ERASER) {
+      setNoteDialog({
+        isOpen: true,
+        row: actualRow,
+        col,
+        text: existingNote.text || ''
+      })
+      return
+    }
+    
     // Handle eraser tool
     if (appState.activeTool === TOOLS.ERASER) {
       // Remove grid fill

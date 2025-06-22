@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.3.1',
+      version: 'バージョン 1.3.2',
       close: '閉じる',
       sections: {
         about: {
@@ -21,7 +21,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'ズームイン/アウト:', desc: 'マウスホイール / ピンチインアウト' },
             { label: 'パン（画面移動）:', desc: 'Shift + ドラッグ / 2本指フリック' },
             { label: 'アイテム配置・色塗り・壁描画:', desc: '左クリック / タップ' },
-            { label: 'アイテム削除・色消去・壁削除:', desc: '右クリック / 消去ツール' }
+            { label: 'アイテム削除・色消去・壁削除:', desc: '右クリック / 消去ツール' },
+            { label: 'メモ編集:', desc: '既存メモをクリック（任意のツール状態で可能）' }
           ]
         },
         keyboard: {
@@ -81,6 +82,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.3.2', date: '2025-06-22', changes: ['どのツールでもNoteを開けるように変更'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['スマホタッチ操作を改善', '1本指はツール操作専用、2本指でマップ移動・ズーム', 'ヘルプの操作説明を「機能：操作方法」形式に統一'] },
             { version: 'v1.3.0', date: '2025-06-22', changes: ['スマホ表示対応'] },
             { version: 'v1.2.0', date: '2025-06-22', changes: ['メモのツールチップ常時表示機能を追加', 'Noteボタンでツールチップのオン/オフ切り替え', 'DoorOpenの色を白に変更'] },
@@ -93,7 +95,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.3.1',
+      version: 'Version 1.3.2',
       close: 'Close',
       sections: {
         about: {
@@ -106,7 +108,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'Zoom in/out:', desc: 'Mouse wheel / Pinch gestures' },
             { label: 'Pan (move view):', desc: 'Shift + drag / Two-finger drag' },
             { label: 'Place items, fill colors, draw walls:', desc: 'Left click / Tap' },
-            { label: 'Remove items, clear colors, erase walls:', desc: 'Right click / Eraser tool' }
+            { label: 'Remove items, clear colors, erase walls:', desc: 'Right click / Eraser tool' },
+            { label: 'Edit notes:', desc: 'Click existing note (works with any tool)' }
           ]
         },
         keyboard: {
@@ -166,6 +169,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.3.2', date: '2025-06-22', changes: ['Enable note editing with any tool'] },
+            { version: 'v1.3.1', date: '2025-06-22', changes: ['Improved mobile touch controls', 'Single finger for tool operations, two fingers for map movement/zoom', 'Unified help documentation to "function: operation" format'] },
             { version: 'v1.3.0', date: '2025-06-22', changes: ['Mobile support'] },
             { version: 'v1.2.0', date: '2025-06-22', changes: ['Added always-visible note tooltips', 'Note button to toggle tooltip display on/off', 'Changed DoorOpen color to white'] },
             { version: 'v1.1.1', date: '2025-06-22', changes: ['Improved SVG export visual quality', 'Unified chest design with main canvas', 'Unified Grid Arrows to simple text arrows', 'Fixed Line Arrow positioning and design'] },

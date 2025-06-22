@@ -22,8 +22,15 @@ const NoteDialog = ({ isOpen, onClose, onSave, initialText = '' }) => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-      <div className="bg-white rounded-lg p-6 w-96 max-w-full mx-4">
+    <div 
+      className="fixed inset-0 flex items-center justify-center z-50" 
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+      onClick={handleCancel}
+    >
+      <div 
+        className="bg-white rounded-lg p-6 w-96 max-w-full mx-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-lg font-bold mb-4">メモを入力</h2>
         
         <textarea
