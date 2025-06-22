@@ -46,7 +46,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { name: 'ドア:', desc: '既存の壁に開いたドア（□）または閉じたドア（■）を配置します。', color: 'text-orange-600' },
             { name: '矢印:', desc: 'グリッドセルまたは壁に方向矢印を配置します。', color: 'text-indigo-600' },
             { name: 'ノート:', desc: 'セルにメモを追加します。クリックでテキストダイアログが開きます。', color: 'text-pink-600' },
-            { name: '消去ツール（Eraser）:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。右クリック不要のスマホ対応ツールです。', color: 'text-red-500' }
+            { name: '消去ツール（Eraser）:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。(スマホで右クリック消去できないので仮対応)', color: 'text-red-500' }
           ]
         },
         mapManagement: {
@@ -80,7 +80,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
-            { version: 'v1.1.0', date: '2025-06-22', changes: ['SVGエクスポート機能を追加', '消去ツール（Eraser）を追加 - スマホ対応', 'ファイル名にタイムスタンプを追加', 'SVG出力の色彩を改善'] },
+            { version: 'v1.1.0', date: '2025-06-22', changes: ['SVGエクスポート機能を追加', '消去ツール（Eraser）を追加 - スマホ仮対応', 'ファイル名にタイムスタンプを追加'] },
             { version: 'v1.0.0', date: '2025-06-21', changes: ['初回リリース', '基本的なマッピング機能', 'マルチフロア・マルチマップ対応', 'JSONエクスポート/インポート機能'] }
           ]
         }
