@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.3.2',
+      version: 'バージョン 1.3.3',
       close: '閉じる',
       sections: {
         about: {
@@ -82,6 +82,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.3.3', date: '2025-06-22', changes: ['スマホにハンバーガーメニューで機能を追加'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['どのツールでもNoteを開けるように変更'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['スマホタッチ操作を改善', '1本指はツール操作専用、2本指でマップ移動・ズーム', 'ヘルプの操作説明を「機能：操作方法」形式に統一'] },
             { version: 'v1.3.0', date: '2025-06-22', changes: ['スマホ表示対応'] },
@@ -95,7 +96,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.3.2',
+      version: 'Version 1.3.3',
       close: 'Close',
       sections: {
         about: {
@@ -169,6 +170,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.3.3', date: '2025-06-22', changes: ['Add hamburger menu for mobile with hidden desktop features'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['Enable note editing with any tool'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['Improved mobile touch controls', 'Single finger for tool operations, two fingers for map movement/zoom', 'Unified help documentation to "function: operation" format'] },
             { version: 'v1.3.0', date: '2025-06-22', changes: ['Mobile support'] },
