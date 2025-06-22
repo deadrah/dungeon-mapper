@@ -27,10 +27,33 @@ const Header = ({
   const [editingMapId, setEditingMapId] = useState(null)
   const [editingMapName, setEditingMapName] = useState('')
   const [isHelpOpen, setIsHelpOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleZoomIn = () => setZoom(Math.min(5, zoom * 1.2))
   const handleZoomOut = () => setZoom(Math.max(0.1, zoom * 0.8))
   const handleZoomReset = () => setZoom(1)
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
+  const handleMobileExport = () => {
+    onExport()
+    closeMobileMenu()
+  }
+
+  const handleMobileImport = () => {
+    handleImportClick()
+    closeMobileMenu()
+  }
+
+  const handleMobileSVG = () => {
+    onExportSVG()
+    closeMobileMenu()
+  }
+
+  const handleMobileHelp = () => {
+    setIsHelpOpen(true)
+    closeMobileMenu()
+  }
   
   const handleResetFloor = () => {
     if (window.confirm(`Floor ${currentFloor}のすべてのデータを削除しますか？この操作は元に戻せません。`)) {
@@ -279,10 +302,21 @@ const Header = ({
           </button>
           <button
             onClick={() => setIsHelpOpen(true)}
-            className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm w-8"
+            className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm w-8 md:block hidden"
             title="ヘルプ"
           >
             ?
+          </button>
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-sm w-8 md:hidden"
+            title="メニュー"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 4h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M2 8h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M2 12h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -327,6 +361,82 @@ const Header = ({
         </div>
       )}
       
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 flex items-center justify-center z-50" 
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          onClick={closeMobileMenu}
+        >
+          <div 
+            className="bg-white rounded-lg p-4 w-64 max-w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold mb-4 text-gray-900">メニュー</h3>
+            
+            <div className="space-y-2">
+              <div className="border-b border-gray-200 pb-2 mb-2">
+                <h4 className="text-sm font-semibold text-gray-600 mb-2">グリッド設定</h4>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-700">Size:</span>
+                  <input
+                    type="number"
+                    value={gridSize.cols}
+                    onChange={(e) => {
+                      const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
+                      onGridSizeChange({ rows: size, cols: size })
+                    }}
+                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-16"
+                    min="5"
+                    max="50"
+                  />
+                  <span className="text-sm text-gray-700">x</span>
+                  <input
+                    type="number"
+                    value={gridSize.rows}
+                    onChange={(e) => {
+                      const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
+                      onGridSizeChange({ rows: size, cols: gridSize.cols })
+                    }}
+                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-16"
+                    min="5"
+                    max="50"
+                  />
+                </div>
+              </div>
+              
+              <button
+                onClick={handleMobileExport}
+                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Export Map
+              </button>
+              
+              <button
+                onClick={handleMobileImport}
+                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Import Map
+              </button>
+              
+              <button
+                onClick={handleMobileSVG}
+                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Download SVG
+              </button>
+              
+              <button
+                onClick={handleMobileHelp}
+                className="w-full bg-yellow-700 hover:bg-yellow-600 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Help
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Help Dialog */}
       <HelpDialog
         isOpen={isHelpOpen}
