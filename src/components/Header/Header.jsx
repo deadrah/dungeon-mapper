@@ -207,7 +207,7 @@ const Header = ({
 
         <button
           onClick={() => setIsHelpOpen(true)}
-          className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm ml-2"
+          className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm ml-2 w-8"
           title="ヘルプ"
         >
           ?
