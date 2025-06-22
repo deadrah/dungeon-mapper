@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.0.0',
+      version: 'バージョン 1.1.0',
       close: '閉じる',
       sections: {
         about: {
@@ -76,12 +76,19 @@ const HelpDialog = ({ isOpen, onClose }) => {
             'ドアや壁の矢印は、既存の壁にのみ配置できます',
             'セルの矢印は壁とは独立してセルの中央に配置されます'
           ]
+        },
+        changelog: {
+          title: '更新履歴',
+          items: [
+            { version: 'v1.1.0', date: '2025-06-22', changes: ['SVGエクスポート機能を追加', '消去ツール（Eraser）を追加 - スマホ対応', 'ファイル名にタイムスタンプを追加', 'SVG出力の色彩を改善'] },
+            { version: 'v1.0.0', date: '2025-06-21', changes: ['初回リリース', '基本的なマッピング機能', 'マルチフロア・マルチマップ対応', 'JSONエクスポート/インポート機能'] }
+          ]
         }
       }
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.0.0',
+      version: 'Version 1.1.0',
       close: 'Close',
       sections: {
         about: {
@@ -148,6 +155,13 @@ const HelpDialog = ({ isOpen, onClose }) => {
             'Regular backups using the Export function are recommended for important maps',
             'Doors and wall arrows can only be placed on existing walls',
             'Cell arrows are placed independently in the center of grid cells'
+          ]
+        },
+        changelog: {
+          title: 'Update History',
+          items: [
+            { version: 'v1.1.0', date: '2025-06-22', changes: ['Added SVG export functionality', 'Added Eraser tool - mobile-friendly', 'Added timestamps to file names', 'Improved SVG output color accuracy'] },
+            { version: 'v1.0.0', date: '2025-06-21', changes: ['Initial release', 'Basic mapping functionality', 'Multi-floor and multi-map support', 'JSON export/import functionality'] }
           ]
         }
       }
@@ -264,6 +278,26 @@ const HelpDialog = ({ isOpen, onClose }) => {
             <div className="space-y-2 text-gray-700">
               {currentContent.sections.notes.items.map((note, index) => (
                 <div key={index}>• {note}</div>
+              ))}
+            </div>
+          </section>
+
+          {/* Changelog */}
+          <section>
+            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.changelog.title}</h3>
+            <div className="space-y-4">
+              {currentContent.sections.changelog.items.map((version, index) => (
+                <div key={index} className="border-l-4 border-blue-200 pl-4">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <strong className="text-blue-700">{version.version}</strong>
+                    <span className="text-sm text-gray-500">({version.date})</span>
+                  </div>
+                  <div className="space-y-1 text-gray-700">
+                    {version.changes.map((change, changeIndex) => (
+                      <div key={changeIndex}>• {change}</div>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </section>
