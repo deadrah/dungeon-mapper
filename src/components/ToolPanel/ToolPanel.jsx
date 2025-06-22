@@ -22,7 +22,7 @@ const TOOL_GROUPS = [
       { id: TOOLS.DARK_ZONE, name: 'Dark Zone', icon: 'Ξ', description: 'Dark area', key: '' },
       { id: TOOLS.CHEST, name: 'Chest [5]', icon: '□', description: 'Treasure chest', key: '5' },
       { id: TOOLS.WARP_POINT, name: 'Warp', icon: '◊', description: 'Teleport point', key: '' },
-      { id: TOOLS.SHUTE, name: 'Shute', icon: '●', description: 'Shute', key: 'E' },
+      { id: TOOLS.SHUTE, name: 'Shute', icon: '●', description: 'Shute', key: '' },
       { id: TOOLS.ELEVATOR, name: 'Elevator', icon: 'E', description: 'Elevator', key: '' },
       { id: TOOLS.STAIRS_UP_SVG, name: 'Stairs Up', icon: '▲', description: 'Stairs going up', key: '' },
       { id: TOOLS.STAIRS_DOWN_SVG, name: 'Stairs Down', icon: '▼', description: 'Stairs going down', key: '' },
