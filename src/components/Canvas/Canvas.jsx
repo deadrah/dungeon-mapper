@@ -193,6 +193,21 @@ const Canvas = ({
       }
     })
     
+    // Handle eraser tool for lines
+    if (appState.activeTool === TOOLS.ERASER) {
+      // Remove walls at this position
+      if (existingWallIndex !== -1) {
+        const newWalls = floorData.walls.filter((_, index) => index !== existingWallIndex)
+        updateCurrentFloorData('walls', newWalls)
+      }
+      // Remove doors at this position
+      const newDoors = (floorData.doors || []).filter(door => 
+        !(door.startRow === actualRow && door.startCol === col)
+      )
+      updateCurrentFloorData('doors', newDoors)
+      return;
+    }
+    
     if (appState.activeTool === 'line') {
       if (existingWallIndex === -1) {
         // Add immediate wall for single click
@@ -342,6 +357,21 @@ const Canvas = ({
     }
     
     const actualRow = appState.gridSize.rows - 1 - row;
+    
+    // Handle eraser tool
+    if (appState.activeTool === TOOLS.ERASER) {
+      // Remove grid fill
+      const newGrid = [...floorData.grid]
+      if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
+        newGrid[actualRow] = [...newGrid[actualRow]]
+        newGrid[actualRow][col] = null
+        updateCurrentFloorData('grid', newGrid)
+      }
+      // Remove items at this position
+      const newItems = floorData.items.filter(item => !(item.row === actualRow && item.col === col))
+      updateCurrentFloorData('items', newItems)
+      return;
+    }
     
     if (appState.activeTool === TOOLS.BLOCK_COLOR || appState.activeTool === TOOLS.DARK_ZONE) {
       const newGrid = [...floorData.grid]

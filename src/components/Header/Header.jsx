@@ -17,7 +17,8 @@ const Header = ({
   onRedo,
   gridSize,
   onGridSizeChange,
-  onResetFloor
+  onResetFloor,
+  onExportSVG
 }) => {
   const [editingMapId, setEditingMapId] = useState(null)
   const [editingMapName, setEditingMapName] = useState('')
@@ -191,17 +192,24 @@ const Header = ({
         <div className="flex items-center space-x-1">
           <button
             onClick={onExport}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm"
+            className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm w-16"
             title="Export Map (Ctrl+S)"
           >
             Export
           </button>
           <button
             onClick={handleImportClick}
-            className="bg-green-500 hover:bg-green-400 text-white px-3 py-1 rounded text-sm"
+            className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm w-16"
             title="Import Map (Ctrl+L)"
           >
             Import
+          </button>
+          <button
+            onClick={onExportSVG}
+            className="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm w-16"
+            title="Download Floor as SVG Image"
+          >
+            SVG
           </button>
         </div>
 

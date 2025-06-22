@@ -27,7 +27,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
         keyboard: {
           title: 'キーボードショートカット',
           items: [
-            { label: '1-5, Q:', desc: 'ツール選択' },
+            { label: '1-5, Q, E:', desc: 'ツール選択' },
             { label: 'Ctrl + S:', desc: 'マップエクスポート' },
             { label: 'Ctrl + L:', desc: 'マップインポート' },
             { label: 'Ctrl + Z:', desc: '元に戻す' },
@@ -45,7 +45,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { name: '現在位置:', desc: 'プレイヤーの現在位置を示します（1フロアにつき1つのみ）。', color: 'text-red-600' },
             { name: 'ドア:', desc: '既存の壁に開いたドア（□）または閉じたドア（■）を配置します。', color: 'text-orange-600' },
             { name: '矢印:', desc: 'グリッドセルまたは壁に方向矢印を配置します。', color: 'text-indigo-600' },
-            { name: 'ノート:', desc: 'セルにメモを追加します。クリックでテキストダイアログが開きます。', color: 'text-pink-600' }
+            { name: 'ノート:', desc: 'セルにメモを追加します。クリックでテキストダイアログが開きます。', color: 'text-pink-600' },
+            { name: '消去ツール（Eraser）:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。右クリック不要のスマホ対応ツールです。', color: 'text-red-500' }
           ]
         },
         mapManagement: {
@@ -63,7 +64,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
           items: [
             { label: '自動保存:', desc: '操作は自動的にブラウザのローカルストレージに保存されます' },
             { label: 'Export:', desc: 'JSONファイルとしてマップデータをダウンロード' },
-            { label: 'Import:', desc: 'JSONファイルからマップデータを読み込み' }
+            { label: 'Import:', desc: 'JSONファイルからマップデータを読み込み' },
+            { label: 'SVG:', desc: '現在のフロアをSVG画像ファイルとしてダウンロード' }
           ]
         },
         notes: {
@@ -116,7 +118,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { name: 'Current Position:', desc: 'Mark player\'s current location (only one per floor).', color: 'text-red-600' },
             { name: 'Doors:', desc: 'Place open doors (□) or closed doors (■) on existing walls.', color: 'text-orange-600' },
             { name: 'Arrows:', desc: 'Place directional arrows on grid cells or walls.', color: 'text-indigo-600' },
-            { name: 'Notes:', desc: 'Add text memos to cells. Click to open text dialog.', color: 'text-pink-600' }
+            { name: 'Notes:', desc: 'Add text memos to cells. Click to open text dialog.', color: 'text-pink-600' },
+            { name: 'Eraser Tool:', desc: 'Delete all objects with left click/drag. Mobile-friendly tool that doesn\'t require right-click.', color: 'text-red-500' }
           ]
         },
         mapManagement: {
@@ -134,7 +137,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
           items: [
             { label: 'Auto-save:', desc: 'All changes are automatically saved to browser local storage' },
             { label: 'Export:', desc: 'Download map data as JSON file' },
-            { label: 'Import:', desc: 'Load map data from JSON file' }
+            { label: 'Import:', desc: 'Load map data from JSON file' },
+            { label: 'SVG:', desc: 'Download current floor as SVG image file' }
           ]
         },
         notes: {

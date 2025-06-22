@@ -261,7 +261,7 @@ const Grid = ({
           })
         )}
 
-        {/* Grid cell clickable areas - only for non-line tools */}
+        {/* Grid cell clickable areas - only for non-line tools (eraser works on both) */}
         {(activeTool !== TOOLS.LINE && activeTool !== TOOLS.DOOR_OPEN && activeTool !== TOOLS.DOOR_CLOSED && 
           activeTool !== TOOLS.LINE_ARROW_NORTH && activeTool !== TOOLS.LINE_ARROW_SOUTH &&
           activeTool !== TOOLS.LINE_ARROW_EAST && activeTool !== TOOLS.LINE_ARROW_WEST) && 
@@ -300,10 +300,10 @@ const Grid = ({
           })
         )}
 
-        {/* Line tool clickable areas */}
+        {/* Line tool clickable areas (includes eraser) */}
         {(activeTool === 'line' || activeTool === 'door_open' || activeTool === 'door_closed' || 
           activeTool === 'line_arrow_north' || activeTool === 'line_arrow_south' ||
-          activeTool === 'line_arrow_east' || activeTool === 'line_arrow_west') && (
+          activeTool === 'line_arrow_east' || activeTool === 'line_arrow_west' || activeTool === TOOLS.ERASER) && (
           <>
             {/* Horizontal line areas */}
             {(!isDraggingLine || dragLineType === 'horizontal') && Array.from({ length: Math.min(endRow - startRow + 1, gridSize.rows + 1) }, (_, i) => startRow + i).map(row =>

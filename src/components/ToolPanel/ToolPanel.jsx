@@ -32,7 +32,8 @@ const TOOL_GROUPS = [
       { id: TOOLS.ARROW_SOUTH, name: 'Arrow', icon: '↓', description: 'South arrow', key: '' },
       { id: TOOLS.ARROW_WEST, name: 'Arrow', icon: '←', description: 'West arrow', key: '' },
       { id: TOOLS.ARROW_EAST, name: 'Arrow', icon: '→', description: 'East arrow', key: '' },
-      { id: TOOLS.CURRENT_POSITION, name: 'Current Position [q]', icon: '●', description: 'Current position marker', key: 'q' }
+      { id: TOOLS.CURRENT_POSITION, name: 'Current Position [q]', icon: '●', description: 'Current position marker', key: 'q' },
+      { id: TOOLS.ERASER, name: 'Eraser [e]', icon: '⌫', description: 'Erase objects with left click/drag', key: 'e' }
     ]
   }
 ]

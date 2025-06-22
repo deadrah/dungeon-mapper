@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { MAX_FLOORS, MAX_MAPS } from '../utils/constants'
+import { exportFloorAsSVG, downloadSVG } from '../utils/svgExport'
 
 const createEmptyFloor = (gridSize) => ({
   grid: new Array(gridSize.rows).fill(null).map(() => new Array(gridSize.cols).fill(null)),
@@ -276,9 +277,10 @@ export const useAppState = () => {
       const dataBlob = new Blob([dataStr], { type: 'application/json' })
       const url = URL.createObjectURL(dataBlob)
       
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
       const link = document.createElement('a')
       link.href = url
-      link.download = `dmapper_${new Date().toISOString().slice(0, 10)}.json`
+      link.download = `dmapper_${timestamp}.json`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -341,6 +343,22 @@ export const useAppState = () => {
     }))
   }, [updateState])
 
+  // Export current floor as SVG
+  const exportFloorSVG = useCallback(() => {
+    try {
+      const floorData = getCurrentFloorData()
+      const mapName = state.mapNames?.[state.currentMap] || `Map ${state.currentMap}`
+      const svgContent = exportFloorAsSVG(floorData, state.gridSize, mapName, state.currentFloor)
+      
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
+      const filename = `${mapName.replace(/[^a-z0-9]/gi, '_')}_Floor_${state.currentFloor}_${timestamp}.svg`
+      downloadSVG(svgContent, filename)
+    } catch (error) {
+      console.error('Failed to export SVG:', error)
+      alert('SVGエクスポートに失敗しました')
+    }
+  }, [state, getCurrentFloorData])
+
   return {
     state,
     updateState,
@@ -356,6 +374,7 @@ export const useAppState = () => {
     getCurrentFloorData,
     resetCurrentFloor,
     exportState,
-    importState
+    importState,
+    exportFloorSVG
   }
 }

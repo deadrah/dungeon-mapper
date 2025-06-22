@@ -22,7 +22,8 @@ export const TOOLS = {
   ARROW_NORTH: 'arrow_north',
   ARROW_SOUTH: 'arrow_south',
   ARROW_EAST: 'arrow_east',
-  ARROW_WEST: 'arrow_west'
+  ARROW_WEST: 'arrow_west',
+  ERASER: 'eraser'
 }
 
 export const COLORS = [

@@ -20,7 +20,8 @@ function App() {
     redo,
     resetCurrentFloor,
     exportState,
-    importState
+    importState,
+    exportFloorSVG
   } = useAppState()
 
 
@@ -79,6 +80,7 @@ function App() {
         onUndo={undo}
         onRedo={redo}
         onResetFloor={resetCurrentFloor}
+        onExportSVG={exportFloorSVG}
       />
       
       <div className="flex flex-1 overflow-hidden">
