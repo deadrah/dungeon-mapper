@@ -7,8 +7,8 @@ const TOOL_GROUPS = [
     tools: [
       { id: TOOLS.LINE, name: 'Line [1]', icon: '│', description: 'Draw walls', key: '1' },
       { id: 'spacer_1', name: '', icon: '', description: 'Spacer', isDisabled: true },
-      { id: TOOLS.DOOR_OPEN, name: 'Door Open [2]', icon: '□', description: 'Open door (transparent)', key: '2' },
-      { id: TOOLS.DOOR_CLOSED, name: 'Door Closed [3]', icon: '█', description: 'Closed door (black)', key: '3' },
+      { id: TOOLS.DOOR_OPEN, name: 'Door Open [2]', icon: 'DOOR_OPEN_SVG', description: 'Open door (transparent)', key: '2' },
+      { id: TOOLS.DOOR_CLOSED, name: 'Door Closed [3]', icon: 'DOOR_CLOSED_SVG', description: 'Closed door (black)', key: '3' },
       { id: TOOLS.LINE_ARROW_NORTH, name: 'Line Arrow', icon: '↑', description: 'One-way door north', key: '' },
       { id: TOOLS.LINE_ARROW_SOUTH, name: 'Line Arrow', icon: '↓', description: 'One-way door south', key: '' },
       { id: TOOLS.LINE_ARROW_WEST, name: 'Line Arrow', icon: '←', description: 'One-way door west', key: '' },
@@ -18,7 +18,7 @@ const TOOL_GROUPS = [
   {
     name: 'Grid Tools',
     tools: [
-      { id: TOOLS.BLOCK_COLOR, name: 'Fill [4]', icon: '■', description: 'Fill grid blocks', key: '4' },
+      { id: TOOLS.BLOCK_COLOR, name: 'Fill [4]', icon: '█', description: 'Fill grid blocks', key: '4' },
       { id: TOOLS.DARK_ZONE, name: 'Dark Zone', icon: 'Ξ', description: 'Dark area', key: '' },
       { id: TOOLS.CHEST, name: 'Chest [5]', icon: '□', description: 'Treasure chest', key: '5' },
       { id: TOOLS.WARP_POINT, name: 'Warp', icon: '◊', description: 'Teleport point', key: '' },
@@ -81,7 +81,7 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                   return (
                     <div
                       key={tool.id}
-                      className={`md:py-2 py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 bg-gray-800 ${
+                      className={`md:py-2 py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 bg-gray-800 md:block hidden ${
                         group.name === 'Grid Tools' ? 'md:min-w-0' : 'md:min-w-0 min-w-12'
                       }`}
                     >
@@ -92,6 +92,16 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                           <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon === 'DOOR_OPEN_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                          <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                          <path d="M8 2v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon === 'DOOR_CLOSED_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                          <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="currentColor"/>
+                          <path d="M8 2v12" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon}
                     </span>
@@ -119,6 +129,16 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                           <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon === 'DOOR_OPEN_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                          <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                          <path d="M8 2v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon === 'DOOR_CLOSED_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                          <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="currentColor"/>
+                          <path d="M8 2v12" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon}
                     </span>
