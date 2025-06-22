@@ -56,7 +56,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'Rename:', desc: 'マップに名前を付けることができます' },
             { label: 'Floor選択:', desc: '各マップにつき30階層まで対応' },
             { label: 'Reset:', desc: '現在のフロアのデータを全削除' },
-            { label: 'Grid Size:', desc: 'グリッドサイズを5x5から50x50まで調整可能' }
+            { label: 'Grid Size:', desc: 'グリッドサイズを5x5から50x50まで調整可能' },
+            { label: 'Note:', desc: 'メモのツールチップ表示をオン/オフ切り替え（常時表示）' }
           ]
         },
         dataSaving: {
@@ -65,8 +66,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: '自動保存:', desc: '操作は自動的にブラウザのローカルストレージに保存されます' },
             { label: 'Export:', desc: 'JSONファイルとしてマップデータをダウンロード' },
             { label: 'Import:', desc: 'JSONファイルからマップデータを読み込み' },
-            { label: 'SVG:', desc: '現在のフロアをSVG画像ファイルとしてダウンロード' },
-            { label: 'Note:', desc: 'メモのツールチップ表示をオン/オフ切り替え（常時表示）' }
+            { label: 'SVG:', desc: '現在のフロアをSVG画像ファイルとしてダウンロード' }
           ]
         },
         notes: {
@@ -139,7 +139,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'Rename:', desc: 'Give custom names to your maps' },
             { label: 'Floor Selection:', desc: 'Support up to 30 floors per map' },
             { label: 'Reset:', desc: 'Clear all data on current floor' },
-            { label: 'Grid Size:', desc: 'Adjust grid size from 5x5 to 50x50' }
+            { label: 'Grid Size:', desc: 'Adjust grid size from 5x5 to 50x50' },
+            { label: 'Note:', desc: 'Toggle note tooltip display on/off (always visible when on)' }
           ]
         },
         dataSaving: {
@@ -148,8 +149,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'Auto-save:', desc: 'All changes are automatically saved to browser local storage' },
             { label: 'Export:', desc: 'Download map data as JSON file' },
             { label: 'Import:', desc: 'Load map data from JSON file' },
-            { label: 'SVG:', desc: 'Download current floor as SVG image file' },
-            { label: 'Note:', desc: 'Toggle note tooltip display on/off (always visible when on)' }
+            { label: 'SVG:', desc: 'Download current floor as SVG image file' }
           ]
         },
         notes: {
