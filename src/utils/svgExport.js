@@ -25,6 +25,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       .warp-point { fill: #06b6d4; stroke: #0891b2; stroke-width: 1; }
       .dark-zone { fill: #000000; stroke: #333333; stroke-width: 0.5; }
       .arrow { fill: #374151; stroke: #111827; stroke-width: 1; }
+      .line-arrow { fill: #345dd1; stroke: #345dd1; stroke-width: 1; }
       .note-text { font-family: Arial, sans-serif; font-size: 8px; fill: #1f2937; }
       .title-text { font-family: Arial, sans-serif; font-size: 14px; fill: #1f2937; font-weight: bold; }
       .header-text { font-family: Arial, sans-serif; font-size: 10px; fill: #374151; text-anchor: middle; }
@@ -154,18 +155,19 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         const centerY = displayRow * cellSize + cellSize * 0.5
         
         if (isArrow) {
-          // Arrow on vertical line
-          const arrowSize = cellSize * 0.3
-          svg += `      <g transform="translate(${centerX}, ${centerY})">\n`
+          // Arrow on vertical line - same design as main canvas
+          const arrowSize = cellSize * 0.5
+          const scale = arrowSize / 20 // Scale factor to match original viewBox 0 0 20 20
+          svg += `      <g transform="translate(${centerX - arrowSize/2}, ${centerY + cellSize * 0.3 - arrowSize/2}) scale(${scale})">\n`
           
           if (door.type === 'line_arrow_north') {
-            svg += `        <polygon points="-${arrowSize/2},-${arrowSize/2} 0,-${arrowSize} ${arrowSize/2},-${arrowSize/2} 0,${arrowSize/2}" class="arrow"/>\n`
+            svg += `        <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" class="line-arrow"/>\n`
           } else if (door.type === 'line_arrow_south') {
-            svg += `        <polygon points="-${arrowSize/2},${arrowSize/2} 0,${arrowSize} ${arrowSize/2},${arrowSize/2} 0,-${arrowSize/2}" class="arrow"/>\n`
+            svg += `        <path d="M10 19 L14 14 L11.5 14 L11.5 1 L8.5 1 L8.5 14 L6 14 Z" class="line-arrow"/>\n`
           } else if (door.type === 'line_arrow_east') {
-            svg += `        <polygon points="-${arrowSize/2},-${arrowSize/2} ${arrowSize},0 -${arrowSize/2},${arrowSize/2} ${arrowSize/2},0" class="arrow"/>\n`
+            svg += `        <path d="M19 10 L14 6 L14 8.5 L1 8.5 L1 11.5 L14 11.5 L14 14 Z" class="line-arrow"/>\n`
           } else if (door.type === 'line_arrow_west') {
-            svg += `        <polygon points="${arrowSize/2},-${arrowSize/2} -${arrowSize},0 ${arrowSize/2},${arrowSize/2} -${arrowSize/2},0" class="arrow"/>\n`
+            svg += `        <path d="M1 10 L6 14 L6 11.5 L19 11.5 L19 8.5 L6 8.5 L6 6 Z" class="line-arrow"/>\n`
           }
           
           svg += '      </g>\n'
@@ -182,18 +184,19 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         const centerY = displayRow * cellSize
         
         if (isArrow) {
-          // Arrow on horizontal line
-          const arrowSize = cellSize * 0.3
-          svg += `      <g transform="translate(${centerX}, ${centerY})">\n`
+          // Arrow on horizontal line - same design as main canvas
+          const arrowSize = cellSize * 0.5
+          const scale = arrowSize / 20 // Scale factor to match original viewBox 0 0 20 20
+          svg += `      <g transform="translate(${centerX + cellSize * 0.3 - arrowSize/2}, ${centerY - arrowSize/2}) scale(${scale})">\n`
           
           if (door.type === 'line_arrow_north') {
-            svg += `        <polygon points="-${arrowSize/2},-${arrowSize/2} 0,-${arrowSize} ${arrowSize/2},-${arrowSize/2} 0,${arrowSize/2}" class="arrow"/>\n`
+            svg += `        <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" class="line-arrow"/>\n`
           } else if (door.type === 'line_arrow_south') {
-            svg += `        <polygon points="-${arrowSize/2},${arrowSize/2} 0,${arrowSize} ${arrowSize/2},${arrowSize/2} 0,-${arrowSize/2}" class="arrow"/>\n`
+            svg += `        <path d="M10 19 L14 14 L11.5 14 L11.5 1 L8.5 1 L8.5 14 L6 14 Z" class="line-arrow"/>\n`
           } else if (door.type === 'line_arrow_east') {
-            svg += `        <polygon points="-${arrowSize/2},-${arrowSize/2} ${arrowSize},0 -${arrowSize/2},${arrowSize/2} ${arrowSize/2},0" class="arrow"/>\n`
+            svg += `        <path d="M19 10 L14 6 L14 8.5 L1 8.5 L1 11.5 L14 11.5 L14 14 Z" class="line-arrow"/>\n`
           } else if (door.type === 'line_arrow_west') {
-            svg += `        <polygon points="${arrowSize/2},-${arrowSize/2} -${arrowSize},0 ${arrowSize/2},${arrowSize/2} -${arrowSize/2},0" class="arrow"/>\n`
+            svg += `        <path d="M1 10 L6 14 L6 11.5 L19 11.5 L19 8.5 L6 8.5 L6 6 Z" class="line-arrow"/>\n`
           }
           
           svg += '      </g>\n'
@@ -221,12 +224,16 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       
       switch (item.type) {
         case TOOLS.CHEST:
-          // Chest base
-          svg += `      <rect x="${centerX - itemSize/2}" y="${centerY - itemSize/5}" width="${itemSize}" height="${itemSize * 0.4}" class="chest" rx="1"/>\n`
+          // Chest base (smaller size)
+          const chestSize = itemSize * 0.8
+          svg += `      <rect x="${centerX - chestSize/2}" y="${centerY}" width="${chestSize}" height="${chestSize/2}" stroke="#8B4513" stroke-width="1.5" fill="none" rx="1"/>\n`
           // Chest lid (curved top)
-          svg += `      <path d="M ${centerX - itemSize/2} ${centerY - itemSize/5} Q ${centerX} ${centerY - itemSize/2} ${centerX + itemSize/2} ${centerY - itemSize/5}" fill="none" stroke="#8B4513" stroke-width="1.5"/>\n`
+          svg += `      <path d="M ${centerX - chestSize/2} ${centerY} Q ${centerX - chestSize/2} ${centerY - chestSize/3} ${centerX} ${centerY - chestSize/3} Q ${centerX + chestSize/2} ${centerY - chestSize/3} ${centerX + chestSize/2} ${centerY}" stroke="#8B4513" stroke-width="1.5" fill="none"/>\n`
           // Chest lock
-          svg += `      <circle cx="${centerX}" cy="${centerY - itemSize/5}" r="${itemSize/8}" class="chest-lock"/>\n`
+          svg += `      <circle cx="${centerX}" cy="${centerY}" r="${chestSize/12}" stroke="#FFD700" stroke-width="1" fill="#FFD700"/>\n`
+          // Chest hinges
+          svg += `      <rect x="${centerX - chestSize/3}" y="${centerY - chestSize/24}" width="${chestSize/24}" height="${chestSize/12}" fill="#654321"/>\n`
+          svg += `      <rect x="${centerX + chestSize/3}" y="${centerY - chestSize/24}" width="${chestSize/24}" height="${chestSize/12}" fill="#654321"/>\n`
           break
         
         case TOOLS.STAIRS_UP_SVG:
@@ -250,19 +257,19 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           break
         
         case TOOLS.ARROW_NORTH:
-          svg += `      <polygon points="${centerX - itemSize/3},${centerY + itemSize/4} ${centerX},${centerY - itemSize/4} ${centerX + itemSize/3},${centerY + itemSize/4}" class="arrow"/>\n`
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">↑</text>\n`
           break
         
         case TOOLS.ARROW_SOUTH:
-          svg += `      <polygon points="${centerX - itemSize/3},${centerY - itemSize/4} ${centerX},${centerY + itemSize/4} ${centerX + itemSize/3},${centerY - itemSize/4}" class="arrow"/>\n`
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">↓</text>\n`
           break
         
         case TOOLS.ARROW_EAST:
-          svg += `      <polygon points="${centerX - itemSize/4},${centerY - itemSize/3} ${centerX + itemSize/4},${centerY} ${centerX - itemSize/4},${centerY + itemSize/3}" class="arrow"/>\n`
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">→</text>\n`
           break
         
         case TOOLS.ARROW_WEST:
-          svg += `      <polygon points="${centerX + itemSize/4},${centerY - itemSize/3} ${centerX - itemSize/4},${centerY} ${centerX + itemSize/4},${centerY + itemSize/3}" class="arrow"/>\n`
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">←</text>\n`
           break
         
         case TOOLS.NOTE:
