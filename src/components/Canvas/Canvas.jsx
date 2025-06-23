@@ -193,13 +193,13 @@ const Canvas = ({
     
     if (isDraggingErase) {
       // Remove wall at this position
-      const newWalls = floorData.walls.filter(wall => 
+      const newWalls = (floorData.walls || []).filter(wall => 
         !(wall.startRow === actualRow && wall.startCol === col &&
           ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
       )
       updateCurrentFloorData('walls', newWalls)
     } else if (isDraggingLine) {
-      const existingWallIndex = floorData.walls.findIndex(wall => 
+      const existingWallIndex = (floorData.walls || []).findIndex(wall => 
         wall.startRow === actualRow && wall.startCol === col &&
         ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol))
       )
@@ -219,7 +219,7 @@ const Canvas = ({
           endCol: col + 1, // Horizontal line
           id: Date.now() + Math.random()
         }
-        const newWalls = [...floorData.walls, newWall]
+        const newWalls = [...(floorData.walls || []), newWall]
         updateCurrentFloorData('walls', newWalls)
       }
     }
@@ -260,7 +260,7 @@ const Canvas = ({
     }
     
 
-    const existingWallIndex = floorData.walls.findIndex(wall => {
+    const existingWallIndex = (floorData.walls || []).findIndex(wall => {
       // Exact match for position and direction
       if (isVertical) {
         // Vertical wall: must start at this position and be vertical
@@ -275,7 +275,7 @@ const Canvas = ({
     if (appState.activeTool === TOOLS.ERASER) {
       // Remove walls at this position
       if (existingWallIndex !== -1) {
-        const newWalls = floorData.walls.filter((_, index) => index !== existingWallIndex)
+        const newWalls = (floorData.walls || []).filter((_, index) => index !== existingWallIndex)
         updateCurrentFloorData('walls', newWalls)
       }
       // Remove doors at this position
@@ -302,7 +302,7 @@ const Canvas = ({
           endCol: col + 1, // Horizontal line
           id: Date.now() + Math.random()
         }
-        const newWalls = [...floorData.walls, newWall]
+        const newWalls = [...(floorData.walls || []), newWall]
         updateCurrentFloorData('walls', newWalls)
         
         // Start dragging mode - wait for mouse movement to determine direction for additional lines
@@ -325,7 +325,7 @@ const Canvas = ({
       // For Door and Arrow tools, place on existing walls only
       if (existingWallIndex !== -1) {
         // Found existing wall, place door/arrow on it
-        const existingWall = floorData.walls[existingWallIndex]
+        const existingWall = (floorData.walls || [])[existingWallIndex]
         
         // Check if there's already a door on this specific wall (same position AND direction)
         const wallIsVertical = existingWall.startCol === existingWall.endCol
@@ -414,7 +414,7 @@ const Canvas = ({
     
     if (lineTools.includes(appState.activeTool)) {
       // Line tool: Remove walls only
-      const newWalls = floorData.walls.filter(wall => 
+      const newWalls = (floorData.walls || []).filter(wall => 
         !(wall.startRow === actualRow && wall.startCol === col &&
           ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
       )
@@ -437,7 +437,7 @@ const Canvas = ({
     const actualRow = appState.gridSize.rows - 1 - row;
     
     // Check if there's an existing note at this location
-    const existingNote = floorData.items.find(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
+    const existingNote = (floorData.items || []).find(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
     
     // If there's an existing note, open the note dialog regardless of current tool (except Eraser)
     if (existingNote && appState.activeTool !== TOOLS.ERASER) {
@@ -453,20 +453,20 @@ const Canvas = ({
     // Handle eraser tool
     if (appState.activeTool === TOOLS.ERASER) {
       // Remove grid fill
-      const newGrid = [...floorData.grid]
+      const newGrid = [...(floorData.grid || [])]
       if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
         newGrid[actualRow] = [...newGrid[actualRow]]
         newGrid[actualRow][col] = null
         updateCurrentFloorData('grid', newGrid)
       }
       // Remove items at this position
-      const newItems = floorData.items.filter(item => !(item.row === actualRow && item.col === col))
+      const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
       updateCurrentFloorData('items', newItems)
       return;
     }
     
     if (appState.activeTool === TOOLS.BLOCK_COLOR || appState.activeTool === TOOLS.DARK_ZONE) {
-      const newGrid = [...floorData.grid]
+      const newGrid = [...(floorData.grid || [])]
       if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
         newGrid[actualRow] = [...newGrid[actualRow]]
         // Use gray color for DARK_ZONE, otherwise use selected color
@@ -478,8 +478,8 @@ const Canvas = ({
       // Grid clicks are only for items that go in cell centers
     } else if (appState.activeTool === TOOLS.NOTE) {
       // Special handling for NOTE tool - open dialog
-      const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
-      const existingText = existingItemIndex >= 0 ? floorData.items[existingItemIndex].text || '' : ''
+      const existingItemIndex = (floorData.items || []).findIndex(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
+      const existingText = existingItemIndex >= 0 ? (floorData.items || [])[existingItemIndex].text || '' : ''
       
       setNoteDialog({
         isOpen: true,
@@ -491,7 +491,7 @@ const Canvas = ({
       // Special handling for CURRENT_POSITION - only one per floor
       if (appState.activeTool === TOOLS.CURRENT_POSITION) {
         // Remove any existing current position markers on this floor
-        const itemsWithoutCurrentPos = floorData.items.filter(item => item.type !== TOOLS.CURRENT_POSITION)
+        const itemsWithoutCurrentPos = (floorData.items || []).filter(item => item.type !== TOOLS.CURRENT_POSITION)
         
         // Add new current position marker
         const newItem = {
@@ -504,7 +504,7 @@ const Canvas = ({
         updateCurrentFloorData('items', newItems)
       } else {
         // Check if there's already an item at this position
-        const existingItemIndex = floorData.items.findIndex(item => item.row === actualRow && item.col === col)
+        const existingItemIndex = (floorData.items || []).findIndex(item => item.row === actualRow && item.col === col)
         
         if (existingItemIndex === -1) {
           // Add new item
@@ -514,11 +514,11 @@ const Canvas = ({
             col,
             id: Date.now() + Math.random()
           }
-          const newItems = [...floorData.items, newItem]
+          const newItems = [...(floorData.items || []), newItem]
           updateCurrentFloorData('items', newItems)
         } else {
           // Replace existing item with new type
-          const newItems = [...floorData.items]
+          const newItems = [...(floorData.items || [])]
           newItems[existingItemIndex] = {
             type: appState.activeTool,
             row: actualRow,
@@ -533,7 +533,7 @@ const Canvas = ({
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog
-    const existingItemIndex = floorData.items.findIndex(item => item.row === row && item.col === col && item.type === TOOLS.NOTE)
+    const existingItemIndex = (floorData.items || []).findIndex(item => item.row === row && item.col === col && item.type === TOOLS.NOTE)
     
     if (text.trim()) {
       // Save note with text
@@ -547,17 +547,17 @@ const Canvas = ({
       
       if (existingItemIndex >= 0) {
         // Update existing note
-        const newItems = [...floorData.items]
+        const newItems = [...(floorData.items || [])]
         newItems[existingItemIndex] = noteItem
         updateCurrentFloorData('items', newItems)
       } else {
         // Add new note
-        const newItems = [...floorData.items, noteItem]
+        const newItems = [...(floorData.items || []), noteItem]
         updateCurrentFloorData('items', newItems)
       }
     } else if (existingItemIndex >= 0) {
       // Remove note if text is empty
-      const newItems = floorData.items.filter((_, index) => index !== existingItemIndex)
+      const newItems = (floorData.items || []).filter((_, index) => index !== existingItemIndex)
       updateCurrentFloorData('items', newItems)
     }
   }, [noteDialog, floorData.items, updateCurrentFloorData])
@@ -583,7 +583,7 @@ const Canvas = ({
     
     if (fillTools.includes(appState.activeTool)) {
       // Fill category: Remove fill color only
-      const newGrid = [...floorData.grid]
+      const newGrid = [...(floorData.grid || [])]
       if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
         newGrid[actualRow] = [...newGrid[actualRow]]
         newGrid[actualRow][col] = null
@@ -591,7 +591,7 @@ const Canvas = ({
       }
     } else if (lineTools.includes(appState.activeTool)) {
       // Line category: Remove walls only
-      const newWalls = floorData.walls.filter(wall => 
+      const newWalls = (floorData.walls || []).filter(wall => 
         !(wall.startRow === actualRow && wall.startCol === col)
       )
       updateCurrentFloorData('walls', newWalls)
@@ -603,7 +603,7 @@ const Canvas = ({
       updateCurrentFloorData('doors', newDoors)
     } else if (otherGridTools.includes(appState.activeTool)) {
       // Other Grid tools category: Remove items only
-      const newItems = floorData.items.filter(item => !(item.row === actualRow && item.col === col))
+      const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
       updateCurrentFloorData('items', newItems)
     }
   }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, updateCurrentFloorData])
