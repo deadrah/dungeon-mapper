@@ -13,6 +13,8 @@ const Header = ({
   setZoom,
   onExport,
   onImport,
+  onExportDungeon,
+  onImportDungeon,
   onUndo,
   onRedo,
   gridSize,
@@ -29,6 +31,7 @@ const Header = ({
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isFileMenuOpen, setIsFileMenuOpen] = useState(false)
+  const [selectedDungeonForExport, setSelectedDungeonForExport] = useState(1)
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
   const closeFileMenu = () => setIsFileMenuOpen(false)
@@ -48,6 +51,29 @@ const Header = ({
     closeFileMenu()
   }
 
+  const handleDesktopDungeonExport = () => {
+    onExportDungeon(selectedDungeonForExport)
+    closeFileMenu()
+  }
+
+  const handleDesktopDungeonImport = () => {
+    handleDungeonImportClick()
+    closeFileMenu()
+  }
+
+  const handleDungeonImportClick = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json'
+    input.onchange = (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        onImportDungeon(file, selectedDungeonForExport)
+      }
+    }
+    input.click()
+  }
+
 
   const handleMobileExport = () => {
     onExport()
@@ -61,6 +87,16 @@ const Header = ({
 
   const handleMobileSVG = () => {
     onExportSVG()
+    closeMobileMenu()
+  }
+
+  const handleMobileDungeonExport = () => {
+    onExportDungeon(selectedDungeonForExport)
+    closeMobileMenu()
+  }
+
+  const handleMobileDungeonImport = () => {
+    handleDungeonImportClick()
     closeMobileMenu()
   }
 
@@ -274,7 +310,7 @@ const Header = ({
           </button>
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="bg-gray-700 hover:bg-gray-600 text-white px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden"
+            className="bg-blue-700 hover:bg-blue-600 text-white px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden"
             title="メニュー"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -337,11 +373,11 @@ const Header = ({
             className="bg-white rounded-lg p-4 w-64 max-w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-bold mb-4 text-gray-900">メニュー</h3>
+            <h3 className="text-lg font-bold mb-4 text-gray-900">Menu</h3>
             
             <div className="space-y-2">
               <div className="border-b border-gray-200 pb-2 mb-2">
-                <h4 className="text-sm font-semibold text-gray-600 mb-2">グリッド設定</h4>
+                <h4 className="text-sm font-semibold text-gray-600 mb-2">Grid Size</h4>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-700">Size:</span>
                   <input
@@ -370,6 +406,51 @@ const Header = ({
                 </div>
               </div>
               
+              {/* Dungeon selection */}
+              <div>
+                <span className="text-sm font-semibold text-gray-700">Dungeon Save/Load</span>
+                <select
+                  value={selectedDungeonForExport}
+                  onChange={(e) => setSelectedDungeonForExport(parseInt(e.target.value))}
+                  className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-full mt-1"
+                >
+                  {Array.from({ length: MAX_DUNGEONS }, (_, i) => i + 1).map(dungeonId => (
+                    <option key={dungeonId} value={dungeonId}>
+                      {dungeonNames[dungeonId] || `Dungeon ${dungeonId}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <button
+                onClick={handleMobileDungeonExport}
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Save Dungeon
+              </button>
+              
+              <button
+                onClick={handleMobileDungeonImport}
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Load Dungeon
+              </button>
+              
+              {/* HR separator */}
+              <hr className="border-gray-200" />
+
+              <button
+                onClick={handleMobileSVG}
+                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Download Floor SVG Image
+              </button> 
+
+              {/* HR separator */}
+              <hr className="border-gray-200" />
+              <div>
+                <span className="text-sm font-semibold text-gray-700">All Data Backup</span>
+              </div>
               <button
                 onClick={handleMobileExport}
                 className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
@@ -384,13 +465,9 @@ const Header = ({
                 Import All Data
               </button>
               
-              <button
-                onClick={handleMobileSVG}
-                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
-              >
-                Download Floor SVG
-              </button>
-              
+              {/* HR separator */}
+              <hr className="border-gray-200" />
+
               <button
                 onClick={handleMobileHelp}
                 className="w-full bg-yellow-700 hover:bg-yellow-600 text-white px-3 py-2 rounded text-sm text-left"
@@ -413,9 +490,55 @@ const Header = ({
             className="bg-white rounded-lg p-4 w-64 max-w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-bold mb-4 text-gray-900">File Operations</h3>
+            <h3 className="text-lg font-bold mb-4 text-gray-900">File Menu</h3>
             
             <div className="space-y-2">
+              {/* Dungeon selection */}
+              <div>
+                <span className="text-sm font-semibold text-gray-700">Dungeon Save/Load</span>
+                <select
+                  value={selectedDungeonForExport}
+                  onChange={(e) => setSelectedDungeonForExport(parseInt(e.target.value))}
+                  className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-full mt-1"
+                >
+                  {Array.from({ length: MAX_DUNGEONS }, (_, i) => i + 1).map(dungeonId => (
+                    <option key={dungeonId} value={dungeonId}>
+                      {dungeonNames[dungeonId] || `Dungeon ${dungeonId}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <button
+                onClick={handleDesktopDungeonExport}
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Save Dungeon
+              </button>
+              
+              <button
+                onClick={handleDesktopDungeonImport}
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Load Dungeon
+              </button>
+              
+              {/* HR separator */}
+              <hr className="border-gray-200" />
+
+              <button
+                onClick={handleDesktopSVG}
+                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Download Floor SVG Image
+              </button> 
+
+              {/* HR separator */}
+              <hr className="border-gray-300" />
+              
+              <div>
+                <span className="text-sm font-semibold text-gray-700">All Data Backup</span>
+              </div>
               <button
                 onClick={handleDesktopExport}
                 className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
@@ -429,13 +552,7 @@ const Header = ({
               >
                 Import All Data
               </button>
-              
-              <button
-                onClick={handleDesktopSVG}
-                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
-              >
-                Download Floor SVG
-              </button>
+
             </div>
           </div>
         </div>

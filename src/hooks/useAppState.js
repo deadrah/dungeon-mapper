@@ -379,6 +379,120 @@ export const useAppState = () => {
     }
   }, [state])
 
+  // Export single dungeon as JSON file
+  const exportDungeon = useCallback((dungeonId) => {
+    try {
+      if (!state.dungeons[dungeonId]) {
+        alert('Selected dungeon does not exist')
+        return
+      }
+
+      const dungeonData = {
+        dungeon: {
+          id: dungeonId,
+          name: state.dungeonNames[dungeonId] || `Dungeon ${dungeonId}`,
+          data: state.dungeons[dungeonId]
+        },
+        gridSize: state.gridSize,
+        exportType: 'single_dungeon',
+        exportedAt: new Date().toISOString()
+      }
+
+      const dataStr = JSON.stringify(dungeonData)
+      const dataBlob = new Blob([dataStr], { type: 'application/json' })
+      const url = URL.createObjectURL(dataBlob)
+      
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
+      const dungeonName = (state.dungeonNames[dungeonId] || `Dungeon_${dungeonId}`).replace(/[\\/:*?"<>|]/g, '_')
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${dungeonName}_${timestamp}.json`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Failed to export dungeon:', error)
+      alert('Dungeon export failed')
+    }
+  }, [state])
+
+  // Import single dungeon from JSON file
+  const importDungeon = useCallback((file, targetSlotId) => {
+    try {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        try {
+          const importedData = JSON.parse(e.target.result)
+          
+          // Validate dungeon export format
+          if (!importedData.dungeon || importedData.exportType !== 'single_dungeon') {
+            alert('Invalid dungeon file format. Please select a dungeon file exported from DMapper.')
+            return
+          }
+
+          const dungeonData = importedData.dungeon
+          
+          // Use provided target slot or find next available slot
+          let targetDungeonId = targetSlotId
+          if (!targetDungeonId) {
+            for (let i = 1; i <= MAX_DUNGEONS; i++) {
+              if (!state.dungeons[i] || isFloorEmpty(state.dungeons[i])) {
+                targetDungeonId = i
+                break
+              }
+            }
+            if (!targetDungeonId) {
+              alert('No available dungeon slots. Please clear a dungeon first.')
+              return
+            }
+          }
+
+          // Confirm overwrite if slot has data
+          if (targetSlotId && state.dungeons[targetSlotId] && !isFloorEmpty(state.dungeons[targetSlotId])) {
+            const dungeonName = state.dungeonNames[targetSlotId] || `Dungeon ${targetSlotId}`
+            if (!window.confirm(`"${dungeonName}" will be overwritten. Are you sure?`)) {
+              return
+            }
+          }
+
+          // Ensure all floors have doors property
+          if (dungeonData.data && dungeonData.data.floors) {
+            Object.keys(dungeonData.data.floors).forEach(floorKey => {
+              if (!dungeonData.data.floors[floorKey].doors) {
+                dungeonData.data.floors[floorKey].doors = []
+              }
+            })
+          }
+
+          // Import the dungeon
+          updateState(state => ({
+            ...state,
+            dungeons: {
+              ...state.dungeons,
+              [targetDungeonId]: dungeonData.data
+            },
+            dungeonNames: {
+              ...state.dungeonNames,
+              [targetDungeonId]: dungeonData.name
+            },
+            currentDungeon: targetDungeonId
+          }))
+
+          alert(`Dungeon imported successfully to slot ${targetDungeonId}`)
+        } catch (error) {
+          console.error('Failed to parse imported dungeon file:', error)
+          alert('Failed to read dungeon file. Please select a valid JSON file.')
+        }
+      }
+      reader.readAsText(file)
+    } catch (error) {
+      console.error('Failed to import dungeon:', error)
+      alert('Dungeon import failed')
+    }
+  }, [state, updateState])
+
   // Import state from JSON file
   const importState = useCallback((file) => {
     try {
@@ -528,7 +642,7 @@ export const useAppState = () => {
       const svgContent = exportFloorAsSVG(floorData, state.gridSize, dungeonName, state.currentFloor)
       
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
-      const filename = `${dungeonName.replace(/[^a-z0-9]/gi, '_')}_Floor_${state.currentFloor}_${timestamp}.svg`
+      const filename = `${dungeonName.replace(/[\\/:*?"<>|]/g, '_')}_Floor_${state.currentFloor}_${timestamp}.svg`
       downloadSVG(svgContent, filename)
     } catch (error) {
       console.error('Failed to export SVG:', error)
@@ -553,6 +667,8 @@ export const useAppState = () => {
     resetCurrentFloor,
     exportState,
     importState,
+    exportDungeon,
+    importDungeon,
     exportFloorSVG
   }
 }

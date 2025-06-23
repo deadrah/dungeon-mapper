@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.3.4',
+      version: 'バージョン 1.3.5',
       close: '閉じる',
       sections: {
         about: {
@@ -65,6 +65,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: '自動保存:', desc: 'ブラウザのローカルストレージに自動保存' },
             { label: '全データダウンロード:', desc: 'Export All Dataボタン' },
             { label: '全データ復元:', desc: 'Import All Dataボタン' },
+            { label: 'ダンジョン単位セーブ:', desc: '選択したダンジョンのみをSave Dungeonボタン' },
+            { label: 'ダンジョン単位ロード:', desc: '選択スロットにLoad Dungeonボタン' },
             { label: 'SVG画像ダウンロード:', desc: 'SVGボタン' }
           ]
         },
@@ -79,7 +81,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
-            { version: 'v1.3.4', date: '2025-06-23', changes: ['ヘッダー表示項目の整備', 'エクスポートデータの軽量化', '[マップ]-[フロア]構造から[ダンジョン]-[フロア]に名称変更', '1ダンジョンにつき30フロアを管理可能(最大10ダンジョン)'] },
+            { version: 'v1.3.5', date: '2025-06-23', changes: ['ダンジョン毎のセーブロードに対応'] },
+            { version: 'v1.3.4', date: '2025-06-23', changes: ['ヘッダー表示項目の整備', 'エクスポートデータの軽量化', '[マップ]-[フロア]構造から[ダンジョン]-[フロア]に名称変更', '1ダンジョンにつき30フロアを管理可能(最大10ダンジョン)', 'ダンジョン単位でのエクスポート・インポート機能を追加'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['スマホにハンバーガーメニューで機能を追加'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['どのツールでもNoteを開けるように変更'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['スマホタッチ操作を改善', '1本指はツール操作専用、2本指でマップ移動・ズーム', 'ヘルプの操作説明を「機能：操作方法」形式に統一'] },
@@ -94,7 +97,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.3.4',
+      version: 'Version 1.3.5',
       close: 'Close',
       sections: {
         about: {
@@ -149,8 +152,10 @@ const HelpDialog = ({ isOpen, onClose }) => {
           title: 'Data Storage',
           items: [
             { label: 'Auto-save:', desc: 'All changes are automatically saved to browser local storage' },
-            { label: 'Export:', desc: 'Download map data as JSON file' },
-            { label: 'Import:', desc: 'Load map data from JSON file' },
+            { label: 'Export All Data:', desc: 'Download all dungeons as JSON file' },
+            { label: 'Import All Data:', desc: 'Load all dungeons from JSON file' },
+            { label: 'Save Dungeon:', desc: 'Download selected dungeon only as JSON file' },
+            { label: 'Load Dungeon:', desc: 'Load dungeon file to selected slot (with overwrite confirmation)' },
             { label: 'SVG:', desc: 'Download current floor as SVG image file' }
           ]
         },
@@ -165,7 +170,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: 'Update History',
           items: [
-            { version: 'v1.3.4', date: '2025-06-23', changes: ['Reorganized header UI for cleaner layout', 'Optimized export data file size', 'Renamed [Map]-[Floor] structure to [Dungeon]-[Floor]', 'Support up to 30 floors per dungeon (max 10 dungeons)'] },
+            { version: 'v1.3.5', date: '2025-06-23', changes: ['Added per-dungeon save/load functionality'] },
+            { version: 'v1.3.4', date: '2025-06-23', changes: ['Reorganized header UI for cleaner layout', 'Optimized export data file size', 'Renamed [Map]-[Floor] structure to [Dungeon]-[Floor]', 'Support up to 30 floors per dungeon (max 10 dungeons)', 'Added dungeon-specific export/import functionality'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['Add hamburger menu for mobile with hidden desktop features'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['Enable note editing with any tool'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['Improved mobile touch controls', 'Single finger for tool operations, two fingers for map movement/zoom', 'Unified help documentation to "function: operation" format'] },

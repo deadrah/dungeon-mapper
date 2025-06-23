@@ -22,6 +22,8 @@ function App() {
     resetCurrentFloor,
     exportState,
     importState,
+    exportDungeon,
+    importDungeon,
     exportFloorSVG
   } = useAppState()
 
@@ -78,6 +80,8 @@ function App() {
         onGridSizeChange={setGridSize}
         onExport={exportState}
         onImport={importState}
+        onExportDungeon={exportDungeon}
+        onImportDungeon={importDungeon}
         onUndo={undo}
         onRedo={redo}
         onResetFloor={resetCurrentFloor}
