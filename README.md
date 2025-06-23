@@ -93,6 +93,18 @@ npm run build
 ```
 
 
+## 📝 Version History
+
+### v1.3.8 - Enhanced User Experience
+- **Fixed Note Editing**: Can now edit notes while line tools (wall drawing, doors, line arrows) are selected
+- **Fixed Keyboard Shortcuts**: Text input fields no longer trigger tool shortcuts accidentally during typing
+- **UI Improvement**: Updated shute tool display name to "Shute/Pit" for better clarity
+
+### v1.3.7 - Enhanced Teleport and Shute Tools
+- Enhanced teleport point functionality with improved visibility
+- Adjusted diamond size for better recognition
+- Added clickable zoom reset functionality
+
 ## ⚠️ Important Notes
 
 - Data is stored in browser local storage and will be lost if browser data is cleared

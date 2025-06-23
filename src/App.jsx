@@ -31,6 +31,19 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      // Check if text input field is focused - disable shortcuts to avoid conflicts
+      const activeElement = document.activeElement
+      const isTextInput = activeElement && (
+        activeElement.tagName === 'INPUT' ||
+        activeElement.tagName === 'TEXTAREA' ||
+        activeElement.isContentEditable ||
+        activeElement.getAttribute('contenteditable') === 'true'
+      )
+      
+      if (isTextInput) {
+        return // Don't process shortcuts when text input is active
+      }
+      
       if (e.ctrlKey) {
         switch (e.key) {
           case 's':
