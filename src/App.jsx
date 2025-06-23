@@ -8,9 +8,9 @@ import { TOOLS } from './utils/constants'
 function App() {
   const {
     state,
-    setCurrentMap,
+    setCurrentDungeon,
     setCurrentFloor,
-    setMapName,
+    setDungeonName,
     setZoom,
     setActiveTool,
     setGridSize,
@@ -66,12 +66,12 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-100">
       <Header
-        currentMap={state.currentMap}
+        currentDungeon={state.currentDungeon}
         currentFloor={state.currentFloor}
-        setCurrentMap={setCurrentMap}
+        setCurrentDungeon={setCurrentDungeon}
         setCurrentFloor={setCurrentFloor}
-        mapNames={state.mapNames || {}}
-        setMapName={setMapName}
+        dungeonNames={state.dungeonNames || {}}
+        setDungeonName={setDungeonName}
         zoom={state.zoom}
         setZoom={setZoom}
         gridSize={state.gridSize}

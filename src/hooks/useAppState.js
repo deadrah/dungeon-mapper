@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { MAX_FLOORS, MAX_MAPS } from '../utils/constants'
+import { MAX_FLOORS, MAX_DUNGEONS } from '../utils/constants'
 import { exportFloorAsSVG, downloadSVG } from '../utils/svgExport'
 
 const createEmptyFloor = (gridSize) => ({
@@ -9,7 +9,7 @@ const createEmptyFloor = (gridSize) => ({
   doors: []
 })
 
-const createEmptyMap = (gridSize) => {
+const createEmptyDungeon = (gridSize) => {
   const floors = {}
   for (let i = 1; i <= MAX_FLOORS; i++) {
     floors[i] = createEmptyFloor(gridSize)
@@ -18,20 +18,20 @@ const createEmptyMap = (gridSize) => {
 }
 
 const INITIAL_STATE = {
-  currentMap: 1,
+  currentDungeon: 1,
   currentFloor: 1,
   gridSize: { rows: 20, cols: 20 },
   zoom: 1.0,
   activeTool: 'block_color',
   showNoteTooltips: true,
-  maps: {
+  dungeons: {
     1: {
-      name: 'Map 1',
-      floors: createEmptyMap({ rows: 20, cols: 20 })
+      name: 'Dungeon 1',
+      floors: createEmptyDungeon({ rows: 20, cols: 20 })
     }
   },
-  mapNames: {
-    1: 'Map 1'
+  dungeonNames: {
+    1: 'Dungeon 1'
   }
 }
 
@@ -45,22 +45,22 @@ const loadStateFromStorage = () => {
       const parsedState = JSON.parse(saved)
       
       // Check if it's old format (has floors property directly)
-      if (parsedState.floors && !parsedState.maps) {
+      if (parsedState.floors && !parsedState.dungeons && !parsedState.maps) {
         // Convert old format to new format
         const convertedState = {
-          currentMap: 1,
+          currentDungeon: 1,
           currentFloor: parsedState.currentFloor || 1,
           gridSize: parsedState.gridSize || { rows: 20, cols: 20 },
           zoom: parsedState.zoom || 1.0,
           activeTool: parsedState.activeTool || 'block_color',
-          maps: {
+          dungeons: {
             1: {
-              name: 'Map 1',
+              name: 'Dungeon 1',
               floors: {}
             }
           },
-          mapNames: {
-            1: 'Map 1'
+          dungeonNames: {
+            1: 'Dungeon 1'
           }
         }
         
@@ -70,27 +70,69 @@ const loadStateFromStorage = () => {
           if (!floor.doors) {
             floor.doors = []
           }
-          convertedState.maps[1].floors[floorKey] = floor
+          convertedState.dungeons[1].floors[floorKey] = floor
         })
         
         // Fill missing floors up to MAX_FLOORS
         for (let i = 1; i <= MAX_FLOORS; i++) {
-          if (!convertedState.maps[1].floors[i]) {
-            convertedState.maps[1].floors[i] = createEmptyFloor(convertedState.gridSize)
+          if (!convertedState.dungeons[1].floors[i]) {
+            convertedState.dungeons[1].floors[i] = createEmptyFloor(convertedState.gridSize)
           }
         }
         
         return convertedState
       }
-      
-      // New format - ensure doors property exists for all floors in all maps
-      if (parsedState.maps) {
+
+      // Convert maps format to dungeons format
+      if (parsedState.maps && !parsedState.dungeons) {
+        const convertedState = {
+          currentDungeon: parsedState.currentMap || 1,
+          currentFloor: parsedState.currentFloor || 1,
+          gridSize: parsedState.gridSize || { rows: 20, cols: 20 },
+          zoom: parsedState.zoom || 1.0,
+          activeTool: parsedState.activeTool || 'block_color',
+          showNoteTooltips: parsedState.showNoteTooltips !== undefined ? parsedState.showNoteTooltips : true,
+          dungeons: {},
+          dungeonNames: {}
+        }
+        
+        // Convert maps to dungeons
         Object.keys(parsedState.maps).forEach(mapKey => {
           const map = parsedState.maps[mapKey]
-          if (map.floors) {
-            Object.keys(map.floors).forEach(floorKey => {
-              if (!map.floors[floorKey].doors) {
-                map.floors[floorKey].doors = []
+          convertedState.dungeons[mapKey] = {
+            name: map.name ? map.name.replace(/^Map /, 'Dungeon ') : `Dungeon ${mapKey}`,
+            floors: map.floors || {}
+          }
+          
+          // Ensure doors property exists for all floors
+          if (convertedState.dungeons[mapKey].floors) {
+            Object.keys(convertedState.dungeons[mapKey].floors).forEach(floorKey => {
+              if (!convertedState.dungeons[mapKey].floors[floorKey].doors) {
+                convertedState.dungeons[mapKey].floors[floorKey].doors = []
+              }
+            })
+          }
+        })
+        
+        // Convert mapNames to dungeonNames
+        if (parsedState.mapNames) {
+          Object.keys(parsedState.mapNames).forEach(mapKey => {
+            const oldName = parsedState.mapNames[mapKey]
+            convertedState.dungeonNames[mapKey] = oldName.replace(/^Map /, 'Dungeon ')
+          })
+        }
+        
+        return convertedState
+      }
+      
+      // New format - ensure doors property exists for all floors in all dungeons
+      if (parsedState.dungeons) {
+        Object.keys(parsedState.dungeons).forEach(dungeonKey => {
+          const dungeon = parsedState.dungeons[dungeonKey]
+          if (dungeon.floors) {
+            Object.keys(dungeon.floors).forEach(floorKey => {
+              if (!dungeon.floors[floorKey].doors) {
+                dungeon.floors[floorKey].doors = []
               }
             })
           }
@@ -162,42 +204,42 @@ export const useAppState = () => {
     }
   }, [])
 
-  const setCurrentMap = useCallback((mapId) => {
+  const setCurrentDungeon = useCallback((dungeonId) => {
     updateState(state => {
-      if (!state.maps[mapId]) {
-        state.maps[mapId] = {
-          name: `Map ${mapId}`,
-          floors: createEmptyMap(state.gridSize)
+      if (!state.dungeons[dungeonId]) {
+        state.dungeons[dungeonId] = {
+          name: `Dungeon ${dungeonId}`,
+          floors: createEmptyDungeon(state.gridSize)
         }
-        state.mapNames[mapId] = `Map ${mapId}`
+        state.dungeonNames[dungeonId] = `Dungeon ${dungeonId}`
       }
-      return { ...state, currentMap: mapId }
+      return { ...state, currentDungeon: dungeonId }
     })
   }, [updateState])
 
   const setCurrentFloor = useCallback((floor) => {
     updateState(state => {
-      const currentMap = state.maps[state.currentMap]
-      if (!currentMap.floors[floor]) {
-        currentMap.floors[floor] = createEmptyFloor(state.gridSize)
+      const currentDungeon = state.dungeons[state.currentDungeon]
+      if (!currentDungeon.floors[floor]) {
+        currentDungeon.floors[floor] = createEmptyFloor(state.gridSize)
       }
       return { ...state, currentFloor: floor }
     })
   }, [updateState])
 
-  const setMapName = useCallback((mapId, name) => {
+  const setDungeonName = useCallback((dungeonId, name) => {
     updateState(state => ({
       ...state,
-      maps: {
-        ...state.maps,
-        [mapId]: {
-          ...state.maps[mapId],
+      dungeons: {
+        ...state.dungeons,
+        [dungeonId]: {
+          ...state.dungeons[dungeonId],
           name
         }
       },
-      mapNames: {
-        ...state.mapNames,
-        [mapId]: name
+      dungeonNames: {
+        ...state.dungeonNames,
+        [dungeonId]: name
       }
     }))
   }, [updateState])
@@ -206,11 +248,11 @@ export const useAppState = () => {
     updateState(state => {
       const newState = { ...state, gridSize: newSize }
       
-      // Update all floors in all maps to match new grid size
-      Object.keys(newState.maps).forEach(mapKey => {
-        const map = newState.maps[mapKey]
-        Object.keys(map.floors).forEach(floorKey => {
-          const oldGrid = map.floors[floorKey].grid
+      // Update all floors in all dungeons to match new grid size
+      Object.keys(newState.dungeons).forEach(dungeonKey => {
+        const dungeon = newState.dungeons[dungeonKey]
+        Object.keys(dungeon.floors).forEach(floorKey => {
+          const oldGrid = dungeon.floors[floorKey].grid
           const newGrid = new Array(newSize.rows).fill(null).map(() => new Array(newSize.cols).fill(null))
           
           // Copy existing data that fits in new grid
@@ -221,12 +263,12 @@ export const useAppState = () => {
           }
           
           // Filter items to fit within new grid bounds
-          const filteredItems = map.floors[floorKey].items.filter(
+          const filteredItems = dungeon.floors[floorKey].items.filter(
             item => item.row < newSize.rows && item.col < newSize.cols
           )
           
-          newState.maps[mapKey].floors[floorKey] = {
-            ...map.floors[floorKey],
+          newState.dungeons[dungeonKey].floors[floorKey] = {
+            ...dungeon.floors[floorKey],
             grid: newGrid,
             items: filteredItems
           }
@@ -252,14 +294,14 @@ export const useAppState = () => {
   const updateCurrentFloorData = useCallback((dataType, data) => {
     updateState(state => ({
       ...state,
-      maps: {
-        ...state.maps,
-        [state.currentMap]: {
-          ...state.maps[state.currentMap],
+      dungeons: {
+        ...state.dungeons,
+        [state.currentDungeon]: {
+          ...state.dungeons[state.currentDungeon],
           floors: {
-            ...state.maps[state.currentMap].floors,
+            ...state.dungeons[state.currentDungeon].floors,
             [state.currentFloor]: {
-              ...state.maps[state.currentMap].floors[state.currentFloor],
+              ...state.dungeons[state.currentDungeon].floors[state.currentFloor],
               [dataType]: data
             }
           }
@@ -269,10 +311,10 @@ export const useAppState = () => {
   }, [updateState])
 
   const getCurrentFloorData = useCallback(() => {
-    const currentMap = state.maps[state.currentMap]
-    if (!currentMap) return createEmptyFloor(state.gridSize)
+    const currentDungeon = state.dungeons[state.currentDungeon]
+    if (!currentDungeon) return createEmptyFloor(state.gridSize)
     
-    return currentMap.floors[state.currentFloor] || createEmptyFloor(state.gridSize)
+    return currentDungeon.floors[state.currentFloor] || createEmptyFloor(state.gridSize)
   }, [state])
 
   // Export state as JSON file
@@ -293,7 +335,7 @@ export const useAppState = () => {
       URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Failed to export state:', error)
-      alert('エクスポートに失敗しました')
+      alert('Export failed')
     }
   }, [state])
 
@@ -305,29 +347,119 @@ export const useAppState = () => {
         try {
           const importedState = JSON.parse(e.target.result)
           
-          // Validate and ensure doors property exists for all floors
-          if (importedState.floors) {
+          // Process the imported state through the same conversion logic as loadStateFromStorage
+          let processedState
+          
+          // Check if it's old format (has floors property directly)
+          if (importedState.floors && !importedState.dungeons && !importedState.maps) {
+            // Convert old format to new format
+            processedState = {
+              currentDungeon: 1,
+              currentFloor: importedState.currentFloor || 1,
+              gridSize: importedState.gridSize || { rows: 20, cols: 20 },
+              zoom: importedState.zoom || 1.0,
+              activeTool: importedState.activeTool || 'block_color',
+              showNoteTooltips: importedState.showNoteTooltips !== undefined ? importedState.showNoteTooltips : true,
+              dungeons: {
+                1: {
+                  name: 'Dungeon 1',
+                  floors: {}
+                }
+              },
+              dungeonNames: {
+                1: 'Dungeon 1'
+              }
+            }
+            
+            // Convert old floors to new format and ensure doors property exists
             Object.keys(importedState.floors).forEach(floorKey => {
-              if (!importedState.floors[floorKey].doors) {
-                importedState.floors[floorKey].doors = []
+              const floor = importedState.floors[floorKey]
+              if (!floor.doors) {
+                floor.doors = []
+              }
+              processedState.dungeons[1].floors[floorKey] = floor
+            })
+            
+            // Fill missing floors up to MAX_FLOORS
+            for (let i = 1; i <= MAX_FLOORS; i++) {
+              if (!processedState.dungeons[1].floors[i]) {
+                processedState.dungeons[1].floors[i] = createEmptyFloor(processedState.gridSize)
+              }
+            }
+          }
+          // Convert maps format to dungeons format
+          else if (importedState.maps && !importedState.dungeons) {
+            processedState = {
+              currentDungeon: importedState.currentMap || 1,
+              currentFloor: importedState.currentFloor || 1,
+              gridSize: importedState.gridSize || { rows: 20, cols: 20 },
+              zoom: importedState.zoom || 1.0,
+              activeTool: importedState.activeTool || 'block_color',
+              showNoteTooltips: importedState.showNoteTooltips !== undefined ? importedState.showNoteTooltips : true,
+              dungeons: {},
+              dungeonNames: {}
+            }
+            
+            // Convert maps to dungeons
+            Object.keys(importedState.maps).forEach(mapKey => {
+              const map = importedState.maps[mapKey]
+              processedState.dungeons[mapKey] = {
+                name: map.name ? map.name.replace(/^Map /, 'Dungeon ') : `Dungeon ${mapKey}`,
+                floors: map.floors || {}
+              }
+              
+              // Ensure doors property exists for all floors
+              if (processedState.dungeons[mapKey].floors) {
+                Object.keys(processedState.dungeons[mapKey].floors).forEach(floorKey => {
+                  if (!processedState.dungeons[mapKey].floors[floorKey].doors) {
+                    processedState.dungeons[mapKey].floors[floorKey].doors = []
+                  }
+                })
+              }
+            })
+            
+            // Convert mapNames to dungeonNames
+            if (importedState.mapNames) {
+              Object.keys(importedState.mapNames).forEach(mapKey => {
+                const oldName = importedState.mapNames[mapKey]
+                processedState.dungeonNames[mapKey] = oldName.replace(/^Map /, 'Dungeon ')
+              })
+            }
+          }
+          // New format - ensure doors property exists for all floors in all dungeons
+          else if (importedState.dungeons) {
+            processedState = importedState
+            Object.keys(processedState.dungeons).forEach(dungeonKey => {
+              const dungeon = processedState.dungeons[dungeonKey]
+              if (dungeon.floors) {
+                Object.keys(dungeon.floors).forEach(floorKey => {
+                  if (!dungeon.floors[floorKey].doors) {
+                    dungeon.floors[floorKey].doors = []
+                  }
+                })
               }
             })
           }
+          // Check if it's a valid DMapper file format
+          else {
+            alert('Unsupported file format. Please select a JSON file exported from DMapper.')
+            return
+          }
           
-          setState(importedState)
-          historyRef.current = [JSON.parse(JSON.stringify(importedState))]
+          setState(processedState)
+          historyRef.current = [JSON.parse(JSON.stringify(processedState))]
           historyIndexRef.current = 0
           
-          alert('インポートが完了しました')
+          alert('Import completed successfully')
         } catch (error) {
           console.error('Failed to parse imported file:', error)
-          alert('ファイルの読み込みに失敗しました。正しいJSONファイルを選択してください。')
+          alert('Failed to read file. Please select a valid JSON file.')
         }
       }
       reader.readAsText(file)
     } catch (error) {
       console.error('Failed to import state:', error)
-      alert('インポートに失敗しました')
+      alert('Import failed')
     }
   }, [])
 
@@ -335,12 +467,12 @@ export const useAppState = () => {
   const resetCurrentFloor = useCallback(() => {
     updateState(state => ({
       ...state,
-      maps: {
-        ...state.maps,
-        [state.currentMap]: {
-          ...state.maps[state.currentMap],
+      dungeons: {
+        ...state.dungeons,
+        [state.currentDungeon]: {
+          ...state.dungeons[state.currentDungeon],
           floors: {
-            ...state.maps[state.currentMap].floors,
+            ...state.dungeons[state.currentDungeon].floors,
             [state.currentFloor]: createEmptyFloor(state.gridSize)
           }
         }
@@ -352,15 +484,15 @@ export const useAppState = () => {
   const exportFloorSVG = useCallback(() => {
     try {
       const floorData = getCurrentFloorData()
-      const mapName = state.mapNames?.[state.currentMap] || `Map ${state.currentMap}`
-      const svgContent = exportFloorAsSVG(floorData, state.gridSize, mapName, state.currentFloor)
+      const dungeonName = state.dungeonNames?.[state.currentDungeon] || `Dungeon ${state.currentDungeon}`
+      const svgContent = exportFloorAsSVG(floorData, state.gridSize, dungeonName, state.currentFloor)
       
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
-      const filename = `${mapName.replace(/[^a-z0-9]/gi, '_')}_Floor_${state.currentFloor}_${timestamp}.svg`
+      const filename = `${dungeonName.replace(/[^a-z0-9]/gi, '_')}_Floor_${state.currentFloor}_${timestamp}.svg`
       downloadSVG(svgContent, filename)
     } catch (error) {
       console.error('Failed to export SVG:', error)
-      alert('SVGエクスポートに失敗しました')
+      alert('SVG export failed')
     }
   }, [state, getCurrentFloorData])
 
@@ -369,9 +501,9 @@ export const useAppState = () => {
     updateState,
     undo,
     redo,
-    setCurrentMap,
+    setCurrentDungeon,
     setCurrentFloor,
-    setMapName,
+    setDungeonName,
     setZoom,
     setActiveTool,
     setGridSize,

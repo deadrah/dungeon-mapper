@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { MAX_FLOORS, MAX_MAPS } from '../../utils/constants'
+import { MAX_FLOORS, MAX_DUNGEONS } from '../../utils/constants'
 import HelpDialog from '../Dialog/HelpDialog'
 
 const Header = ({ 
-  currentMap,
+  currentDungeon,
   currentFloor, 
-  setCurrentMap,
+  setCurrentDungeon,
   setCurrentFloor,
-  mapNames,
-  setMapName,
+  dungeonNames,
+  setDungeonName,
   zoom, 
   setZoom,
   onExport,
@@ -75,20 +75,20 @@ const Header = ({
     }
   }
 
-  const handleMapNameEdit = (mapId) => {
-    setEditingMapId(mapId)
-    setEditingMapName(mapNames[mapId] || `Dungeon ${mapId}`)
+  const handleDungeonNameEdit = (dungeonId) => {
+    setEditingMapId(dungeonId)
+    setEditingMapName(dungeonNames[dungeonId] || `Dungeon ${dungeonId}`)
   }
 
-  const handleMapNameSave = () => {
+  const handleDungeonNameSave = () => {
     if (editingMapName.trim()) {
-      setMapName(editingMapId, editingMapName.trim())
+      setDungeonName(editingMapId, editingMapName.trim())
     }
     setEditingMapId(null)
     setEditingMapName('')
   }
 
-  const handleMapNameCancel = () => {
+  const handleDungeonNameCancel = () => {
     setEditingMapId(null)
     setEditingMapName('')
   }
@@ -114,20 +114,20 @@ const Header = ({
         
         <div className="flex items-center space-x-2 md:flex-row">
           <select
-            value={currentMap}
-            onChange={(e) => setCurrentMap(parseInt(e.target.value))}
+            value={currentDungeon}
+            onChange={(e) => setCurrentDungeon(parseInt(e.target.value))}
             className="bg-gray-600 text-white px-2 py-1.5 rounded text-sm h-8"
           >
-            {Array.from({ length: MAX_MAPS }, (_, i) => i + 1).map(mapId => (
-              <option key={mapId} value={mapId}>
-                {mapNames[mapId] || `Dungeon ${mapId}`}
+            {Array.from({ length: MAX_DUNGEONS }, (_, i) => i + 1).map(dungeonId => (
+              <option key={dungeonId} value={dungeonId}>
+                {dungeonNames[dungeonId] || `Dungeon ${dungeonId}`}
               </option>
             ))}
           </select>
           <button
-            onClick={() => handleMapNameEdit(currentMap)}
+            onClick={() => handleDungeonNameEdit(currentDungeon)}
             className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center"
-            title="Rename Current Map"
+            title="Rename Current Dungeon"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M11.5 2L14 4.5L5 13.5H2.5V11L11.5 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -290,33 +290,33 @@ const Header = ({
       {editingMapId && (
         <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
           <div className="bg-white rounded-lg p-6 w-96 max-w-full mx-4">
-            <h2 className="text-lg font-bold mb-4 text-black">Rename Map</h2>
+            <h2 className="text-lg font-bold mb-4 text-black">Rename Dungeon</h2>
             
             <input
               type="text"
               value={editingMapName}
               onChange={(e) => setEditingMapName(e.target.value)}
-              placeholder="Map name..."
+              placeholder="Dungeon name..."
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  handleMapNameSave()
+                  handleDungeonNameSave()
                 } else if (e.key === 'Escape') {
-                  handleMapNameCancel()
+                  handleDungeonNameCancel()
                 }
               }}
             />
             
             <div className="flex justify-end gap-2 mt-4">
               <button
-                onClick={handleMapNameCancel}
+                onClick={handleDungeonNameCancel}
                 className="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
               >
                 Cancel
               </button>
               <button
-                onClick={handleMapNameSave}
+                onClick={handleDungeonNameSave}
                 className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors"
               >
                 Save
@@ -374,21 +374,21 @@ const Header = ({
                 onClick={handleMobileExport}
                 className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
               >
-                Export Map
+                Export All Data
               </button>
               
               <button
                 onClick={handleMobileImport}
                 className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
               >
-                Import Map
+                Import All Data
               </button>
               
               <button
                 onClick={handleMobileSVG}
                 className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
               >
-                Download SVG
+                Download Floor SVG
               </button>
               
               <button
@@ -420,21 +420,21 @@ const Header = ({
                 onClick={handleDesktopExport}
                 className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
               >
-                Export Map
+                Export All Data
               </button>
               
               <button
                 onClick={handleDesktopImport}
                 className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
               >
-                Import Map
+                Import All Data
               </button>
               
               <button
                 onClick={handleDesktopSVG}
                 className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
               >
-                Download SVG
+                Download Floor SVG
               </button>
             </div>
           </div>
