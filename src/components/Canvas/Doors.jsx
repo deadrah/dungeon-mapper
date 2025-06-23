@@ -39,7 +39,7 @@ const Doors = ({ doors = [], zoom, offset, gridSize }) => {
               className="absolute"
               style={{
                 left: centerX - doorWidth / 2,
-                top: centerY + cellSize * 0.3,
+                top: centerY + cellSize * 0.25,
                 width: doorWidth,
                 height: doorHeight,
                 ...doorStyle,
@@ -83,7 +83,7 @@ const Doors = ({ doors = [], zoom, offset, gridSize }) => {
               key={door.id || index}
               className="absolute"
               style={{
-                left: centerX + cellSize * 0.3,
+                left: centerX + cellSize * 0.25,
                 top: centerY - doorHeight / 2,
                 width: doorWidth,
                 height: doorHeight,
