@@ -17,7 +17,8 @@ const Grid = ({
   dragLineType,
   dragStartRow,
   dragStartCol,
-  isTwoFingerActive
+  isTwoFingerActive,
+  isSingleFingerPanning
 }) => {
   const cellSize = GRID_SIZE * zoom
 
@@ -280,7 +281,7 @@ const Grid = ({
                 height={cellSize}
                 fill="transparent"
                 style={{ 
-                  pointerEvents: isTwoFingerActive ? 'none' : 'all',
+                  pointerEvents: (isTwoFingerActive || isSingleFingerPanning) ? 'none' : 'all',
                   cursor: 'pointer',
                   touchAction: 'manipulation'
                 }}
@@ -330,7 +331,7 @@ const Grid = ({
                 height={cellSize}
                 fill="transparent"
                 style={{ 
-                  pointerEvents: isTwoFingerActive ? 'none' : 'all',
+                  pointerEvents: (isTwoFingerActive || isSingleFingerPanning) ? 'none' : 'all',
                   cursor: 'pointer',
                   touchAction: 'manipulation'
                 }}
@@ -378,7 +379,7 @@ const Grid = ({
                     onMouseEnter={isEnabled ? (e) => handleLineEnter(e, row, col, false) : undefined}
                     style={{ 
                       cursor: isEnabled ? 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" fill="black"/></svg>) 8 8, crosshair' : 'default',
-                      pointerEvents: (isEnabled && !isTwoFingerActive) ? 'auto' : 'none',
+                      pointerEvents: (isEnabled && !isTwoFingerActive && !isSingleFingerPanning) ? 'auto' : 'none',
                       touchAction: 'manipulation'
                     }}
                   />
@@ -411,7 +412,7 @@ const Grid = ({
                     onMouseEnter={isEnabled ? (e) => handleLineEnter(e, row, col, true) : undefined}
                     style={{ 
                       cursor: isEnabled ? 'url(data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2" fill="black"/></svg>) 8 8, crosshair' : 'default',
-                      pointerEvents: (isEnabled && !isTwoFingerActive) ? 'auto' : 'none',
+                      pointerEvents: (isEnabled && !isTwoFingerActive && !isSingleFingerPanning) ? 'auto' : 'none',
                       touchAction: 'manipulation'
                     }}
                   />

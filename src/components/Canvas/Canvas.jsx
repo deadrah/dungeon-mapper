@@ -33,6 +33,8 @@ const Canvas = ({
   const [initialPinchDistance, setInitialPinchDistance] = useState(null)
   const [initialZoom, setInitialZoom] = useState(1)
   const [isTwoFingerActive, setIsTwoFingerActive] = useState(false)
+  const [isSingleFingerPanning, setIsSingleFingerPanning] = useState(false)
+  const [singleTouchStart, setSingleTouchStart] = useState({ x: 0, y: 0, time: 0 })
 
   const floorData = getCurrentFloorData() || { grid: [], walls: [], items: [], doors: [] }
 
@@ -115,7 +117,19 @@ const Canvas = ({
       setLastMousePos({ x: centerX, y: centerY })
       setIsTwoFingerActive(true)
       
+      // Cancel single finger panning if it was active
+      setIsSingleFingerPanning(false)
+      
       e.preventDefault()
+    } else if (e.touches.length === 1) {
+      // Single finger touch - prepare for potential panning
+      const touch = e.touches[0]
+      setSingleTouchStart({
+        x: touch.clientX,
+        y: touch.clientY,
+        time: Date.now()
+      })
+      setLastMousePos({ x: touch.clientX, y: touch.clientY })
     }
   }, [getDistance, appState.zoom])
 
@@ -145,8 +159,35 @@ const Canvas = ({
       
       setLastMousePos({ x: centerX, y: centerY })
       e.preventDefault()
+    } else if (e.touches.length === 1) {
+      // Single finger touch - check for panning
+      const touch = e.touches[0]
+      const deltaX = touch.clientX - singleTouchStart.x
+      const deltaY = touch.clientY - singleTouchStart.y
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+      
+      // Start panning if moved more than 10 pixels and not too long since touch start
+      const timeSinceStart = Date.now() - singleTouchStart.time
+      if (!isSingleFingerPanning && distance > 10 && timeSinceStart < 500) {
+        setIsSingleFingerPanning(true)
+        e.preventDefault()
+      }
+      
+      // Continue panning if active
+      if (isSingleFingerPanning) {
+        const panDeltaX = touch.clientX - lastMousePos.x
+        const panDeltaY = touch.clientY - lastMousePos.y
+        
+        setOffset(prev => ({
+          x: prev.x + panDeltaX,
+          y: prev.y + panDeltaY
+        }))
+        
+        setLastMousePos({ x: touch.clientX, y: touch.clientY })
+        e.preventDefault()
+      }
     }
-  }, [lastMousePos, isPanning, initialPinchDistance, initialZoom, getDistance, setZoom])
+  }, [lastMousePos, isPanning, initialPinchDistance, initialZoom, getDistance, setZoom, singleTouchStart, isSingleFingerPanning])
 
   const handleTouchEnd = useCallback((e) => {
     if (e.touches.length === 0) {
@@ -155,6 +196,7 @@ const Canvas = ({
       setInitialPinchDistance(null)
       setInitialZoom(1)
       setIsTwoFingerActive(false)
+      setIsSingleFingerPanning(false)
     } else if (e.touches.length < 2) {
       // Less than 2 fingers (end of pinch/two-finger pan)
       setIsPanning(false)
@@ -745,6 +787,7 @@ const Canvas = ({
           dragStartRow={dragStartRow}
           dragStartCol={dragStartCol}
           isTwoFingerActive={isTwoFingerActive}
+          isSingleFingerPanning={isSingleFingerPanning}
         />
         
         <Walls

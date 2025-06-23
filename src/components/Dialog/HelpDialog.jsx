@@ -7,7 +7,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明 - 更新履歴',
-      version: 'バージョン 1.3.8',
+      version: 'バージョン 1.4.0',
       close: '閉じる',
       sections: {
         about: {
@@ -18,7 +18,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
           title: '基本操作',
           items: [
             { label: 'マップ拡大縮小:', desc: 'マウスホイール / ピンチインアウト' },
-            { label: 'マップ画面移動:', desc: 'Shift + ドラッグ / 2本指フリック' },
+            { label: 'マップ画面移動:', desc: 'Shift + ドラッグ / フリック' },
             { label: 'アイテム配置・色塗り・壁描画:', desc: '左クリック / タップ' },
             { label: 'アイテム削除・色消去・壁削除:', desc: '右クリック / 消去ツール' },
             { label: 'メモ編集:', desc: '既存メモをクリック（任意のツール状態で可能）' }
@@ -89,6 +89,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.4.0', date: '2025-06-23', changes: ['スマホ対応：フリックでのマップ移動に対応'] },
             { version: 'v1.3.8', date: '2025-06-23', changes: ['Line系ツール選択中でもメモ編集が可能に', 'テキスト入力中のキーボードショートカット干渉を修正'] },
             { version: 'v1.3.7', date: '2025-06-23', changes: ['テレポートポイントに2文字識別子機能を追加', 'ズーム表示をクリックで100%リセット', 'Shute●ツールでPitを表す○も配置可能（右下プルダウンで選択）'] },
             { version: 'v1.3.6', date: '2025-06-23', changes: ['ライン幅とグリッド色の調整', '重要な配列アクセスバグを修正'] },
@@ -108,7 +109,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
     },
     en: {
       title: 'DMapper - User Guide - Update History',
-      version: 'Version 1.3.8',
+      version: 'Version 1.4.0',
       close: 'Close',
       sections: {
         about: {
@@ -119,7 +120,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
           title: 'Basic Controls',
           items: [
             { label: 'Zoom in/out:', desc: 'Mouse wheel / Pinch gestures' },
-            { label: 'Pan (move view):', desc: 'Shift + drag / Two-finger drag' },
+            { label: 'Pan (move view):', desc: 'Shift + drag / Swipe' },
             { label: 'Place items, fill colors, draw walls:', desc: 'Left click / Tap' },
             { label: 'Remove items, clear colors, erase walls:', desc: 'Right click / Eraser tool' },
             { label: 'Edit notes:', desc: 'Click existing note (works with any tool)' }
@@ -190,6 +191,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.4.0', date: '2025-06-23', changes: ['Mobile support: Swipe panning functionality'] },
             { version: 'v1.3.8', date: '2025-06-23', changes: ['Fixed note editing while line tools are selected', 'Fixed keyboard shortcut interference during text input'] },
             { version: 'v1.3.7', date: '2025-06-23', changes: ['Added 2-character identifier feature for teleport points', 'Added click-to-reset zoom to 100%', 'Shute● tool can now place Pit○ markers (selectable via dropdown)'] },
             { version: 'v1.3.6', date: '2025-06-23', changes: ['Adjusted line width and grid colors', 'Fixed critical array access bugs'] },
