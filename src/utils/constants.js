@@ -23,6 +23,8 @@ export const TOOLS = {
   ARROW_SOUTH: 'arrow_south',
   ARROW_EAST: 'arrow_east',
   ARROW_WEST: 'arrow_west',
+  ARROW_ROTATE: 'arrow_rotate',
+  ARROW: 'arrow', // Unified arrow tool
   ERASER: 'eraser'
 }
 

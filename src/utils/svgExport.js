@@ -277,6 +277,10 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">←</text>\n`
           break
         
+        case TOOLS.ARROW_ROTATE:
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000">⟲</text>\n`
+          break
+        
         case TOOLS.NOTE:
           svg += `      <rect x="${centerX - itemSize/2}" y="${centerY - itemSize/2}" width="${itemSize}" height="${itemSize}" fill="#fef3c7" rx="2"/>\n`
           if (item.text) {

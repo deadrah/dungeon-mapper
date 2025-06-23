@@ -18,7 +18,8 @@ const ITEM_ICONS = {
   [TOOLS.ARROW_NORTH]: '↑',
   [TOOLS.ARROW_SOUTH]: '↓',
   [TOOLS.ARROW_EAST]: '→',
-  [TOOLS.ARROW_WEST]: '←'
+  [TOOLS.ARROW_WEST]: '←',
+  [TOOLS.ARROW_ROTATE]: '⟲'
 }
 
 const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) => {
@@ -113,7 +114,7 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
           fontSize = Math.max(8, cellSize * 0.4)  // Smaller size for current position
         }
         
-        const fontWeight = isElevator ? '900' : 'bold'
+        const fontWeight = isElevator ? '900' : (item.type === TOOLS.ARROW_ROTATE ? 'normal' : 'bold')
         
         return (
           <div key={index} className="absolute pointer-events-none">

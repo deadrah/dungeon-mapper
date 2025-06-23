@@ -21,6 +21,7 @@ const Canvas = ({
   const [selectedColor, setSelectedColor] = useState('#ffffff')
   const [warpText, setWarpText] = useState('A')
   const [shuteStyle, setShuteStyle] = useState('filled') // 'filled' (●) or 'outline' (○)
+  const [arrowDirection, setArrowDirection] = useState('north') // 'north', 'south', 'east', 'west', 'rotate'
   const [isDraggingLine, setIsDraggingLine] = useState(false)
   const [dragLineType, setDragLineType] = useState(null) // 'horizontal' or 'vertical'
   const [isDraggingErase, setIsDraggingErase] = useState(false)
@@ -553,12 +554,13 @@ const Canvas = ({
         if (existingItemIndex === -1) {
           // Add new item
           const newItem = {
-            type: appState.activeTool,
+            type: appState.activeTool === TOOLS.ARROW ? `arrow_${arrowDirection}` : appState.activeTool,
             row: actualRow,
             col,
             id: Date.now() + Math.random(),
             ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
-            ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle })
+            ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
+            ...(appState.activeTool === TOOLS.ARROW && { arrowDirection })
           }
           const newItems = [...(floorData.items || []), newItem]
           updateCurrentFloorData('items', newItems)
@@ -566,18 +568,19 @@ const Canvas = ({
           // Replace existing item with new type
           const newItems = [...(floorData.items || [])]
           newItems[existingItemIndex] = {
-            type: appState.activeTool,
+            type: appState.activeTool === TOOLS.ARROW ? `arrow_${arrowDirection}` : appState.activeTool,
             row: actualRow,
             col,
             id: Date.now() + Math.random(),
             ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
-            ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle })
+            ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
+            ...(appState.activeTool === TOOLS.ARROW && { arrowDirection })
           }
           updateCurrentFloorData('items', newItems)
         }
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, warpText, shuteStyle, updateCurrentFloorData])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, warpText, shuteStyle, arrowDirection, updateCurrentFloorData])
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog
@@ -627,7 +630,7 @@ const Canvas = ({
     const lineTools = ['line'];
     const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
     const fillTools = [TOOLS.BLOCK_COLOR, TOOLS.DARK_ZONE];
-    const otherGridTools = ['chest', 'warp_point', 'shute', 'elevator', 'stairs_up_svg', 'stairs_down_svg', 'current_position', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west'];
+    const otherGridTools = ['chest', 'warp_point', 'shute', 'elevator', 'stairs_up_svg', 'stairs_down_svg', 'current_position', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west', 'arrow'];
     
     if (fillTools.includes(appState.activeTool)) {
       // Fill category: Remove fill color only
@@ -839,7 +842,7 @@ const Canvas = ({
             placeholder="A"
             maxLength={2}
             className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
-            style={{ fontSize: '10px' }}
+            style={{ fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
           />
         </div>
       )}
@@ -851,10 +854,28 @@ const Canvas = ({
             value={shuteStyle}
             onChange={(e) => setShuteStyle(e.target.value)}
             className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
-            style={{ fontSize: '10px' }}
+            style={{ fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
           >
             <option value="filled">●</option>
             <option value="outline">○</option>
+          </select>
+        </div>
+      )}
+
+      {/* Arrow direction selector */}
+      {appState.activeTool === TOOLS.ARROW && (
+        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+          <select
+            value={arrowDirection}
+            onChange={(e) => setArrowDirection(e.target.value)}
+            className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
+            style={{ fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
+          >
+            <option value="north">↑</option>
+            <option value="south">↓</option>
+            <option value="west">←</option>
+            <option value="east">→</option>
+            <option value="rotate">⟲</option>
           </select>
         </div>
       )}
