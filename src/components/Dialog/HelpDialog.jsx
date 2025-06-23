@@ -7,7 +7,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明 - 更新履歴',
-      version: 'バージョン 1.4.1',
+      version: 'バージョン 1.4.2',
       close: '閉じる',
       sections: {
         about: {
@@ -83,12 +83,13 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
           items: [
             'データはブラウザのローカルストレージに保存されるため、ブラウザデータを削除すると消失します',
             '重要なダンジョンマップは定期的にExport機能でバックアップを取ることを推奨します',
-            'ドアや壁の矢印は、既存の壁にのみ配置できます'
+            'ドアや壁の矢印は壁が無い場所にも直接配置できます（v1.4.2から）'
           ]
         },
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系ツールの相互上書き', 'Lineが無い場所に直接Line系ツールを配置可能に', '階段ツールにも番号付け機能を追加'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['GridArrowツールを統合、右下での選択に。GridArrow内に回転床も追加'] },
             { version: 'v1.4.0', date: '2025-06-23', changes: ['スマホ対応：フリックでのマップ移動に対応'] },
             { version: 'v1.3.8', date: '2025-06-23', changes: ['Line系ツール選択中でもメモ編集が可能に', 'テキスト入力中のキーボードショートカット干渉を修正'] },
@@ -110,7 +111,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
     },
     en: {
       title: 'DMapper - User Guide - Update History',
-      version: 'Version 1.4.1',
+      version: 'Version 1.4.2',
       close: 'Close',
       sections: {
         about: {
@@ -186,12 +187,13 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
           items: [
             'Data is stored in browser local storage and will be lost if browser data is cleared',
             'Regular backups using the Export function are recommended for important dungeon maps',
-            'Doors and wall arrows can only be placed on existing walls'
+            'Doors and wall arrows can be placed directly anywhere, even without existing walls (since v1.4.2)'
           ]
         },
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系 tools mutual overwriting', 'Direct Line系 tool placement without existing walls', 'Added numbering feature to Stairs tools'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['Unified Grid Arrow tools with right-panel selection. Added rotating floor marker'] },
             { version: 'v1.4.0', date: '2025-06-23', changes: ['Mobile support: Swipe panning functionality'] },
             { version: 'v1.3.8', date: '2025-06-23', changes: ['Fixed note editing while line tools are selected', 'Fixed keyboard shortcut interference during text input'] },
