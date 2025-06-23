@@ -383,25 +383,25 @@ const Canvas = ({
           return false
         }) ?? -1
         
-        if (existingDoorIndex === -1) {
-          // Check if the arrow tool is compatible with the wall direction
-          const isArrowTool = appState.activeTool.startsWith('line_arrow_')
+        // Check if the arrow tool is compatible with the wall direction
+        const isArrowTool = appState.activeTool.startsWith('line_arrow_')
+        
+        let canPlace = true
+        if (isArrowTool) {
+          const isHorizontalArrow = appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west'
+          const isVerticalArrow = appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south'
           
-          let canPlace = true
-          if (isArrowTool) {
-            const isHorizontalArrow = appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west'
-            const isVerticalArrow = appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south'
-            
-            // Vertical walls can only have horizontal arrows (east/west)
-            // Horizontal walls can only have vertical arrows (north/south)
-            if (wallIsVertical && !isHorizontalArrow) {
-              canPlace = false
-            } else if (!wallIsVertical && !isVerticalArrow) {
-              canPlace = false
-            }
+          // Vertical walls can only have horizontal arrows (east/west)
+          // Horizontal walls can only have vertical arrows (north/south)
+          if (wallIsVertical && !isHorizontalArrow) {
+            canPlace = false
+          } else if (!wallIsVertical && !isVerticalArrow) {
+            canPlace = false
           }
-          
-          if (canPlace) {
+        }
+        
+        if (canPlace) {
+          if (existingDoorIndex === -1) {
             // Add new door on the wall
             const newDoor = {
               type: appState.activeTool,
@@ -412,6 +412,18 @@ const Canvas = ({
               id: Date.now() + Math.random()
             }
             const newDoors = [...(floorData.doors || []), newDoor]
+            updateCurrentFloorData('doors', newDoors)
+          } else {
+            // Replace existing door with new type (overwrite)
+            const newDoors = [...(floorData.doors || [])]
+            newDoors[existingDoorIndex] = {
+              type: appState.activeTool,
+              startRow: actualRow,
+              startCol: col,
+              endRow: existingWall.endRow,
+              endCol: existingWall.endCol,
+              id: Date.now() + Math.random()
+            }
             updateCurrentFloorData('doors', newDoors)
           }
         }
