@@ -45,8 +45,8 @@ const Canvas = ({
 
   const handleWheel = useCallback((e) => {
     e.preventDefault()
-    const delta = e.deltaY > 0 ? 0.9 : 1.1
-    const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, appState.zoom * delta))
+    const delta = e.deltaY > 0 ? -0.05 : 0.05
+    const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, appState.zoom + delta))
     setZoom(newZoom)
   }, [appState.zoom, setZoom])
 
