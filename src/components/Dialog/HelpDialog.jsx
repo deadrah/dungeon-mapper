@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.3.3',
+      version: 'バージョン 1.3.4',
       close: '閉じる',
       sections: {
         about: {
@@ -18,8 +18,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
         controls: {
           title: '基本操作',
           items: [
-            { label: 'ズームイン/アウト:', desc: 'マウスホイール / ピンチインアウト' },
-            { label: 'パン（画面移動）:', desc: 'Shift + ドラッグ / 2本指フリック' },
+            { label: 'マップ拡大縮小:', desc: 'マウスホイール / ピンチインアウト' },
+            { label: 'マップ画面移動:', desc: 'Shift + ドラッグ / 2本指フリック' },
             { label: 'アイテム配置・色塗り・壁描画:', desc: '左クリック / タップ' },
             { label: 'アイテム削除・色消去・壁削除:', desc: '右クリック / 消去ツール' },
             { label: 'メモ編集:', desc: '既存メモをクリック（任意のツール状態で可能）' }
@@ -29,8 +29,6 @@ const HelpDialog = ({ isOpen, onClose }) => {
           title: 'キーボードショートカット',
           items: [
             { label: 'ツール選択:', desc: '1-5, Q, E' },
-            { label: 'マップエクスポート:', desc: 'Ctrl + S' },
-            { label: 'マップインポート:', desc: 'Ctrl + L' },
             { label: '元に戻す:', desc: 'Ctrl + Z' },
             { label: 'やり直し:', desc: 'Ctrl + Y' }
           ]
@@ -51,10 +49,10 @@ const HelpDialog = ({ isOpen, onClose }) => {
           ]
         },
         mapManagement: {
-          title: 'マップ管理',
+          title: 'ダンジョン管理',
           items: [
-            { label: '複数マップ管理（最大10個）:', desc: 'Map選択' },
-            { label: 'マップ名前付け:', desc: 'Renameボタン' },
+            { label: '複数ダンジョン管理（最大10個）:', desc: 'Dungeon選択' },
+            { label: 'ダンジョン名前付け:', desc: 'Renameボタン' },
             { label: '階層切り替え（最大30階）:', desc: 'Floor選択' },
             { label: '現在フロア全削除:', desc: 'Resetボタン' },
             { label: 'グリッドサイズ調整（5x5〜50x50）:', desc: 'Grid Sizeスライダー' },
@@ -65,8 +63,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
           title: 'データ保存',
           items: [
             { label: '自動保存:', desc: 'ブラウザのローカルストレージに自動保存' },
-            { label: 'JSONダウンロード:', desc: 'Exportボタン' },
-            { label: 'JSONファイル読み込み:', desc: 'Importボタン' },
+            { label: '全データダウンロード:', desc: 'Export All Dataボタン' },
+            { label: '全データ復元:', desc: 'Import All Dataボタン' },
             { label: 'SVG画像ダウンロード:', desc: 'SVGボタン' }
           ]
         },
@@ -74,14 +72,14 @@ const HelpDialog = ({ isOpen, onClose }) => {
           title: '注意事項',
           items: [
             'データはブラウザのローカルストレージに保存されるため、ブラウザデータを削除すると消失します',
-            '重要なマップは定期的にExport機能でバックアップを取ることを推奨します',
-            'ドアや壁の矢印は、既存の壁にのみ配置できます',
-            'セルの矢印は壁とは独立してセルの中央に配置されます'
+            '重要なダンジョンマップは定期的にExport機能でバックアップを取ることを推奨します',
+            'ドアや壁の矢印は、既存の壁にのみ配置できます'
           ]
         },
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.3.4', date: '2025-06-23', changes: ['ヘッダー表示項目の整備', 'エクスポートデータの軽量化', '[マップ]-[フロア]構造から[ダンジョン]-[フロア]に名称変更', '1ダンジョンにつき30フロアを管理可能(最大10ダンジョン)'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['スマホにハンバーガーメニューで機能を追加'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['どのツールでもNoteを開けるように変更'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['スマホタッチ操作を改善', '1本指はツール操作専用、2本指でマップ移動・ズーム', 'ヘルプの操作説明を「機能：操作方法」形式に統一'] },
@@ -96,7 +94,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.3.3',
+      version: 'Version 1.3.4',
       close: 'Close',
       sections: {
         about: {
@@ -117,8 +115,6 @@ const HelpDialog = ({ isOpen, onClose }) => {
           title: 'Keyboard Shortcuts',
           items: [
             { label: '1-5, Q, E:', desc: 'Tool selection' },
-            { label: 'Ctrl + S:', desc: 'Export map' },
-            { label: 'Ctrl + L:', desc: 'Import map' },
             { label: 'Ctrl + Z:', desc: 'Undo' },
             { label: 'Ctrl + Y:', desc: 'Redo' }
           ]
@@ -139,11 +135,11 @@ const HelpDialog = ({ isOpen, onClose }) => {
           ]
         },
         mapManagement: {
-          title: 'Map Management',
+          title: 'Dungeon Management',
           items: [
-            { label: 'Map Selection:', desc: 'Manage multiple maps (up to 10)' },
-            { label: 'Rename:', desc: 'Give custom names to your maps' },
-            { label: 'Floor Selection:', desc: 'Support up to 30 floors per map' },
+            { label: 'Dungeon Selection:', desc: 'Manage multiple dungeons (up to 10)' },
+            { label: 'Rename:', desc: 'Give custom names to your dungeons' },
+            { label: 'Floor Selection:', desc: 'Support up to 30 floors per dungeon' },
             { label: 'Reset:', desc: 'Clear all data on current floor' },
             { label: 'Grid Size:', desc: 'Adjust grid size from 5x5 to 50x50' },
             { label: 'Note:', desc: 'Toggle note tooltip display on/off (always visible when on)' }
@@ -162,14 +158,14 @@ const HelpDialog = ({ isOpen, onClose }) => {
           title: 'Important Notes',
           items: [
             'Data is stored in browser local storage and will be lost if browser data is cleared',
-            'Regular backups using the Export function are recommended for important maps',
-            'Doors and wall arrows can only be placed on existing walls',
-            'Cell arrows are placed independently in the center of grid cells'
+            'Regular backups using the Export function are recommended for important dungeon maps',
+            'Doors and wall arrows can only be placed on existing walls'
           ]
         },
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.3.4', date: '2025-06-23', changes: ['Reorganized header UI for cleaner layout', 'Optimized export data file size', 'Renamed [Map]-[Floor] structure to [Dungeon]-[Floor]', 'Support up to 30 floors per dungeon (max 10 dungeons)'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['Add hamburger menu for mobile with hidden desktop features'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['Enable note editing with any tool'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['Improved mobile touch controls', 'Single finger for tool operations, two fingers for map movement/zoom', 'Unified help documentation to "function: operation" format'] },
