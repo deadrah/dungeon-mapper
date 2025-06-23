@@ -778,7 +778,16 @@ const Canvas = ({
       )}
       
       {/* Zoom indicator */}
-      <div className="absolute bottom-4 right-4 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-sm">
+      <div 
+        className="absolute bottom-4 right-4 bg-gray-900 rounded shadow-lg text-white text-xs cursor-pointer hover:bg-gray-700 transition-colors z-50 flex items-center justify-center"
+        onClick={() => setZoom(1.0)}
+        title="Click to reset zoom to 100%"
+        style={{ 
+          pointerEvents: 'auto',
+          width: '48px',
+          height: '40px'
+        }}
+      >
         {Math.round(appState.zoom * 100)}%
       </div>
       
