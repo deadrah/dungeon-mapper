@@ -42,6 +42,48 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
       )
     }
     
+    // Special rendering for Warp Point with text
+    if (item.type === TOOLS.WARP_POINT) {
+      return (
+        <div style={{ 
+          position: 'relative', 
+          width: cellSize, 
+          height: cellSize,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* Diamond background */}
+          <div style={{
+            position: 'absolute',
+            fontSize: Math.max(12, cellSize * 0.6),
+            color: '#4bdcff'
+          }}>
+            ◊
+          </div>
+          {/* Text overlay */}
+          {item.warpText && (
+            <div style={{
+              position: 'absolute',
+              fontSize: Math.max(10, cellSize * 0.45),
+              color: '#0c4b5b',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              lineHeight: '1'
+            }}>
+              {item.warpText}
+            </div>
+          )}
+        </div>
+      )
+    }
+    
+    // Special rendering for Shute with style options
+    if (item.type === TOOLS.SHUTE) {
+      const icon = item.shuteStyle === 'outline' ? '○' : '●'
+      return icon
+    }
+    
     // Default text rendering
     return ITEM_ICONS[item.type] || '?'
   }

@@ -19,6 +19,8 @@ const Canvas = ({
   const [isPanning, setIsPanning] = useState(false)
   const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 })
   const [selectedColor, setSelectedColor] = useState('#ffffff')
+  const [warpText, setWarpText] = useState('A')
+  const [shuteStyle, setShuteStyle] = useState('filled') // 'filled' (●) or 'outline' (○)
   const [isDraggingLine, setIsDraggingLine] = useState(false)
   const [dragLineType, setDragLineType] = useState(null) // 'horizontal' or 'vertical'
   const [isDraggingErase, setIsDraggingErase] = useState(false)
@@ -512,7 +514,9 @@ const Canvas = ({
             type: appState.activeTool,
             row: actualRow,
             col,
-            id: Date.now() + Math.random()
+            id: Date.now() + Math.random(),
+            ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
+            ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle })
           }
           const newItems = [...(floorData.items || []), newItem]
           updateCurrentFloorData('items', newItems)
@@ -523,13 +527,15 @@ const Canvas = ({
             type: appState.activeTool,
             row: actualRow,
             col,
-            id: Date.now() + Math.random()
+            id: Date.now() + Math.random(),
+            ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
+            ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle })
           }
           updateCurrentFloorData('items', newItems)
         }
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, updateCurrentFloorData])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, warpText, shuteStyle, updateCurrentFloorData])
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog
@@ -767,7 +773,7 @@ const Canvas = ({
       
       {/* Color picker for block color tool */}
       {appState.activeTool === TOOLS.BLOCK_COLOR && (
-        <div className="absolute bottom-16 right-4 bg-gray-900 p-2 rounded shadow-lg z-50">
+        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
           <input
             type="color"
             value={selectedColor}
@@ -776,10 +782,43 @@ const Canvas = ({
           />
         </div>
       )}
+
+      {/* Text input for warp point tool */}
+      {appState.activeTool === TOOLS.WARP_POINT && (
+        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+          <input
+            type="text"
+            value={warpText}
+            onChange={(e) => {
+              const value = e.target.value.slice(0, 2).toUpperCase()
+              setWarpText(value)
+            }}
+            placeholder="A"
+            maxLength={2}
+            className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
+            style={{ fontSize: '10px' }}
+          />
+        </div>
+      )}
+
+      {/* Style selector for shute tool */}
+      {appState.activeTool === TOOLS.SHUTE && (
+        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+          <select
+            value={shuteStyle}
+            onChange={(e) => setShuteStyle(e.target.value)}
+            className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
+            style={{ fontSize: '10px' }}
+          >
+            <option value="filled">●</option>
+            <option value="outline">○</option>
+          </select>
+        </div>
+      )}
       
       {/* Zoom indicator */}
       <div 
-        className="absolute bottom-4 right-4 bg-gray-900 rounded shadow-lg text-white text-xs cursor-pointer hover:bg-gray-700 transition-colors z-50 flex items-center justify-center"
+        className="absolute bottom-4 right-4 bg-gray-800 rounded shadow-lg text-white text-xs cursor-pointer hover:bg-gray-700 transition-colors z-50 flex items-center justify-center"
         onClick={() => setZoom(1.0)}
         title="Click to reset zoom to 100%"
         style={{ 

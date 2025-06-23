@@ -253,7 +253,12 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           break
         
         case TOOLS.WARP_POINT:
+          // Diamond background
           svg += `      <polygon points="${centerX},${centerY - itemSize/2} ${centerX + itemSize/3},${centerY} ${centerX},${centerY + itemSize/2} ${centerX - itemSize/3},${centerY}" class="warp-point"/>\n`
+          // Text overlay if warpText exists
+          if (item.warpText) {
+            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(6, itemSize * 0.4)}" fill="#0c4b5b" font-weight="bold">${item.warpText}</text>\n`
+          }
           break
         
         case TOOLS.ARROW_NORTH:
@@ -284,6 +289,30 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         
         case TOOLS.DARK_ZONE:
           svg += `      <circle cx="${centerX}" cy="${centerY}" r="${itemSize/3}" class="dark-zone"/>\n`
+          break
+        
+        case TOOLS.SHUTE:
+          if (item.shuteStyle === 'outline') {
+            svg += `      <circle cx="${centerX}" cy="${centerY}" r="${itemSize/3}" fill="none" stroke="#333333" stroke-width="2"/>\n`
+          } else {
+            svg += `      <circle cx="${centerX}" cy="${centerY}" r="${itemSize/3}" fill="#333333"/>\n`
+          }
+          break
+        
+        case TOOLS.ELEVATOR:
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#b8860b" font-weight="900">E</text>\n`
+          break
+        
+        case TOOLS.STAIRS_UP_SVG:
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▲</text>\n`
+          break
+        
+        case TOOLS.STAIRS_DOWN_SVG:
+          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▼</text>\n`
+          break
+        
+        case TOOLS.CURRENT_POSITION:
+          svg += `      <circle cx="${centerX}" cy="${centerY}" r="${itemSize/4}" fill="#dc143c"/>\n`
           break
       }
     })

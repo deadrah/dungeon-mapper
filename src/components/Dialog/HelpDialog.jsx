@@ -7,7 +7,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.3.6',
+      version: 'バージョン 1.3.7',
       close: '閉じる',
       sections: {
         about: {
@@ -35,14 +35,17 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         tools: {
           title: 'ツール説明',
           items: [
-            { name: '壁描画（Line）:', desc: 'グリッドの境界線に壁を描画します。クリック&ドラッグで連続描画が可能です。', color: 'text-purple-600' },
-            { name: 'ブロック色塗り:', desc: 'グリッドのセルに色を塗ります。右下のカラーピッカーで色を選択できます。', color: 'text-green-600' },
-            { name: 'ダークゾーン:', desc: '暗いエリアをグレーで表示します。', color: 'text-gray-600' },
+            { name: '壁描画（Line）:', desc: 'セルの境界線に壁を描画します。クリック&ドラッグで連続描画が可能です。', color: 'text-purple-600' },
+            { name: '色塗り（Fill）:', desc: 'セルに色を塗ります。右下のカラーピッカーで色を選択できます。踏破済、ダークゾーン、魔法禁止エリアなどの塗分けに使用できます。', color: 'text-green-600' },
+            { name: 'ダークゾーン:', desc: 'セルをグレーで塗ります。', color: 'text-gray-600' },
             { name: '階段:', desc: '上り階段（▲）と下り階段（▼）を配置します。', color: 'text-blue-600' },
-            { name: '宝箱・ワープ・イベント:', desc: '宝箱、ワープポイント、イベントマーカーを配置します。', color: 'text-yellow-600' },
+            { name: '宝箱:', desc: '宝物の場所を示すマーカーです。', color: 'text-yellow-600' },
+            { name: 'テレポートポイント:', desc: '右下の文字入力欄で最大2文字の識別子を設定できます。複数のテレポート先を管理可能です。', color: 'text-purple-600' },
+            { name: 'シュート・ピット:', desc: '落下地点を示します。右下のプルダウンでシュート（●）またはピット（○）を選択できます。', color: 'text-gray-600' },
+            { name: 'イベントマーカー:', desc: '特殊イベントの発生場所を示します。', color: 'text-yellow-600' },
             { name: '現在位置:', desc: 'プレイヤーの現在位置を示します（1フロアにつき1つのみ）。', color: 'text-red-600' },
             { name: 'ドア:', desc: '既存の壁に開いたドア（□）または閉じたドア（■）を配置します。', color: 'text-orange-600' },
-            { name: '矢印:', desc: 'グリッドセルまたは壁に方向矢印を配置します。', color: 'text-indigo-600' },
+            { name: '矢印:', desc: 'セルまたは壁に一方通行や強制移動矢印を配置します。', color: 'text-indigo-600' },
             { name: 'ノート:', desc: 'セルにメモを追加します。クリックでテキストダイアログが開きます。', color: 'text-pink-600' },
             { name: '消去ツール（Eraser）:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。(スマホで右クリック消去できないので仮対応)', color: 'text-red-500' }
           ]
@@ -86,6 +89,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.3.7', date: '2025-06-23', changes: ['テレポートポイントに2文字識別子機能を追加', 'ズーム表示をクリックで100%リセット', 'Shute●ツールでPitを表す○も配置可能（右下プルダウンで選択）'] },
             { version: 'v1.3.6', date: '2025-06-23', changes: ['ライン幅とグリッド色の調整', '重要な配列アクセスバグを修正'] },
             { version: 'v1.3.5', date: '2025-06-23', changes: ['ダンジョン毎のセーブロードに対応', '多言語対応整備'] },
             { version: 'v1.3.4', date: '2025-06-23', changes: ['ヘッダー表示項目の整備', 'エクスポートデータの軽量化', '[マップ]-[フロア]構造から[ダンジョン]-[フロア]に名称変更', '1ダンジョンにつき30フロアを管理可能(最大10ダンジョン)'] },
@@ -103,7 +107,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.3.6',
+      version: 'Version 1.3.7',
       close: 'Close',
       sections: {
         about: {
@@ -131,14 +135,17 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         tools: {
           title: 'Tool Description',
           items: [
-            { name: 'Wall Drawing (Line):', desc: 'Draw walls on grid boundaries. Click & drag for continuous drawing.', color: 'text-purple-600' },
-            { name: 'Block Color Fill:', desc: 'Fill grid cells with colors. Use the color picker in the bottom right.', color: 'text-green-600' },
-            { name: 'Dark Zone:', desc: 'Mark dark areas with gray shading.', color: 'text-gray-600' },
+            { name: 'Wall Drawing (Line):', desc: 'Draw walls on cell boundaries. Click & drag for continuous drawing.', color: 'text-purple-600' },
+            { name: 'Color Fill (Fill):', desc: 'Fill cells with colors. Use the color picker in the bottom right. Can be used to mark explored areas, dark zones, magic-restricted areas, etc.', color: 'text-green-600' },
+            { name: 'Dark Zone:', desc: 'Fill cells with gray color.', color: 'text-gray-600' },
             { name: 'Stairs:', desc: 'Place up stairs (▲) and down stairs (▼).', color: 'text-blue-600' },
-            { name: 'Chest, Warp, Event:', desc: 'Place treasure chests, warp points, and event markers.', color: 'text-yellow-600' },
+            { name: 'Chest:', desc: 'Mark treasure locations.', color: 'text-yellow-600' },
+            { name: 'Teleport Point:', desc: 'Use the text input in the bottom right to set up to 2 character identifiers. Manage multiple teleport destinations.', color: 'text-purple-600' },
+            { name: 'Shute & Pit:', desc: 'Mark fall points. Use the dropdown in the bottom right to select Shute (●) or Pit (○).', color: 'text-gray-600' },
+            { name: 'Event Marker:', desc: 'Mark special event locations.', color: 'text-yellow-600' },
             { name: 'Current Position:', desc: 'Mark player\'s current location (only one per floor).', color: 'text-red-600' },
             { name: 'Doors:', desc: 'Place open doors (□) or closed doors (■) on existing walls.', color: 'text-orange-600' },
-            { name: 'Arrows:', desc: 'Place directional arrows on grid cells or walls.', color: 'text-indigo-600' },
+            { name: 'Arrows:', desc: 'Place one-way or forced movement arrows on cells or walls.', color: 'text-indigo-600' },
             { name: 'Notes:', desc: 'Add text memos to cells. Click to open text dialog.', color: 'text-pink-600' },
             { name: 'Eraser Tool:', desc: 'Delete all objects with left click/drag. Mobile-friendly tool that doesn\'t require right-click.', color: 'text-red-500' }
           ]
@@ -182,6 +189,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.3.7', date: '2025-06-23', changes: ['Added 2-character identifier feature for teleport points', 'Added click-to-reset zoom to 100%', 'Shute● tool can now place Pit○ markers (selectable via dropdown)'] },
             { version: 'v1.3.6', date: '2025-06-23', changes: ['Adjusted line width and grid colors', 'Fixed critical array access bugs'] },
             { version: 'v1.3.5', date: '2025-06-23', changes: ['Added per-dungeon save/load functionality', 'Multi-language support implementation'] },
             { version: 'v1.3.4', date: '2025-06-23', changes: ['Reorganized header UI for cleaner layout', 'Optimized export data file size', 'Renamed [Map]-[Floor] structure to [Dungeon]-[Floor]', 'Support up to 30 floors per dungeon (max 10 dungeons)'] },
