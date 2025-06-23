@@ -317,10 +317,50 @@ export const useAppState = () => {
     return currentDungeon.floors[state.currentFloor] || createEmptyFloor(state.gridSize)
   }, [state])
 
+  // Check if a floor is completely empty
+  const isFloorEmpty = (floor) => {
+    if (!floor) return true
+    
+    // Check if grid has any non-null values
+    const hasGridData = floor.grid && floor.grid.some(row => 
+      row && row.some(cell => cell !== null)
+    )
+    
+    // Check if there are any walls, items, or doors
+    const hasWalls = floor.walls && floor.walls.length > 0
+    const hasItems = floor.items && floor.items.length > 0
+    const hasDoors = floor.doors && floor.doors.length > 0
+    
+    return !hasGridData && !hasWalls && !hasItems && !hasDoors
+  }
+
   // Export state as JSON file
   const exportState = useCallback(() => {
     try {
-      const dataStr = JSON.stringify(state, null, 2)
+      // Create optimized state for export
+      const optimizedState = { ...state }
+      
+      // Remove empty floors from each dungeon
+      if (optimizedState.dungeons) {
+        Object.keys(optimizedState.dungeons).forEach(dungeonKey => {
+          const dungeon = optimizedState.dungeons[dungeonKey]
+          if (dungeon.floors) {
+            const optimizedFloors = {}
+            Object.keys(dungeon.floors).forEach(floorKey => {
+              const floor = dungeon.floors[floorKey]
+              if (!isFloorEmpty(floor)) {
+                optimizedFloors[floorKey] = floor
+              }
+            })
+            optimizedState.dungeons[dungeonKey] = {
+              ...dungeon,
+              floors: optimizedFloors
+            }
+          }
+        })
+      }
+      
+      const dataStr = JSON.stringify(optimizedState)
       const dataBlob = new Blob([dataStr], { type: 'application/json' })
       const url = URL.createObjectURL(dataBlob)
       
