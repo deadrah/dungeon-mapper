@@ -54,6 +54,7 @@ const Grid = ({
 
   const handleLineClick = (e, row, col, isVertical) => {
     e.preventDefault()
+    
     if (e.button === 0) {
       onLineClick(row, col, isVertical, e)
     } else if (e.button === 2) {
@@ -298,6 +299,49 @@ const Grid = ({
                 }}
                 onMouseEnter={(e) => handleCellMouseEnter(e, row, col)}
                 onMouseOver={(e) => handleCellMouseOver(e, row, col)}
+              />
+            )
+          })
+        )}
+
+        {/* Note clickable areas for line tools - allow clicking existing notes */}
+        {(activeTool === TOOLS.LINE || activeTool === TOOLS.DOOR_OPEN || activeTool === TOOLS.DOOR_CLOSED || 
+          activeTool === TOOLS.LINE_ARROW_NORTH || activeTool === TOOLS.LINE_ARROW_SOUTH ||
+          activeTool === TOOLS.LINE_ARROW_EAST || activeTool === TOOLS.LINE_ARROW_WEST) && 
+         Array.from({ length: Math.min(endRow - startRow, gridSize.rows) }, (_, i) => startRow + i).map(row =>
+          Array.from({ length: Math.min(endCol - startCol, gridSize.cols) }, (_, i) => startCol + i).map(col => {
+            if (row >= gridSize.rows || col >= gridSize.cols) return null;
+            
+            // Only create clickable area if there's a note at this position
+            // Note: Items use inverted row coordinates (gridSize.rows - 1 - item.row)
+            const displayRow = gridSize.rows - 1 - row;
+            const hasNote = (floorData.items || []).some(item => 
+              item.row === displayRow && item.col === col && item.type === TOOLS.NOTE
+            );
+            
+            if (!hasNote) return null;
+            
+            return (
+              <rect
+                key={`note-click-line-${row}-${col}`}
+                x={offset.x + col * cellSize + 24}
+                y={offset.y + row * cellSize + 24}
+                width={cellSize}
+                height={cellSize}
+                fill="transparent"
+                style={{ 
+                  pointerEvents: isTwoFingerActive ? 'none' : 'all',
+                  cursor: 'pointer',
+                  touchAction: 'manipulation'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleCellClick(e, row, col)
+                }}
+                onMouseDown={(e) => {
+                  e.stopPropagation()
+                  handleCellClick(e, row, col)
+                }}
               />
             )
           })
