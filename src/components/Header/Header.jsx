@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { MAX_FLOORS, MAX_MAPS } from '../../utils/constants'
 import HelpDialog from '../Dialog/HelpDialog'
 
@@ -28,12 +28,26 @@ const Header = ({
   const [editingMapName, setEditingMapName] = useState('')
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  const handleZoomIn = () => setZoom(Math.min(5, zoom * 1.2))
-  const handleZoomOut = () => setZoom(Math.max(0.1, zoom * 0.8))
-  const handleZoomReset = () => setZoom(1)
+  const [isFileMenuOpen, setIsFileMenuOpen] = useState(false)
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
+  const closeFileMenu = () => setIsFileMenuOpen(false)
+  
+  const handleDesktopExport = () => {
+    onExport()
+    closeFileMenu()
+  }
+
+  const handleDesktopImport = () => {
+    handleImportClick()
+    closeFileMenu()
+  }
+
+  const handleDesktopSVG = () => {
+    onExportSVG()
+    closeFileMenu()
+  }
+
 
   const handleMobileExport = () => {
     onExport()
@@ -63,7 +77,7 @@ const Header = ({
 
   const handleMapNameEdit = (mapId) => {
     setEditingMapId(mapId)
-    setEditingMapName(mapNames[mapId] || `Map ${mapId}`)
+    setEditingMapName(mapNames[mapId] || `Dungeon ${mapId}`)
   }
 
   const handleMapNameSave = () => {
@@ -99,7 +113,6 @@ const Header = ({
         <h1 className="text-lg font-bold md:mb-0 mb-1">DMapper</h1>
         
         <div className="flex items-center space-x-2 md:flex-row">
-          <span className="text-sm md:inline hidden">Map:</span>
           <select
             value={currentMap}
             onChange={(e) => setCurrentMap(parseInt(e.target.value))}
@@ -107,22 +120,19 @@ const Header = ({
           >
             {Array.from({ length: MAX_MAPS }, (_, i) => i + 1).map(mapId => (
               <option key={mapId} value={mapId}>
-                {mapNames[mapId] || `Map ${mapId}`}
+                {mapNames[mapId] || `Dungeon ${mapId}`}
               </option>
             ))}
           </select>
           <button
             onClick={() => handleMapNameEdit(currentMap)}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1.5 rounded text-sm h-8"
+            className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center"
             title="Rename Current Map"
           >
-            <span className="md:inline hidden">Rename</span>
-            <span className="md:hidden">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11.5 2L14 4.5L5 13.5H2.5V11L11.5 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M10 3.5L12.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.5 2L14 4.5L5 13.5H2.5V11L11.5 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 3.5L12.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </button>
         </div>
 
@@ -141,23 +151,19 @@ const Header = ({
           </select>
           <button
             onClick={handleResetFloor}
-            className="bg-red-500 hover:bg-red-400 text-white px-2 py-1.5 rounded text-sm h-8"
+            className="bg-red-500 hover:bg-red-400 text-white px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center"
             title={`Reset Floor ${currentFloor}`}
           >
-            <span className="md:inline hidden">Reset</span>
-            <span className="md:hidden">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="8" cy="8" r="2" fill="currentColor"/>
-                <path d="M8 1V3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M8 13V15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M15 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M3 8H1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M12.95 3.05L11.54 4.46" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M4.46 11.54L3.05 12.95" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M12.95 12.95L11.54 11.54" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                <path d="M4.46 4.46L3.05 3.05" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 1V3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M8 13V15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M15 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M3 8H1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M12.95 3.05L11.54 4.46" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M4.46 11.54L3.05 12.95" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M12.95 12.95L11.54 11.54" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M4.46 4.46L3.05 3.05" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
           </button>
         </div>
         
@@ -170,7 +176,7 @@ const Header = ({
               const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
               onGridSizeChange({ rows: size, cols: size })
             }}
-            className="bg-gray-600 text-white px-2 py-1 rounded text-sm w-16"
+            className="bg-gray-600 text-white px-2 py-1 rounded text-sm w-12"
             min="5"
             max="50"
             title="Grid Size (5-50)"
@@ -183,7 +189,7 @@ const Header = ({
               const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
               onGridSizeChange({ rows: size, cols: gridSize.cols })
             }}
-            className="bg-gray-600 text-white px-2 py-1 rounded text-sm w-16"
+            className="bg-gray-600 text-white px-2 py-1 rounded text-sm w-12"
             min="5"
             max="50"
             title="Grid Size (5-50)"
@@ -192,50 +198,23 @@ const Header = ({
 
         <button
           onClick={onToggleNoteTooltips}
-          className={`px-2 py-1.5 rounded text-sm w-20 h-8 transition-colors md:inline-flex hidden items-center justify-center gap-1 ${
+          className={`px-2 py-1 rounded text-sm w-8 h-8 transition-colors md:inline-flex hidden items-center justify-center ${
             showNoteTooltips 
               ? 'bg-green-600 hover:bg-green-500 text-white' 
               : 'bg-gray-600 hover:bg-gray-500 text-white'
           }`}
           title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
         >
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
             <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
-          Note
         </button>
       </div>
 
       <div className="flex items-center md:space-x-2 space-x-1 justify-between md:justify-end mt-2 md:mt-0">
-        <div className="flex items-center space-x-1 md:flex hidden ml-2">
-          <button
-            onClick={handleZoomOut}
-            className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm"
-            title="Zoom Out"
-          >
-            -
-          </button>
-          <span className="text-sm w-12 text-center">
-            {Math.round(zoom * 100)}%
-          </span>
-          <button
-            onClick={handleZoomIn}
-            className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm"
-            title="Zoom In"
-          >
-            +
-          </button>
-          <button
-            onClick={handleZoomReset}
-            className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm"
-            title="Reset Zoom (100%)"
-          >
-            ⌂
-          </button>
-        </div>
 
         <div className="flex items-center space-x-1">
           <button
@@ -261,25 +240,11 @@ const Header = ({
 
         <div className="flex items-center space-x-1 md:flex hidden">
           <button
-            onClick={onExport}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm w-16"
-            title="Export Map (Ctrl+S)"
+            onClick={() => setIsFileMenuOpen(true)}
+            className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm"
+            title="File Operations"
           >
-            Export
-          </button>
-          <button
-            onClick={handleImportClick}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm w-16"
-            title="Import Map (Ctrl+L)"
-          >
-            Import
-          </button>
-          <button
-            onClick={onExportSVG}
-            className="bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm w-16"
-            title="Download Floor as SVG Image"
-          >
-            SVG
+            File
           </button>
         </div>
 
@@ -386,7 +351,7 @@ const Header = ({
                       const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
                       onGridSizeChange({ rows: size, cols: size })
                     }}
-                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-16"
+                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-12"
                     min="5"
                     max="50"
                   />
@@ -398,7 +363,7 @@ const Header = ({
                       const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
                       onGridSizeChange({ rows: size, cols: gridSize.cols })
                     }}
-                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-16"
+                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-12"
                     min="5"
                     max="50"
                   />
@@ -431,6 +396,45 @@ const Header = ({
                 className="w-full bg-yellow-700 hover:bg-yellow-600 text-white px-3 py-2 rounded text-sm text-left"
               >
                 Help
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* File Menu Modal */}
+      {isFileMenuOpen && (
+        <div 
+          className="fixed inset-0 flex items-center justify-center z-50" 
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          onClick={closeFileMenu}
+        >
+          <div 
+            className="bg-white rounded-lg p-4 w-64 max-w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold mb-4 text-gray-900">File Operations</h3>
+            
+            <div className="space-y-2">
+              <button
+                onClick={handleDesktopExport}
+                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Export Map
+              </button>
+              
+              <button
+                onClick={handleDesktopImport}
+                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Import Map
+              </button>
+              
+              <button
+                onClick={handleDesktopSVG}
+                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
+              >
+                Download SVG
               </button>
             </div>
           </div>
