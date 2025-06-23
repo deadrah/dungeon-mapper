@@ -152,7 +152,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       if (isVertical) {
         const displayRow = gridSize.rows - 1 - door.startRow
         const centerX = door.startCol * cellSize
-        const centerY = displayRow * cellSize + cellSize * 0.5
+        const centerY = displayRow * cellSize + cellSize * 0.8
         
         if (isArrow) {
           // Arrow on vertical line - same design as main canvas
@@ -180,7 +180,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       } else {
         // Horizontal door
         const displayRow = door.startRow
-        const centerX = door.startCol * cellSize + cellSize * 0.5
+        const centerX = door.startCol * cellSize + cellSize * 0.8
         const centerY = displayRow * cellSize
         
         if (isArrow) {
