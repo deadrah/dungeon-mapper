@@ -309,10 +309,16 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         
         case TOOLS.STAIRS_UP_SVG:
           svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▲</text>\n`
+          if (item.stairsText) {
+            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(6, itemSize * 0.3)}" fill="#ffffff" font-weight="bold">${item.stairsText}</text>\n`
+          }
           break
         
         case TOOLS.STAIRS_DOWN_SVG:
           svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▼</text>\n`
+          if (item.stairsText) {
+            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(6, itemSize * 0.3)}" fill="#ffffff" font-weight="bold">${item.stairsText}</text>\n`
+          }
           break
         
         case TOOLS.CURRENT_POSITION:

@@ -85,6 +85,44 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
       return icon
     }
     
+    // Special rendering for Stairs with text overlay
+    if (item.type === TOOLS.STAIRS_UP_SVG || item.type === TOOLS.STAIRS_DOWN_SVG) {
+      return (
+        <div style={{ 
+          position: 'relative', 
+          width: cellSize, 
+          height: cellSize,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* Triangle background */}
+          <div style={{
+            position: 'absolute',
+            fontSize: Math.max(12, cellSize * 0.6),
+            color: '#0000ff',
+            fontWeight: 'bold'
+          }}>
+            {item.type === TOOLS.STAIRS_UP_SVG ? '▲' : '▼'}
+          </div>
+          {/* Text overlay */}
+          {item.stairsText && (
+            <div style={{
+              position: 'absolute',
+              fontSize: Math.max(8, cellSize * 0.3),
+              color: '#ffffff',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              lineHeight: '1',
+              textShadow: '1px 1px 1px rgba(0,0,0,0.5)'
+            }}>
+              {item.stairsText}
+            </div>
+          )}
+        </div>
+      )
+    }
+    
     // Default text rendering
     return ITEM_ICONS[item.type] || '?'
   }
