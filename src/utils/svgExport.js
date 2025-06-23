@@ -309,17 +309,26 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         
         case TOOLS.STAIRS_UP_SVG:
           svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▲</text>\n`
-          if (item.stairsText) {
+          // Debug: always add text for testing
+          console.log('STAIRS_UP item:', item)
+          if (item.stairsText && item.stairsText.trim() !== '') {
             // Add white text with black outline for better visibility
             svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">${item.stairsText}</text>\n`
+          } else {
+            // Temporary: force display "1" for debugging
+            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">1</text>\n`
           }
           break
         
         case TOOLS.STAIRS_DOWN_SVG:
           svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▼</text>\n`
-          if (item.stairsText) {
+          console.log('STAIRS_DOWN item:', item)
+          if (item.stairsText && item.stairsText.trim() !== '') {
             // Add white text with black outline for better visibility
             svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">${item.stairsText}</text>\n`
+          } else {
+            // Temporary: force display "2" for debugging
+            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">2</text>\n`
           }
           break
         
