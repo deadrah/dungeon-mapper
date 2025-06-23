@@ -28,8 +28,15 @@ const Doors = ({ doors = [], zoom, offset, gridSize }) => {
         if (isVertical) {
           // Vertical door: centered on vertical line (use coordinate transformation)
           const displayRow = gridSize.rows - 1 - door.startRow;
-          const centerX = offset.x + door.startCol * cellSize + 24;
-          const centerY = offset.y + displayRow * cellSize + 24;
+          let centerX = 0;
+          let centerY = 0;
+          if(isArrow){
+            centerX = offset.x + door.startCol * cellSize + 24;
+            centerY = offset.y + displayRow * cellSize + 24;
+          } else {
+            centerX = offset.x + door.startCol * cellSize + 24;
+            centerY = offset.y + displayRow * cellSize + 26;
+          }
           const doorWidth = isArrow ? cellSize * 0.5 : cellSize * 0.2;
           const doorHeight = isArrow ? cellSize * 0.5 : cellSize * 0.4;
           
@@ -73,8 +80,15 @@ const Doors = ({ doors = [], zoom, offset, gridSize }) => {
         } else {
           // Horizontal door: centered on horizontal line (no coordinate transformation)
           const displayRow = door.startRow;
-          const centerX = offset.x + door.startCol * cellSize + 24;
-          const centerY = offset.y + displayRow * cellSize + 24;
+          let centerX = 0;
+          let centerY = 0;
+          if(isArrow){
+            centerX = offset.x + door.startCol * cellSize + 24;
+            centerY = offset.y + displayRow * cellSize + 24;
+          } else {
+            centerX = offset.x + door.startCol * cellSize + 26;
+            centerY = offset.y + displayRow * cellSize + 24;
+          }
           const doorWidth = isArrow ? cellSize * 0.5 : cellSize * 0.4;
           const doorHeight = isArrow ? cellSize * 0.5 : cellSize * 0.2;
           

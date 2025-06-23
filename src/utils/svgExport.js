@@ -238,10 +238,16 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         
         case TOOLS.STAIRS_UP_SVG:
           svg += `      <polygon points="${centerX - itemSize/2},${centerY + itemSize/3} ${centerX},${centerY - itemSize/3} ${centerX + itemSize/2},${centerY + itemSize/3}" class="stairs-up"/>\n`
+          if (item.stairsText && item.stairsText.trim() !== '') {
+            svg += `      <text x="${centerX}" y="${centerY + 7}" text-anchor="middle" font-size="${Math.max(12, itemSize * 0.6)}" fill="#ffffff" font-weight="bold">${item.stairsText}</text>\n`
+          }
           break
         
         case TOOLS.STAIRS_DOWN_SVG:
           svg += `      <polygon points="${centerX - itemSize/2},${centerY - itemSize/3} ${centerX},${centerY + itemSize/3} ${centerX + itemSize/2},${centerY - itemSize/3}" class="stairs-down"/>\n`
+          if (item.stairsText && item.stairsText.trim() !== '') {
+            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(12, itemSize * 0.6)}" fill="#ffffff" font-weight="bold">${item.stairsText}</text>\n`
+          }
           break
         
         case TOOLS.CURRENT_POSITION:
@@ -307,30 +313,6 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#b8860b" font-weight="900">E</text>\n`
           break
         
-        case TOOLS.STAIRS_UP_SVG:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▲</text>\n`
-          // Debug: always add text for testing
-          console.log('STAIRS_UP item:', item)
-          if (item.stairsText && item.stairsText.trim() !== '') {
-            // Add white text with black outline for better visibility
-            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">${item.stairsText}</text>\n`
-          } else {
-            // Temporary: force display "1" for debugging
-            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">1</text>\n`
-          }
-          break
-        
-        case TOOLS.STAIRS_DOWN_SVG:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#0000ff" font-weight="bold">▼</text>\n`
-          console.log('STAIRS_DOWN item:', item)
-          if (item.stairsText && item.stairsText.trim() !== '') {
-            // Add white text with black outline for better visibility
-            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">${item.stairsText}</text>\n`
-          } else {
-            // Temporary: force display "2" for debugging
-            svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.4)}" fill="#ffffff" stroke="#000000" stroke-width="0.5" font-weight="bold">2</text>\n`
-          }
-          break
         
         case TOOLS.CURRENT_POSITION:
           svg += `      <circle cx="${centerX}" cy="${centerY}" r="${itemSize/4}" fill="#dc143c"/>\n`
