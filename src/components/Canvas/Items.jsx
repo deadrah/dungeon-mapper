@@ -21,7 +21,7 @@ const ITEM_ICONS = {
   [TOOLS.ARROW_WEST]: '←'
 }
 
-const Items = ({ items, zoom, offset, gridSize, showNoteTooltips = true }) => {
+const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) => {
   const cellSize = GRID_SIZE * zoom
 
   const renderItem = (item) => {

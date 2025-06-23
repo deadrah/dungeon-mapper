@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { MAX_FLOORS, MAX_DUNGEONS } from '../utils/constants'
 import { exportFloorAsSVG, downloadSVG } from '../utils/svgExport'
+import { getMessage } from '../utils/messages'
 
 const createEmptyFloor = (gridSize) => ({
   grid: new Array(gridSize.rows).fill(null).map(() => new Array(gridSize.cols).fill(null)),
@@ -24,6 +25,7 @@ const INITIAL_STATE = {
   zoom: 1.0,
   activeTool: 'block_color',
   showNoteTooltips: true,
+  language: 'ja',
   dungeons: {
     1: {
       name: 'Dungeon 1',
@@ -53,6 +55,8 @@ const loadStateFromStorage = () => {
           gridSize: parsedState.gridSize || { rows: 20, cols: 20 },
           zoom: parsedState.zoom || 1.0,
           activeTool: parsedState.activeTool || 'block_color',
+          showNoteTooltips: parsedState.showNoteTooltips !== undefined ? parsedState.showNoteTooltips : true,
+          language: parsedState.language || 'ja',
           dungeons: {
             1: {
               name: 'Dungeon 1',
@@ -92,6 +96,7 @@ const loadStateFromStorage = () => {
           zoom: parsedState.zoom || 1.0,
           activeTool: parsedState.activeTool || 'block_color',
           showNoteTooltips: parsedState.showNoteTooltips !== undefined ? parsedState.showNoteTooltips : true,
+          language: parsedState.language || 'ja',
           dungeons: {},
           dungeonNames: {}
         }
@@ -137,6 +142,11 @@ const loadStateFromStorage = () => {
             })
           }
         })
+      }
+      
+      // Ensure language exists
+      if (!parsedState.language) {
+        parsedState.language = 'ja'
       }
       
       return parsedState
@@ -291,6 +301,10 @@ export const useAppState = () => {
     updateState(state => ({ ...state, showNoteTooltips: !state.showNoteTooltips }))
   }, [updateState])
 
+  const setLanguage = useCallback((language) => {
+    updateState(state => ({ ...state, language }))
+  }, [updateState])
+
   const updateCurrentFloorData = useCallback((dataType, data) => {
     updateState(state => ({
       ...state,
@@ -375,7 +389,7 @@ export const useAppState = () => {
       URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Failed to export state:', error)
-      alert('Export failed')
+      alert(getMessage(state.language, 'exportFailed'))
     }
   }, [state])
 
@@ -383,7 +397,7 @@ export const useAppState = () => {
   const exportDungeon = useCallback((dungeonId) => {
     try {
       if (!state.dungeons[dungeonId]) {
-        alert('Selected dungeon does not exist')
+        alert(getMessage(state.language, 'dungeonNotExists'))
         return
       }
 
@@ -414,7 +428,7 @@ export const useAppState = () => {
       URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Failed to export dungeon:', error)
-      alert('Dungeon export failed')
+      alert(getMessage(state.language, 'dungeonExportFailed'))
     }
   }, [state])
 
@@ -428,7 +442,7 @@ export const useAppState = () => {
           
           // Validate dungeon export format
           if (!importedData.dungeon || importedData.exportType !== 'single_dungeon') {
-            alert('Invalid dungeon file format. Please select a dungeon file exported from DMapper.')
+            alert(getMessage(state.language, 'invalidDungeonFile'))
             return
           }
 
@@ -444,15 +458,31 @@ export const useAppState = () => {
               }
             }
             if (!targetDungeonId) {
-              alert('No available dungeon slots. Please clear a dungeon first.')
+              alert(getMessage(state.language, 'noAvailableSlots'))
               return
             }
           }
 
           // Confirm load operation
-          const loadMessage = targetSlotId 
-            ? `Load "${dungeonData.name}" to slot ${targetSlotId}?${state.dungeons[targetSlotId] && !isFloorEmpty(state.dungeons[targetSlotId]) ? ` (Current "${state.dungeonNames[targetSlotId] || `Dungeon ${targetSlotId}`}" will be overwritten)` : ''}`
-            : `Load "${dungeonData.name}" to next available slot?`
+          let loadMessage
+          if (targetSlotId) {
+            if (state.dungeons[targetSlotId] && !isFloorEmpty(state.dungeons[targetSlotId])) {
+              loadMessage = getMessage(state.language, 'loadDungeonOverwrite', {
+                name: dungeonData.name,
+                slot: targetSlotId,
+                currentName: state.dungeonNames[targetSlotId] || `Dungeon ${targetSlotId}`
+              })
+            } else {
+              loadMessage = getMessage(state.language, 'loadDungeon', {
+                name: dungeonData.name,
+                slot: targetSlotId
+              })
+            }
+          } else {
+            loadMessage = getMessage(state.language, 'loadDungeonAutoSlot', {
+              name: dungeonData.name
+            })
+          }
           
           if (!window.confirm(loadMessage)) {
             return
@@ -481,16 +511,16 @@ export const useAppState = () => {
             currentDungeon: targetDungeonId
           }))
 
-          alert(`Dungeon imported successfully to slot ${targetDungeonId}`)
+          alert(getMessage(state.language, 'dungeonLoadSuccess', { slot: targetDungeonId }))
         } catch (error) {
           console.error('Failed to parse imported dungeon file:', error)
-          alert('Failed to read dungeon file. Please select a valid JSON file.')
+          alert(getMessage(state.language, 'invalidJsonFile'))
         }
       }
       reader.readAsText(file)
     } catch (error) {
       console.error('Failed to import dungeon:', error)
-      alert('Dungeon import failed')
+      alert(getMessage(state.language, 'dungeonImportFailed'))
     }
   }, [state, updateState])
 
@@ -597,12 +627,12 @@ export const useAppState = () => {
           }
           // Check if it's a valid DMapper file format
           else {
-            alert('Unsupported file format. Please select a JSON file exported from DMapper.')
+            alert(getMessage(state.language, 'unsupportedFileFormat'))
             return
           }
           
           // Confirm import operation
-          if (!window.confirm('Import all data? This will replace all current dungeons and settings.')) {
+          if (!window.confirm(getMessage(state.language, 'importAllData'))) {
             return
           }
           
@@ -610,18 +640,18 @@ export const useAppState = () => {
           historyRef.current = [JSON.parse(JSON.stringify(processedState))]
           historyIndexRef.current = 0
           
-          alert('Import completed successfully')
+          alert(getMessage(state.language, 'importCompleted'))
         } catch (error) {
           console.error('Failed to parse imported file:', error)
-          alert('Failed to read file. Please select a valid JSON file.')
+          alert(getMessage(state.language, 'invalidJsonFile'))
         }
       }
       reader.readAsText(file)
     } catch (error) {
       console.error('Failed to import state:', error)
-      alert('Import failed')
+      alert(getMessage(state.language, 'importFailed'))
     }
-  }, [])
+  }, [state])
 
   // Reset current floor data
   const resetCurrentFloor = useCallback(() => {
@@ -652,7 +682,7 @@ export const useAppState = () => {
       downloadSVG(svgContent, filename)
     } catch (error) {
       console.error('Failed to export SVG:', error)
-      alert('SVG export failed')
+      alert(getMessage(state.language, 'svgExportFailed'))
     }
   }, [state, getCurrentFloorData])
 
@@ -668,6 +698,7 @@ export const useAppState = () => {
     setActiveTool,
     setGridSize,
     toggleNoteTooltips,
+    setLanguage,
     updateCurrentFloorData,
     getCurrentFloorData,
     resetCurrentFloor,

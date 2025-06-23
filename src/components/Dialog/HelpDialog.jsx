@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const HelpDialog = ({ isOpen, onClose }) => {
-  const [language, setLanguage] = useState('ja') // 'ja' or 'en'
+const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
   if (!isOpen) return null
 
@@ -70,6 +69,12 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'SVG画像ダウンロード:', desc: 'SVGボタン' }
           ]
         },
+        settings: {
+          title: '設定',
+          items: [
+            { label: '言語切り替え:', desc: 'ヘルプ画面右上のJP/ENボタンで表示言語を切り替え（メッセージも連動）' }
+          ]
+        },
         notes: {
           title: '注意事項',
           items: [
@@ -81,8 +86,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: '更新履歴',
           items: [
-            { version: 'v1.3.5', date: '2025-06-23', changes: ['ダンジョン毎のセーブロードに対応'] },
-            { version: 'v1.3.4', date: '2025-06-23', changes: ['ヘッダー表示項目の整備', 'エクスポートデータの軽量化', '[マップ]-[フロア]構造から[ダンジョン]-[フロア]に名称変更', '1ダンジョンにつき30フロアを管理可能(最大10ダンジョン)', 'ダンジョン単位でのエクスポート・インポート機能を追加'] },
+            { version: 'v1.3.5', date: '2025-06-23', changes: ['ダンジョン毎のセーブロードに対応', '多言語対応整備'] },
+            { version: 'v1.3.4', date: '2025-06-23', changes: ['ヘッダー表示項目の整備', 'エクスポートデータの軽量化', '[マップ]-[フロア]構造から[ダンジョン]-[フロア]に名称変更', '1ダンジョンにつき30フロアを管理可能(最大10ダンジョン)'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['スマホにハンバーガーメニューで機能を追加'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['どのツールでもNoteを開けるように変更'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['スマホタッチ操作を改善', '1本指はツール操作専用、2本指でマップ移動・ズーム', 'ヘルプの操作説明を「機能：操作方法」形式に統一'] },
@@ -159,6 +164,12 @@ const HelpDialog = ({ isOpen, onClose }) => {
             { label: 'SVG:', desc: 'Download current floor as SVG image file' }
           ]
         },
+        settings: {
+          title: 'Settings',
+          items: [
+            { label: 'Language Toggle:', desc: 'Switch display language using JP/EN buttons in top-right of help screen (messages also change)' }
+          ]
+        },
         notes: {
           title: 'Important Notes',
           items: [
@@ -170,8 +181,8 @@ const HelpDialog = ({ isOpen, onClose }) => {
         changelog: {
           title: 'Update History',
           items: [
-            { version: 'v1.3.5', date: '2025-06-23', changes: ['Added per-dungeon save/load functionality'] },
-            { version: 'v1.3.4', date: '2025-06-23', changes: ['Reorganized header UI for cleaner layout', 'Optimized export data file size', 'Renamed [Map]-[Floor] structure to [Dungeon]-[Floor]', 'Support up to 30 floors per dungeon (max 10 dungeons)', 'Added dungeon-specific export/import functionality'] },
+            { version: 'v1.3.5', date: '2025-06-23', changes: ['Added per-dungeon save/load functionality', 'Multi-language support implementation'] },
+            { version: 'v1.3.4', date: '2025-06-23', changes: ['Reorganized header UI for cleaner layout', 'Optimized export data file size', 'Renamed [Map]-[Floor] structure to [Dungeon]-[Floor]', 'Support up to 30 floors per dungeon (max 10 dungeons)'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['Add hamburger menu for mobile with hidden desktop features'] },
             { version: 'v1.3.2', date: '2025-06-22', changes: ['Enable note editing with any tool'] },
             { version: 'v1.3.1', date: '2025-06-22', changes: ['Improved mobile touch controls', 'Single finger for tool operations, two fingers for map movement/zoom', 'Unified help documentation to "function: operation" format'] },
@@ -207,7 +218,7 @@ const HelpDialog = ({ isOpen, onClose }) => {
             {/* Language Toggle */}
             <div className="flex bg-gray-200 rounded-lg p-1">
               <button
-                onClick={() => setLanguage('ja')}
+                onClick={() => onLanguageChange('ja')}
                 className={`px-3 py-1 rounded text-sm transition-colors ${
                   language === 'ja'
                     ? 'bg-blue-500 text-white'
@@ -217,14 +228,14 @@ const HelpDialog = ({ isOpen, onClose }) => {
                 JP
               </button>
               <button
-                onClick={() => setLanguage('en')}
+                onClick={() => onLanguageChange('en')}
                 className={`px-3 py-1 rounded text-sm transition-colors ${
                   language === 'en'
                     ? 'bg-blue-500 text-white'
                     : 'text-gray-700 hover:bg-gray-300'
                 }`}
               >
-                English
+                EN
               </button>
             </div>
             <button
@@ -242,6 +253,16 @@ const HelpDialog = ({ isOpen, onClose }) => {
           <section>
             <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.about.title}</h3>
             <p className="text-gray-700">{currentContent.sections.about.content}</p>
+          </section>
+
+          {/* Settings */}
+          <section>
+            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.settings.title}</h3>
+            <div className="space-y-2">
+              {currentContent.sections.settings.items.map((item, index) => (
+                <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+              ))}
+            </div>
           </section>
 
           {/* Basic Controls */}

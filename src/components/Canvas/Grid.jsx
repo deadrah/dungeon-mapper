@@ -6,7 +6,7 @@ const Grid = ({
   zoom, 
   offset, 
   viewportSize,
-  floorData,
+  floorData = { grid: [], walls: [], items: [], doors: [] },
   onGridClick,
   onGridRightClick,
   onLineClick,
@@ -242,8 +242,8 @@ const Grid = ({
         />
 
         {/* Grid cells with colors */}
-        {floorData.grid.map((row, rowIndex) =>
-          row.map((cellColor, colIndex) => {
+        {floorData && floorData.grid && floorData.grid.map((row, rowIndex) =>
+          row && row.map((cellColor, colIndex) => {
             if (cellColor && rowIndex < gridSize.rows && colIndex < gridSize.cols) {
               const displayRow = gridSize.rows - 1 - rowIndex;
               return (

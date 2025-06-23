@@ -1,7 +1,7 @@
 import React from 'react'
 import { GRID_SIZE } from '../../utils/constants'
 
-const Doors = ({ doors, zoom, offset, gridSize }) => {
+const Doors = ({ doors = [], zoom, offset, gridSize }) => {
   const cellSize = GRID_SIZE * zoom
 
   return (

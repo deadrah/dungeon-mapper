@@ -15,6 +15,7 @@ function App() {
     setActiveTool,
     setGridSize,
     toggleNoteTooltips,
+    setLanguage,
     updateCurrentFloorData,
     getCurrentFloorData,
     undo,
@@ -88,6 +89,8 @@ function App() {
         onExportSVG={exportFloorSVG}
         showNoteTooltips={state.showNoteTooltips}
         onToggleNoteTooltips={toggleNoteTooltips}
+        language={state.language}
+        onLanguageChange={setLanguage}
         activeTool={state.activeTool}
         toolName={getToolName(state.activeTool)}
       />

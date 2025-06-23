@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { MAX_FLOORS, MAX_DUNGEONS } from '../../utils/constants'
 import HelpDialog from '../Dialog/HelpDialog'
+import { getMessage } from '../../utils/messages'
 
 const Header = ({ 
   currentDungeon,
@@ -23,6 +24,8 @@ const Header = ({
   onExportSVG,
   showNoteTooltips,
   onToggleNoteTooltips,
+  language,
+  onLanguageChange,
   activeTool,
   toolName
 }) => {
@@ -106,7 +109,8 @@ const Header = ({
   }
   
   const handleResetFloor = () => {
-    if (window.confirm(`Delete all data on Floor ${currentFloor}? This action cannot be undone.`)) {
+    const message = getMessage(language, 'resetFloor', { floor: currentFloor })
+    if (window.confirm(message)) {
       onResetFloor()
     }
   }
@@ -561,6 +565,8 @@ const Header = ({
       <HelpDialog
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
+        language={language}
+        onLanguageChange={onLanguageChange}
       />
     </div>
   )

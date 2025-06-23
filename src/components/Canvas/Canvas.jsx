@@ -32,7 +32,7 @@ const Canvas = ({
   const [initialZoom, setInitialZoom] = useState(1)
   const [isTwoFingerActive, setIsTwoFingerActive] = useState(false)
 
-  const floorData = getCurrentFloorData()
+  const floorData = getCurrentFloorData() || { grid: [], walls: [], items: [], doors: [] }
 
   // Calculate distance between two touch points
   const getDistance = useCallback((touch1, touch2) => {
