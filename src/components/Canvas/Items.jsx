@@ -56,7 +56,7 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
           {/* Diamond background */}
           <div style={{
             position: 'absolute',
-            fontSize: Math.max(12, cellSize * 0.6),
+            fontSize: Math.max(12, cellSize * 0.8),
             color: '#4bdcff'
           }}>
             ◊
