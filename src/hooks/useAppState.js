@@ -449,12 +449,13 @@ export const useAppState = () => {
             }
           }
 
-          // Confirm overwrite if slot has data
-          if (targetSlotId && state.dungeons[targetSlotId] && !isFloorEmpty(state.dungeons[targetSlotId])) {
-            const dungeonName = state.dungeonNames[targetSlotId] || `Dungeon ${targetSlotId}`
-            if (!window.confirm(`"${dungeonName}" will be overwritten. Are you sure?`)) {
-              return
-            }
+          // Confirm load operation
+          const loadMessage = targetSlotId 
+            ? `Load "${dungeonData.name}" to slot ${targetSlotId}?${state.dungeons[targetSlotId] && !isFloorEmpty(state.dungeons[targetSlotId]) ? ` (Current "${state.dungeonNames[targetSlotId] || `Dungeon ${targetSlotId}`}" will be overwritten)` : ''}`
+            : `Load "${dungeonData.name}" to next available slot?`
+          
+          if (!window.confirm(loadMessage)) {
+            return
           }
 
           // Ensure all floors have doors property
@@ -597,6 +598,11 @@ export const useAppState = () => {
           // Check if it's a valid DMapper file format
           else {
             alert('Unsupported file format. Please select a JSON file exported from DMapper.')
+            return
+          }
+          
+          // Confirm import operation
+          if (!window.confirm('Import all data? This will replace all current dungeons and settings.')) {
             return
           }
           
