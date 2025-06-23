@@ -217,7 +217,7 @@ const Grid = ({
             <path
               d={`M ${cellSize} 0 L 0 0 0 ${cellSize}`}
               fill="none"
-              stroke="#999"
+              stroke="#bfbfbf"
               strokeWidth="1"
             />
           </pattern>
@@ -254,7 +254,7 @@ const Grid = ({
                   width={cellSize}
                   height={cellSize}
                   fill={cellColor}
-                  stroke="#999"
+                  stroke="#dbdbdb"
                   strokeWidth="1"
                 />
               )

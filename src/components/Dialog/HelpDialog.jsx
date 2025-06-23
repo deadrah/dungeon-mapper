@@ -7,7 +7,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
   const content = {
     ja: {
       title: 'DMapper - 機能説明',
-      version: 'バージョン 1.3.5',
+      version: 'バージョン 1.3.6',
       close: '閉じる',
       sections: {
         about: {
@@ -86,6 +86,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.3.6', date: '2025-06-23', changes: ['ライン幅とグリッド色の調整', '重要な配列アクセスバグを修正'] },
             { version: 'v1.3.5', date: '2025-06-23', changes: ['ダンジョン毎のセーブロードに対応', '多言語対応整備'] },
             { version: 'v1.3.4', date: '2025-06-23', changes: ['ヘッダー表示項目の整備', 'エクスポートデータの軽量化', '[マップ]-[フロア]構造から[ダンジョン]-[フロア]に名称変更', '1ダンジョンにつき30フロアを管理可能(最大10ダンジョン)'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['スマホにハンバーガーメニューで機能を追加'] },
@@ -102,7 +103,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
     },
     en: {
       title: 'DMapper - User Guide',
-      version: 'Version 1.3.5',
+      version: 'Version 1.3.6',
       close: 'Close',
       sections: {
         about: {
@@ -181,6 +182,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.3.6', date: '2025-06-23', changes: ['Adjusted line width and grid colors', 'Fixed critical array access bugs'] },
             { version: 'v1.3.5', date: '2025-06-23', changes: ['Added per-dungeon save/load functionality', 'Multi-language support implementation'] },
             { version: 'v1.3.4', date: '2025-06-23', changes: ['Reorganized header UI for cleaner layout', 'Optimized export data file size', 'Renamed [Map]-[Floor] structure to [Dungeon]-[Floor]', 'Support up to 30 floors per dungeon (max 10 dungeons)'] },
             { version: 'v1.3.3', date: '2025-06-22', changes: ['Add hamburger menu for mobile with hidden desktop features'] },

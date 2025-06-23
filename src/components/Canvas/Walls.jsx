@@ -25,7 +25,7 @@ const Walls = ({ walls = [], zoom, offset, gridSize }) => {
                 x2={offset.x + wall.endCol * cellSize + 24}
                 y2={offset.y + (displayRow + 1) * cellSize + 24}
                 stroke="#000000"
-                strokeWidth="3"
+                strokeWidth="2"
                 strokeLinecap="round"
               />
             )
@@ -40,7 +40,7 @@ const Walls = ({ walls = [], zoom, offset, gridSize }) => {
                 x2={offset.x + wall.endCol * cellSize + 24}
                 y2={offset.y + displayRow * cellSize + 24}
                 stroke="#000000"
-                strokeWidth="3"
+                strokeWidth="2"
                 strokeLinecap="round"
               />
             )

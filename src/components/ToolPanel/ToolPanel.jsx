@@ -32,7 +32,7 @@ const TOOL_GROUPS = [
       { id: TOOLS.ARROW_SOUTH, name: 'Arrow', icon: '↓', description: 'South arrow', key: '' },
       { id: TOOLS.ARROW_WEST, name: 'Arrow', icon: '←', description: 'West arrow', key: '' },
       { id: TOOLS.ARROW_EAST, name: 'Arrow', icon: '→', description: 'East arrow', key: '' },
-      { id: TOOLS.CURRENT_POSITION, name: 'Current Position [q]', icon: '●', description: 'Current position marker', key: 'q' },
+      { id: TOOLS.CURRENT_POSITION, name: 'CurrentPos [q]', icon: '●', description: 'Current position marker', key: 'q' },
       { id: TOOLS.ERASER, name: 'Eraser [e]', icon: '⌫', description: 'Erase objects with left click/drag', key: 'e' }
     ]
   }
@@ -59,7 +59,7 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
   }
 
   return (
-    <div className="md:w-56 w-full bg-gray-800 text-white flex flex-col md:max-h-none max-h-44">
+    <div className="md:w-48 w-full bg-gray-800 text-white flex flex-col md:max-h-none max-h-44">
       <div className="p-2 text-center text-sm font-bold border-b border-gray-600 md:block hidden">
         Tools
       </div>
@@ -81,7 +81,7 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                   return (
                     <div
                       key={tool.id}
-                      className={`md:py-2 py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 bg-gray-800 md:block hidden ${
+                      className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b border-gray-700 bg-gray-800 md:block hidden ${
                         group.name === 'Grid Tools' ? 'md:min-w-0' : 'md:min-w-0 min-w-12'
                       }`}
                     >
@@ -114,7 +114,7 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                   <button
                     key={tool.id}
                     onClick={() => setActiveTool(tool.id)}
-                    className={`md:py-2 py-2 flex flex-col items-center justify-center text-xs border-b border-gray-700 transition-colors hover:bg-gray-600 rounded md:rounded-none ${
+                    className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b border-gray-700 transition-colors hover:bg-gray-600 rounded md:rounded-none ${
                       group.name === 'Grid Tools' 
                         ? 'md:min-w-0' // Grid Toolsはグリッド表示
                         : 'md:min-w-0 min-w-12' // Line Toolsは最小幅設定
