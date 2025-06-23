@@ -367,47 +367,15 @@ const Canvas = ({
         }
       }
     } else {
-      // For Door and Arrow tools, place anywhere (with or without existing walls)
-      let wallIsVertical, endRow, endCol
-      
-      if (existingWallIndex !== -1) {
-        // Found existing wall, use its direction
-        const existingWall = (floorData.walls || [])[existingWallIndex]
-        wallIsVertical = existingWall.startCol === existingWall.endCol
-        endRow = existingWall.endRow
-        endCol = existingWall.endCol
-      } else {
-        // No existing wall, determine direction based on click position and tool
-        const isArrowTool = appState.activeTool.startsWith('line_arrow_')
-        
-        if (isArrowTool) {
-          // For arrows, determine direction based on arrow type
-          const isHorizontalArrow = appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west'
-          wallIsVertical = isHorizontalArrow  // Horizontal arrows go on vertical walls
-          
-          if (wallIsVertical) {
-            // Create vertical wall segment
-            endRow = actualRow + 1
-            endCol = col
-          } else {
-            // Create horizontal wall segment  
-            endRow = actualRow
-            endCol = col + 1
-          }
-        } else {
-          // For doors, default to vertical orientation
-          wallIsVertical = true
-          endRow = actualRow + 1
-          endCol = col
-        }
-      }
+      // For Door and Arrow tools, use the same line-based placement as Line tool
+      // The isVertical parameter determines if this is a vertical or horizontal line click
       
       // Check if there's already a door at this position with the same orientation
       const existingDoorIndex = floorData.doors?.findIndex(door => {
         if (door.startRow === actualRow && door.startCol === col) {
           // Same position, check if same wall direction
           const doorIsVertical = door.startCol === door.endCol
-          return doorIsVertical === wallIsVertical
+          return doorIsVertical === isVertical
         }
         return false
       }) ?? -1
@@ -420,16 +388,20 @@ const Canvas = ({
         const isHorizontalArrow = appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west'
         const isVerticalArrow = appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south'
         
-        // Vertical walls can only have horizontal arrows (east/west)
-        // Horizontal walls can only have vertical arrows (north/south)
-        if (wallIsVertical && !isHorizontalArrow) {
+        // Vertical lines can only have horizontal arrows (east/west)
+        // Horizontal lines can only have vertical arrows (north/south)
+        if (isVertical && !isHorizontalArrow) {
           canPlace = false
-        } else if (!wallIsVertical && !isVerticalArrow) {
+        } else if (!isVertical && !isVerticalArrow) {
           canPlace = false
         }
       }
       
       if (canPlace) {
+        // Determine end coordinates based on line direction
+        const endRow = isVertical ? actualRow + 1 : actualRow
+        const endCol = isVertical ? col : col + 1
+        
         if (existingDoorIndex === -1) {
           // Add new door
           const newDoor = {
