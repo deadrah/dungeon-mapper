@@ -367,65 +367,93 @@ const Canvas = ({
         }
       }
     } else {
-      // For Door and Arrow tools, place on existing walls only
+      // For Door and Arrow tools, place anywhere (with or without existing walls)
+      let wallIsVertical, endRow, endCol
+      
       if (existingWallIndex !== -1) {
-        // Found existing wall, place door/arrow on it
+        // Found existing wall, use its direction
         const existingWall = (floorData.walls || [])[existingWallIndex]
-        
-        // Check if there's already a door on this specific wall (same position AND direction)
-        const wallIsVertical = existingWall.startCol === existingWall.endCol
-        const existingDoorIndex = floorData.doors?.findIndex(door => {
-          if (door.startRow === actualRow && door.startCol === col) {
-            // Same position, check if same wall direction
-            const doorIsVertical = door.startCol === door.endCol
-            return doorIsVertical === wallIsVertical
-          }
-          return false
-        }) ?? -1
-        
-        // Check if the arrow tool is compatible with the wall direction
+        wallIsVertical = existingWall.startCol === existingWall.endCol
+        endRow = existingWall.endRow
+        endCol = existingWall.endCol
+      } else {
+        // No existing wall, determine direction based on click position and tool
         const isArrowTool = appState.activeTool.startsWith('line_arrow_')
         
-        let canPlace = true
         if (isArrowTool) {
+          // For arrows, determine direction based on arrow type
           const isHorizontalArrow = appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west'
-          const isVerticalArrow = appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south'
+          wallIsVertical = isHorizontalArrow  // Horizontal arrows go on vertical walls
           
-          // Vertical walls can only have horizontal arrows (east/west)
-          // Horizontal walls can only have vertical arrows (north/south)
-          if (wallIsVertical && !isHorizontalArrow) {
-            canPlace = false
-          } else if (!wallIsVertical && !isVerticalArrow) {
-            canPlace = false
-          }
-        }
-        
-        if (canPlace) {
-          if (existingDoorIndex === -1) {
-            // Add new door on the wall
-            const newDoor = {
-              type: appState.activeTool,
-              startRow: actualRow,
-              startCol: col,
-              endRow: existingWall.endRow,
-              endCol: existingWall.endCol,
-              id: Date.now() + Math.random()
-            }
-            const newDoors = [...(floorData.doors || []), newDoor]
-            updateCurrentFloorData('doors', newDoors)
+          if (wallIsVertical) {
+            // Create vertical wall segment
+            endRow = actualRow + 1
+            endCol = col
           } else {
-            // Replace existing door with new type (overwrite)
-            const newDoors = [...(floorData.doors || [])]
-            newDoors[existingDoorIndex] = {
-              type: appState.activeTool,
-              startRow: actualRow,
-              startCol: col,
-              endRow: existingWall.endRow,
-              endCol: existingWall.endCol,
-              id: Date.now() + Math.random()
-            }
-            updateCurrentFloorData('doors', newDoors)
+            // Create horizontal wall segment  
+            endRow = actualRow
+            endCol = col + 1
           }
+        } else {
+          // For doors, default to vertical orientation
+          wallIsVertical = true
+          endRow = actualRow + 1
+          endCol = col
+        }
+      }
+      
+      // Check if there's already a door at this position with the same orientation
+      const existingDoorIndex = floorData.doors?.findIndex(door => {
+        if (door.startRow === actualRow && door.startCol === col) {
+          // Same position, check if same wall direction
+          const doorIsVertical = door.startCol === door.endCol
+          return doorIsVertical === wallIsVertical
+        }
+        return false
+      }) ?? -1
+      
+      // Check if the arrow tool is compatible with the wall direction
+      const isArrowTool = appState.activeTool.startsWith('line_arrow_')
+      
+      let canPlace = true
+      if (isArrowTool) {
+        const isHorizontalArrow = appState.activeTool === 'line_arrow_east' || appState.activeTool === 'line_arrow_west'
+        const isVerticalArrow = appState.activeTool === 'line_arrow_north' || appState.activeTool === 'line_arrow_south'
+        
+        // Vertical walls can only have horizontal arrows (east/west)
+        // Horizontal walls can only have vertical arrows (north/south)
+        if (wallIsVertical && !isHorizontalArrow) {
+          canPlace = false
+        } else if (!wallIsVertical && !isVerticalArrow) {
+          canPlace = false
+        }
+      }
+      
+      if (canPlace) {
+        if (existingDoorIndex === -1) {
+          // Add new door
+          const newDoor = {
+            type: appState.activeTool,
+            startRow: actualRow,
+            startCol: col,
+            endRow: endRow,
+            endCol: endCol,
+            id: Date.now() + Math.random()
+          }
+          const newDoors = [...(floorData.doors || []), newDoor]
+          updateCurrentFloorData('doors', newDoors)
+        } else {
+          // Replace existing door with new type (overwrite)
+          const newDoors = [...(floorData.doors || [])]
+          newDoors[existingDoorIndex] = {
+            type: appState.activeTool,
+            startRow: actualRow,
+            startCol: col,
+            endRow: endRow,
+            endCol: endCol,
+            id: Date.now() + Math.random()
+          }
+          updateCurrentFloorData('doors', newDoors)
         }
       }
     }
