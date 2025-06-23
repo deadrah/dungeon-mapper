@@ -173,7 +173,6 @@ const Header = ({
         </div>
 
         <div className="flex items-center space-x-2">
-          <span className="text-sm md:inline hidden">Floor:</span>
           <select
             value={currentFloor}
             onChange={(e) => setCurrentFloor(parseInt(e.target.value))}
@@ -181,7 +180,7 @@ const Header = ({
           >
             {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floor => (
               <option key={floor} value={floor}>
-                {floor}
+                {floor}F
               </option>
             ))}
           </select>
