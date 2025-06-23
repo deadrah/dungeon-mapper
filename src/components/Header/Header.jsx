@@ -106,7 +106,7 @@ const Header = ({
   }
   
   const handleResetFloor = () => {
-    if (window.confirm(`Floor ${currentFloor}のすべてのデータを削除しますか？この操作は元に戻せません。`)) {
+    if (window.confirm(`Delete all data on Floor ${currentFloor}? This action cannot be undone.`)) {
       onResetFloor()
     }
   }
