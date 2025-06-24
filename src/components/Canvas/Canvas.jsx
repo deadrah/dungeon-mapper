@@ -14,6 +14,7 @@ const Canvas = ({
   getNoteAt,
   setNoteAt,
   deleteNoteAt,
+  moveNoteAt,
   showNoteTooltips = true,
   theme
 }) => {
@@ -41,8 +42,31 @@ const Canvas = ({
   const [isTwoFingerActive, setIsTwoFingerActive] = useState(false)
   const [isSingleFingerPanning, setIsSingleFingerPanning] = useState(false)
   const [singleTouchStart, setSingleTouchStart] = useState({ x: 0, y: 0, time: 0 })
+  
+  // Note dragging states
+  const [isDraggingNote, setIsDraggingNote] = useState(false)
+  const [draggedNote, setDraggedNote] = useState(null) // { row, col, text }
+  const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 })
+  const [dragCurrentPos, setDragCurrentPos] = useState({ x: 0, y: 0 })
+  const [dragHoverCell, setDragHoverCell] = useState(null) // { row, col }
+  
+  // Stable reference for drag states to avoid useCallback dependency issues
+  const dragStateRef = useRef({
+    draggedNote: null,
+    isDraggingNote: false,
+    dragHoverCell: null
+  })
 
   const floorData = getCurrentFloorData() || { grid: [], walls: [], items: [], doors: [] }
+
+  // Update drag state ref when states change
+  useEffect(() => {
+    dragStateRef.current = {
+      draggedNote,
+      isDraggingNote,
+      dragHoverCell
+    }
+  }, [draggedNote, isDraggingNote, dragHoverCell])
 
   // Calculate distance between two touch points
   const getDistance = useCallback((touch1, touch2) => {
@@ -99,14 +123,10 @@ const Canvas = ({
         e.preventDefault()
         e.stopPropagation()
         
-        // Left click opens dialog, right click deletes (only for NOTE tool)
-        if (e.button === 0) { // Left click
-          setNoteDialog({
-            isOpen: true,
-            row: noteRow,
-            col: noteCol,
-            text: existingNote.text || ''
-          })
+        if (e.button === 0) { // Left click - prepare for drag or dialog
+          setDragStartPos({ x: e.clientX, y: e.clientY })
+          setDraggedNote({ row: noteRow, col: noteCol, text: existingNote.text })
+          // Don't open dialog immediately - wait to see if it's a drag
         } else if (e.button === 2 && appState.activeTool === TOOLS.NOTE) { // Right click with NOTE tool
           deleteNoteAt(noteRow, noteCol)
         }
@@ -122,7 +142,38 @@ const Canvas = ({
   }, [getNoteAt, appState.activeTool, deleteNoteAt])
 
   const handleMouseMove = useCallback((e) => {
-    if (isPanning) {
+    // Handle note dragging
+    if (draggedNote && !isDraggingNote) {
+      // Check if mouse moved enough to start dragging (5px threshold)
+      const deltaX = e.clientX - dragStartPos.x
+      const deltaY = e.clientY - dragStartPos.y
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+      
+      if (distance > 5) {
+        setIsDraggingNote(true)
+        setDragCurrentPos({ x: e.clientX, y: e.clientY })
+      }
+    } else if (isDraggingNote) {
+      // Update drag position and calculate hover cell
+      setDragCurrentPos({ x: e.clientX, y: e.clientY })
+      
+      // Calculate which cell the mouse is over
+      const rect = canvasRef.current?.getBoundingClientRect()
+      if (rect) {
+        const cellSize = GRID_SIZE * appState.zoom
+        const mouseX = e.clientX - rect.left - offset.x - 24
+        const mouseY = e.clientY - rect.top - offset.y - 24
+        
+        const col = Math.floor(mouseX / cellSize)
+        const row = appState.gridSize.rows - 1 - Math.floor(mouseY / cellSize)
+        
+        if (col >= 0 && col < appState.gridSize.cols && row >= 0 && row < appState.gridSize.rows) {
+          setDragHoverCell({ row, col })
+        } else {
+          setDragHoverCell(null)
+        }
+      }
+    } else if (isPanning && !isDraggingNote) {
       const deltaX = e.clientX - lastMousePos.x
       const deltaY = e.clientY - lastMousePos.y
       
@@ -133,7 +184,7 @@ const Canvas = ({
       
       setLastMousePos({ x: e.clientX, y: e.clientY })
     }
-  }, [isPanning, lastMousePos])
+  }, [isPanning, lastMousePos, draggedNote, isDraggingNote, dragStartPos, offset, appState.zoom, appState.gridSize])
 
   // Touch event handlers for mobile
   const handleTouchStart = useCallback((e) => {
@@ -306,6 +357,49 @@ const Canvas = ({
   }, [isDraggingLine, isDraggingErase, dragLineType, appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.walls, updateCurrentFloorData])
 
   const handleMouseUp = useCallback(() => {
+    // Get stable references to current drag states
+    const { draggedNote, isDraggingNote, dragHoverCell } = dragStateRef.current
+    
+    // Handle note dragging completion
+    if (draggedNote) {
+      if (isDraggingNote && dragHoverCell) {
+        // Complete drag operation - move note to new cell
+        const { row: fromRow, col: fromCol } = draggedNote
+        const { row: toRow, col: toCol } = dragHoverCell
+        
+        if (fromRow !== toRow || fromCol !== toCol) {
+          // Check if target cell has existing note
+          const existingNote = getNoteAt(toRow, toCol)
+          if (existingNote) {
+            // Show confirmation dialog for overwrite
+            if (window.confirm(`セル (${toRow}, ${toCol}) に既存のメモがあります。上書きしますか？`)) {
+              // Remove source note and add to target
+              deleteNoteAt(fromRow, fromCol)
+              setNoteAt(toRow, toCol, draggedNote.text)
+            }
+          } else {
+            // Move note to new cell
+            moveNoteAt(fromRow, fromCol, toRow, toCol)
+          }
+        }
+      } else if (!isDraggingNote) {
+        // It was a click, not a drag - open dialog
+        setNoteDialog({
+          isOpen: true,
+          row: draggedNote.row,
+          col: draggedNote.col,
+          text: draggedNote.text || ''
+        })
+      }
+      
+      // Reset drag states
+      setIsDraggingNote(false)
+      setDraggedNote(null)
+      setDragStartPos({ x: 0, y: 0 })
+      setDragCurrentPos({ x: 0, y: 0 })
+      setDragHoverCell(null)
+    }
+    
     setIsPanning(false)
     setIsDraggingLine(false)
     setIsDraggingErase(false)
@@ -315,7 +409,7 @@ const Canvas = ({
     setDragStartMousePos(null)
     setDragDirectionDetected(false)
     setIsRightMouseDown(false) // Reset right mouse button state
-  }, [])
+  }, [getNoteAt, deleteNoteAt, setNoteAt, moveNoteAt])
 
   const handleLineClick = useCallback((row, col, isVertical, event = null) => {
     // For line tool, we allow one extra row/col for boundaries
@@ -526,20 +620,33 @@ const Canvas = ({
       return;
     }
     
+    // Don't handle grid clicks if we're in the middle of dragging a note
+    if (isDraggingNote) {
+      return;
+    }
+    
+    // Don't handle grid clicks if a note drag has been initiated (but not yet in dragging mode)
+    if (draggedNote) {
+      return;
+    }
+    
     const actualRow = appState.gridSize.rows - 1 - row;
     
     // Check if there's an existing note at this location (new notes system)
     const existingNote = getNoteAt(actualRow, col)
     
-    // If there's an existing note, open the note dialog regardless of current tool (except Eraser)
+    // If there's an existing note, handle it based on the tool
     if (existingNote && appState.activeTool !== TOOLS.ERASER) {
-      setNoteDialog({
-        isOpen: true,
-        row: actualRow,
-        col,
-        text: existingNote.text || ''
-      })
-      return
+      // For NOTE tool, let the normal flow handle it to avoid duplicate dialogs
+      if (appState.activeTool !== TOOLS.NOTE) {
+        setNoteDialog({
+          isOpen: true,
+          row: actualRow,
+          col,
+          text: existingNote.text || ''
+        })
+        return
+      }
     }
     
     // Handle eraser tool
@@ -631,7 +738,7 @@ const Canvas = ({
         }
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, updateCurrentFloorData])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, setNoteAt, deleteNoteAt])
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog
@@ -794,7 +901,7 @@ const Canvas = ({
       document.removeEventListener('mousemove', handleGlobalMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [handleMouseMove, handleMouseUp, isDraggingLine, isDraggingErase, isRightMouseDown, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
+  }, [handleMouseMove, isDraggingLine, isDraggingErase, isRightMouseDown, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
 
   return (
     <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: theme.grid.canvasBackground }}>
@@ -813,7 +920,8 @@ const Canvas = ({
           userSelect: 'none',
           WebkitUserSelect: 'none',
           MozUserSelect: 'none',
-          msUserSelect: 'none'
+          msUserSelect: 'none',
+          cursor: isDraggingNote ? 'grabbing' : 'default'
         }}
       >
         <Grid
@@ -853,6 +961,10 @@ const Canvas = ({
           gridSize={appState.gridSize}
           showNoteTooltips={showNoteTooltips}
           theme={theme}
+          isDraggingNote={isDraggingNote}
+          draggedNote={draggedNote}
+          dragHoverCell={dragHoverCell}
+          dragCurrentPos={dragCurrentPos}
         />
         
         <Doors

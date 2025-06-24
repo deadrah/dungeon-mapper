@@ -1014,6 +1014,55 @@ export const useAppState = () => {
     })
   }, [updateState])
 
+  const moveNoteAt = useCallback((fromRow, fromCol, toRow, toCol) => {
+    updateState(state => {
+      const currentFloor = state.dungeons[state.currentDungeon]?.floors[state.currentFloor]
+      if (!currentFloor) return state
+
+      const notes = [...(currentFloor.notes || [])]
+      const sourceIndex = notes.findIndex(note => note.row === fromRow && note.col === fromCol)
+      
+      if (sourceIndex === -1) return state // Source note not found
+      
+      const sourceNote = notes[sourceIndex]
+      const targetIndex = notes.findIndex(note => note.row === toRow && note.col === toCol)
+      
+      // Remove source note
+      notes.splice(sourceIndex, 1)
+      
+      // If there's a target note, remove it too (overwrite)
+      if (targetIndex !== -1) {
+        const adjustedTargetIndex = targetIndex > sourceIndex ? targetIndex - 1 : targetIndex
+        notes.splice(adjustedTargetIndex, 1)
+      }
+      
+      // Add note at new position
+      notes.push({
+        row: toRow,
+        col: toCol,
+        text: sourceNote.text,
+        id: Date.now() + Math.random()
+      })
+
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [state.currentDungeon]: {
+            ...state.dungeons[state.currentDungeon],
+            floors: {
+              ...state.dungeons[state.currentDungeon].floors,
+              [state.currentFloor]: {
+                ...currentFloor,
+                notes
+              }
+            }
+          }
+        }
+      }
+    })
+  }, [updateState])
+
   // Export current floor as SVG
   const exportFloorSVG = useCallback(() => {
     try {
@@ -1057,6 +1106,7 @@ export const useAppState = () => {
     exportFloorSVG,
     getNoteAt,
     setNoteAt,
-    deleteNoteAt
+    deleteNoteAt,
+    moveNoteAt
   }
 }

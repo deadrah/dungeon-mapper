@@ -22,7 +22,19 @@ const ITEM_ICONS = {
   [TOOLS.ARROW_ROTATE]: '⟲'
 }
 
-const Items = ({ items = [], notes = [], zoom, offset, gridSize, showNoteTooltips = true, theme }) => {
+const Items = ({ 
+  items = [], 
+  notes = [], 
+  zoom, 
+  offset, 
+  gridSize, 
+  showNoteTooltips = true, 
+  theme,
+  isDraggingNote = false,
+  draggedNote = null,
+  dragHoverCell = null,
+  dragCurrentPos = null
+}) => {
   const cellSize = GRID_SIZE * zoom
 
   const renderItem = (item) => {
@@ -154,8 +166,87 @@ const Items = ({ items = [], notes = [], zoom, offset, gridSize, showNoteTooltip
 
   return (
     <div className="absolute inset-0" style={{ zIndex: 15, pointerEvents: 'none' }}>
+      {/* Drag hover cell highlight */}
+      {isDraggingNote && dragHoverCell && (
+        <div
+          style={{
+            position: 'absolute',
+            left: offset.x + dragHoverCell.col * cellSize + 24,
+            top: offset.y + (gridSize.rows - 1 - dragHoverCell.row) * cellSize + 24,
+            width: cellSize,
+            height: cellSize,
+            backgroundColor: notes.find(note => note.row === dragHoverCell.row && note.col === dragHoverCell.col) 
+              ? `${theme.items.teleport}40` // Semi-transparent teleport color for occupied cells
+              : `${theme.items.arrow}40`, // Semi-transparent arrow color (blue) for empty cells
+            border: '2px solid ' + (notes.find(note => note.row === dragHoverCell.row && note.col === dragHoverCell.col) 
+              ? theme.items.teleport : theme.items.arrow),
+            pointerEvents: 'none',
+            zIndex: 16
+          }}
+        />
+      )}
+      
+      {/* Dragged note ghost */}
+      {isDraggingNote && draggedNote && dragCurrentPos && (
+        <div
+          style={{
+            position: 'fixed',
+            left: dragCurrentPos.x - cellSize / 2,
+            top: dragCurrentPos.y - cellSize / 2,
+            width: cellSize,
+            height: cellSize,
+            pointerEvents: 'none',
+            zIndex: 1000,
+            opacity: 0.7
+          }}
+        >
+          {/* Ghost triangle */}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              width: 0,
+              height: 0,
+              borderLeft: `${cellSize * 0.25}px solid ${theme.items.noteTriangle}`,
+              borderBottom: `${cellSize * 0.25}px solid transparent`,
+              opacity: 0.8
+            }}
+          />
+          {/* Ghost tooltip */}
+          <div
+            className="rounded px-1 py-1 shadow-lg"
+            style={{
+              position: 'absolute',
+              left: cellSize / 2,
+              top: cellSize / 2,
+              fontSize: '8px',
+              whiteSpace: 'nowrap',
+              maxWidth: `${cellSize * 2}px`,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              backgroundColor: theme.items.note,
+              borderColor: theme.items.noteBorder,
+              border: `1px solid ${theme.items.noteBorder}`,
+              color: theme.items.noteBorder,
+              transform: 'translate(-50%, -50%)',
+              opacity: 0.8
+            }}
+          >
+            {draggedNote.text.length > 7 ? `${draggedNote.text.slice(0, 7)}...` : draggedNote.text}
+          </div>
+        </div>
+      )}
+      
       {/* New note system - rendered first so they appear behind items */}
-      {notes.map((note, index) => (
+      {notes.map((note, index) => {
+        // Hide the note being dragged
+        const isBeingDragged = isDraggingNote && draggedNote && 
+          note.row === draggedNote.row && note.col === draggedNote.col
+        
+        if (isBeingDragged) return null
+        
+        return (
         <div key={`note-${index}`} className="absolute pointer-events-auto" style={{ zIndex: 14 }}>
           {/* Red triangle in top-left corner */}
           <div
@@ -219,7 +310,8 @@ const Items = ({ items = [], notes = [], zoom, offset, gridSize, showNoteTooltip
             </div>
           )}
         </div>
-      ))}
+        )
+      })}
       
       {items.map((item, index) => {
         // Special styling for different items

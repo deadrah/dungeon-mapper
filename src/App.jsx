@@ -31,7 +31,8 @@ function App() {
     exportFloorSVG,
     getNoteAt,
     setNoteAt,
-    deleteNoteAt
+    deleteNoteAt,
+    moveNoteAt
   } = useAppState()
 
 
@@ -133,6 +134,7 @@ function App() {
           getNoteAt={getNoteAt}
           setNoteAt={setNoteAt}
           deleteNoteAt={deleteNoteAt}
+          moveNoteAt={moveNoteAt}
           showNoteTooltips={state.showNoteTooltips}
           theme={currentTheme}
         />
