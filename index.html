@@ -13,8 +13,8 @@
     <meta property="og:title" content="DMapper - 3D Dungeon Mapping Tool" />
     <meta property="og:description" content="Free online dungeon mapping tool for 3D dungeon games. Create grid-based dungeon maps with stairs, chests, traps, and other items." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://deadrah.github.io/dungeon-mapper/" />
-    <meta property="og:image" content="https://deadrah.github.io/dungeon-mapper/og-image.svg" />
+    <meta property="og:url" content="%VITE_PRODUCTION_URL%" />
+    <meta property="og:image" content="%VITE_PRODUCTION_URL%og-image.svg" />
     <meta property="og:site_name" content="DMapper" />
     <meta property="og:locale" content="en_US" />
     
@@ -22,20 +22,11 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="DMapper - 3D Dungeon Mapping Tool" />
     <meta name="twitter:description" content="Free online dungeon mapping tool for 3D dungeon games. Create grid-based dungeon maps with stairs, chests, traps, and other items." />
-    <meta name="twitter:image" content="https://deadrah.github.io/dungeon-mapper/twitter-card.svg" />
+    <meta name="twitter:image" content="%VITE_PRODUCTION_URL%twitter-card.svg" />
     
     <!-- Additional SEO -->
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://deadrah.github.io/dungeon-mapper/" />
-    
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S36XWNSJ3C"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-S36XWNSJ3C');
-    </script>
+    <link rel="canonical" href="%VITE_PRODUCTION_URL%" />
   </head>
   <body>
     <div id="root"></div>
