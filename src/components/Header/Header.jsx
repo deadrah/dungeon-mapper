@@ -256,11 +256,11 @@ const Header = ({
           onClick={onToggleNoteTooltips}
           className="px-2 py-1 rounded text-sm w-8 h-8 transition-colors md:inline-flex hidden items-center justify-center"
           style={{
-            backgroundColor: showNoteTooltips ? '#16a34a' : theme.ui.button,
+            backgroundColor: showNoteTooltips ? theme.ui.buttonActive : theme.ui.button,
             color: theme.ui.panelText
           }}
-          onMouseEnter={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#15803d' : theme.ui.buttonHover}
-          onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#16a34a' : theme.ui.button}
+          onMouseEnter={(e) => e.target.style.backgroundColor = showNoteTooltips ? theme.ui.buttonActiveHover : theme.ui.buttonHover}
+          onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? theme.ui.buttonActive : theme.ui.button}
           title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
@@ -320,11 +320,11 @@ const Header = ({
             onClick={onToggleNoteTooltips}
             className="px-2 py-1.5 rounded text-sm w-8 h-8 transition-colors md:hidden"
             style={{
-              backgroundColor: showNoteTooltips ? '#16a34a' : theme.ui.button,
+              backgroundColor: showNoteTooltips ? theme.ui.buttonActive : theme.ui.button,
               color: theme.ui.panelText
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#15803d' : theme.ui.buttonHover}
-            onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#16a34a' : theme.ui.button}
+            onMouseEnter={(e) => e.target.style.backgroundColor = showNoteTooltips ? theme.ui.buttonActiveHover : theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? theme.ui.buttonActive : theme.ui.button}
             title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.4em', pointerEvents: 'none'}}>
@@ -360,6 +360,19 @@ const Header = ({
               <path d="M2 8h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <path d="M2 12h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
+          </button>
+          <button
+            onClick={() => setIsHelpOpen(true)}
+            className="px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden transition-colors"
+            style={{ 
+              backgroundColor: themeName === 'dungeon' ? '#cd853f' : '#b45309', 
+              color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#b8860b' : '#92400e'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#cd853f' : '#b45309'}
+            title="ヘルプ"
+          >
+            ?
           </button>
         </div>
       </div>
