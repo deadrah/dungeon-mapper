@@ -101,7 +101,7 @@ export const themes = {
       arrow: '#6b5b73',             // 古い石の色
       note: '#faf6f0',              // 非常に薄いセピア
       noteBorder: '#5d4e37',        // ダークブラウン
-      noteTriangle: '#a0522d',      // Note triangle (古いレンガ色、彩度を下げた赤)
+      noteTriangle: '#d75516',      // Note triangle (古いレンガ色、彩度を下げた赤)
       shute: '#704214',             // ダークブラウン
       darkZone: 'rgba(61, 43, 31, 0.7)',  // セピア調の暗い部分
     },
