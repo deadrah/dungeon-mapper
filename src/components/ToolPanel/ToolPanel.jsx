@@ -57,20 +57,17 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
 
   return (
     <div className="md:w-48 w-full flex flex-col md:max-h-none max-h-44" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
-      <div className="p-2 text-center text-sm font-bold border-b md:block hidden" style={{ borderColor: theme.ui.border }}>
-        Tools
-      </div>
-      
+     
       <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
         {TOOL_GROUPS.map((group, groupIndex) => (
           <div key={group.name} className="md:block">
-            <div className="px-2 py-1 text-xs font-bold border-b md:block hidden" style={{ backgroundColor: theme.ui.button, borderColor: theme.ui.border }}>
+            <div className="px-2 py-2 text-sm font-bold border-b md:block hidden" style={{ backgroundColor: theme.ui.button, borderColor: theme.ui.border }}>
               {group.name}
             </div>
-            <div className={`md:grid md:grid-cols-2 md:gap-px md:p-0 p-2 ${
+            <div className={`md:grid md:grid-cols-2 md:p-0 p-2 ${
               group.name === 'Grid Tools' 
-                ? 'grid grid-cols-8 gap-1' // モバイルでGrid Toolsは8列グリッド（16個のツールを2行で表示）
-                : 'flex gap-1' // Line Toolsは従来通り横スクロール
+                ? 'grid grid-cols-8 gap-0' // モバイルでGrid Toolsは8列グリッド（16個のツールを2行で表示）
+                : 'flex gap-0' // Line Toolsは従来通り横スクロール
             }`}>
               {group.tools.map((tool) => {
                 // Handle spacer items (non-interactive)
@@ -82,32 +79,32 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                         group.name === 'Grid Tools' ? 'md:min-w-0' : 'md:min-w-0 min-w-12'
                       }`}
                       style={{ 
-                        backgroundColor: theme.ui.panel, 
+                        backgroundColor: theme.ui.button, 
                         borderColor: theme.ui.border,
                         color: theme.ui.panelText
                       }}
                     >
-                      <span className="text-lg">
+                      <span className="text-lg" style={{ pointerEvents: 'none' }}>
                       {tool.icon === 'NOTE_SVG' ? (
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                           <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon === 'DOOR_OPEN_SVG' ? (
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                           <path d="M8 2v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon === 'DOOR_CLOSED_SVG' ? (
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="currentColor"/>
                           <path d="M8 2v12" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon}
                     </span>
-                      <span className="text-xs truncate w-full text-center px-1 md:block hidden">{tool.name}</span>
+                      <span className="text-xs truncate w-full text-center px-1 md:block hidden" style={{ pointerEvents: 'none' }}>{tool.name}</span>
                     </div>
                   )
                 }
@@ -116,7 +113,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                   <button
                     key={tool.id}
                     onClick={() => setActiveTool(tool.id)}
-                    className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b transition-colors rounded md:rounded-none ${
+                    className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b transition-all duration-200 rounded md:rounded-none ${
                       group.name === 'Grid Tools' 
                         ? 'md:min-w-0' // Grid Toolsはグリッド表示
                         : 'md:min-w-0 min-w-12' // Line Toolsは最小幅設定
@@ -124,41 +121,42 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                     style={{
                       backgroundColor: activeTool === tool.id ? theme.ui.buttonActive : theme.ui.button,
                       borderColor: theme.ui.border,
-                      color: theme.ui.panelText
+                      color: theme.ui.panelText,
+                      '--hover-bg': theme.ui.buttonHover
                     }}
                     onMouseEnter={(e) => {
                       if (activeTool !== tool.id) {
-                        e.target.style.backgroundColor = theme.ui.buttonHover
+                        e.currentTarget.style.backgroundColor = theme.ui.buttonHover
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (activeTool !== tool.id) {
-                        e.target.style.backgroundColor = theme.ui.button
+                        e.currentTarget.style.backgroundColor = theme.ui.button
                       }
                     }}
                     title={`${tool.name} - ${tool.description}${tool.key ? ` (${tool.key})` : ''}`}
                   >
-                    <span className="text-lg">
+                    <span className="text-lg" style={{ pointerEvents: 'none' }}>
                       {tool.icon === 'NOTE_SVG' ? (
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                           <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                           <path d="M6 11h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon === 'DOOR_OPEN_SVG' ? (
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="none"/>
                           <path d="M8 2v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon === 'DOOR_CLOSED_SVG' ? (
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em'}}>
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="currentColor"/>
                           <path d="M8 2v12" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
                         </svg>
                       ) : tool.icon}
                     </span>
-                    <span className="text-xs truncate w-full text-center px-1 md:block hidden">{tool.name}</span>
+                    <span className="text-xs truncate w-full text-center px-1 md:block hidden" style={{ pointerEvents: 'none' }}>{tool.name}</span>
                   </button>
                 )
               })}

@@ -28,6 +28,7 @@ const Header = ({
   language,
   onLanguageChange,
   theme,
+  themeName,
   onThemeChange,
   activeTool,
   toolName
@@ -151,7 +152,7 @@ const Header = ({
   
 
   return (
-    <div className="md:h-12 h-auto bg-gray-900 text-white md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0">
+    <div className="md:h-12 h-auto md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
       <div className="flex md:items-center md:space-x-4 gap-2 md:gap-0 justify-between md:justify-start">
         <h1 className="text-lg font-bold md:mb-0 mb-1">DMapper</h1>
         
@@ -159,7 +160,8 @@ const Header = ({
           <select
             value={currentDungeon}
             onChange={(e) => setCurrentDungeon(parseInt(e.target.value))}
-            className="bg-gray-600 text-white px-2 py-1.5 rounded text-sm h-8"
+            className="px-2 py-1.5 rounded text-sm h-8"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
           >
             {Array.from({ length: MAX_DUNGEONS }, (_, i) => i + 1).map(dungeonId => (
               <option key={dungeonId} value={dungeonId}>
@@ -169,7 +171,10 @@ const Header = ({
           </select>
           <button
             onClick={() => handleDungeonNameEdit(currentDungeon)}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center"
+            className="px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center transition-colors"
+            style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
             title="Rename Current Dungeon"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -183,7 +188,8 @@ const Header = ({
           <select
             value={currentFloor}
             onChange={(e) => setCurrentFloor(parseInt(e.target.value))}
-            className="bg-gray-600 text-white px-2 py-1.5 rounded text-sm h-8"
+            className="px-2 py-1.5 rounded text-sm h-8"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
           >
             {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floor => (
               <option key={floor} value={floor}>
@@ -193,7 +199,13 @@ const Header = ({
           </select>
           <button
             onClick={handleResetFloor}
-            className="bg-red-500 hover:bg-red-400 text-white px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center"
+            className="px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center transition-colors"
+            style={{ 
+              backgroundColor: themeName === 'dungeon' ? '#a0522d' : '#dc2626', 
+              color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#8b4513' : '#b91c1c'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#a0522d' : '#dc2626'}
             title={`Reset Floor ${currentFloor}`}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -218,7 +230,8 @@ const Header = ({
               const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
               onGridSizeChange({ rows: size, cols: size })
             }}
-            className="bg-gray-600 text-white px-2 py-1 rounded text-sm w-12"
+            className="px-2 py-1 rounded text-sm w-12"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
             min="5"
             max="50"
             title="Grid Size (5-50)"
@@ -231,7 +244,8 @@ const Header = ({
               const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
               onGridSizeChange({ rows: size, cols: gridSize.cols })
             }}
-            className="bg-gray-600 text-white px-2 py-1 rounded text-sm w-12"
+            className="px-2 py-1 rounded text-sm w-12"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
             min="5"
             max="50"
             title="Grid Size (5-50)"
@@ -240,11 +254,13 @@ const Header = ({
 
         <button
           onClick={onToggleNoteTooltips}
-          className={`px-2 py-1 rounded text-sm w-8 h-8 transition-colors md:inline-flex hidden items-center justify-center ${
-            showNoteTooltips 
-              ? 'bg-green-600 hover:bg-green-500 text-white' 
-              : 'bg-gray-600 hover:bg-gray-500 text-white'
-          }`}
+          className="px-2 py-1 rounded text-sm w-8 h-8 transition-colors md:inline-flex hidden items-center justify-center"
+          style={{
+            backgroundColor: showNoteTooltips ? '#16a34a' : theme.ui.button,
+            color: theme.ui.panelText
+          }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#15803d' : theme.ui.buttonHover}
+          onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#16a34a' : theme.ui.button}
           title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -261,14 +277,20 @@ const Header = ({
         <div className="flex items-center space-x-1">
           <button
             onClick={onUndo}
-            className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm"
+            className="px-2 py-1 rounded text-sm transition-colors"
+            style={{ backgroundColor: theme.ui.button, color: theme.ui.panelText }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.button}
             title="Undo (Ctrl+Z)"
           >
             ↶
           </button>
           <button
             onClick={onRedo}
-            className="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1 rounded text-sm"
+            className="px-2 py-1 rounded text-sm transition-colors"
+            style={{ backgroundColor: theme.ui.button, color: theme.ui.panelText }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.button}
             title="Redo (Ctrl+Y)"
           >
             ↷
@@ -277,13 +299,16 @@ const Header = ({
 
         {/* スマホでは選択中のツール名を中央表示 */}
         <div className="md:hidden flex-1 text-center">
-          <span className="text-sm text-blue-300">{toolName}</span>
+          <span className="text-sm" style={{ color: theme.ui.panelText }}>{toolName}</span>
         </div>
 
         <div className="flex items-center space-x-1 md:flex hidden">
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm"
+            className="px-3 py-1 rounded text-sm transition-colors"
+            style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
             title="Menu"
           >
             Menu
@@ -293,11 +318,13 @@ const Header = ({
         <div className="flex items-center space-x-1">
           <button
             onClick={onToggleNoteTooltips}
-            className={`px-2 py-1.5 rounded text-sm w-8 h-8 transition-colors md:hidden ${
-              showNoteTooltips 
-                ? 'bg-green-600 hover:bg-green-500 text-white' 
-                : 'bg-gray-600 hover:bg-gray-500 text-white'
-            }`}
+            className="px-2 py-1.5 rounded text-sm w-8 h-8 transition-colors md:hidden"
+            style={{
+              backgroundColor: showNoteTooltips ? '#16a34a' : theme.ui.button,
+              color: theme.ui.panelText
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#15803d' : theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#16a34a' : theme.ui.button}
             title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.4em'}}>
@@ -309,14 +336,23 @@ const Header = ({
           </button>
           <button
             onClick={() => setIsHelpOpen(true)}
-            className="bg-yellow-700 hover:bg-yellow-600 text-white px-2 py-1 rounded text-sm w-8 md:block hidden"
+            className="px-2 py-1 rounded text-sm w-8 md:block hidden transition-colors"
+            style={{ 
+              backgroundColor: themeName === 'dungeon' ? '#cd853f' : '#b45309', 
+              color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#b8860b' : '#92400e'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#cd853f' : '#b45309'}
             title="ヘルプ"
           >
             ?
           </button>
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="bg-blue-700 hover:bg-blue-600 text-white px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden"
+            className="px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden transition-colors"
+            style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
             title="メニュー"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -331,15 +367,16 @@ const Header = ({
       {/* Map Rename Dialog */}
       {editingMapId && (
         <div className="fixed inset-0 flex items-center justify-center z-50" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <div className="bg-white rounded-lg p-6 w-96 max-w-full mx-4">
-            <h2 className="text-lg font-bold mb-4 text-black">Rename Dungeon</h2>
+          <div className="rounded-lg p-6 w-96 max-w-full mx-4" style={{ backgroundColor: theme.ui.panel }}>
+            <h2 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>Rename Dungeon</h2>
             
             <input
               type="text"
               value={editingMapName}
               onChange={(e) => setEditingMapName(e.target.value)}
               placeholder="Dungeon name..."
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              className="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -353,13 +390,19 @@ const Header = ({
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={handleDungeonNameCancel}
-                className="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+                className="px-4 py-2 rounded transition-colors"
+                style={{ backgroundColor: theme.ui.button, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.button}
               >
                 Cancel
               </button>
               <button
                 onClick={handleDungeonNameSave}
-                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors"
+                className="px-4 py-2 rounded transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Save
               </button>
@@ -376,16 +419,17 @@ const Header = ({
           onClick={closeMobileMenu}
         >
           <div 
-            className="bg-white rounded-lg p-4 w-64 max-w-full mx-4"
+            className="rounded-lg p-4 w-64 max-w-full mx-4"
+            style={{ backgroundColor: theme.ui.panel }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-bold mb-4 text-gray-900">Menu</h3>
+            <h3 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>Menu</h3>
             
             <div className="space-y-2">
-              <div className="border-b border-gray-200 pb-2 mb-2">
-                <h4 className="text-sm font-semibold text-gray-600 mb-2">Grid Size</h4>
+              <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
+                <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>Grid Size</h4>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-700">Size:</span>
+                  <span className="text-sm" style={{ color: theme.ui.panelText }}>Size:</span>
                   <input
                     type="number"
                     value={gridSize.cols}
@@ -393,11 +437,12 @@ const Header = ({
                       const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
                       onGridSizeChange({ rows: size, cols: size })
                     }}
-                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-12"
+                    className="px-2 py-1 rounded text-sm w-12"
+                    style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
                     min="5"
                     max="50"
                   />
-                  <span className="text-sm text-gray-700">x</span>
+                  <span className="text-sm" style={{ color: theme.ui.panelText }}>x</span>
                   <input
                     type="number"
                     value={gridSize.rows}
@@ -405,7 +450,8 @@ const Header = ({
                       const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
                       onGridSizeChange({ rows: size, cols: gridSize.cols })
                     }}
-                    className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-12"
+                    className="px-2 py-1 rounded text-sm w-12"
+                    style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
                     min="5"
                     max="50"
                   />
@@ -414,7 +460,7 @@ const Header = ({
               
               {/* Dungeon selection */}
               <div>
-                <span className="text-sm font-semibold text-gray-700">Dungeon Save/Load</span>
+                <span className="text-sm font-semibold" style={{ color: theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520' }}>Dungeon Save/Load</span>
                 <select
                   value={selectedDungeonForExport}
                   onChange={(e) => setSelectedDungeonForExport(parseInt(e.target.value))}
@@ -430,14 +476,20 @@ const Header = ({
               
               <button
                 onClick={handleMobileDungeonExport}
-                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Save Dungeon
               </button>
               
               <button
                 onClick={handleMobileDungeonImport}
-                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Load Dungeon
               </button>
@@ -447,7 +499,10 @@ const Header = ({
 
               <button
                 onClick={handleMobileSVG}
-                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Download Floor SVG Image
               </button> 
@@ -455,18 +510,24 @@ const Header = ({
               {/* HR separator */}
               <hr className="border-gray-200" />
               <div>
-                <span className="text-sm font-semibold text-gray-700">All Data Backup</span>
+                <span className="text-sm font-semibold" style={{ color: theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520' }}>All Data Backup</span>
               </div>
               <button
                 onClick={handleMobileExport}
-                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Export All Data
               </button>
               
               <button
                 onClick={handleMobileImport}
-                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Import All Data
               </button>
@@ -476,7 +537,10 @@ const Header = ({
 
               <button
                 onClick={handleMobileHelp}
-                className="w-full bg-yellow-700 hover:bg-yellow-600 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Help
               </button>
@@ -493,19 +557,21 @@ const Header = ({
           onClick={closeMenu}
         >
           <div 
-            className="bg-white rounded-lg p-4 w-64 max-w-full mx-4"
+            className="rounded-lg p-4 w-64 max-w-full mx-4"
+            style={{ backgroundColor: theme.ui.panel }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-bold mb-4 text-gray-900">Menu</h3>
+            <h3 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>Menu</h3>
             
             <div className="space-y-2">
               {/* Theme Selection */}
-              <div className="border-b border-gray-200 pb-2 mb-2">
-                <h4 className="text-sm font-semibold text-gray-600 mb-2">Theme</h4>
+              <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
+                <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>Theme</h4>
                 <select
-                  value={theme}
+                  value={themeName}
                   onChange={(e) => onThemeChange(e.target.value)}
-                  className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-full"
+                  className="px-2 py-1 rounded text-sm w-full"
+                  style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
                 >
                   {getThemeOptions().map(option => (
                     <option key={option.value} value={option.value}>
@@ -517,7 +583,7 @@ const Header = ({
 
               {/* Dungeon selection */}
               <div>
-                <span className="text-sm font-semibold text-gray-700">Dungeon Save/Load</span>
+                <span className="text-sm font-semibold" style={{ color: theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520' }}>Dungeon Save/Load</span>
                 <select
                   value={selectedDungeonForExport}
                   onChange={(e) => setSelectedDungeonForExport(parseInt(e.target.value))}
@@ -533,14 +599,20 @@ const Header = ({
               
               <button
                 onClick={handleDesktopDungeonExport}
-                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Save Dungeon
               </button>
               
               <button
                 onClick={handleDesktopDungeonImport}
-                className="w-full bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Load Dungeon
               </button>
@@ -550,7 +622,10 @@ const Header = ({
 
               <button
                 onClick={handleDesktopSVG}
-                className="w-full bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Download Floor SVG Image
               </button> 
@@ -559,18 +634,24 @@ const Header = ({
               <hr className="border-gray-300" />
               
               <div>
-                <span className="text-sm font-semibold text-gray-700">All Data Backup</span>
+                <span className="text-sm font-semibold" style={{ color: theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520' }}>All Data Backup</span>
               </div>
               <button
                 onClick={handleDesktopExport}
-                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Export All Data
               </button>
               
               <button
                 onClick={handleDesktopImport}
-                className="w-full bg-blue-500 hover:bg-blue-400 text-white px-3 py-2 rounded text-sm text-left"
+                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
+                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Import All Data
               </button>
@@ -586,6 +667,7 @@ const Header = ({
         onClose={() => setIsHelpOpen(false)}
         language={language}
         onLanguageChange={onLanguageChange}
+        theme={theme}
       />
     </div>
   )

@@ -778,7 +778,7 @@ const Canvas = ({
   }, [handleMouseMove, handleMouseUp, isDraggingLine, isDraggingErase, isRightMouseDown, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
 
   return (
-    <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: '#f8f8f8' }}>
+    <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: theme.ui.panel === '#1f2937' ? '#f8f8f8' : theme.grid.background }}>
       <div
         ref={canvasRef}
         className="w-full h-full"
@@ -839,7 +839,7 @@ const Canvas = ({
       
       {/* Color picker for block color tool */}
       {appState.activeTool === TOOLS.BLOCK_COLOR && (
-        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+        <div className="absolute bottom-16 right-4 p-2 rounded shadow-lg z-50" style={{ backgroundColor: theme.ui.panel }}>
           <input
             type="color"
             value={selectedColor}
@@ -851,7 +851,7 @@ const Canvas = ({
 
       {/* Text input for warp point tool */}
       {appState.activeTool === TOOLS.WARP_POINT && (
-        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+        <div className="absolute bottom-16 right-4 p-2 rounded shadow-lg z-50" style={{ backgroundColor: theme.ui.panel }}>
           <input
             type="text"
             value={warpText}
@@ -861,20 +861,20 @@ const Canvas = ({
             }}
             placeholder="A"
             maxLength={2}
-            className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
-            style={{ fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
+            className="w-8 h-8 rounded border text-center text-xs"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}`, fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
           />
         </div>
       )}
 
       {/* Style selector for shute tool */}
       {appState.activeTool === TOOLS.SHUTE && (
-        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+        <div className="absolute bottom-16 right-4 p-2 rounded shadow-lg z-50" style={{ backgroundColor: theme.ui.panel }}>
           <select
             value={shuteStyle}
             onChange={(e) => setShuteStyle(e.target.value)}
-            className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
-            style={{ fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
+            className="w-8 h-8 rounded border text-center text-xs"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}`, fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
           >
             <option value="filled">●</option>
             <option value="outline">○</option>
@@ -884,27 +884,27 @@ const Canvas = ({
 
       {/* Stairs text input */}
       {(appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && (
-        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+        <div className="absolute bottom-16 right-4 p-2 rounded shadow-lg z-50" style={{ backgroundColor: theme.ui.panel }}>
           <input
             type="text"
             value={stairsText}
             onChange={(e) => setStairsText(e.target.value)}
             placeholder=""
             maxLength={2}
-            className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
-            style={{ fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
+            className="w-8 h-8 rounded border text-center text-xs"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}`, fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
           />
         </div>
       )}
 
       {/* Arrow direction selector */}
       {appState.activeTool === TOOLS.ARROW && (
-        <div className="absolute bottom-16 right-4 bg-gray-800 p-2 rounded shadow-lg z-50">
+        <div className="absolute bottom-16 right-4 p-2 rounded shadow-lg z-50" style={{ backgroundColor: theme.ui.panel }}>
           <select
             value={arrowDirection}
             onChange={(e) => setArrowDirection(e.target.value)}
-            className="w-8 h-8 rounded border text-center text-xs bg-white text-black"
-            style={{ fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
+            className="w-8 h-8 rounded border text-center text-xs"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}`, fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
           >
             <option value="north">↑</option>
             <option value="south">↓</option>
@@ -917,14 +917,18 @@ const Canvas = ({
       
       {/* Zoom indicator */}
       <div 
-        className="absolute bottom-4 right-4 bg-gray-800 rounded shadow-lg text-white text-xs cursor-pointer hover:bg-gray-700 transition-colors z-50 flex items-center justify-center"
+        className="absolute bottom-4 right-4 rounded shadow-lg text-xs cursor-pointer transition-colors z-50 flex items-center justify-center"
         onClick={() => setZoom(1.0)}
         title="Click to reset zoom to 100%"
         style={{ 
+          backgroundColor: theme.ui.button, 
+          color: theme.ui.panelText,
           pointerEvents: 'auto',
           width: '48px',
           height: '40px'
         }}
+        onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+        onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.button}
       >
         {Math.round(appState.zoom * 100)}%
       </div>

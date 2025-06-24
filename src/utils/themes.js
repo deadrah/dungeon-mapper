@@ -58,7 +58,7 @@ export const themes = {
     ui: {
       panel: '#1f2937',             // Tool panel background
       panelText: '#ffffff',         // Tool panel text
-      button: '#374151',            // Button background
+      button: '#1f2937',            // Button background
       buttonHover: '#4b5563',       // Button hover
       buttonActive: '#496fc1',      // Active button
       input: '#374151',             // Input background
@@ -67,180 +67,62 @@ export const themes = {
     }
   },
   
-  dark: {
-    name: 'Dark',
+  dungeon: {
+    name: 'Dungeon',
     
     grid: {
-      background: '#1e293b',
-      lines: '#475569',
-      cellBorder: '#334155',
+      background: '#f7f3e9',        // 古い羊皮紙のような背景
+      lines: '#a0956b',             // セピア調のグリッド線
+      cellBorder: '#c4b896',        // 薄いセピアの境界線
     },
     
     header: {
-      background: '#0f172a',
-      text: '#e2e8f0',
-      border: '#334155',
-      corner: '#1e293b',
+      background: '#f0ebe0',        // 少し濃い羊皮紙色
+      text: '#5d4e37',              // ダークブラウンのテキスト
+      border: '#a0956b',            // セピア調の境界線
+      corner: '#ede7d9',            // 角の装飾
     },
     
     items: {
-      teleport: '#06b6d4',
-      teleportBorder: '#0e7490',
-      event: '#ef4444',
-      elevator: '#f59e0b',
-      stairs: '#3b82f6',
-      chest: '#f97316',
-      currentPosition: '#ef4444',
-      arrow: '#6366f1',
-      note: '#374151',
-      noteBorder: '#e2e8f0',
-      shute: '#a855f7',
-      darkZone: 'rgba(0,0,0,0.8)',
+      teleport: '#8b7355',          // 古いブロンズ色
+      teleportBorder: '#5d4e37',    // ダークブラウン
+      event: '#a0522d',             // 古いレンガ色
+      elevator: '#cd853f',          // アンティークゴールド
+      stairs: '#6b5b73',            // 古い石の色
+      chest: '#b8860b',             // 古い金色
+      currentPosition: '#8b4513',   // サドルブラウン
+      arrow: '#6b5b73',             // 古い石の色
+      note: '#faf6f0',              // 非常に薄いセピア
+      noteBorder: '#5d4e37',        // ダークブラウン
+      shute: '#704214',             // ダークブラウン
+      darkZone: 'rgba(61, 43, 31, 0.7)',  // セピア調の暗い部分
     },
     
     walls: {
-      stroke: '#e2e8f0',
+      stroke: '#5d4e37',            // ダークブラウンの壁
       strokeWidth: 2,
     },
     
     doors: {
       open: {
-        background: '#374151',
-        border: '#e2e8f0',
+        background: '#f7f3e9',      // 羊皮紙色
+        border: '#5d4e37',          // ダークブラウン
       },
       closed: {
-        background: '#1f2937',
-        border: '#e2e8f0',
+        background: '#8b7355',      // ブロンズ色
+        border: '#5d4e37',          // ダークブラウン
       },
     },
     
     ui: {
-      panel: '#0f172a',
-      panelText: '#e2e8f0',
-      button: '#1e293b',
-      buttonHover: '#334155',
-      buttonActive: '#3b82f6',
-      input: '#1e293b',
-      inputText: '#e2e8f0',
-      border: '#334155',
-    }
-  },
-  
-  ocean: {
-    name: 'Ocean',
-    
-    grid: {
-      background: '#e0f2fe',
-      lines: '#0891b2',
-      cellBorder: '#67e8f9',
-    },
-    
-    header: {
-      background: '#cffafe',
-      text: '#0c4a6e',
-      border: '#06b6d4',
-      corner: '#a5f3fc',
-    },
-    
-    items: {
-      teleport: '#0891b2',
-      teleportBorder: '#164e63',
-      event: '#dc2626',
-      elevator: '#d97706',
-      stairs: '#2563eb',
-      chest: '#ea580c',
-      currentPosition: '#dc2626',
-      arrow: '#1e40af',
-      note: '#f0f9ff',
-      noteBorder: '#0c4a6e',
-      shute: '#7c3aed',
-      darkZone: 'rgba(8,145,178,0.6)',
-    },
-    
-    walls: {
-      stroke: '#0c4a6e',
-      strokeWidth: 2,
-    },
-    
-    doors: {
-      open: {
-        background: '#f0f9ff',
-        border: '#0c4a6e',
-      },
-      closed: {
-        background: '#0369a1',
-        border: '#0c4a6e',
-      },
-    },
-    
-    ui: {
-      panel: '#0c4a6e',
-      panelText: '#f0f9ff',
-      button: '#0891b2',
-      buttonHover: '#0e7490',
-      buttonActive: '#0284c7',
-      input: '#075985',
-      inputText: '#f0f9ff',
-      border: '#0891b2',
-    }
-  },
-  
-  forest: {
-    name: 'Forest',
-    
-    grid: {
-      background: '#f0fdf4',
-      lines: '#16a34a',
-      cellBorder: '#86efac',
-    },
-    
-    header: {
-      background: '#dcfce7',
-      text: '#14532d',
-      border: '#22c55e',
-      corner: '#bbf7d0',
-    },
-    
-    items: {
-      teleport: '#059669',
-      teleportBorder: '#064e3b',
-      event: '#dc2626',
-      elevator: '#d97706',
-      stairs: '#2563eb',
-      chest: '#ea580c',
-      currentPosition: '#dc2626',
-      arrow: '#1e40af',
-      note: '#f7fee7',
-      noteBorder: '#14532d',
-      shute: '#7c3aed',
-      darkZone: 'rgba(5,150,105,0.6)',
-    },
-    
-    walls: {
-      stroke: '#14532d',
-      strokeWidth: 2,
-    },
-    
-    doors: {
-      open: {
-        background: '#f7fee7',
-        border: '#14532d',
-      },
-      closed: {
-        background: '#166534',
-        border: '#14532d',
-      },
-    },
-    
-    ui: {
-      panel: '#14532d',
-      panelText: '#f7fee7',
-      button: '#16a34a',
-      buttonHover: '#15803d',
-      buttonActive: '#22c55e',
-      input: '#166534',
-      inputText: '#f7fee7',
-      border: '#16a34a',
+      panel: '#3d2b1f',             // ダークセピア
+      panelText: '#f0ebe0',         // 薄いセピア
+      button: '#5d4e37',            // ダークブラウン
+      buttonHover: '#8b7355',       // ブロンズ色
+      buttonActive: '#a0956b',      // アクティブセピア
+      input: '#5d4e37',             // ダークブラウン
+      inputText: '#f0ebe0',         // 薄いセピア
+      border: '#3d2b1f',            // ブロンズ色
     }
   }
 }

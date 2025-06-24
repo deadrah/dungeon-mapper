@@ -1,6 +1,6 @@
 import React from 'react'
 
-const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
+const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme }) => {
 
   if (!isOpen) return null
 
@@ -217,6 +217,18 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
   const currentContent = content[language]
 
+  // より見やすい見出し色を計算
+  const getHeadingColor = () => {
+    // defaultテーマでは明るいブルー、dungeonテーマでは明るいゴールド
+    return theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520'  // light blue : goldenrod
+  }
+
+  // ツール名用の落ち着いた色
+  const getToolColor = () => {
+    // defaultテーマでは少し暗いブルー、dungeonテーマでは少し暗いゴールド
+    return theme.ui.panel === '#1f2937' ? '#93c5fd' : '#b8860b'  // blue-300 : dark goldenrod
+  }
+
   return (
     <div 
       className="fixed inset-0 flex items-center justify-center z-50" 
@@ -224,47 +236,63 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto"
+        className="rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto"
+        style={{ backgroundColor: theme.ui.panel }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-black">
+            <h2 className="text-2xl font-bold" style={{ color: theme.ui.panelText }}>
               {language === 'ja' ? (
-                <>DMapper - 機能説明 - <a href="#changelog" className="text-blue-600 hover:text-blue-800 underline">更新履歴</a></>
+                <>DMapper - 機能説明 - <a href="#changelog" className="underline" style={{ color: getHeadingColor() }}>更新履歴</a></>
               ) : (
-                <>DMapper - User Guide - <a href="#changelog" className="text-blue-600 hover:text-blue-800 underline">Update History</a></>
+                <>DMapper - User Guide - <a href="#changelog" className="underline" style={{ color: getHeadingColor() }}>Update History</a></>
               )}
             </h2>
-            <p className="text-sm text-gray-500 mt-1">{currentContent.version}</p>
+            <p className="text-sm mt-1" style={{ color: theme.ui.panelText, opacity: 0.7 }}>{currentContent.version}</p>
           </div>
           <div className="flex items-center space-x-3">
             {/* Language Toggle */}
-            <div className="flex bg-gray-200 rounded-lg p-1">
+            <div className="flex rounded-lg p-1" style={{ backgroundColor: theme.ui.button }}>
               <button
                 onClick={() => onLanguageChange('ja')}
-                className={`px-3 py-1 rounded text-sm transition-colors ${
-                  language === 'ja'
-                    ? 'bg-blue-500 text-white'
-                    : 'text-gray-700 hover:bg-gray-300'
-                }`}
+                className="px-3 py-1 rounded text-sm transition-colors"
+                style={{
+                  backgroundColor: language === 'ja' ? theme.ui.buttonActive : 'transparent',
+                  color: theme.ui.panelText
+                }}
+                onMouseEnter={(e) => {
+                  if (language !== 'ja') e.target.style.backgroundColor = theme.ui.buttonHover
+                }}
+                onMouseLeave={(e) => {
+                  if (language !== 'ja') e.target.style.backgroundColor = 'transparent'
+                }}
               >
                 JP
               </button>
               <button
                 onClick={() => onLanguageChange('en')}
-                className={`px-3 py-1 rounded text-sm transition-colors ${
-                  language === 'en'
-                    ? 'bg-blue-500 text-white'
-                    : 'text-gray-700 hover:bg-gray-300'
-                }`}
+                className="px-3 py-1 rounded text-sm transition-colors"
+                style={{
+                  backgroundColor: language === 'en' ? theme.ui.buttonActive : 'transparent',
+                  color: theme.ui.panelText
+                }}
+                onMouseEnter={(e) => {
+                  if (language !== 'en') e.target.style.backgroundColor = theme.ui.buttonHover
+                }}
+                onMouseLeave={(e) => {
+                  if (language !== 'en') e.target.style.backgroundColor = 'transparent'
+                }}
               >
                 EN
               </button>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              className="text-2xl font-bold transition-colors"
+              style={{ color: theme.ui.panelText }}
+              onMouseEnter={(e) => e.target.style.opacity = '0.7'}
+              onMouseLeave={(e) => e.target.style.opacity = '1'}
               title={currentContent.close}
             >
               ×
@@ -272,16 +300,16 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
           </div>
         </div>
         
-        <div className="text-black space-y-6">
+        <div className="space-y-6" style={{ color: theme.ui.panelText }}>
           {/* About */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.about.title}</h3>
-            <p className="text-gray-700">{currentContent.sections.about.content}</p>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.about.title}</h3>
+            <p style={{ color: theme.ui.panelText }}>{currentContent.sections.about.content}</p>
           </section>
 
           {/* Settings */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.settings.title}</h3>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.settings.title}</h3>
             <div className="space-y-2">
               {currentContent.sections.settings.items.map((item, index) => (
                 <div key={index}><strong>{item.label}</strong> {item.desc}</div>
@@ -291,7 +319,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
           {/* Basic Controls */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.controls.title}</h3>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.controls.title}</h3>
             <div className="space-y-2">
               {currentContent.sections.controls.items.map((item, index) => (
                 <div key={index}><strong>{item.label}</strong> {item.desc}</div>
@@ -301,7 +329,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
           {/* Keyboard Shortcuts */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.keyboard.title}</h3>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.keyboard.title}</h3>
             <div className="space-y-2">
               {currentContent.sections.keyboard.items.map((item, index) => (
                 <div key={index}><strong>{item.label}</strong> {item.desc}</div>
@@ -311,12 +339,12 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
           {/* Tools */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.tools.title}</h3>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.tools.title}</h3>
             <div className="space-y-3">
               {currentContent.sections.tools.items.map((tool, index) => (
                 <div key={index}>
-                  <strong className={tool.color}>{tool.name}</strong>
-                  <p className="text-gray-700 ml-4">{tool.desc}</p>
+                  <strong style={{ color: getToolColor() }}>{tool.name}</strong>
+                  <p className="ml-4" style={{ color: theme.ui.panelText }}>{tool.desc}</p>
                 </div>
               ))}
             </div>
@@ -324,7 +352,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
           {/* Map Management */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.mapManagement.title}</h3>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.mapManagement.title}</h3>
             <div className="space-y-2">
               {currentContent.sections.mapManagement.items.map((item, index) => (
                 <div key={index}><strong>{item.label}</strong> {item.desc}</div>
@@ -334,7 +362,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
           {/* Data Saving */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.dataSaving.title}</h3>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.dataSaving.title}</h3>
             <div className="space-y-2">
               {currentContent.sections.dataSaving.items.map((item, index) => (
                 <div key={index}><strong>{item.label}</strong> {item.desc}</div>
@@ -344,8 +372,8 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
           {/* Notes */}
           <section>
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.notes.title}</h3>
-            <div className="space-y-2 text-gray-700">
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.notes.title}</h3>
+            <div className="space-y-2" style={{ color: theme.ui.panelText }}>
               {currentContent.sections.notes.items.map((note, index) => (
                 <div key={index}>• {note}</div>
               ))}
@@ -354,15 +382,15 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
 
           {/* Changelog */}
           <section id="changelog">
-            <h3 className="text-lg font-semibold mb-2 text-blue-600">{currentContent.sections.changelog.title}</h3>
+            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.changelog.title}</h3>
             <div className="space-y-4">
               {currentContent.sections.changelog.items.map((version, index) => (
-                <div key={index} className="border-l-4 border-blue-200 pl-4">
+                <div key={index} className="border-l-4 pl-4" style={{ borderColor: getHeadingColor() }}>
                   <div className="flex items-center space-x-2 mb-2">
-                    <strong className="text-blue-700">{version.version}</strong>
-                    <span className="text-sm text-gray-500">({version.date})</span>
+                    <strong style={{ color: getHeadingColor() }}>{version.version}</strong>
+                    <span className="text-sm" style={{ color: theme.ui.panelText }}>({version.date})</span>
                   </div>
-                  <div className="space-y-1 text-gray-700">
+                  <div className="space-y-1" style={{ color: theme.ui.panelText }}>
                     {version.changes.map((change, changeIndex) => (
                       <div key={changeIndex}>• {change}</div>
                     ))}
@@ -376,7 +404,10 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange }) => {
         <div className="flex justify-end mt-6">
           <button
             onClick={onClose}
-            className="px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors"
+            className="px-6 py-2 rounded transition-colors"
+            style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
           >
             {currentContent.close}
           </button>

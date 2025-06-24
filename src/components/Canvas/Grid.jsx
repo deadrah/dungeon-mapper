@@ -82,7 +82,7 @@ const Grid = ({
               className="text-xs px-1 border-b flex items-center justify-center font-mono"
               style={{
                 position: 'absolute',
-                top: offset.y + row * cellSize + 24,
+                top: Math.round(offset.y + row * cellSize + 24),
                 height: cellSize,
                 width: '24px',
                 fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
@@ -104,7 +104,7 @@ const Grid = ({
             className="text-xs py-1 border-r flex items-center justify-center font-mono"
             style={{
               position: 'absolute',
-              left: offset.x + col * cellSize + 24,
+              left: Math.round(offset.x + col * cellSize + 24),
               width: cellSize,
               height: '24px',
               fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
@@ -150,7 +150,7 @@ const Grid = ({
             className="text-xs py-1 border-r flex items-center justify-center font-mono"
             style={{
               position: 'absolute',
-              left: offset.x + col * cellSize + 24,
+              left: Math.round(offset.x + col * cellSize + 24),
               width: cellSize,
               height: '24px',
               fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
@@ -166,53 +166,49 @@ const Grid = ({
       {/* Corner decorations */}
       {/* Top-left corner */}
       <div 
-        className="absolute z-10 border-r border-b" 
+        className="absolute z-10" 
         style={{
           left: offset.x,
           top: offset.y,
           width: '24px',
           height: '24px',
-          backgroundColor: theme.header.corner,
-          borderColor: theme.header.border
+          backgroundColor: theme.header.corner
         }}
       />
       
       {/* Top-right corner */}
       <div 
-        className="absolute z-10 border-l border-b" 
+        className="absolute z-10" 
         style={{
           left: offset.x + gridSize.cols * cellSize + 24,
           top: offset.y,
           width: '24px',
           height: '24px',
-          backgroundColor: theme.header.corner,
-          borderColor: theme.header.border
+          backgroundColor: theme.header.corner
         }}
       />
       
       {/* Bottom-left corner */}
       <div 
-        className="absolute z-10 border-r border-t" 
+        className="absolute z-10" 
         style={{
           left: offset.x,
           top: offset.y + gridSize.rows * cellSize + 24,
           width: '24px',
           height: '24px',
-          backgroundColor: theme.header.corner,
-          borderColor: theme.header.border
+          backgroundColor: theme.header.corner
         }}
       />
       
       {/* Bottom-right corner */}
       <div 
-        className="absolute z-10 border-l border-t" 
+        className="absolute z-10" 
         style={{
           left: offset.x + gridSize.cols * cellSize + 24,
           top: offset.y + gridSize.rows * cellSize + 24,
           width: '24px',
           height: '24px',
-          backgroundColor: theme.header.corner,
-          borderColor: theme.header.border
+          backgroundColor: theme.header.corner
         }}
       />
 
@@ -223,42 +219,49 @@ const Grid = ({
         style={{ pointerEvents: 'auto', zIndex: 5 }}
         onContextMenu={(e) => e.preventDefault()}
       >
-        {/* Grid lines */}
-        <defs>
-          <pattern
-            id="grid"
-            width={cellSize}
-            height={cellSize}
-            patternUnits="userSpaceOnUse"
-            x={offset.x + 24}
-            y={offset.y + 24}
-          >
-            <path
-              d={`M ${cellSize} 0 L 0 0 0 ${cellSize}`}
-              fill="none"
-              stroke={theme.grid.lines}
-              strokeWidth="1"
-            />
-          </pattern>
-        </defs>
-        
         {/* Grid background */}
         <rect
-          x={offset.x + 24}
-          y={offset.y + 24}
+          x={Math.round(offset.x + 24)}
+          y={Math.round(offset.y + 24)}
           width={gridSize.cols * cellSize}
           height={gridSize.rows * cellSize}
           fill={theme.grid.background}
         />
         
-        {/* Grid pattern overlay */}
-        <rect
-          x={offset.x + 24}
-          y={offset.y + 24}
-          width={gridSize.cols * cellSize}
-          height={gridSize.rows * cellSize}
-          fill="url(#grid)"
-        />
+        {/* Grid lines - draw directly instead of using pattern */}
+        {/* Vertical lines */}
+        {Array.from({ length: gridSize.cols + 1 }, (_, i) => {
+          const x = Math.round(offset.x + 24 + i * cellSize) - 0.5
+          return (
+            <line
+              key={`v-line-${i}`}
+              x1={x}
+              y1={Math.round(offset.y + 24)}
+              x2={x}
+              y2={Math.round(offset.y + 24 + gridSize.rows * cellSize)}
+              stroke={theme.grid.lines}
+              strokeWidth="1"
+              shapeRendering="crispEdges"
+            />
+          )
+        })}
+        
+        {/* Horizontal lines */}
+        {Array.from({ length: gridSize.rows + 1 }, (_, i) => {
+          const y = Math.round(offset.y + 24 + i * cellSize) - 0.5
+          return (
+            <line
+              key={`h-line-${i}`}
+              x1={Math.round(offset.x + 24)}
+              y1={y}
+              x2={Math.round(offset.x + 24 + gridSize.cols * cellSize)}
+              y2={y}
+              stroke={theme.grid.lines}
+              strokeWidth="1"
+              shapeRendering="crispEdges"
+            />
+          )
+        })}
 
         {/* Grid cells with colors */}
         {floorData && floorData.grid && floorData.grid.map((row, rowIndex) =>
@@ -268,8 +271,8 @@ const Grid = ({
               return (
                 <rect
                   key={`${rowIndex}-${colIndex}`}
-                  x={offset.x + colIndex * cellSize + 24}
-                  y={offset.y + displayRow * cellSize + 24}
+                  x={offset.x + colIndex * cellSize + 23.5}
+                  y={offset.y + displayRow * cellSize + 23.5}
                   width={cellSize}
                   height={cellSize}
                   fill={cellColor}

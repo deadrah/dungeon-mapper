@@ -82,7 +82,7 @@ function App() {
   }, [exportState, undo, redo, setActiveTool])
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className="h-screen flex flex-col" style={{ backgroundColor: currentTheme.grid.background }}>
       <Header
         currentDungeon={state.currentDungeon}
         currentFloor={state.currentFloor}
@@ -106,7 +106,8 @@ function App() {
         onToggleNoteTooltips={toggleNoteTooltips}
         language={state.language}
         onLanguageChange={setLanguage}
-        theme={state.theme}
+        theme={currentTheme}
+        themeName={state.theme}
         onThemeChange={setTheme}
         activeTool={state.activeTool}
         toolName={getToolName(state.activeTool)}
