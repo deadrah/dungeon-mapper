@@ -267,29 +267,48 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       
       switch (item.type) {
         case TOOLS.CHEST:
-          // Chest base (smaller size)
+          // Chest SVG rendering to match canvas
           const chestSize = itemSize * 0.8
-          svg += `      <rect x="${centerX - chestSize/2}" y="${centerY}" width="${chestSize}" height="${chestSize/2}" stroke="#8B4513" stroke-width="1.5" fill="none" rx="1"/>\n`
-          // Chest lid (curved top)
-          svg += `      <path d="M ${centerX - chestSize/2} ${centerY} Q ${centerX - chestSize/2} ${centerY - chestSize/3} ${centerX} ${centerY - chestSize/3} Q ${centerX + chestSize/2} ${centerY - chestSize/3} ${centerX + chestSize/2} ${centerY}" stroke="#8B4513" stroke-width="1.5" fill="none"/>\n`
+          svg += `      <g transform="translate(${centerX - chestSize/2}, ${centerY - chestSize/2})" viewBox="0 0 24 24">\n`
+          // Chest base
+          svg += `        <rect x="${chestSize * 4/24}" y="${chestSize * 12/24}" width="${chestSize * 16/24}" height="${chestSize * 8/24}" stroke="${colors.chest}" stroke-width="1.5" fill="none" rx="${chestSize * 1/24}"/>\n`
+          // Chest lid
+          svg += `        <path d="M${chestSize * 4/24} ${chestSize * 12/24} Q${chestSize * 4/24} ${chestSize * 8/24} ${chestSize * 12/24} ${chestSize * 8/24} Q${chestSize * 20/24} ${chestSize * 8/24} ${chestSize * 20/24} ${chestSize * 12/24}" stroke="${colors.chest}" stroke-width="1.5" fill="none"/>\n`
           // Chest lock
-          svg += `      <circle cx="${centerX}" cy="${centerY}" r="${chestSize/12}" stroke="#FFD700" stroke-width="1" fill="#FFD700"/>\n`
+          svg += `        <circle cx="${chestSize * 12/24}" cy="${chestSize * 12/24}" r="${chestSize * 1.5/24}" stroke="${colors.chest}" stroke-width="1" fill="${colors.chest}"/>\n`
           // Chest hinges
-          svg += `      <rect x="${centerX - chestSize/3}" y="${centerY - chestSize/24}" width="${chestSize/24}" height="${chestSize/12}" fill="#654321"/>\n`
-          svg += `      <rect x="${centerX + chestSize/3}" y="${centerY - chestSize/24}" width="${chestSize/24}" height="${chestSize/12}" fill="#654321"/>\n`
+          svg += `        <rect x="${chestSize * 6/24}" y="${chestSize * 11/24}" width="${chestSize * 1/24}" height="${chestSize * 2/24}" fill="${colors.chest}"/>\n`
+          svg += `        <rect x="${chestSize * 17/24}" y="${chestSize * 11/24}" width="${chestSize * 1/24}" height="${chestSize * 2/24}" fill="${colors.chest}"/>\n`
+          svg += `      </g>\n`
           break
         
         case TOOLS.STAIRS_UP_SVG:
-          svg += `      <polygon points="${centerX - itemSize/2},${centerY + itemSize/3} ${centerX},${centerY - itemSize/3} ${centerX + itemSize/2},${centerY + itemSize/3}" class="stairs-up"/>\n`
+          // Up stairs SVG (from up.svg)
+          const upSize = itemSize
+          svg += `      <g transform="translate(${centerX - upSize/2}, ${centerY - upSize/2})">\n`
+          svg += `        <rect width="${upSize}" height="${upSize}" fill="transparent" />\n`
+          svg += `        <rect x="${upSize * 0.1}" y="${upSize * 0.7}" width="${upSize * 0.19}" height="${upSize * 0.2}" fill="gray" />\n`
+          svg += `        <rect x="${upSize * 0.3}" y="${upSize * 0.5}" width="${upSize * 0.19}" height="${upSize * 0.4}" fill="gray" />\n`
+          svg += `        <rect x="${upSize * 0.5}" y="${upSize * 0.3}" width="${upSize * 0.19}" height="${upSize * 0.6}" fill="gray" />\n`
+          svg += `        <rect x="${upSize * 0.7}" y="${upSize * 0.1}" width="${upSize * 0.19}" height="${upSize * 0.8}" fill="gray" />\n`
+          svg += `      </g>\n`
           if (item.stairsText && item.stairsText.trim() !== '') {
-            svg += `      <text x="${centerX}" y="${centerY + 7}" text-anchor="middle" font-size="${Math.max(12, itemSize * 0.6)}" fill="#ffffff" font-weight="bold">${item.stairsText}</text>\n`
+            svg += `      <text x="${centerX}" y="${centerY + 7}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.5)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.stairsText}</text>\n`
           }
           break
         
         case TOOLS.STAIRS_DOWN_SVG:
-          svg += `      <polygon points="${centerX - itemSize/2},${centerY - itemSize/3} ${centerX},${centerY + itemSize/3} ${centerX + itemSize/2},${centerY - itemSize/3}" class="stairs-down"/>\n`
+          // Down stairs SVG (from down.svg)
+          const downSize = itemSize
+          svg += `      <g transform="translate(${centerX - downSize/2}, ${centerY - downSize/2})">\n`
+          svg += `        <rect width="${downSize}" height="${downSize}" fill="#333" />\n`
+          svg += `        <rect x="${downSize * 0.1}" y="${downSize * 0.1}" width="${downSize * 0.18}" height="${downSize * 0.8}" fill="#eee" />\n`
+          svg += `        <rect x="${downSize * 0.3}" y="${downSize * 0.25}" width="${downSize * 0.18}" height="${downSize * 0.65}" fill="#ccc" />\n`
+          svg += `        <rect x="${downSize * 0.5}" y="${downSize * 0.4}" width="${downSize * 0.18}" height="${downSize * 0.5}" fill="#aaa" />\n`
+          svg += `        <rect x="${downSize * 0.7}" y="${downSize * 0.55}" width="${downSize * 0.18}" height="${downSize * 0.35}" fill="#888" />\n`
+          svg += `      </g>\n`
           if (item.stairsText && item.stairsText.trim() !== '') {
-            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(12, itemSize * 0.6)}" fill="#ffffff" font-weight="bold">${item.stairsText}</text>\n`
+            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.5)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.stairsText}</text>\n`
           }
           break
         
@@ -306,7 +325,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           svg += `      <polygon points="${centerX},${centerY - itemSize/2} ${centerX + itemSize/3},${centerY} ${centerX},${centerY + itemSize/2} ${centerX - itemSize/3},${centerY}" class="warp-point"/>\n`
           // Text overlay if warpText exists
           if (item.warpText) {
-            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(6, itemSize * 0.4)}" fill="#0c4b5b" font-weight="bold">${item.warpText}</text>\n`
+            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(6, itemSize * 0.4)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.warpText}</text>\n`
           }
           break
         

@@ -60,17 +60,18 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, th
             fontSize: Math.max(12, cellSize * 0.8),
             color: theme.items.teleport
           }}>
-            ◊
+            ◆
           </div>
           {/* Text overlay */}
           {item.warpText && (
             <div style={{
               position: 'absolute',
               fontSize: Math.max(10, cellSize * 0.45),
-              color: theme.items.teleportBorder,
+              color: 'white',
               fontWeight: 'bold',
               textAlign: 'center',
-              lineHeight: '1'
+              lineHeight: '1',
+              textShadow: '0 0 4px rgba(0,0,0,1)'
             }}>
               {item.warpText}
             </div>

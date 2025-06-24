@@ -23,7 +23,7 @@ export const themes = {
     
     // Item colors
     items: {
-      teleport: '#4bdcff',          // Teleport point fill
+      teleport: '#2fb8d4',          // Teleport point fill
       teleportBorder: '#0c4b5b',    // Teleport point border
       event: '#ca0101',             // Event marker
       elevator: '#b8860b',          // Elevator
