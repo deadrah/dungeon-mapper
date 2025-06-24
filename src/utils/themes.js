@@ -28,7 +28,7 @@ export const themes = {
       event: '#ca0101',             // Event marker
       elevator: '#b8860b',          // Elevator
       stairs: '#0000ff',            // Stairs
-      chest: '#ff8c00',             // Chest
+      chest: '#d4a017',             // Chest
       currentPosition: '#dc143c',   // Current position marker
       arrow: '#345dd1',             // Arrow color
       note: '#ffffff',              // Note background
