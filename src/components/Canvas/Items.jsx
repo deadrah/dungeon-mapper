@@ -85,8 +85,9 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, th
       return icon
     }
     
-    // Special rendering for Stairs with text overlay
+    // Special rendering for Stairs with SVG and text overlay
     if (item.type === TOOLS.STAIRS_UP_SVG || item.type === TOOLS.STAIRS_DOWN_SVG) {
+      const isUp = item.type === TOOLS.STAIRS_UP_SVG
       return (
         <div style={{ 
           position: 'relative', 
@@ -96,25 +97,45 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, th
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          {/* Triangle background */}
-          <div style={{
-            position: 'absolute',
-            fontSize: Math.max(12, cellSize * 0.6),
-            color: theme.items.stairs,
-            fontWeight: 'bold'
-          }}>
-            {item.type === TOOLS.STAIRS_UP_SVG ? '▲' : '▼'}
-          </div>
+          {/* Stairs SVG */}
+          <svg 
+            width={cellSize * 0.7} 
+            height={cellSize * 0.7} 
+            viewBox="0 0 100 100"
+          >
+            {isUp ? (
+              // Up stairs SVG (from up.svg)
+              <g>
+                <rect width="100" height="100" fill="transparent" />
+                <rect x="10" y="70" width="19" height="20" fill="gray" />
+                <rect x="30" y="50" width="19" height="40" fill="gray" />
+                <rect x="50" y="30" width="19" height="60" fill="gray" />
+                <rect x="70" y="10" width="19" height="80" fill="gray" />
+              </g>
+            ) : (
+              // Down stairs SVG (from down.svg)
+              <g>
+                <rect width="100" height="100" fill="#333" />
+                <rect x="10" y="10" width="18" height="80" fill="#eee" />
+                <rect x="30" y="25" width="18" height="65" fill="#ccc" />
+                <rect x="50" y="40" width="18" height="50" fill="#aaa" />
+                <rect x="70" y="55" width="18" height="35" fill="#888" />
+              </g>
+            )}
+          </svg>
           {/* Text overlay */}
           {item.stairsText && (
             <div style={{
               position: 'absolute',
-              fontSize: Math.max(8, cellSize * 0.3),
-              color: '#ffffff',
+              fontSize: Math.max(8, cellSize * 0.5),
+              color: 'white',
               fontWeight: 'bold',
               textAlign: 'center',
               lineHeight: '1',
-              textShadow: '1px 1px 1px rgba(0,0,0,0.5)'
+              textShadow: '0 0 4px rgba(0,0,0,1)',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)'
             }}>
               {item.stairsText}
             </div>
