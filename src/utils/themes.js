@@ -94,7 +94,7 @@ export const themes = {
       elevator: '#cd853f',          // アンティークゴールド
       stairs: '#6b5b73',            // 古い石の色
       chest: '#b8860b',             // 古い金色
-      currentPosition: '#8b4513',   // サドルブラウン
+      currentPosition: '#b22222',   // ファイアブリック（赤み強化）
       arrow: '#6b5b73',             // 古い石の色
       note: '#faf6f0',              // 非常に薄いセピア
       noteBorder: '#5d4e37',        // ダークブラウン
