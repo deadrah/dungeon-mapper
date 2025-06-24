@@ -1,7 +1,7 @@
 import React from 'react'
 import { GRID_SIZE } from '../../utils/constants'
 
-const Walls = ({ walls = [], zoom, offset, gridSize }) => {
+const Walls = ({ walls = [], zoom, offset, gridSize, theme }) => {
   const cellSize = GRID_SIZE * zoom
 
   return (
@@ -24,8 +24,8 @@ const Walls = ({ walls = [], zoom, offset, gridSize }) => {
                 y1={offset.y + displayRow * cellSize + 24}
                 x2={offset.x + wall.endCol * cellSize + 24}
                 y2={offset.y + (displayRow + 1) * cellSize + 24}
-                stroke="#000000"
-                strokeWidth="2"
+                stroke={theme.walls.stroke}
+                strokeWidth={theme.walls.strokeWidth}
                 strokeLinecap="round"
               />
             )
@@ -39,8 +39,8 @@ const Walls = ({ walls = [], zoom, offset, gridSize }) => {
                 y1={offset.y + displayRow * cellSize + 24}
                 x2={offset.x + wall.endCol * cellSize + 24}
                 y2={offset.y + displayRow * cellSize + 24}
-                stroke="#000000"
-                strokeWidth="2"
+                stroke={theme.walls.stroke}
+                strokeWidth={theme.walls.strokeWidth}
                 strokeLinecap="round"
               />
             )

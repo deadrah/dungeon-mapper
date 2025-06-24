@@ -1,39 +1,82 @@
 import { TOOLS, GRID_SIZE } from './constants'
 
-export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floorNumber = 1) => {
+export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floorNumber = 1, theme = null) => {
   const cellSize = GRID_SIZE
   const headerSize = 40
   const padding = 20
   const svgWidth = gridSize.cols * cellSize + padding * 2 + headerSize
   const svgHeight = gridSize.rows * cellSize + padding * 2 + headerSize
 
+  // Use theme colors or fallback to defaults
+  const colors = theme ? {
+    gridLine: theme.grid.lines,
+    wallLine: theme.walls.stroke,
+    doorOpen: theme.doors.open.background,
+    doorOpenBorder: theme.doors.open.border,
+    doorClosed: theme.doors.closed.background,
+    doorClosedBorder: theme.doors.closed.border,
+    chest: theme.items.chest,
+    stairs: theme.items.stairs,
+    currentPosition: theme.items.currentPosition,
+    event: theme.items.event,
+    teleport: theme.items.teleport,
+    teleportBorder: theme.items.teleportBorder,
+    darkZone: theme.items.darkZone,
+    arrow: theme.items.arrow,
+    lineArrow: theme.items.arrow,
+    noteText: theme.items.noteBorder,
+    titleText: theme.header.text,
+    headerText: theme.header.text,
+    background: theme.grid.background
+  } : {
+    gridLine: '#d1d5db',
+    wallLine: '#1f2937',
+    doorOpen: '#ffffff',
+    doorOpenBorder: '#1f2937',
+    doorClosed: '#1f2937',
+    doorClosedBorder: '#1f2937',
+    chest: '#8B4513',
+    stairs: '#0000ff',
+    currentPosition: '#dc143c',
+    event: '#ca0101',
+    teleport: '#06b6d4',
+    teleportBorder: '#0891b2',
+    darkZone: '#000000',
+    arrow: '#374151',
+    lineArrow: '#345dd1',
+    noteText: '#1f2937',
+    titleText: '#1f2937',
+    headerText: '#374151',
+    background: '#ffffff'
+  }
+
   // SVG header
   let svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      .grid-line { stroke: #d1d5db; stroke-width: 1; opacity: 0.7; }
-      .wall-line { stroke: #1f2937; stroke-width: 3; stroke-linecap: round; }
-      .door-open { fill: #ffffff; stroke: #1f2937; stroke-width: 2; }
-      .door-closed { fill: #1f2937; stroke: #1f2937; stroke-width: 2; }
-      .chest { fill: #8B4513; stroke: #8B4513; stroke-width: 1; }
-      .chest-lock { fill: #FFD700; stroke: #FFD700; stroke-width: 1; }
-      .stairs-up { fill: #0000ff; stroke: #0000ff; stroke-width: 1; }
-      .stairs-down { fill: #0000ff; stroke: #0000ff; stroke-width: 1; }
-      .current-position { fill: #dc143c; stroke: #dc143c; stroke-width: 2; }
-      .event-marker { fill: #ca0101; stroke: #ca0101; stroke-width: 1; }
-      .warp-point { fill: #06b6d4; stroke: #0891b2; stroke-width: 1; }
-      .dark-zone { fill: #000000; stroke: #333333; stroke-width: 0.5; }
-      .arrow { fill: #374151; stroke: #111827; stroke-width: 1; }
-      .line-arrow { fill: #345dd1; stroke: #345dd1; stroke-width: 1; }
-      .note-text { font-family: Arial, sans-serif; font-size: 8px; fill: #1f2937; }
-      .title-text { font-family: Arial, sans-serif; font-size: 14px; fill: #1f2937; font-weight: bold; }
-      .header-text { font-family: Arial, sans-serif; font-size: 10px; fill: #374151; text-anchor: middle; }
+      .grid-line { stroke: ${colors.gridLine}; stroke-width: 1; opacity: 0.7; }
+      .wall-line { stroke: ${colors.wallLine}; stroke-width: 3; stroke-linecap: round; }
+      .door-open { fill: ${colors.doorOpen}; stroke: ${colors.doorOpenBorder}; stroke-width: 2; }
+      .door-closed { fill: ${colors.doorClosed}; stroke: ${colors.doorClosedBorder}; stroke-width: 2; }
+      .chest { fill: ${colors.chest}; stroke: ${colors.chest}; stroke-width: 1; }
+      .chest-lock { fill: ${colors.chest}; stroke: ${colors.chest}; stroke-width: 1; }
+      .stairs-up { fill: ${colors.stairs}; stroke: ${colors.stairs}; stroke-width: 1; }
+      .stairs-down { fill: ${colors.stairs}; stroke: ${colors.stairs}; stroke-width: 1; }
+      .current-position { fill: ${colors.currentPosition}; stroke: ${colors.currentPosition}; stroke-width: 2; }
+      .event-marker { fill: ${colors.event}; stroke: ${colors.event}; stroke-width: 1; }
+      .warp-point { fill: ${colors.teleport}; stroke: ${colors.teleportBorder}; stroke-width: 1; }
+      .dark-zone { fill: ${colors.darkZone}; stroke: ${colors.darkZone}; stroke-width: 0.5; }
+      .arrow { fill: ${colors.arrow}; stroke: ${colors.arrow}; stroke-width: 1; }
+      .line-arrow { fill: ${colors.lineArrow}; stroke: ${colors.lineArrow}; stroke-width: 1; }
+      .note-text { font-family: Arial, sans-serif; font-size: 8px; fill: ${colors.noteText}; }
+      .title-text { font-family: Arial, sans-serif; font-size: 14px; fill: ${colors.titleText}; font-weight: bold; }
+      .header-text { font-family: Arial, sans-serif; font-size: 10px; fill: ${colors.headerText}; text-anchor: middle; }
     </style>
   </defs>
   
   <!-- Background -->
-  <rect width="${svgWidth}" height="${svgHeight}" fill="#ffffff"/>
+  <rect width="${svgWidth}" height="${svgHeight}" fill="${colors.background}"/>
   
   <!-- Title -->
   <text x="${padding}" y="${padding}" class="title-text">${mapName} - Floor ${floorNumber}</text>

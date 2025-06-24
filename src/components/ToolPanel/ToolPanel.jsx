@@ -35,7 +35,7 @@ const TOOL_GROUPS = [
   }
 ]
 
-const ToolPanel = ({ activeTool, setActiveTool }) => {
+const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
   // Flatten all tools with their defined keyboard shortcuts
   const allTools = []
   TOOL_GROUPS.forEach(group => {
@@ -56,15 +56,15 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
   }
 
   return (
-    <div className="md:w-48 w-full bg-gray-800 text-white flex flex-col md:max-h-none max-h-44">
-      <div className="p-2 text-center text-sm font-bold border-b border-gray-600 md:block hidden">
+    <div className="md:w-48 w-full flex flex-col md:max-h-none max-h-44" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
+      <div className="p-2 text-center text-sm font-bold border-b md:block hidden" style={{ borderColor: theme.ui.border }}>
         Tools
       </div>
       
       <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
         {TOOL_GROUPS.map((group, groupIndex) => (
           <div key={group.name} className="md:block">
-            <div className="px-2 py-1 text-xs font-bold bg-gray-700 border-b border-gray-600 md:block hidden">
+            <div className="px-2 py-1 text-xs font-bold border-b md:block hidden" style={{ backgroundColor: theme.ui.button, borderColor: theme.ui.border }}>
               {group.name}
             </div>
             <div className={`md:grid md:grid-cols-2 md:gap-px md:p-0 p-2 ${
@@ -78,9 +78,14 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                   return (
                     <div
                       key={tool.id}
-                      className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b border-gray-700 bg-gray-800 md:block hidden ${
+                      className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b md:block hidden ${
                         group.name === 'Grid Tools' ? 'md:min-w-0' : 'md:min-w-0 min-w-12'
                       }`}
+                      style={{ 
+                        backgroundColor: theme.ui.panel, 
+                        borderColor: theme.ui.border,
+                        color: theme.ui.panelText
+                      }}
                     >
                       <span className="text-lg">
                       {tool.icon === 'NOTE_SVG' ? (
@@ -111,12 +116,26 @@ const ToolPanel = ({ activeTool, setActiveTool }) => {
                   <button
                     key={tool.id}
                     onClick={() => setActiveTool(tool.id)}
-                    className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b border-gray-700 transition-colors hover:bg-gray-600 rounded md:rounded-none ${
+                    className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b transition-colors rounded md:rounded-none ${
                       group.name === 'Grid Tools' 
                         ? 'md:min-w-0' // Grid Toolsはグリッド表示
                         : 'md:min-w-0 min-w-12' // Line Toolsは最小幅設定
-                    } ${activeTool === tool.id ? 'text-white' : ''}`}
-                    style={activeTool === tool.id ? { backgroundColor: '#496fc1' } : {}}
+                    }`}
+                    style={{
+                      backgroundColor: activeTool === tool.id ? theme.ui.buttonActive : theme.ui.button,
+                      borderColor: theme.ui.border,
+                      color: theme.ui.panelText
+                    }}
+                    onMouseEnter={(e) => {
+                      if (activeTool !== tool.id) {
+                        e.target.style.backgroundColor = theme.ui.buttonHover
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTool !== tool.id) {
+                        e.target.style.backgroundColor = theme.ui.button
+                      }
+                    }}
                     title={`${tool.name} - ${tool.description}${tool.key ? ` (${tool.key})` : ''}`}
                   >
                     <span className="text-lg">

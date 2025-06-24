@@ -16,6 +16,8 @@ function App() {
     setGridSize,
     toggleNoteTooltips,
     setLanguage,
+    setTheme,
+    currentTheme,
     updateCurrentFloorData,
     getCurrentFloorData,
     undo,
@@ -104,6 +106,8 @@ function App() {
         onToggleNoteTooltips={toggleNoteTooltips}
         language={state.language}
         onLanguageChange={setLanguage}
+        theme={state.theme}
+        onThemeChange={setTheme}
         activeTool={state.activeTool}
         toolName={getToolName(state.activeTool)}
       />
@@ -112,6 +116,7 @@ function App() {
         <ToolPanel
           activeTool={state.activeTool}
           setActiveTool={setActiveTool}
+          theme={currentTheme}
         />
         
         <Canvas
@@ -120,6 +125,7 @@ function App() {
           updateCurrentFloorData={updateCurrentFloorData}
           getCurrentFloorData={getCurrentFloorData}
           showNoteTooltips={state.showNoteTooltips}
+          theme={currentTheme}
         />
       </div>
     </div>

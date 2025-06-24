@@ -22,7 +22,7 @@ const ITEM_ICONS = {
   [TOOLS.ARROW_ROTATE]: '⟲'
 }
 
-const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) => {
+const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, theme }) => {
   const cellSize = GRID_SIZE * zoom
 
   const renderItem = (item) => {
@@ -31,14 +31,14 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
       return (
         <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 24 24" fill="none">
           {/* Chest base */}
-          <rect x="4" y="12" width="16" height="8" stroke="#8B4513" strokeWidth="1.5" fill="none" rx="1"/>
+          <rect x="4" y="12" width="16" height="8" stroke={theme.items.chest} strokeWidth="1.5" fill="none" rx="1"/>
           {/* Chest lid */}
-          <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke="#8B4513" strokeWidth="1.5" fill="none"/>
+          <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke={theme.items.chest} strokeWidth="1.5" fill="none"/>
           {/* Chest lock */}
-          <circle cx="12" cy="12" r="1.5" stroke="#FFD700" strokeWidth="1" fill="#FFD700"/>
+          <circle cx="12" cy="12" r="1.5" stroke={theme.items.chest} strokeWidth="1" fill={theme.items.chest}/>
           {/* Chest hinges */}
-          <rect x="6" y="11" width="1" height="2" fill="#654321"/>
-          <rect x="17" y="11" width="1" height="2" fill="#654321"/>
+          <rect x="6" y="11" width="1" height="2" fill={theme.items.chest}/>
+          <rect x="17" y="11" width="1" height="2" fill={theme.items.chest}/>
         </svg>
       )
     }
@@ -58,7 +58,7 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
           <div style={{
             position: 'absolute',
             fontSize: Math.max(12, cellSize * 0.8),
-            color: '#4bdcff'
+            color: theme.items.teleport
           }}>
             ◊
           </div>
@@ -67,7 +67,7 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
             <div style={{
               position: 'absolute',
               fontSize: Math.max(10, cellSize * 0.45),
-              color: '#0c4b5b',
+              color: theme.items.teleportBorder,
               fontWeight: 'bold',
               textAlign: 'center',
               lineHeight: '1'
@@ -100,7 +100,7 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
           <div style={{
             position: 'absolute',
             fontSize: Math.max(12, cellSize * 0.6),
-            color: '#0000ff',
+            color: theme.items.stairs,
             fontWeight: 'bold'
           }}>
             {item.type === TOOLS.STAIRS_UP_SVG ? '▲' : '▼'}
@@ -136,20 +136,24 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
         const isChest = item.type === TOOLS.CHEST
         const isCurrentPosition = item.type === TOOLS.CURRENT_POSITION
         
-        let textColor = 'black'
+        let textColor = theme.items.note || 'black'
         let fontSize = Math.max(12, cellSize * 0.6)
         
         if (item.type === TOOLS.EVENT_MARKER) {
-          textColor = '#ca0101'
+          textColor = theme.items.event
         } else if (isElevator) {
-          textColor = '#b8860b'  // Dark goldenrod - darker yellow for better visibility
+          textColor = theme.items.elevator
         } else if (isStairs) {
-          textColor = '#0000ff'
+          textColor = theme.items.stairs
         } else if (isChest) {
-          textColor = '#ff8c00'  // Dark orange
+          textColor = theme.items.chest
         } else if (isCurrentPosition) {
-          textColor = '#dc143c'  // Crimson red
+          textColor = theme.items.currentPosition
           fontSize = Math.max(8, cellSize * 0.4)  // Smaller size for current position
+        } else if (item.type === TOOLS.SHUTE) {
+          textColor = theme.items.shute
+        } else if (item.type === TOOLS.ARROW || item.type === TOOLS.ARROW_NORTH || item.type === TOOLS.ARROW_SOUTH || item.type === TOOLS.ARROW_EAST || item.type === TOOLS.ARROW_WEST || item.type === TOOLS.ARROW_ROTATE) {
+          textColor = theme.items.arrow
         }
         
         const fontWeight = isElevator ? '900' : (item.type === TOOLS.ARROW_ROTATE ? 'normal' : 'bold')
@@ -177,7 +181,7 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
             {/* Tooltip for notes */}
             {item.type === TOOLS.NOTE && showNoteTooltips && item.text && (
               <div
-                className="bg-yellow-100 border border-yellow-300 rounded px-2 py-1 text-black shadow-lg"
+                className="rounded px-2 py-1 shadow-lg"
                 style={{
                   position: 'absolute',
                   left: offset.x + item.col * cellSize + 14,
@@ -187,7 +191,11 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true }) 
                   maxWidth: `${cellSize * 2}px`,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  zIndex: 100
+                  zIndex: 100,
+                  backgroundColor: theme.items.note,
+                  borderColor: theme.items.noteBorder,
+                  border: `1px solid ${theme.items.noteBorder}`,
+                  color: theme.items.noteBorder
                 }}
                 title={item.text}
               >

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { MAX_FLOORS, MAX_DUNGEONS } from '../../utils/constants'
 import HelpDialog from '../Dialog/HelpDialog'
 import { getMessage } from '../../utils/messages'
+import { getThemeOptions } from '../../utils/themes'
 
 const Header = ({ 
   currentDungeon,
@@ -26,6 +27,8 @@ const Header = ({
   onToggleNoteTooltips,
   language,
   onLanguageChange,
+  theme,
+  onThemeChange,
   activeTool,
   toolName
 }) => {
@@ -33,35 +36,35 @@ const Header = ({
   const [editingMapName, setEditingMapName] = useState('')
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isFileMenuOpen, setIsFileMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedDungeonForExport, setSelectedDungeonForExport] = useState(1)
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false)
-  const closeFileMenu = () => setIsFileMenuOpen(false)
+  const closeMenu = () => setIsMenuOpen(false)
   
   const handleDesktopExport = () => {
     onExport()
-    closeFileMenu()
+    closeMenu()
   }
 
   const handleDesktopImport = () => {
     handleImportClick()
-    closeFileMenu()
+    closeMenu()
   }
 
   const handleDesktopSVG = () => {
     onExportSVG()
-    closeFileMenu()
+    closeMenu()
   }
 
   const handleDesktopDungeonExport = () => {
     onExportDungeon(selectedDungeonForExport)
-    closeFileMenu()
+    closeMenu()
   }
 
   const handleDesktopDungeonImport = () => {
     handleDungeonImportClick()
-    closeFileMenu()
+    closeMenu()
   }
 
   const handleDungeonImportClick = () => {
@@ -279,11 +282,11 @@ const Header = ({
 
         <div className="flex items-center space-x-1 md:flex hidden">
           <button
-            onClick={() => setIsFileMenuOpen(true)}
+            onClick={() => setIsMenuOpen(true)}
             className="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm"
-            title="File Operations"
+            title="Menu"
           >
-            File
+            Menu
           </button>
         </div>
 
@@ -482,20 +485,36 @@ const Header = ({
         </div>
       )}
 
-      {/* File Menu Modal */}
-      {isFileMenuOpen && (
+      {/* Menu Modal */}
+      {isMenuOpen && (
         <div 
           className="fixed inset-0 flex items-center justify-center z-50" 
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-          onClick={closeFileMenu}
+          onClick={closeMenu}
         >
           <div 
             className="bg-white rounded-lg p-4 w-64 max-w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-lg font-bold mb-4 text-gray-900">File Menu</h3>
+            <h3 className="text-lg font-bold mb-4 text-gray-900">Menu</h3>
             
             <div className="space-y-2">
+              {/* Theme Selection */}
+              <div className="border-b border-gray-200 pb-2 mb-2">
+                <h4 className="text-sm font-semibold text-gray-600 mb-2">Theme</h4>
+                <select
+                  value={theme}
+                  onChange={(e) => onThemeChange(e.target.value)}
+                  className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-full"
+                >
+                  {getThemeOptions().map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Dungeon selection */}
               <div>
                 <span className="text-sm font-semibold text-gray-700">Dungeon Save/Load</span>

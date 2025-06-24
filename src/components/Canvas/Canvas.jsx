@@ -11,7 +11,8 @@ const Canvas = ({
   setZoom, 
   updateCurrentFloorData,
   getCurrentFloorData,
-  showNoteTooltips = true
+  showNoteTooltips = true,
+  theme
 }) => {
   const canvasRef = useRef(null)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
@@ -806,6 +807,7 @@ const Canvas = ({
           dragStartCol={dragStartCol}
           isTwoFingerActive={isTwoFingerActive}
           isSingleFingerPanning={isSingleFingerPanning}
+          theme={theme}
         />
         
         <Walls
@@ -813,6 +815,7 @@ const Canvas = ({
           zoom={appState.zoom}
           offset={offset}
           gridSize={appState.gridSize}
+          theme={theme}
         />
         
         <Items
@@ -821,6 +824,7 @@ const Canvas = ({
           offset={offset}
           gridSize={appState.gridSize}
           showNoteTooltips={showNoteTooltips}
+          theme={theme}
         />
         
         <Doors
@@ -828,6 +832,7 @@ const Canvas = ({
           zoom={appState.zoom}
           offset={offset}
           gridSize={appState.gridSize}
+          theme={theme}
         />
 
       </div>

@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { MAX_FLOORS, MAX_DUNGEONS } from '../utils/constants'
 import { exportFloorAsSVG, downloadSVG } from '../utils/svgExport'
 import { getMessage } from '../utils/messages'
+import { getTheme } from '../utils/themes'
 
 const createEmptyFloor = (gridSize) => ({
   grid: new Array(gridSize.rows).fill(null).map(() => new Array(gridSize.cols).fill(null)),
@@ -26,6 +27,7 @@ const INITIAL_STATE = {
   activeTool: 'block_color',
   showNoteTooltips: true,
   language: 'ja',
+  theme: 'default',
   dungeons: {
     1: {
       name: 'Dungeon 1',
@@ -57,6 +59,7 @@ const loadStateFromStorage = () => {
           activeTool: parsedState.activeTool || 'block_color',
           showNoteTooltips: parsedState.showNoteTooltips !== undefined ? parsedState.showNoteTooltips : true,
           language: parsedState.language || 'ja',
+          theme: parsedState.theme || 'default',
           dungeons: {
             1: {
               name: 'Dungeon 1',
@@ -97,6 +100,7 @@ const loadStateFromStorage = () => {
           activeTool: parsedState.activeTool || 'block_color',
           showNoteTooltips: parsedState.showNoteTooltips !== undefined ? parsedState.showNoteTooltips : true,
           language: parsedState.language || 'ja',
+          theme: parsedState.theme || 'default',
           dungeons: {},
           dungeonNames: {}
         }
@@ -147,6 +151,11 @@ const loadStateFromStorage = () => {
       // Ensure language exists
       if (!parsedState.language) {
         parsedState.language = 'ja'
+      }
+      
+      // Ensure theme exists
+      if (!parsedState.theme) {
+        parsedState.theme = 'default'
       }
       
       return parsedState
@@ -303,6 +312,10 @@ export const useAppState = () => {
 
   const setLanguage = useCallback((language) => {
     updateState(state => ({ ...state, language }))
+  }, [updateState])
+
+  const setTheme = useCallback((theme) => {
+    updateState(state => ({ ...state, theme }))
   }, [updateState])
 
   const updateCurrentFloorData = useCallback((dataType, data) => {
@@ -545,6 +558,8 @@ export const useAppState = () => {
               zoom: importedState.zoom || 1.0,
               activeTool: importedState.activeTool || 'block_color',
               showNoteTooltips: importedState.showNoteTooltips !== undefined ? importedState.showNoteTooltips : true,
+              language: importedState.language || 'ja',
+              theme: importedState.theme || 'default',
               dungeons: {
                 1: {
                   name: 'Dungeon 1',
@@ -581,6 +596,8 @@ export const useAppState = () => {
               zoom: importedState.zoom || 1.0,
               activeTool: importedState.activeTool || 'block_color',
               showNoteTooltips: importedState.showNoteTooltips !== undefined ? importedState.showNoteTooltips : true,
+              language: importedState.language || 'ja',
+              theme: importedState.theme || 'default',
               dungeons: {},
               dungeonNames: {}
             }
@@ -675,7 +692,8 @@ export const useAppState = () => {
     try {
       const floorData = getCurrentFloorData()
       const dungeonName = state.dungeonNames?.[state.currentDungeon] || `Dungeon ${state.currentDungeon}`
-      const svgContent = exportFloorAsSVG(floorData, state.gridSize, dungeonName, state.currentFloor)
+      const currentTheme = getTheme(state.theme)
+      const svgContent = exportFloorAsSVG(floorData, state.gridSize, dungeonName, state.currentFloor, currentTheme)
       
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
       const filename = `${dungeonName.replace(/[\\/:*?"<>|]/g, '_')}_Floor_${state.currentFloor}_${timestamp}.svg`
@@ -699,6 +717,8 @@ export const useAppState = () => {
     setGridSize,
     toggleNoteTooltips,
     setLanguage,
+    setTheme,
+    currentTheme: getTheme(state.theme),
     updateCurrentFloorData,
     getCurrentFloorData,
     resetCurrentFloor,

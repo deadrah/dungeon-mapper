@@ -18,7 +18,8 @@ const Grid = ({
   dragStartRow,
   dragStartCol,
   isTwoFingerActive,
-  isSingleFingerPanning
+  isSingleFingerPanning,
+  theme
 }) => {
   const cellSize = GRID_SIZE * zoom
 
@@ -72,19 +73,21 @@ const Grid = ({
   return (
     <div className="absolute inset-0 pointer-events-none">
       {/* Row headers */}
-      <div className="absolute left-0 top-0 z-10 bg-gray-100 border-r">
+      <div className="absolute left-0 top-0 z-10 border-r" style={{ backgroundColor: theme.header.background, borderColor: theme.header.border }}>
         {Array.from({ length: endRow - startRow }, (_, i) => startRow + i).map(row => {
           const displayRow = gridSize.rows - 1 - row;
           return (
             <div
               key={`row-header-${row}`}
-              className="text-xs text-gray-600 px-1 border-b flex items-center justify-center font-mono"
+              className="text-xs px-1 border-b flex items-center justify-center font-mono"
               style={{
                 position: 'absolute',
                 top: offset.y + row * cellSize + 24,
                 height: cellSize,
                 width: '24px',
-                fontSize: Math.max(8, Math.min(12, cellSize * 0.3))
+                fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
+                color: theme.header.text,
+                borderColor: theme.header.border
               }}
             >
               {displayRow < 10 ? `0${displayRow}` : displayRow}
@@ -94,17 +97,19 @@ const Grid = ({
       </div>
 
       {/* Column headers */}
-      <div className="absolute left-0 top-0 z-10 bg-gray-100 border-b">
+      <div className="absolute left-0 top-0 z-10 border-b" style={{ backgroundColor: theme.header.background, borderColor: theme.header.border }}>
         {Array.from({ length: endCol - startCol }, (_, i) => startCol + i).map(col => (
           <div
             key={`col-header-${col}`}
-            className="text-xs text-gray-600 py-1 border-r flex items-center justify-center font-mono"
+            className="text-xs py-1 border-r flex items-center justify-center font-mono"
             style={{
               position: 'absolute',
               left: offset.x + col * cellSize + 24,
               width: cellSize,
               height: '24px',
-              fontSize: Math.max(8, Math.min(12, cellSize * 0.3))
+              fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
+              color: theme.header.text,
+              borderColor: theme.header.border
             }}
           >
             {col < 10 ? `0${col}` : col}
@@ -113,20 +118,22 @@ const Grid = ({
       </div>
 
       {/* Right row headers */}
-      <div className="absolute left-0 top-0 z-10 bg-gray-100 border-l">
+      <div className="absolute left-0 top-0 z-10 border-l" style={{ backgroundColor: theme.header.background, borderColor: theme.header.border }}>
         {Array.from({ length: endRow - startRow }, (_, i) => startRow + i).map(row => {
           const displayRow = gridSize.rows - 1 - row;
           return (
             <div
               key={`row-header-right-${row}`}
-              className="text-xs text-gray-600 px-1 border-b flex items-center justify-center font-mono"
+              className="text-xs px-1 border-b flex items-center justify-center font-mono"
               style={{
                 position: 'absolute',
                 left: offset.x + gridSize.cols * cellSize + 24,
                 top: offset.y + row * cellSize + 24,
                 height: cellSize,
                 width: '24px',
-                fontSize: Math.max(8, Math.min(12, cellSize * 0.3))
+                fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
+                color: theme.header.text,
+                borderColor: theme.header.border
               }}
             >
               {displayRow < 10 ? `0${displayRow}` : displayRow}
@@ -136,17 +143,19 @@ const Grid = ({
       </div>
 
       {/* Bottom column headers */}
-      <div className="absolute z-10 bg-gray-100 border-t" style={{ top: offset.y + gridSize.rows * cellSize + 24 }}>
+      <div className="absolute z-10 border-t" style={{ top: offset.y + gridSize.rows * cellSize + 24, backgroundColor: theme.header.background, borderColor: theme.header.border }}>
         {Array.from({ length: endCol - startCol }, (_, i) => startCol + i).map(col => (
           <div
             key={`col-header-bottom-${col}`}
-            className="text-xs text-gray-600 py-1 border-r flex items-center justify-center font-mono"
+            className="text-xs py-1 border-r flex items-center justify-center font-mono"
             style={{
               position: 'absolute',
               left: offset.x + col * cellSize + 24,
               width: cellSize,
               height: '24px',
-              fontSize: Math.max(8, Math.min(12, cellSize * 0.3))
+              fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
+              color: theme.header.text,
+              borderColor: theme.header.border
             }}
           >
             {col < 10 ? `0${col}` : col}
@@ -157,45 +166,53 @@ const Grid = ({
       {/* Corner decorations */}
       {/* Top-left corner */}
       <div 
-        className="absolute z-10 bg-gray-200 border-r border-b" 
+        className="absolute z-10 border-r border-b" 
         style={{
           left: offset.x,
           top: offset.y,
           width: '24px',
-          height: '24px'
+          height: '24px',
+          backgroundColor: theme.header.corner,
+          borderColor: theme.header.border
         }}
       />
       
       {/* Top-right corner */}
       <div 
-        className="absolute z-10 bg-gray-200 border-l border-b" 
+        className="absolute z-10 border-l border-b" 
         style={{
           left: offset.x + gridSize.cols * cellSize + 24,
           top: offset.y,
           width: '24px',
-          height: '24px'
+          height: '24px',
+          backgroundColor: theme.header.corner,
+          borderColor: theme.header.border
         }}
       />
       
       {/* Bottom-left corner */}
       <div 
-        className="absolute z-10 bg-gray-200 border-r border-t" 
+        className="absolute z-10 border-r border-t" 
         style={{
           left: offset.x,
           top: offset.y + gridSize.rows * cellSize + 24,
           width: '24px',
-          height: '24px'
+          height: '24px',
+          backgroundColor: theme.header.corner,
+          borderColor: theme.header.border
         }}
       />
       
       {/* Bottom-right corner */}
       <div 
-        className="absolute z-10 bg-gray-200 border-l border-t" 
+        className="absolute z-10 border-l border-t" 
         style={{
           left: offset.x + gridSize.cols * cellSize + 24,
           top: offset.y + gridSize.rows * cellSize + 24,
           width: '24px',
-          height: '24px'
+          height: '24px',
+          backgroundColor: theme.header.corner,
+          borderColor: theme.header.border
         }}
       />
 
@@ -219,7 +236,7 @@ const Grid = ({
             <path
               d={`M ${cellSize} 0 L 0 0 0 ${cellSize}`}
               fill="none"
-              stroke="#bfbfbf"
+              stroke={theme.grid.lines}
               strokeWidth="1"
             />
           </pattern>
@@ -231,7 +248,7 @@ const Grid = ({
           y={offset.y + 24}
           width={gridSize.cols * cellSize}
           height={gridSize.rows * cellSize}
-          fill="#d7e2f6"
+          fill={theme.grid.background}
         />
         
         {/* Grid pattern overlay */}
@@ -256,7 +273,7 @@ const Grid = ({
                   width={cellSize}
                   height={cellSize}
                   fill={cellColor}
-                  stroke="#dbdbdb"
+                  stroke={theme.grid.cellBorder}
                   strokeWidth="1"
                 />
               )

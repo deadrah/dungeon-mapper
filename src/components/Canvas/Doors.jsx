@@ -1,7 +1,7 @@
 import React from 'react'
 import { GRID_SIZE } from '../../utils/constants'
 
-const Doors = ({ doors = [], zoom, offset, gridSize }) => {
+const Doors = ({ doors = [], zoom, offset, gridSize, theme }) => {
   const cellSize = GRID_SIZE * zoom
 
   return (
@@ -20,9 +20,9 @@ const Doors = ({ doors = [], zoom, offset, gridSize }) => {
           // Arrow doors: no border, just arrow SVG
           doorStyle = { backgroundColor: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' };
         } else if (isOpen) {
-          doorStyle = { backgroundColor: '#ffffff', border: '2px solid #000000' };
+          doorStyle = { backgroundColor: theme.doors.open.background, border: `2px solid ${theme.doors.open.border}` };
         } else {
-          doorStyle = { backgroundColor: '#000000', border: '2px solid #000000' };
+          doorStyle = { backgroundColor: theme.doors.closed.background, border: `2px solid ${theme.doors.closed.border}` };
         }
         
         if (isVertical) {
@@ -62,16 +62,16 @@ const Doors = ({ doors = [], zoom, offset, gridSize }) => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   {door.type === 'line_arrow_north' && (
-                    <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                   {door.type === 'line_arrow_south' && (
-                    <path d="M10 19 L14 14 L11.5 14 L11.5 1 L8.5 1 L8.5 14 L6 14 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M10 19 L14 14 L11.5 14 L11.5 1 L8.5 1 L8.5 14 L6 14 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                   {door.type === 'line_arrow_east' && (
-                    <path d="M19 10 L14 6 L14 8.5 L1 8.5 L1 11.5 L14 11.5 L14 14 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M19 10 L14 6 L14 8.5 L1 8.5 L1 11.5 L14 11.5 L14 14 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                   {door.type === 'line_arrow_west' && (
-                    <path d="M1 10 L6 14 L6 11.5 L19 11.5 L19 8.5 L6 8.5 L6 6 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M1 10 L6 14 L6 11.5 L19 11.5 L19 8.5 L6 8.5 L6 6 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                 </svg>
               )}
@@ -114,16 +114,16 @@ const Doors = ({ doors = [], zoom, offset, gridSize }) => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   {door.type === 'line_arrow_north' && (
-                    <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M10 1 L6 6 L8.5 6 L8.5 19 L11.5 19 L11.5 6 L14 6 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                   {door.type === 'line_arrow_south' && (
-                    <path d="M10 19 L14 14 L11.5 14 L11.5 1 L8.5 1 L8.5 14 L6 14 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M10 19 L14 14 L11.5 14 L11.5 1 L8.5 1 L8.5 14 L6 14 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                   {door.type === 'line_arrow_east' && (
-                    <path d="M19 10 L14 6 L14 8.5 L1 8.5 L1 11.5 L14 11.5 L14 14 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M19 10 L14 6 L14 8.5 L1 8.5 L1 11.5 L14 11.5 L14 14 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                   {door.type === 'line_arrow_west' && (
-                    <path d="M1 10 L6 14 L6 11.5 L19 11.5 L19 8.5 L6 8.5 L6 6 Z" fill="#345dd1" stroke="#345dd1" strokeWidth="1"/>
+                    <path d="M1 10 L6 14 L6 11.5 L19 11.5 L19 8.5 L6 8.5 L6 6 Z" fill={theme.items.arrow} stroke={theme.items.arrow} strokeWidth="1"/>
                   )}
                 </svg>
               )}
