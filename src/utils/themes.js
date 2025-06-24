@@ -8,6 +8,7 @@ export const themes = {
     // Grid colors
     grid: {
       background: '#d7e2f6',        // Main grid background
+      canvasBackground: '#f8f8f8',  // Canvas background (outside grid)
       lines: '#bfbfbf',             // Grid line color
       cellBorder: '#dbdbdb',        // Individual cell borders
     },
@@ -74,6 +75,7 @@ export const themes = {
     
     grid: {
       background: '#f7f3e9',        // 古い羊皮紙のような背景
+      canvasBackground: '#ede7d9',  // キャンバス背景（グリッド外）
       lines: '#a0956b',             // セピア調のグリッド線
       cellBorder: '#c4b896',        // 薄いセピアの境界線
     },

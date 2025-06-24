@@ -778,7 +778,7 @@ const Canvas = ({
   }, [handleMouseMove, handleMouseUp, isDraggingLine, isDraggingErase, isRightMouseDown, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
 
   return (
-    <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: theme.ui.panel === '#1f2937' ? '#f8f8f8' : theme.grid.background }}>
+    <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: theme.grid.canvasBackground }}>
       <div
         ref={canvasRef}
         className="w-full h-full"
