@@ -64,6 +64,8 @@ export const themes = {
       buttonActive: '#496fc1',      // Active button
       buttonActiveHover: '#3b5998', // Active button hover (darker blue)
       groupHeader: '#374151',       // Tool group header background
+      background: '#ffffff',        // Light background for inputs
+      text: '#374151',              // Dark text for inputs
       input: '#374151',             // Input background
       inputText: '#ffffff',         // Input text
       border: '#374151',            // General borders
@@ -126,6 +128,8 @@ export const themes = {
       buttonActive: '#a0956b',      // アクティブセピア
       buttonActiveHover: '#8b7355', // アクティブボタンホバー（ブロンズ色）
       groupHeader: '#704214',       // グループヘッダー背景（濃いブラウン）
+      background: '#faf6f0',        // 薄いセピア背景（入力フィールド用）
+      text: '#3d2415',              // ダークブラウンテキスト（入力フィールド用）
       input: '#5d4e37',             // ダークブラウン
       inputText: '#f0ebe0',         // 薄いセピア
       border: '#3d2b1f',            // ブロンズ色

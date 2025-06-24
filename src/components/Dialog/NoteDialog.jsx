@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const NoteDialog = ({ isOpen, onClose, onSave, initialText = '' }) => {
+const NoteDialog = ({ isOpen, onClose, onSave, initialText = '', theme }) => {
   const [text, setText] = useState(initialText)
 
   useEffect(() => {
@@ -28,29 +28,55 @@ const NoteDialog = ({ isOpen, onClose, onSave, initialText = '' }) => {
       onClick={handleCancel}
     >
       <div 
-        className="bg-white rounded-lg p-6 w-96 max-w-full mx-4"
+        className="rounded-lg p-6 w-96 max-w-full mx-4"
+        style={{ backgroundColor: theme?.ui?.panel || '#ffffff' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold mb-4">メモを入力</h2>
+        <h2 className="text-lg font-bold mb-4" style={{ color: theme?.ui?.panelText || '#000000' }}>メモを入力</h2>
         
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="メモを入力してください..."
-          className="w-full h-32 p-2 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full h-32 p-2 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          style={{
+            backgroundColor: theme?.ui?.background || '#ffffff',
+            color: theme?.ui?.text || '#374151',
+            border: `1px solid ${theme?.ui?.border || '#d1d5db'}`
+          }}
           autoFocus
         />
         
         <div className="flex justify-end gap-2 mt-4">
           <button
             onClick={handleCancel}
-            className="px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+            className="px-4 py-2 rounded transition-colors"
+            style={{
+              backgroundColor: theme?.ui?.button || '#f3f4f6',
+              color: theme?.ui?.panelText || '#374151'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = theme?.ui?.buttonHover || '#e5e7eb'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = theme?.ui?.button || '#f3f4f6'
+            }}
           >
             キャンセル
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors"
+            className="px-4 py-2 rounded transition-colors"
+            style={{
+              backgroundColor: theme?.ui?.buttonActive || '#3b82f6',
+              color: theme?.ui?.panelText || '#ffffff'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = theme?.ui?.buttonActiveHover || '#2563eb'
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = theme?.ui?.buttonActive || '#3b82f6'
+            }}
           >
             保存
           </button>

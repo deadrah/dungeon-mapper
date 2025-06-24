@@ -376,7 +376,7 @@ const Header = ({
               onChange={(e) => setEditingMapName(e.target.value)}
               placeholder="Dungeon name..."
               className="w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
+              style={{ backgroundColor: theme.ui.background || '#ffffff', color: theme.ui.text || '#374151', border: `1px solid ${theme.ui.border}` }}
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {

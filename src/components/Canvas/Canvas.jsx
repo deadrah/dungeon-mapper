@@ -939,6 +939,7 @@ const Canvas = ({
         onClose={handleNoteDialogClose}
         onSave={handleNoteDialogSave}
         initialText={noteDialog.text}
+        theme={theme}
       />
     </div>
   )
