@@ -9,6 +9,7 @@ export const MESSAGES = {
     
     // Floor operations
     resetFloor: '{floor}Fのすべてのデータを削除しますか？この操作は元に戻せません。',
+    resetAllDungeons: 'すべてのダンジョンデータを初期化しますか？この操作は元に戻せません。',
     
     // Dungeon operations
     loadDungeon: '"{name}" をスロット {slot} に読み込みますか？',
@@ -40,6 +41,7 @@ export const MESSAGES = {
     
     // Floor operations
     resetFloor: 'Delete all data on {floor}F? This action cannot be undone.',
+    resetAllDungeons: 'Reset all dungeon data? This action cannot be undone.',
     
     // Dungeon operations
     loadDungeon: 'Load "{name}" to slot {slot}?',

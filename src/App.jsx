@@ -23,6 +23,7 @@ function App() {
     undo,
     redo,
     resetCurrentFloor,
+    resetAllDungeons,
     exportState,
     importState,
     exportDungeon,
@@ -101,6 +102,7 @@ function App() {
         onUndo={undo}
         onRedo={redo}
         onResetFloor={resetCurrentFloor}
+        onResetAllDungeons={resetAllDungeons}
         onExportSVG={exportFloorSVG}
         showNoteTooltips={state.showNoteTooltips}
         onToggleNoteTooltips={toggleNoteTooltips}

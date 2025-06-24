@@ -687,6 +687,24 @@ export const useAppState = () => {
     }))
   }, [updateState])
 
+  // Reset all dungeons
+  const resetAllDungeons = useCallback(() => {
+    updateState(state => ({
+      ...state,
+      currentDungeon: 1,
+      currentFloor: 1,
+      dungeons: {
+        1: {
+          name: 'Dungeon 1',
+          floors: createEmptyDungeon(state.gridSize)
+        }
+      },
+      dungeonNames: {
+        1: 'Dungeon 1'
+      }
+    }))
+  }, [updateState])
+
   // Export current floor as SVG
   const exportFloorSVG = useCallback(() => {
     try {
@@ -722,6 +740,7 @@ export const useAppState = () => {
     updateCurrentFloorData,
     getCurrentFloorData,
     resetCurrentFloor,
+    resetAllDungeons,
     exportState,
     importState,
     exportDungeon,
