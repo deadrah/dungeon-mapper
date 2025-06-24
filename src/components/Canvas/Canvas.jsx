@@ -856,7 +856,7 @@ const Canvas = ({
             type="text"
             value={warpText}
             onChange={(e) => {
-              const value = e.target.value.slice(0, 2).toUpperCase()
+              const value = e.target.value.slice(0, 2)
               setWarpText(value)
             }}
             placeholder="A"
