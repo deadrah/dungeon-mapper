@@ -405,7 +405,29 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
           </section>
         </div>
         
-        <div className="flex justify-end mt-6">
+        {/* Footer */}
+        <div className="border-t mt-6 pt-4" style={{ borderColor: theme.ui.border || '#374151' }}>
+          <div className="text-center text-sm" style={{ color: theme.ui.panelText, opacity: 0.7 }}>
+            <p className="mb-2">
+              © 2025 DMapper - 3D Dungeon Mapping Tool
+            </p>
+            <p>
+              <a 
+                href="https://github.com/deadrah/dungeon-mapper" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline"
+                style={{ color: getHeadingColor() }}
+              >
+                GitHub Repository
+              </a>
+              {" | "}
+              <span>Open Source Project</span>
+            </p>
+          </div>
+        </div>
+        
+        <div className="flex justify-end mt-4">
           <button
             onClick={onClose}
             className="px-6 py-2 rounded transition-colors"
