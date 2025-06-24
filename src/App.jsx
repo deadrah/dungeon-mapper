@@ -28,7 +28,10 @@ function App() {
     importState,
     exportDungeon,
     importDungeon,
-    exportFloorSVG
+    exportFloorSVG,
+    getNoteAt,
+    setNoteAt,
+    deleteNoteAt
   } = useAppState()
 
 
@@ -127,6 +130,9 @@ function App() {
           setZoom={setZoom}
           updateCurrentFloorData={updateCurrentFloorData}
           getCurrentFloorData={getCurrentFloorData}
+          getNoteAt={getNoteAt}
+          setNoteAt={setNoteAt}
+          deleteNoteAt={deleteNoteAt}
           showNoteTooltips={state.showNoteTooltips}
           theme={currentTheme}
         />

@@ -25,6 +25,8 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     arrow: theme.items.arrow,
     lineArrow: theme.items.arrow,
     noteText: theme.items.noteBorder,
+    noteTriangle: theme.items.noteTriangle,
+    noteTooltipBg: theme.items.note,
     titleText: theme.header.text,
     headerText: theme.header.text,
     background: theme.grid.background
@@ -45,6 +47,8 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     arrow: '#374151',
     lineArrow: '#345dd1',
     noteText: '#1f2937',
+    noteTriangle: '#dc2626',
+    noteTooltipBg: '#ffffff',
     titleText: '#1f2937',
     headerText: '#374151',
     background: '#ffffff'
@@ -249,6 +253,36 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           const doorHeight = cellSize * 0.2
           svg += `      <rect x="${centerX - doorWidth/2}" y="${centerY - doorHeight/2}" width="${doorWidth}" height="${doorHeight}" class="${isOpen ? 'door-open' : 'door-closed'}"/>\n`
         }
+      }
+    })
+    
+    svg += '    </g>\n\n'
+  }
+
+  // Add notes (new memo system)
+  if (floorData.notes && floorData.notes.length > 0) {
+    svg += '    <!-- Notes -->\n    <g class="notes">\n'
+    
+    floorData.notes.forEach(note => {
+      const displayRow = gridSize.rows - 1 - note.row
+      const triangleX = note.col * cellSize
+      const triangleY = displayRow * cellSize
+      const triangleSize = cellSize * 0.25
+      
+      // Red triangle in top-left corner
+      svg += `      <polygon points="${triangleX},${triangleY} ${triangleX + triangleSize},${triangleY} ${triangleX},${triangleY + triangleSize}" fill="${colors.noteTriangle}"/>\n`
+      
+      // Tooltip (centered in cell)
+      if (note.text) {
+        const centerX = note.col * cellSize + cellSize / 2
+        const centerY = displayRow * cellSize + cellSize / 2
+        const tooltipText = note.text.length > 7 ? `${note.text.slice(0, 7)}...` : note.text
+        
+        // Tooltip background
+        svg += `      <rect x="${centerX - 25}" y="${centerY - 8}" width="50" height="16" fill="${colors.noteTooltipBg}" stroke="${colors.noteText}" stroke-width="1" rx="2"/>\n`
+        
+        // Tooltip text
+        svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="8" fill="${colors.noteText}">${tooltipText}</text>\n`
       }
     })
     

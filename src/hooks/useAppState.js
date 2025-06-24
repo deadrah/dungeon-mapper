@@ -8,7 +8,8 @@ const createEmptyFloor = (gridSize) => ({
   grid: new Array(gridSize.rows).fill(null).map(() => new Array(gridSize.cols).fill(null)),
   walls: [],
   items: [],
-  doors: []
+  doors: [],
+  notes: []
 })
 
 const createEmptyDungeon = (gridSize) => {
@@ -115,7 +116,8 @@ const transformFloorToNewGridSize = (floor, oldGridSize, newGridSize) => {
     grid: newGrid,
     items: transformedItems,
     walls: transformedWalls,
-    doors: transformedDoors
+    doors: transformedDoors,
+    notes: floor.notes || []
   }
 }
 
@@ -171,11 +173,26 @@ const loadStateFromStorage = () => {
           }
         }
         
-        // Convert old floors to new format and ensure doors property exists
+        // Convert old floors to new format and ensure doors and notes properties exist
         Object.keys(parsedState.floors).forEach(floorKey => {
           const floor = parsedState.floors[floorKey]
           if (!floor.doors) {
             floor.doors = []
+          }
+          if (!floor.notes) {
+            floor.notes = []
+          }
+          // Migrate existing note items to notes array
+          if (floor.items) {
+            const noteItems = floor.items.filter(item => item.type === 'note')
+            const nonNoteItems = floor.items.filter(item => item.type !== 'note')
+            floor.notes = noteItems.map(item => ({
+              row: item.row,
+              col: item.col,
+              text: item.text || '',
+              id: item.id || (Date.now() + Math.random()).toString()
+            }))
+            floor.items = nonNoteItems
           }
           convertedState.dungeons[1].floors[floorKey] = floor
         })
@@ -213,11 +230,27 @@ const loadStateFromStorage = () => {
             floors: map.floors || {}
           }
           
-          // Ensure doors property exists for all floors
+          // Ensure doors and notes properties exist for all floors, and migrate notes
           if (convertedState.dungeons[mapKey].floors) {
             Object.keys(convertedState.dungeons[mapKey].floors).forEach(floorKey => {
-              if (!convertedState.dungeons[mapKey].floors[floorKey].doors) {
-                convertedState.dungeons[mapKey].floors[floorKey].doors = []
+              const floor = convertedState.dungeons[mapKey].floors[floorKey]
+              if (!floor.doors) {
+                floor.doors = []
+              }
+              if (!floor.notes) {
+                floor.notes = []
+              }
+              // Migrate existing note items to notes array
+              if (floor.items) {
+                const noteItems = floor.items.filter(item => item.type === 'note')
+                const nonNoteItems = floor.items.filter(item => item.type !== 'note')
+                floor.notes = noteItems.map(item => ({
+                  row: item.row,
+                  col: item.col,
+                  text: item.text || '',
+                  id: item.id || (Date.now() + Math.random()).toString()
+                }))
+                floor.items = nonNoteItems
               }
             })
           }
@@ -234,14 +267,32 @@ const loadStateFromStorage = () => {
         return convertedState
       }
       
-      // New format - ensure doors property exists for all floors in all dungeons
+      // New format - ensure doors and notes properties exist for all floors in all dungeons, and migrate notes
       if (parsedState.dungeons) {
         Object.keys(parsedState.dungeons).forEach(dungeonKey => {
           const dungeon = parsedState.dungeons[dungeonKey]
           if (dungeon.floors) {
             Object.keys(dungeon.floors).forEach(floorKey => {
-              if (!dungeon.floors[floorKey].doors) {
-                dungeon.floors[floorKey].doors = []
+              const floor = dungeon.floors[floorKey]
+              if (!floor.doors) {
+                floor.doors = []
+              }
+              if (!floor.notes) {
+                floor.notes = []
+              }
+              // Migrate existing note items to notes array
+              if (floor.items) {
+                const noteItems = floor.items.filter(item => item.type === 'note')
+                const nonNoteItems = floor.items.filter(item => item.type !== 'note')
+                if (noteItems.length > 0) {
+                  floor.notes = noteItems.map(item => ({
+                    row: item.row,
+                    col: item.col,
+                    text: item.text || '',
+                    id: item.id || (Date.now() + Math.random()).toString()
+                  }))
+                  floor.items = nonNoteItems
+                }
               }
             })
           }
@@ -587,7 +638,7 @@ export const useAppState = () => {
             return
           }
 
-          // Ensure all floors have doors property and transform coordinates if needed
+          // Ensure all floors have doors and notes properties, migrate notes, and transform coordinates if needed
           if (dungeonData.data && dungeonData.data.floors) {
             const importedGridSize = importedData.gridSize || { rows: 20, cols: 20 }
             
@@ -595,6 +646,23 @@ export const useAppState = () => {
               const floor = dungeonData.data.floors[floorKey]
               if (!floor.doors) {
                 floor.doors = []
+              }
+              if (!floor.notes) {
+                floor.notes = []
+              }
+              // Migrate existing note items to notes array
+              if (floor.items) {
+                const noteItems = floor.items.filter(item => item.type === 'note')
+                const nonNoteItems = floor.items.filter(item => item.type !== 'note')
+                if (noteItems.length > 0) {
+                  floor.notes = noteItems.map(item => ({
+                    row: item.row,
+                    col: item.col,
+                    text: item.text || '',
+                    id: item.id || (Date.now() + Math.random()).toString()
+                  }))
+                  floor.items = nonNoteItems
+                }
               }
               
               // Transform floor data to match current grid size if different
@@ -669,11 +737,26 @@ export const useAppState = () => {
               }
             }
             
-            // Convert old floors to new format and ensure doors property exists
+            // Convert old floors to new format and ensure doors and notes properties exist
             Object.keys(importedState.floors).forEach(floorKey => {
               const floor = importedState.floors[floorKey]
               if (!floor.doors) {
                 floor.doors = []
+              }
+              if (!floor.notes) {
+                floor.notes = []
+              }
+              // Migrate existing note items to notes array
+              if (floor.items) {
+                const noteItems = floor.items.filter(item => item.type === 'note')
+                const nonNoteItems = floor.items.filter(item => item.type !== 'note')
+                floor.notes = noteItems.map(item => ({
+                  row: item.row,
+                  col: item.col,
+                  text: item.text || '',
+                  id: item.id || (Date.now() + Math.random()).toString()
+                }))
+                floor.items = nonNoteItems
               }
               processedState.dungeons[1].floors[floorKey] = floor
             })
@@ -708,11 +791,27 @@ export const useAppState = () => {
                 floors: map.floors || {}
               }
               
-              // Ensure doors property exists for all floors
+              // Ensure doors and notes properties exist for all floors, and migrate notes
               if (processedState.dungeons[mapKey].floors) {
                 Object.keys(processedState.dungeons[mapKey].floors).forEach(floorKey => {
-                  if (!processedState.dungeons[mapKey].floors[floorKey].doors) {
-                    processedState.dungeons[mapKey].floors[floorKey].doors = []
+                  const floor = processedState.dungeons[mapKey].floors[floorKey]
+                  if (!floor.doors) {
+                    floor.doors = []
+                  }
+                  if (!floor.notes) {
+                    floor.notes = []
+                  }
+                  // Migrate existing note items to notes array
+                  if (floor.items) {
+                    const noteItems = floor.items.filter(item => item.type === 'note')
+                    const nonNoteItems = floor.items.filter(item => item.type !== 'note')
+                    floor.notes = noteItems.map(item => ({
+                      row: item.row,
+                      col: item.col,
+                      text: item.text || '',
+                      id: item.id || (Date.now() + Math.random()).toString()
+                    }))
+                    floor.items = nonNoteItems
                   }
                 })
               }
@@ -726,15 +825,33 @@ export const useAppState = () => {
               })
             }
           }
-          // New format - ensure doors property exists for all floors in all dungeons
+          // New format - ensure doors and notes properties exist for all floors in all dungeons, and migrate notes
           else if (importedState.dungeons) {
             processedState = importedState
             Object.keys(processedState.dungeons).forEach(dungeonKey => {
               const dungeon = processedState.dungeons[dungeonKey]
               if (dungeon.floors) {
                 Object.keys(dungeon.floors).forEach(floorKey => {
-                  if (!dungeon.floors[floorKey].doors) {
-                    dungeon.floors[floorKey].doors = []
+                  const floor = dungeon.floors[floorKey]
+                  if (!floor.doors) {
+                    floor.doors = []
+                  }
+                  if (!floor.notes) {
+                    floor.notes = []
+                  }
+                  // Migrate existing note items to notes array
+                  if (floor.items) {
+                    const noteItems = floor.items.filter(item => item.type === 'note')
+                    const nonNoteItems = floor.items.filter(item => item.type !== 'note')
+                    if (noteItems.length > 0) {
+                      floor.notes = noteItems.map(item => ({
+                        row: item.row,
+                        col: item.col,
+                        text: item.text || '',
+                        id: item.id || (Date.now() + Math.random()).toString()
+                      }))
+                      floor.items = nonNoteItems
+                    }
                   }
                 })
               }
@@ -821,6 +938,82 @@ export const useAppState = () => {
     }))
   }, [updateState])
 
+  // Note management functions
+  const getNoteAt = useCallback((row, col) => {
+    const floorData = getCurrentFloorData()
+    return (floorData.notes || []).find(note => note.row === row && note.col === col)
+  }, [getCurrentFloorData])
+
+  const setNoteAt = useCallback((row, col, text) => {
+    updateState(state => {
+      const currentFloor = state.dungeons[state.currentDungeon]?.floors[state.currentFloor]
+      if (!currentFloor) return state
+
+      const notes = [...(currentFloor.notes || [])]
+      const existingIndex = notes.findIndex(note => note.row === row && note.col === col)
+      
+      if (text.trim()) {
+        const noteData = {
+          row,
+          col,
+          text: text.trim(),
+          id: Date.now() + Math.random()
+        }
+        
+        if (existingIndex >= 0) {
+          notes[existingIndex] = noteData
+        } else {
+          notes.push(noteData)
+        }
+      } else if (existingIndex >= 0) {
+        notes.splice(existingIndex, 1)
+      }
+
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [state.currentDungeon]: {
+            ...state.dungeons[state.currentDungeon],
+            floors: {
+              ...state.dungeons[state.currentDungeon].floors,
+              [state.currentFloor]: {
+                ...currentFloor,
+                notes
+              }
+            }
+          }
+        }
+      }
+    })
+  }, [updateState])
+
+  const deleteNoteAt = useCallback((row, col) => {
+    updateState(state => {
+      const currentFloor = state.dungeons[state.currentDungeon]?.floors[state.currentFloor]
+      if (!currentFloor) return state
+
+      const notes = (currentFloor.notes || []).filter(note => !(note.row === row && note.col === col))
+
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [state.currentDungeon]: {
+            ...state.dungeons[state.currentDungeon],
+            floors: {
+              ...state.dungeons[state.currentDungeon].floors,
+              [state.currentFloor]: {
+                ...currentFloor,
+                notes
+              }
+            }
+          }
+        }
+      }
+    })
+  }, [updateState])
+
   // Export current floor as SVG
   const exportFloorSVG = useCallback(() => {
     try {
@@ -861,6 +1054,9 @@ export const useAppState = () => {
     importState,
     exportDungeon,
     importDungeon,
-    exportFloorSVG
+    exportFloorSVG,
+    getNoteAt,
+    setNoteAt,
+    deleteNoteAt
   }
 }

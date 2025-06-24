@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
   const content = {
     ja: {
       title: 'DMapper ヘルプ',
-      version: 'バージョン 1.5.1',
+      version: 'バージョン 1.5.2',
       close: '閉じる',
       tabs: {
         guide: '機能説明',
@@ -51,7 +51,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: '現在位置:', desc: 'プレイヤーの現在位置を示します（1フロアにつき1つのみ）。', color: 'text-red-600' },
             { name: 'ドア:', desc: '既存の壁に開いたドア（□）または閉じたドア（■）を配置します。', color: 'text-orange-600' },
             { name: '矢印:', desc: 'セルまたは壁に一方通行や強制移動矢印を配置します。', color: 'text-indigo-600' },
-            { name: 'ノート:', desc: 'セルにメモを追加します。クリックでテキストダイアログが開きます。', color: 'text-pink-600' },
+            { name: 'ノート:', desc: 'セルにメモを追加します。どのアイテムと重複しても配置可能で、左上角の赤い三角で表示されます。セル全体がクリック領域となり、どのツール選択時でもクリックで編集可能です。削除はノートツール選択時の右クリック、消去ツール、またはダイアログ内削除ボタンで行えます。', color: 'text-pink-600' },
             { name: '消去ツール（Eraser）:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。(スマホで右クリック消去できないので仮対応)', color: 'text-red-500' }
           ]
         },
@@ -95,6 +95,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.5.2', date: '2025-06-24', changes: ['メモツール刷新：どのアイテムと重複しても配置可能に', 'メモ表示を左上角の赤い三角に変更'] },
             { version: 'v1.5.1', date: '2025-06-24', changes: ['Grid Sizeコントロールをヘッダーからメニューに移動', 'モバイル・デスクトップメニューを統合', '全ダンジョンリセット機能を追加', 'Grid拡張・縮小時のLine系要素位置ずれを修正', 'Grid Size変更に実行ボタンと確認ダイアログを追加'] },
             { version: 'v1.5.0', date: '2025-06-24', changes: ['テーマシステム実装：デフォルト・ダンジョンテーマの2種類を追加'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系ツールの相互上書き', 'Lineが無い場所に直接Line系ツールを配置可能に', '階段ツールにも番号付け機能を追加'] },
@@ -119,7 +120,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     },
     en: {
       title: 'DMapper Help',
-      version: 'Version 1.5.1',
+      version: 'Version 1.5.2',
       close: 'Close',
       tabs: {
         guide: 'User Guide',
@@ -162,7 +163,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: 'Current Position:', desc: 'Mark player\'s current location (only one per floor).', color: 'text-red-600' },
             { name: 'Doors:', desc: 'Place open doors (□) or closed doors (■) on existing walls.', color: 'text-orange-600' },
             { name: 'Arrows:', desc: 'Place one-way or forced movement arrows on cells or walls.', color: 'text-indigo-600' },
-            { name: 'Notes:', desc: 'Add text memos to cells. Click to open text dialog.', color: 'text-pink-600' },
+            { name: 'Notes:', desc: 'Add text memos to cells. Can be placed on any cell even with existing items, displayed as red triangles in the top-left corner. The entire cell area is clickable, and notes can be edited by clicking regardless of the selected tool. Delete via right-click with Note tool selected, Eraser tool, or delete button in the dialog.', color: 'text-pink-600' },
             { name: 'Eraser Tool:', desc: 'Delete all objects with left click/drag. Mobile-friendly tool that doesn\'t require right-click.', color: 'text-red-500' }
           ]
         },
@@ -206,6 +207,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.5.2', date: '2025-06-24', changes: ['Note tool overhaul: Can now be placed on any cell even with existing items', 'Changed note display to red triangles in top-left corners'] },
             { version: 'v1.5.1', date: '2025-06-24', changes: ['Moved Grid Size controls from header to menu', 'Unified mobile and desktop menus', 'Added Reset All Dungeons feature', 'Fixed Line elements positioning issues during grid resize', 'Added apply button and confirmation dialog for Grid Size changes (improved safety for destructive operations)'] },
             { version: 'v1.5.0', date: '2025-06-24', changes: ['Theme system implementation: Added Default and Dungeon themes'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系 tools mutual overwriting', 'Direct Line系 tool placement without existing walls', 'Added numbering feature to Stairs tools'] },

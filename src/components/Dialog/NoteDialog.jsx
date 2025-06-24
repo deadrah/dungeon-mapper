@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const NoteDialog = ({ isOpen, onClose, onSave, initialText = '', theme }) => {
+const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme }) => {
   const [text, setText] = useState(initialText)
 
   useEffect(() => {
@@ -16,6 +16,13 @@ const NoteDialog = ({ isOpen, onClose, onSave, initialText = '', theme }) => {
 
   const handleCancel = () => {
     setText(initialText)
+    onClose()
+  }
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete()
+    }
     onClose()
   }
 
@@ -47,39 +54,64 @@ const NoteDialog = ({ isOpen, onClose, onSave, initialText = '', theme }) => {
           autoFocus
         />
         
-        <div className="flex justify-end gap-2 mt-4">
-          <button
-            onClick={handleCancel}
-            className="px-4 py-2 rounded transition-colors"
-            style={{
-              backgroundColor: theme?.ui?.button || '#f3f4f6',
-              color: theme?.ui?.panelText || '#374151'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = theme?.ui?.buttonHover || '#e5e7eb'
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = theme?.ui?.button || '#f3f4f6'
-            }}
-          >
-            キャンセル
-          </button>
-          <button
-            onClick={handleSave}
-            className="px-4 py-2 rounded transition-colors"
-            style={{
-              backgroundColor: theme?.ui?.buttonActive || '#3b82f6',
-              color: theme?.ui?.panelText || '#ffffff'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = theme?.ui?.buttonActiveHover || '#2563eb'
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = theme?.ui?.buttonActive || '#3b82f6'
-            }}
-          >
-            保存
-          </button>
+        <div className="flex justify-between mt-4">
+          {/* Left side - Delete button (only show if there's initial text) */}
+          <div>
+            {initialText && onDelete && (
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 rounded transition-colors"
+                style={{
+                  backgroundColor: '#dc2626',
+                  color: '#ffffff'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#b91c1c'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#dc2626'
+                }}
+              >
+                削除
+              </button>
+            )}
+          </div>
+          
+          {/* Right side - Cancel and Save buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={handleCancel}
+              className="px-4 py-2 rounded transition-colors"
+              style={{
+                backgroundColor: theme?.ui?.button || '#f3f4f6',
+                color: theme?.ui?.panelText || '#374151'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = theme?.ui?.buttonHover || '#e5e7eb'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = theme?.ui?.button || '#f3f4f6'
+              }}
+            >
+              キャンセル
+            </button>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 rounded transition-colors"
+              style={{
+                backgroundColor: theme?.ui?.buttonActive || '#3b82f6',
+                color: theme?.ui?.panelText || '#ffffff'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = theme?.ui?.buttonActiveHover || '#2563eb'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = theme?.ui?.buttonActive || '#3b82f6'
+              }}
+            >
+              保存
+            </button>
+          </div>
         </div>
       </div>
     </div>

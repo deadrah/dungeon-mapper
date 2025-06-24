@@ -11,6 +11,9 @@ const Canvas = ({
   setZoom, 
   updateCurrentFloorData,
   getCurrentFloorData,
+  getNoteAt,
+  setNoteAt,
+  deleteNoteAt,
   showNoteTooltips = true,
   theme
 }) => {
@@ -81,12 +84,42 @@ const Canvas = ({
 
 
   const handleMouseDown = useCallback((e) => {
+    // Prevent context menu on right click
+    if (e.button === 2) {
+      e.preventDefault()
+    }
+    
+    // Check for note click first
+    if (e.target.hasAttribute('data-note-row') && e.target.hasAttribute('data-note-col')) {
+      const noteRow = parseInt(e.target.getAttribute('data-note-row'))
+      const noteCol = parseInt(e.target.getAttribute('data-note-col'))
+      const existingNote = getNoteAt(noteRow, noteCol)
+      
+      if (existingNote) {
+        e.preventDefault()
+        e.stopPropagation()
+        
+        // Left click opens dialog, right click deletes (only for NOTE tool)
+        if (e.button === 0) { // Left click
+          setNoteDialog({
+            isOpen: true,
+            row: noteRow,
+            col: noteCol,
+            text: existingNote.text || ''
+          })
+        } else if (e.button === 2 && appState.activeTool === TOOLS.NOTE) { // Right click with NOTE tool
+          deleteNoteAt(noteRow, noteCol)
+        }
+        return
+      }
+    }
+    
     if (e.button === 1 || e.shiftKey) { // Middle mouse or Shift+click for panning
       setIsPanning(true)
       setLastMousePos({ x: e.clientX, y: e.clientY })
       e.preventDefault()
     }
-  }, [])
+  }, [getNoteAt, appState.activeTool, deleteNoteAt])
 
   const handleMouseMove = useCallback((e) => {
     if (isPanning) {
@@ -495,8 +528,8 @@ const Canvas = ({
     
     const actualRow = appState.gridSize.rows - 1 - row;
     
-    // Check if there's an existing note at this location
-    const existingNote = (floorData.items || []).find(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
+    // Check if there's an existing note at this location (new notes system)
+    const existingNote = getNoteAt(actualRow, col)
     
     // If there's an existing note, open the note dialog regardless of current tool (except Eraser)
     if (existingNote && appState.activeTool !== TOOLS.ERASER) {
@@ -521,6 +554,8 @@ const Canvas = ({
       // Remove items at this position
       const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
       updateCurrentFloorData('items', newItems)
+      // Remove notes at this position (new notes system)
+      deleteNoteAt(actualRow, col)
       return;
     }
     
@@ -537,8 +572,8 @@ const Canvas = ({
       // Grid clicks are only for items that go in cell centers
     } else if (appState.activeTool === TOOLS.NOTE) {
       // Special handling for NOTE tool - open dialog
-      const existingItemIndex = (floorData.items || []).findIndex(item => item.row === actualRow && item.col === col && item.type === TOOLS.NOTE)
-      const existingText = existingItemIndex >= 0 ? (floorData.items || [])[existingItemIndex].text || '' : ''
+      const existingNoteData = getNoteAt(actualRow, col)
+      const existingText = existingNoteData ? existingNoteData.text || '' : ''
       
       setNoteDialog({
         isOpen: true,
@@ -600,34 +635,13 @@ const Canvas = ({
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog
-    const existingItemIndex = (floorData.items || []).findIndex(item => item.row === row && item.col === col && item.type === TOOLS.NOTE)
-    
-    if (text.trim()) {
-      // Save note with text
-      const noteItem = {
-        type: TOOLS.NOTE,
-        row,
-        col,
-        text: text.trim(),
-        id: Date.now() + Math.random()
-      }
-      
-      if (existingItemIndex >= 0) {
-        // Update existing note
-        const newItems = [...(floorData.items || [])]
-        newItems[existingItemIndex] = noteItem
-        updateCurrentFloorData('items', newItems)
-      } else {
-        // Add new note
-        const newItems = [...(floorData.items || []), noteItem]
-        updateCurrentFloorData('items', newItems)
-      }
-    } else if (existingItemIndex >= 0) {
-      // Remove note if text is empty
-      const newItems = (floorData.items || []).filter((_, index) => index !== existingItemIndex)
-      updateCurrentFloorData('items', newItems)
-    }
-  }, [noteDialog, floorData.items, updateCurrentFloorData])
+    setNoteAt(row, col, text)
+  }, [noteDialog, setNoteAt])
+
+  const handleNoteDialogDelete = useCallback(() => {
+    const { row, col } = noteDialog
+    deleteNoteAt(row, col)
+  }, [noteDialog, deleteNoteAt])
 
   const handleNoteDialogClose = useCallback(() => {
     // Reset dialog state completely
@@ -672,8 +686,13 @@ const Canvas = ({
       // Other Grid tools category: Remove items only
       const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
       updateCurrentFloorData('items', newItems)
+      
+      // Special case: NOTE tool can delete notes with right-click
+      if (appState.activeTool === TOOLS.NOTE) {
+        deleteNoteAt(actualRow, col)
+      }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, updateCurrentFloorData])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, updateCurrentFloorData, deleteNoteAt])
 
   useEffect(() => {
     const handleGlobalMouseDown = (e) => {
@@ -787,7 +806,15 @@ const Canvas = ({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onContextMenu={(e) => e.preventDefault()}
-        style={{ touchAction: 'none' }}
+        onSelectStart={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+        style={{ 
+          touchAction: 'none',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          MozUserSelect: 'none',
+          msUserSelect: 'none'
+        }}
       >
         <Grid
           gridSize={appState.gridSize}
@@ -820,6 +847,7 @@ const Canvas = ({
         
         <Items
           items={floorData.items}
+          notes={floorData.notes || []}
           zoom={appState.zoom}
           offset={offset}
           gridSize={appState.gridSize}
@@ -938,6 +966,7 @@ const Canvas = ({
         isOpen={noteDialog.isOpen}
         onClose={handleNoteDialogClose}
         onSave={handleNoteDialogSave}
+        onDelete={handleNoteDialogDelete}
         initialText={noteDialog.text}
         theme={theme}
       />

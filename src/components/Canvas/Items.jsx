@@ -22,7 +22,7 @@ const ITEM_ICONS = {
   [TOOLS.ARROW_ROTATE]: '⟲'
 }
 
-const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, theme }) => {
+const Items = ({ items = [], notes = [], zoom, offset, gridSize, showNoteTooltips = true, theme }) => {
   const cellSize = GRID_SIZE * zoom
 
   const renderItem = (item) => {
@@ -154,6 +154,73 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, th
 
   return (
     <div className="absolute inset-0" style={{ zIndex: 15, pointerEvents: 'none' }}>
+      {/* New note system - rendered first so they appear behind items */}
+      {notes.map((note, index) => (
+        <div key={`note-${index}`} className="absolute pointer-events-auto" style={{ zIndex: 14 }}>
+          {/* Red triangle in top-left corner */}
+          <div
+            style={{
+              position: 'absolute',
+              left: offset.x + note.col * cellSize + 24,
+              top: offset.y + (gridSize.rows - 1 - note.row) * cellSize + 24,
+              width: 0,
+              height: 0,
+              borderLeft: `${cellSize * 0.25}px solid ${theme.items.noteTriangle}`,
+              borderBottom: `${cellSize * 0.25}px solid transparent`,
+              pointerEvents: 'none'
+            }}
+          />
+          {/* Invisible clickable area covering the entire cell */}
+          <div
+            style={{
+              position: 'absolute',
+              left: offset.x + note.col * cellSize + 24,
+              top: offset.y + (gridSize.rows - 1 - note.row) * cellSize + 24,
+              width: cellSize,
+              height: cellSize,
+              cursor: 'pointer',
+              backgroundColor: 'transparent',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              MozUserSelect: 'none',
+              msUserSelect: 'none'
+            }}
+            data-note-row={note.row}
+            data-note-col={note.col}
+            title={showNoteTooltips ? note.text : ''}
+            onContextMenu={(e) => e.preventDefault()}
+            onSelectStart={(e) => e.preventDefault()}
+            onDragStart={(e) => e.preventDefault()}
+          />
+          {/* Custom tooltip for notes */}
+          {showNoteTooltips && note.text && (
+            <div
+              className="rounded px-1 py-1 shadow-lg"
+              style={{
+                position: 'absolute',
+                left: offset.x + note.col * cellSize + 24 + cellSize / 2,
+                top: offset.y + (gridSize.rows - 1 - note.row) * cellSize + 24 + cellSize / 2,
+                fontSize: '8px',
+                whiteSpace: 'nowrap',
+                maxWidth: `${cellSize * 2}px`,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                zIndex: 100,
+                backgroundColor: theme.items.note,
+                borderColor: theme.items.noteBorder,
+                border: `1px solid ${theme.items.noteBorder}`,
+                color: theme.items.noteBorder,
+                pointerEvents: 'none',
+                transform: 'translate(-50%, -50%)'
+              }}
+              title={note.text}
+            >
+              {note.text.length > 7 ? `${note.text.slice(0, 7)}...` : note.text}
+            </div>
+          )}
+        </div>
+      ))}
+      
       {items.map((item, index) => {
         // Special styling for different items
         const isElevator = item.type === TOOLS.ELEVATOR
