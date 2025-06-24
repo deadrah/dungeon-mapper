@@ -57,7 +57,7 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, th
           {/* Diamond background */}
           <div style={{
             position: 'absolute',
-            fontSize: Math.max(12, cellSize * 0.8),
+            fontSize: Math.max(12, cellSize * 0.7),
             color: theme.items.teleport
           }}>
             ◆
@@ -71,7 +71,10 @@ const Items = ({ items = [], zoom, offset, gridSize, showNoteTooltips = true, th
               fontWeight: 'bold',
               textAlign: 'center',
               lineHeight: '1',
-              textShadow: '0 0 4px rgba(0,0,0,1)'
+              textShadow: '0 0 4px rgba(0,0,0,1)',
+              top: '45%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)'
             }}>
               {item.warpText}
             </div>
