@@ -39,6 +39,12 @@ const Header = ({
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedDungeonForExport, setSelectedDungeonForExport] = useState(1)
+  const [pendingGridSize, setPendingGridSize] = useState({ rows: gridSize.rows, cols: gridSize.cols })
+
+  // Update pending grid size when actual grid size changes
+  useEffect(() => {
+    setPendingGridSize({ rows: gridSize.rows, cols: gridSize.cols })
+  }, [gridSize.rows, gridSize.cols])
 
   const closeMenu = () => setIsMenuOpen(false)
   
@@ -93,6 +99,19 @@ const Header = ({
     const message = getMessage(language, 'resetAllDungeons')
     if (window.confirm(message)) {
       onResetAllDungeons()
+      closeMenu()
+    }
+  }
+
+  const handleGridSizeChange = () => {
+    const message = getMessage(language, 'changeGridSize', {
+      oldRows: gridSize.rows,
+      oldCols: gridSize.cols,
+      newRows: pendingGridSize.rows,
+      newCols: pendingGridSize.cols
+    })
+    if (window.confirm(message)) {
+      onGridSizeChange(pendingGridSize)
       closeMenu()
     }
   }
@@ -408,33 +427,40 @@ const Header = ({
               {/* Grid Size */}
               <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
                 <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>Grid Size</h4>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm" style={{ color: theme.ui.panelText }}>Size:</span>
-                  <input
-                    type="number"
-                    value={gridSize.cols}
-                    onChange={(e) => {
-                      const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
-                      onGridSizeChange({ rows: size, cols: size })
-                    }}
-                    className="px-2 py-1 rounded text-sm w-12"
-                    style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
-                    min="5"
-                    max="50"
-                  />
-                  <span className="text-sm" style={{ color: theme.ui.panelText }}>x</span>
-                  <input
-                    type="number"
-                    value={gridSize.rows}
-                    onChange={(e) => {
-                      const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
-                      onGridSizeChange({ rows: size, cols: gridSize.cols })
-                    }}
-                    className="px-2 py-1 rounded text-sm w-12"
-                    style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
-                    min="5"
-                    max="50"
-                  />
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm" style={{ color: theme.ui.panelText }}>Size:</span>
+                    <input
+                      type="number"
+                      value={pendingGridSize.cols}
+                      onChange={(e) => {
+                        const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
+                        setPendingGridSize({ rows: size, cols: size })
+                      }}
+                      className="px-2 py-1 rounded text-sm w-12"
+                      style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
+                      min="5"
+                      max="50"
+                    />
+                    <span className="text-sm" style={{ color: theme.ui.panelText }}>x{pendingGridSize.rows}</span>
+                  </div>
+                  <div className="text-xs" style={{ color: theme.ui.panelText, opacity: 0.7 }}>
+                    Current: {gridSize.cols}x{gridSize.rows}
+                  </div>
+                  {(pendingGridSize.rows !== gridSize.rows || pendingGridSize.cols !== gridSize.cols) && (
+                    <button
+                      onClick={handleGridSizeChange}
+                      className="w-full px-2 py-1 rounded text-sm transition-colors"
+                      style={{ 
+                        backgroundColor: themeName === 'dungeon' ? '#daa520' : '#dc2626', 
+                        color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+                      }}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#b8860b' : '#b91c1c'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#daa520' : '#dc2626'}
+                    >
+                      Apply Grid Size Change
+                    </button>
+                  )}
                 </div>
               </div>
 

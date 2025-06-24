@@ -19,6 +19,106 @@ const createEmptyDungeon = (gridSize) => {
   return floors
 }
 
+// Transform floor data to match new grid size
+const transformFloorToNewGridSize = (floor, oldGridSize, newGridSize) => {
+  if (!floor || !oldGridSize || !newGridSize) return floor
+  
+  const oldRows = oldGridSize.rows
+  const newGrid = new Array(newGridSize.rows).fill(null).map(() => new Array(newGridSize.cols).fill(null))
+  
+  // Copy existing grid data that fits in new grid
+  if (floor.grid) {
+    for (let row = 0; row < Math.min(floor.grid.length, newGridSize.rows); row++) {
+      for (let col = 0; col < Math.min(floor.grid[row]?.length || 0, newGridSize.cols); col++) {
+        newGrid[row][col] = floor.grid[row][col]
+      }
+    }
+  }
+  
+  // Filter and transform items
+  const transformedItems = (floor.items || []).filter(
+    item => item.row < newGridSize.rows && item.col < newGridSize.cols
+  )
+  
+  // Transform walls coordinates
+  const transformedWalls = (floor.walls || []).map(wall => {
+    let newStartRow, newEndRow
+    
+    if (wall.startCol === wall.endCol) {
+      // Vertical wall - keep coordinates as-is since Walls.jsx handles the transformation
+      newStartRow = wall.startRow
+      newEndRow = wall.endRow
+    } else {
+      // Horizontal wall - transform the row coordinate to bottom-up system
+      newStartRow = newGridSize.rows - (oldRows - wall.startRow)
+      newEndRow = newGridSize.rows - (oldRows - wall.endRow)
+    }
+    
+    return {
+      ...wall,
+      startRow: newStartRow,
+      endRow: newEndRow
+    }
+  }).filter(wall => {
+    const isVertical = wall.startCol === wall.endCol
+    
+    if (isVertical) {
+      return wall.startRow >= 0 && wall.endRow >= 0 &&
+             wall.startRow <= newGridSize.rows && wall.endRow <= newGridSize.rows &&
+             wall.startCol >= 0 && wall.endCol >= 0 &&
+             wall.startCol <= newGridSize.cols && wall.endCol <= newGridSize.cols
+    } else {
+      return wall.startRow >= 0 && wall.endRow >= 0 &&
+             wall.startRow <= newGridSize.rows && wall.endRow <= newGridSize.rows &&
+             wall.startCol >= 0 && wall.endCol >= 0 &&
+             wall.startCol <= newGridSize.cols && wall.endCol <= newGridSize.cols
+    }
+  })
+  
+  // Transform doors coordinates
+  const transformedDoors = (floor.doors || []).map(door => {
+    let newStartRow, newEndRow
+    
+    if (door.startCol === door.endCol) {
+      // Vertical door - keep coordinates as-is since rendering handles the transformation
+      newStartRow = door.startRow
+      newEndRow = door.endRow
+    } else {
+      // Horizontal door - transform the row coordinate to bottom-up system
+      newStartRow = newGridSize.rows - (oldRows - door.startRow)
+      newEndRow = newGridSize.rows - (oldRows - door.endRow)
+    }
+    
+    return {
+      ...door,
+      startRow: newStartRow,
+      endRow: newEndRow
+    }
+  }).filter(door => {
+    const isVertical = door.startCol === door.endCol
+    
+    if (isVertical) {
+      return door.startRow >= 0 && door.endRow >= 0 &&
+             door.startRow <= newGridSize.rows && door.endRow <= newGridSize.rows &&
+             door.startCol >= 0 && door.endCol >= 0 &&
+             door.startCol <= newGridSize.cols && door.endCol <= newGridSize.cols
+    } else {
+      return door.startRow >= 0 && door.endRow >= 0 &&
+             door.startRow <= newGridSize.rows && door.endRow <= newGridSize.rows &&
+             door.startCol >= 0 && door.endCol >= 0 &&
+             door.startCol <= newGridSize.cols && door.endCol <= newGridSize.cols
+    }
+  })
+  
+  return {
+    ...floor,
+    grid: newGrid,
+    items: transformedItems,
+    walls: transformedWalls,
+    doors: transformedDoors
+  }
+}
+
 const INITIAL_STATE = {
   currentDungeon: 1,
   currentFloor: 1,
@@ -271,117 +371,12 @@ export const useAppState = () => {
       Object.keys(newState.dungeons).forEach(dungeonKey => {
         const dungeon = newState.dungeons[dungeonKey]
         Object.keys(dungeon.floors).forEach(floorKey => {
-          const oldGrid = dungeon.floors[floorKey].grid
-          const newGrid = new Array(newSize.rows).fill(null).map(() => new Array(newSize.cols).fill(null))
-          
-          // Copy existing data that fits in new grid
-          for (let row = 0; row < Math.min(oldGrid.length, newSize.rows); row++) {
-            for (let col = 0; col < Math.min(oldGrid[row].length, newSize.cols); col++) {
-              newGrid[row][col] = oldGrid[row][col]
-            }
-          }
-          
-          // Filter items to fit within new grid bounds
-          const filteredItems = dungeon.floors[floorKey].items.filter(
-            item => item.row < newSize.rows && item.col < newSize.cols
+          const oldGridSize = { rows: dungeon.floors[floorKey].grid?.length || state.gridSize.rows, cols: state.gridSize.cols }
+          newState.dungeons[dungeonKey].floors[floorKey] = transformFloorToNewGridSize(
+            dungeon.floors[floorKey], 
+            oldGridSize, 
+            newSize
           )
-          
-          // Transform walls coordinates for new grid size
-          const oldRows = oldGrid.length
-          const transformedWalls = dungeon.floors[floorKey].walls.map(wall => {
-            // Convert from old coordinate system to new coordinate system
-            // Old system: top-down, New system: bottom-up (like items)
-            
-            // For vertical walls (startCol === endCol), transform both row coordinates
-            // For horizontal walls (startRow === endRow), transform the row coordinate
-            let newStartRow, newEndRow
-            
-            if (wall.startCol === wall.endCol) {
-              // Vertical wall - keep coordinates as-is since Walls.jsx handles the transformation
-              // We just need to ensure they fit within the new grid bounds
-              newStartRow = wall.startRow
-              newEndRow = wall.endRow
-            } else {
-              // Horizontal wall - transform the row coordinate to bottom-up system
-              newStartRow = newSize.rows - (oldRows - wall.startRow)
-              newEndRow = newSize.rows - (oldRows - wall.endRow)
-            }
-            
-            return {
-              ...wall,
-              startRow: newStartRow,
-              endRow: newEndRow
-            }
-          }).filter(wall => {
-            // Filter walls that are within new grid bounds
-            // For grid lines: 0 to gridSize (inclusive) - there are gridSize+1 lines
-            const isVertical = wall.startCol === wall.endCol
-            
-            if (isVertical) {
-              // Vertical wall: column can be 0 to newSize.cols (inclusive)
-              // row coordinates: 0 to newSize.rows-1 for cell boundaries
-              return wall.startRow >= 0 && wall.endRow >= 0 &&
-                     wall.startRow <= newSize.rows && wall.endRow <= newSize.rows &&
-                     wall.startCol >= 0 && wall.endCol >= 0 &&
-                     wall.startCol <= newSize.cols && wall.endCol <= newSize.cols
-            } else {
-              // Horizontal wall: row can be 0 to newSize.rows (inclusive)
-              // column coordinates: 0 to newSize.cols-1 for cell boundaries
-              return wall.startRow >= 0 && wall.endRow >= 0 &&
-                     wall.startRow <= newSize.rows && wall.endRow <= newSize.rows &&
-                     wall.startCol >= 0 && wall.endCol >= 0 &&
-                     wall.startCol <= newSize.cols && wall.endCol <= newSize.cols
-            }
-          })
-          
-          // Transform doors coordinates for new grid size
-          const transformedDoors = dungeon.floors[floorKey].doors.map(door => {
-            // Convert from old coordinate system to new coordinate system
-            // Same logic as walls for vertical and horizontal doors
-            let newStartRow, newEndRow
-            
-            if (door.startCol === door.endCol) {
-              // Vertical door - keep coordinates as-is since rendering handles the transformation
-              newStartRow = door.startRow
-              newEndRow = door.endRow
-            } else {
-              // Horizontal door - transform the row coordinate to bottom-up system
-              newStartRow = newSize.rows - (oldRows - door.startRow)
-              newEndRow = newSize.rows - (oldRows - door.endRow)
-            }
-            
-            return {
-              ...door,
-              startRow: newStartRow,
-              endRow: newEndRow
-            }
-          }).filter(door => {
-            // Filter doors that are within new grid bounds
-            // Same logic as walls for boundary lines
-            const isVertical = door.startCol === door.endCol
-            
-            if (isVertical) {
-              // Vertical door: column can be 0 to newSize.cols (inclusive)
-              return door.startRow >= 0 && door.endRow >= 0 &&
-                     door.startRow <= newSize.rows && door.endRow <= newSize.rows &&
-                     door.startCol >= 0 && door.endCol >= 0 &&
-                     door.startCol <= newSize.cols && door.endCol <= newSize.cols
-            } else {
-              // Horizontal door: row can be 0 to newSize.rows (inclusive)
-              return door.startRow >= 0 && door.endRow >= 0 &&
-                     door.startRow <= newSize.rows && door.endRow <= newSize.rows &&
-                     door.startCol >= 0 && door.endCol >= 0 &&
-                     door.startCol <= newSize.cols && door.endCol <= newSize.cols
-            }
-          })
-          
-          newState.dungeons[dungeonKey].floors[floorKey] = {
-            ...dungeon.floors[floorKey],
-            grid: newGrid,
-            items: filteredItems,
-            walls: transformedWalls,
-            doors: transformedDoors
-          }
         })
       })
       
@@ -592,11 +587,23 @@ export const useAppState = () => {
             return
           }
 
-          // Ensure all floors have doors property
+          // Ensure all floors have doors property and transform coordinates if needed
           if (dungeonData.data && dungeonData.data.floors) {
+            const importedGridSize = importedData.gridSize || { rows: 20, cols: 20 }
+            
             Object.keys(dungeonData.data.floors).forEach(floorKey => {
-              if (!dungeonData.data.floors[floorKey].doors) {
-                dungeonData.data.floors[floorKey].doors = []
+              const floor = dungeonData.data.floors[floorKey]
+              if (!floor.doors) {
+                floor.doors = []
+              }
+              
+              // Transform floor data to match current grid size if different
+              if (importedGridSize.rows !== state.gridSize.rows || importedGridSize.cols !== state.gridSize.cols) {
+                dungeonData.data.floors[floorKey] = transformFloorToNewGridSize(
+                  floor,
+                  importedGridSize,
+                  state.gridSize
+                )
               }
             })
           }
@@ -742,6 +749,24 @@ export const useAppState = () => {
           // Confirm import operation
           if (!window.confirm(getMessage(state.language, 'importAllData'))) {
             return
+          }
+          
+          // Transform all floors to match current grid size if different
+          if (processedState.gridSize.rows !== state.gridSize.rows || processedState.gridSize.cols !== state.gridSize.cols) {
+            Object.keys(processedState.dungeons).forEach(dungeonKey => {
+              const dungeon = processedState.dungeons[dungeonKey]
+              if (dungeon.floors) {
+                Object.keys(dungeon.floors).forEach(floorKey => {
+                  processedState.dungeons[dungeonKey].floors[floorKey] = transformFloorToNewGridSize(
+                    dungeon.floors[floorKey],
+                    processedState.gridSize,
+                    state.gridSize
+                  )
+                })
+              }
+            })
+            // Update grid size to current one
+            processedState.gridSize = state.gridSize
           }
           
           setState(processedState)

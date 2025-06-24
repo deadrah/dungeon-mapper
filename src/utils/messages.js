@@ -10,6 +10,7 @@ export const MESSAGES = {
     // Floor operations
     resetFloor: '{floor}Fのすべてのデータを削除しますか？この操作は元に戻せません。',
     resetAllDungeons: 'すべてのダンジョンデータを初期化しますか？この操作は元に戻せません。',
+    changeGridSize: 'グリッドサイズを{oldRows}x{oldCols}から{newRows}x{newCols}に変更しますか？\n\n範囲外の壁・ドア・アイテムが削除される可能性があります。この操作は元に戻せません。',
     
     // Dungeon operations
     loadDungeon: '"{name}" をスロット {slot} に読み込みますか？',
@@ -42,6 +43,7 @@ export const MESSAGES = {
     // Floor operations
     resetFloor: 'Delete all data on {floor}F? This action cannot be undone.',
     resetAllDungeons: 'Reset all dungeon data? This action cannot be undone.',
+    changeGridSize: 'Change grid size from {oldRows}x{oldCols} to {newRows}x{newCols}?\n\nWalls, doors, and items outside the new bounds may be deleted. This action cannot be undone.',
     
     // Dungeon operations
     loadDungeon: 'Load "{name}" to slot {slot}?',

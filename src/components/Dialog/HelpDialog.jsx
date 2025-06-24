@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme }) => {
+  const [activeTab, setActiveTab] = useState('guide')
 
   if (!isOpen) return null
 
   const content = {
     ja: {
-      title: 'DMapper - 機能説明 - 更新履歴',
+      title: 'DMapper ヘルプ',
       version: 'バージョン 1.5.1',
       close: '閉じる',
+      tabs: {
+        guide: '機能説明',
+        changelog: '更新履歴'
+      },
       sections: {
         about: {
           title: 'DMapperについて',
@@ -85,13 +90,12 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
           items: [
             'データはブラウザのローカルストレージに保存されるため、ブラウザデータを削除すると消失します',
             '重要なダンジョンマップは定期的にExport機能でバックアップを取ることを推奨します',
-            'ドアや壁の矢印は壁が無い場所にも直接配置できます（v1.4.2から）'
           ]
         },
         changelog: {
           title: '更新履歴',
           items: [
-            { version: 'v1.5.1', date: '2025-06-24', changes: ['Grid Sizeコントロールをヘッダーからメニューに移動', 'モバイル・デスクトップメニューを統合', '全ダンジョンリセット機能を追加', 'Grid拡張・縮小時のLine系要素位置ずれを修正'] },
+            { version: 'v1.5.1', date: '2025-06-24', changes: ['Grid Sizeコントロールをヘッダーからメニューに移動', 'モバイル・デスクトップメニューを統合', '全ダンジョンリセット機能を追加', 'Grid拡張・縮小時のLine系要素位置ずれを修正', 'Grid Size変更に実行ボタンと確認ダイアログを追加'] },
             { version: 'v1.5.0', date: '2025-06-24', changes: ['テーマシステム実装：デフォルト・ダンジョンテーマの2種類を追加'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系ツールの相互上書き', 'Lineが無い場所に直接Line系ツールを配置可能に', '階段ツールにも番号付け機能を追加'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['GridArrowツールを統合、右下での選択に。GridArrow内に回転床も追加'] },
@@ -114,9 +118,13 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
       }
     },
     en: {
-      title: 'DMapper - User Guide - Update History',
+      title: 'DMapper Help',
       version: 'Version 1.5.1',
       close: 'Close',
+      tabs: {
+        guide: 'User Guide',
+        changelog: 'Update History'
+      },
       sections: {
         about: {
           title: 'About DMapper',
@@ -193,13 +201,12 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
           items: [
             'Data is stored in browser local storage and will be lost if browser data is cleared',
             'Regular backups using the Export function are recommended for important dungeon maps',
-            'Doors and wall arrows can be placed directly anywhere, even without existing walls (since v1.4.2)'
           ]
         },
         changelog: {
           title: 'Update History',
           items: [
-            { version: 'v1.5.1', date: '2025-06-24', changes: ['Moved Grid Size controls from header to menu', 'Unified mobile and desktop menus', 'Added Reset All Dungeons feature', 'Fixed Line elements positioning issues during grid resize'] },
+            { version: 'v1.5.1', date: '2025-06-24', changes: ['Moved Grid Size controls from header to menu', 'Unified mobile and desktop menus', 'Added Reset All Dungeons feature', 'Fixed Line elements positioning issues during grid resize', 'Added apply button and confirmation dialog for Grid Size changes (improved safety for destructive operations)'] },
             { version: 'v1.5.0', date: '2025-06-24', changes: ['Theme system implementation: Added Default and Dungeon themes'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系 tools mutual overwriting', 'Direct Line系 tool placement without existing walls', 'Added numbering feature to Stairs tools'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['Unified Grid Arrow tools with right-panel selection. Added rotating floor marker'] },
@@ -251,11 +258,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         <div className="flex justify-between items-center mb-4">
           <div>
             <h2 className="text-2xl font-bold" style={{ color: theme.ui.panelText }}>
-              {language === 'ja' ? (
-                <>DMapper - 機能説明 - <a href="#changelog" className="underline" style={{ color: getHeadingColor() }}>更新履歴</a></>
-              ) : (
-                <>DMapper - User Guide - <a href="#changelog" className="underline" style={{ color: getHeadingColor() }}>Update History</a></>
-              )}
+              {currentContent.title}
             </h2>
             <p className="text-sm mt-1" style={{ color: theme.ui.panelText, opacity: 0.7 }}>{currentContent.version}</p>
           </div>
@@ -308,105 +311,152 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
           </div>
         </div>
         
+        {/* Tab Navigation */}
+        <div className="flex mb-6 border-b" style={{ borderColor: theme.ui.border }}>
+          <button
+            onClick={() => setActiveTab('guide')}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === 'guide' ? 'border-b-2' : ''
+            }`}
+            style={{
+              color: activeTab === 'guide' ? getHeadingColor() : theme.ui.panelText,
+              borderColor: activeTab === 'guide' ? getHeadingColor() : 'transparent',
+              opacity: activeTab === 'guide' ? 1 : 0.7
+            }}
+            onMouseEnter={(e) => {
+              if (activeTab !== 'guide') e.target.style.opacity = '0.9'
+            }}
+            onMouseLeave={(e) => {
+              if (activeTab !== 'guide') e.target.style.opacity = '0.7'
+            }}
+          >
+            {currentContent.tabs.guide}
+          </button>
+          <button
+            onClick={() => setActiveTab('changelog')}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === 'changelog' ? 'border-b-2' : ''
+            }`}
+            style={{
+              color: activeTab === 'changelog' ? getHeadingColor() : theme.ui.panelText,
+              borderColor: activeTab === 'changelog' ? getHeadingColor() : 'transparent',
+              opacity: activeTab === 'changelog' ? 1 : 0.7
+            }}
+            onMouseEnter={(e) => {
+              if (activeTab !== 'changelog') e.target.style.opacity = '0.9'
+            }}
+            onMouseLeave={(e) => {
+              if (activeTab !== 'changelog') e.target.style.opacity = '0.7'
+            }}
+          >
+            {currentContent.tabs.changelog}
+          </button>
+        </div>
+        
         <div className="space-y-6" style={{ color: theme.ui.panelText }}>
-          {/* About */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.about.title}</h3>
-            <p style={{ color: theme.ui.panelText }}>{currentContent.sections.about.content}</p>
-          </section>
+          {activeTab === 'guide' && (
+            <>
+              {/* About */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.about.title}</h3>
+                <p style={{ color: theme.ui.panelText }}>{currentContent.sections.about.content}</p>
+              </section>
 
-          {/* Settings */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.settings.title}</h3>
-            <div className="space-y-2">
-              {currentContent.sections.settings.items.map((item, index) => (
-                <div key={index}><strong>{item.label}</strong> {item.desc}</div>
-              ))}
-            </div>
-          </section>
-
-          {/* Basic Controls */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.controls.title}</h3>
-            <div className="space-y-2">
-              {currentContent.sections.controls.items.map((item, index) => (
-                <div key={index}><strong>{item.label}</strong> {item.desc}</div>
-              ))}
-            </div>
-          </section>
-
-          {/* Keyboard Shortcuts */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.keyboard.title}</h3>
-            <div className="space-y-2">
-              {currentContent.sections.keyboard.items.map((item, index) => (
-                <div key={index}><strong>{item.label}</strong> {item.desc}</div>
-              ))}
-            </div>
-          </section>
-
-          {/* Tools */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.tools.title}</h3>
-            <div className="space-y-3">
-              {currentContent.sections.tools.items.map((tool, index) => (
-                <div key={index}>
-                  <strong style={{ color: getToolColor() }}>{tool.name}</strong>
-                  <p className="ml-4" style={{ color: theme.ui.panelText }}>{tool.desc}</p>
+              {/* Settings */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.settings.title}</h3>
+                <div className="space-y-2">
+                  {currentContent.sections.settings.items.map((item, index) => (
+                    <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
+              </section>
 
-          {/* Map Management */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.mapManagement.title}</h3>
-            <div className="space-y-2">
-              {currentContent.sections.mapManagement.items.map((item, index) => (
-                <div key={index}><strong>{item.label}</strong> {item.desc}</div>
-              ))}
-            </div>
-          </section>
-
-          {/* Data Saving */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.dataSaving.title}</h3>
-            <div className="space-y-2">
-              {currentContent.sections.dataSaving.items.map((item, index) => (
-                <div key={index}><strong>{item.label}</strong> {item.desc}</div>
-              ))}
-            </div>
-          </section>
-
-          {/* Notes */}
-          <section>
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.notes.title}</h3>
-            <div className="space-y-2" style={{ color: theme.ui.panelText }}>
-              {currentContent.sections.notes.items.map((note, index) => (
-                <div key={index}>• {note}</div>
-              ))}
-            </div>
-          </section>
-
-          {/* Changelog */}
-          <section id="changelog">
-            <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.changelog.title}</h3>
-            <div className="space-y-4">
-              {currentContent.sections.changelog.items.map((version, index) => (
-                <div key={index} className="border-l-4 pl-4" style={{ borderColor: getHeadingColor() }}>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <strong style={{ color: getHeadingColor() }}>{version.version}</strong>
-                    <span className="text-sm" style={{ color: theme.ui.panelText }}>({version.date})</span>
-                  </div>
-                  <div className="space-y-1" style={{ color: theme.ui.panelText }}>
-                    {version.changes.map((change, changeIndex) => (
-                      <div key={changeIndex}>• {change}</div>
-                    ))}
-                  </div>
+              {/* Basic Controls */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.controls.title}</h3>
+                <div className="space-y-2">
+                  {currentContent.sections.controls.items.map((item, index) => (
+                    <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
+              </section>
+
+              {/* Keyboard Shortcuts */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.keyboard.title}</h3>
+                <div className="space-y-2">
+                  {currentContent.sections.keyboard.items.map((item, index) => (
+                    <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Tools */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.tools.title}</h3>
+                <div className="space-y-3">
+                  {currentContent.sections.tools.items.map((tool, index) => (
+                    <div key={index}>
+                      <strong style={{ color: getToolColor() }}>{tool.name}</strong>
+                      <p className="ml-4" style={{ color: theme.ui.panelText }}>{tool.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Map Management */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.mapManagement.title}</h3>
+                <div className="space-y-2">
+                  {currentContent.sections.mapManagement.items.map((item, index) => (
+                    <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Data Saving */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.dataSaving.title}</h3>
+                <div className="space-y-2">
+                  {currentContent.sections.dataSaving.items.map((item, index) => (
+                    <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Notes */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.notes.title}</h3>
+                <div className="space-y-2" style={{ color: theme.ui.panelText }}>
+                  {currentContent.sections.notes.items.map((note, index) => (
+                    <div key={index}>• {note}</div>
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
+
+          {activeTab === 'changelog' && (
+            <section>
+              <h3 className="text-lg font-semibold mb-4" style={{ color: getHeadingColor() }}>{currentContent.sections.changelog.title}</h3>
+              <div className="space-y-4">
+                {currentContent.sections.changelog.items.map((version, index) => (
+                  <div key={index} className="border-l-4 pl-4" style={{ borderColor: getHeadingColor() }}>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <strong style={{ color: getHeadingColor() }}>{version.version}</strong>
+                      <span className="text-sm" style={{ color: theme.ui.panelText }}>({version.date})</span>
+                    </div>
+                    <div className="space-y-1" style={{ color: theme.ui.panelText }}>
+                      {version.changes.map((change, changeIndex) => (
+                        <div key={changeIndex}>• {change}</div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
         
         {/* Footer */}
