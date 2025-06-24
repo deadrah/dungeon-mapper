@@ -61,7 +61,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
       <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
         {TOOL_GROUPS.map((group, groupIndex) => (
           <div key={group.name} className="md:block">
-            <div className="px-2 py-2 text-sm font-bold border-b md:block hidden" style={{ backgroundColor: theme.ui.button, borderColor: theme.ui.border }}>
+            <div className="px-2 py-2 text-sm font-bold border-b md:block hidden" style={{ backgroundColor: theme.ui.groupHeader, borderColor: theme.ui.border }}>
               {group.name}
             </div>
             <div className={`md:grid md:grid-cols-2 md:p-0 p-2 ${

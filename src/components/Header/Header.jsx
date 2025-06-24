@@ -173,11 +173,11 @@ const Header = ({
             onClick={() => handleDungeonNameEdit(currentDungeon)}
             className="px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center transition-colors"
             style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
             onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
             title="Rename Current Dungeon"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
               <path d="M11.5 2L14 4.5L5 13.5H2.5V11L11.5 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M10 3.5L12.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -208,7 +208,7 @@ const Header = ({
             onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#a0522d' : '#dc2626'}
             title={`Reset Floor ${currentFloor}`}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
               <path d="M8 1V3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <path d="M8 13V15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <path d="M15 8H13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -263,7 +263,7 @@ const Header = ({
           onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#16a34a' : theme.ui.button}
           title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
             <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
             <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -307,7 +307,7 @@ const Header = ({
             onClick={() => setIsMenuOpen(true)}
             className="px-3 py-1 rounded text-sm transition-colors"
             style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
             onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
             title="Menu"
           >
@@ -327,7 +327,7 @@ const Header = ({
             onMouseLeave={(e) => e.target.style.backgroundColor = showNoteTooltips ? '#16a34a' : theme.ui.button}
             title={showNoteTooltips ? "Hide Note Tooltips" : "Show Note Tooltips"}
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.4em'}}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.4em', pointerEvents: 'none'}}>
               <rect x="3" y="2" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill="none"/>
               <path d="M6 5h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <path d="M6 8h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -351,11 +351,11 @@ const Header = ({
             onClick={() => setIsMobileMenuOpen(true)}
             className="px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden transition-colors"
             style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
             onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
             title="メニュー"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
               <path d="M2 4h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <path d="M2 8h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               <path d="M2 12h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>

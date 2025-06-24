@@ -61,9 +61,11 @@ export const themes = {
       button: '#1f2937',            // Button background
       buttonHover: '#4b5563',       // Button hover
       buttonActive: '#496fc1',      // Active button
+      buttonActiveHover: '#3b5998', // Active button hover (darker blue)
+      groupHeader: '#374151',       // Tool group header background
       input: '#374151',             // Input background
       inputText: '#ffffff',         // Input text
-      border: '#4b5563',            // General borders
+      border: '#374151',            // General borders
     }
   },
   
@@ -117,9 +119,11 @@ export const themes = {
     ui: {
       panel: '#3d2b1f',             // ダークセピア
       panelText: '#f0ebe0',         // 薄いセピア
-      button: '#5d4e37',            // ダークブラウン
+      button: '#3d2b1f',            // ダークブラウン
       buttonHover: '#8b7355',       // ブロンズ色
       buttonActive: '#a0956b',      // アクティブセピア
+      buttonActiveHover: '#8b7355', // アクティブボタンホバー（ブロンズ色）
+      groupHeader: '#704214',       // グループヘッダー背景（濃いブラウン）
       input: '#5d4e37',             // ダークブラウン
       inputText: '#f0ebe0',         // 薄いセピア
       border: '#3d2b1f',            // ブロンズ色

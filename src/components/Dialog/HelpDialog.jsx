@@ -7,7 +7,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
   const content = {
     ja: {
       title: 'DMapper - 機能説明 - 更新履歴',
-      version: 'バージョン 1.4.2',
+      version: 'バージョン 1.5.0',
       close: '閉じる',
       sections: {
         about: {
@@ -75,7 +75,8 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         settings: {
           title: '設定',
           items: [
-            { label: '言語切り替え:', desc: 'ヘルプ画面右上のJP/ENボタンで表示言語を切り替え（メッセージも連動）' }
+            { label: '言語切り替え:', desc: 'ヘルプ画面右上のJP/ENボタンで表示言語を切り替え（メッセージも連動）' },
+            { label: 'テーマ変更:', desc: 'メニュー → テーマ選択でデフォルト・ダンジョンテーマを切り替え' }
           ]
         },
         notes: {
@@ -89,6 +90,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.5.0', date: '2025-06-24', changes: ['テーマシステム実装：デフォルト・ダンジョンテーマの2種類を追加'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系ツールの相互上書き', 'Lineが無い場所に直接Line系ツールを配置可能に', '階段ツールにも番号付け機能を追加'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['GridArrowツールを統合、右下での選択に。GridArrow内に回転床も追加'] },
             { version: 'v1.4.0', date: '2025-06-23', changes: ['スマホ対応：フリックでのマップ移動に対応'] },
@@ -111,7 +113,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     },
     en: {
       title: 'DMapper - User Guide - Update History',
-      version: 'Version 1.4.2',
+      version: 'Version 1.5.0',
       close: 'Close',
       sections: {
         about: {
@@ -179,7 +181,8 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         settings: {
           title: 'Settings',
           items: [
-            { label: 'Language Toggle:', desc: 'Switch display language using JP/EN buttons in top-right of help screen (messages also change)' }
+            { label: 'Language Toggle:', desc: 'Switch display language using JP/EN buttons in top-right of help screen (messages also change)' },
+            { label: 'Theme Change:', desc: 'Switch between Default and Dungeon themes via Menu → Theme selection' }
           ]
         },
         notes: {
@@ -193,6 +196,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.5.0', date: '2025-06-24', changes: ['Theme system implementation: Added Default and Dungeon themes'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系 tools mutual overwriting', 'Direct Line系 tool placement without existing walls', 'Added numbering feature to Stairs tools'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['Unified Grid Arrow tools with right-panel selection. Added rotating floor marker'] },
             { version: 'v1.4.0', date: '2025-06-23', changes: ['Mobile support: Swipe panning functionality'] },
