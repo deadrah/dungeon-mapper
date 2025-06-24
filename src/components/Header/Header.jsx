@@ -401,7 +401,7 @@ const Header = ({
                 onClick={handleDungeonNameSave}
                 className="px-4 py-2 rounded transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Save
@@ -426,6 +426,23 @@ const Header = ({
             <h3 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>Menu</h3>
             
             <div className="space-y-2">
+              {/* Theme Selection */}
+              <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
+                <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>Theme</h4>
+                <select
+                  value={themeName}
+                  onChange={(e) => onThemeChange(e.target.value)}
+                  className="px-2 py-1 rounded text-sm w-full"
+                  style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
+                >
+                  {getThemeOptions().map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
                 <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>Grid Size</h4>
                 <div className="flex items-center space-x-2">
@@ -464,7 +481,8 @@ const Header = ({
                 <select
                   value={selectedDungeonForExport}
                   onChange={(e) => setSelectedDungeonForExport(parseInt(e.target.value))}
-                  className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-full mt-1"
+                  className="px-2 py-1 rounded text-sm w-full mt-1"
+                  style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
                 >
                   {Array.from({ length: MAX_DUNGEONS }, (_, i) => i + 1).map(dungeonId => (
                     <option key={dungeonId} value={dungeonId}>
@@ -478,7 +496,7 @@ const Header = ({
                 onClick={handleMobileDungeonExport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Save Dungeon
@@ -488,7 +506,7 @@ const Header = ({
                 onClick={handleMobileDungeonImport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Load Dungeon
@@ -501,7 +519,7 @@ const Header = ({
                 onClick={handleMobileSVG}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Download Floor SVG Image
@@ -516,7 +534,7 @@ const Header = ({
                 onClick={handleMobileExport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Export All Data
@@ -526,7 +544,7 @@ const Header = ({
                 onClick={handleMobileImport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Import All Data
@@ -539,7 +557,7 @@ const Header = ({
                 onClick={handleMobileHelp}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Help
@@ -587,7 +605,8 @@ const Header = ({
                 <select
                   value={selectedDungeonForExport}
                   onChange={(e) => setSelectedDungeonForExport(parseInt(e.target.value))}
-                  className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm w-full mt-1"
+                  className="px-2 py-1 rounded text-sm w-full mt-1"
+                  style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
                 >
                   {Array.from({ length: MAX_DUNGEONS }, (_, i) => i + 1).map(dungeonId => (
                     <option key={dungeonId} value={dungeonId}>
@@ -601,7 +620,7 @@ const Header = ({
                 onClick={handleDesktopDungeonExport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Save Dungeon
@@ -611,7 +630,7 @@ const Header = ({
                 onClick={handleDesktopDungeonImport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Load Dungeon
@@ -624,7 +643,7 @@ const Header = ({
                 onClick={handleDesktopSVG}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Download Floor SVG Image
@@ -640,7 +659,7 @@ const Header = ({
                 onClick={handleDesktopExport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Export All Data
@@ -650,7 +669,7 @@ const Header = ({
                 onClick={handleDesktopImport}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
               >
                 Import All Data
