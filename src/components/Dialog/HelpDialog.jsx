@@ -91,7 +91,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
-            { version: 'v1.5.1', date: '2025-06-24', changes: ['Grid Sizeコントロールをヘッダーからメニューに移動', 'モバイル・デスクトップメニューを統合', '全ダンジョンリセット機能を追加'] },
+            { version: 'v1.5.1', date: '2025-06-24', changes: ['Grid Sizeコントロールをヘッダーからメニューに移動', 'モバイル・デスクトップメニューを統合', '全ダンジョンリセット機能を追加', 'Grid拡張・縮小時のLine系要素位置ずれを修正'] },
             { version: 'v1.5.0', date: '2025-06-24', changes: ['テーマシステム実装：デフォルト・ダンジョンテーマの2種類を追加'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系ツールの相互上書き', 'Lineが無い場所に直接Line系ツールを配置可能に', '階段ツールにも番号付け機能を追加'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['GridArrowツールを統合、右下での選択に。GridArrow内に回転床も追加'] },
@@ -199,7 +199,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
-            { version: 'v1.5.1', date: '2025-06-24', changes: ['Moved Grid Size controls from header to menu', 'Unified mobile and desktop menus', 'Added Reset All Dungeons feature'] },
+            { version: 'v1.5.1', date: '2025-06-24', changes: ['Moved Grid Size controls from header to menu', 'Unified mobile and desktop menus', 'Added Reset All Dungeons feature', 'Fixed Line elements positioning issues during grid resize'] },
             { version: 'v1.5.0', date: '2025-06-24', changes: ['Theme system implementation: Added Default and Dungeon themes'] },
             { version: 'v1.4.2', date: '2025-06-23', changes: ['Line系 tools mutual overwriting', 'Direct Line系 tool placement without existing walls', 'Added numbering feature to Stairs tools'] },
             { version: 'v1.4.1', date: '2025-06-23', changes: ['Unified Grid Arrow tools with right-panel selection. Added rotating floor marker'] },

@@ -286,10 +286,101 @@ export const useAppState = () => {
             item => item.row < newSize.rows && item.col < newSize.cols
           )
           
+          // Transform walls coordinates for new grid size
+          const oldRows = oldGrid.length
+          const transformedWalls = dungeon.floors[floorKey].walls.map(wall => {
+            // Convert from old coordinate system to new coordinate system
+            // Old system: top-down, New system: bottom-up (like items)
+            
+            // For vertical walls (startCol === endCol), transform both row coordinates
+            // For horizontal walls (startRow === endRow), transform the row coordinate
+            let newStartRow, newEndRow
+            
+            if (wall.startCol === wall.endCol) {
+              // Vertical wall - keep coordinates as-is since Walls.jsx handles the transformation
+              // We just need to ensure they fit within the new grid bounds
+              newStartRow = wall.startRow
+              newEndRow = wall.endRow
+            } else {
+              // Horizontal wall - transform the row coordinate to bottom-up system
+              newStartRow = newSize.rows - (oldRows - wall.startRow)
+              newEndRow = newSize.rows - (oldRows - wall.endRow)
+            }
+            
+            return {
+              ...wall,
+              startRow: newStartRow,
+              endRow: newEndRow
+            }
+          }).filter(wall => {
+            // Filter walls that are within new grid bounds
+            // For grid lines: 0 to gridSize (inclusive) - there are gridSize+1 lines
+            const isVertical = wall.startCol === wall.endCol
+            
+            if (isVertical) {
+              // Vertical wall: column can be 0 to newSize.cols (inclusive)
+              // row coordinates: 0 to newSize.rows-1 for cell boundaries
+              return wall.startRow >= 0 && wall.endRow >= 0 &&
+                     wall.startRow <= newSize.rows && wall.endRow <= newSize.rows &&
+                     wall.startCol >= 0 && wall.endCol >= 0 &&
+                     wall.startCol <= newSize.cols && wall.endCol <= newSize.cols
+            } else {
+              // Horizontal wall: row can be 0 to newSize.rows (inclusive)
+              // column coordinates: 0 to newSize.cols-1 for cell boundaries
+              return wall.startRow >= 0 && wall.endRow >= 0 &&
+                     wall.startRow <= newSize.rows && wall.endRow <= newSize.rows &&
+                     wall.startCol >= 0 && wall.endCol >= 0 &&
+                     wall.startCol <= newSize.cols && wall.endCol <= newSize.cols
+            }
+          })
+          
+          // Transform doors coordinates for new grid size
+          const transformedDoors = dungeon.floors[floorKey].doors.map(door => {
+            // Convert from old coordinate system to new coordinate system
+            // Same logic as walls for vertical and horizontal doors
+            let newStartRow, newEndRow
+            
+            if (door.startCol === door.endCol) {
+              // Vertical door - keep coordinates as-is since rendering handles the transformation
+              newStartRow = door.startRow
+              newEndRow = door.endRow
+            } else {
+              // Horizontal door - transform the row coordinate to bottom-up system
+              newStartRow = newSize.rows - (oldRows - door.startRow)
+              newEndRow = newSize.rows - (oldRows - door.endRow)
+            }
+            
+            return {
+              ...door,
+              startRow: newStartRow,
+              endRow: newEndRow
+            }
+          }).filter(door => {
+            // Filter doors that are within new grid bounds
+            // Same logic as walls for boundary lines
+            const isVertical = door.startCol === door.endCol
+            
+            if (isVertical) {
+              // Vertical door: column can be 0 to newSize.cols (inclusive)
+              return door.startRow >= 0 && door.endRow >= 0 &&
+                     door.startRow <= newSize.rows && door.endRow <= newSize.rows &&
+                     door.startCol >= 0 && door.endCol >= 0 &&
+                     door.startCol <= newSize.cols && door.endCol <= newSize.cols
+            } else {
+              // Horizontal door: row can be 0 to newSize.rows (inclusive)
+              return door.startRow >= 0 && door.endRow >= 0 &&
+                     door.startRow <= newSize.rows && door.endRow <= newSize.rows &&
+                     door.startCol >= 0 && door.endCol >= 0 &&
+                     door.startCol <= newSize.cols && door.endCol <= newSize.cols
+            }
+          })
+          
           newState.dungeons[dungeonKey].floors[floorKey] = {
             ...dungeon.floors[floorKey],
             grid: newGrid,
-            items: filteredItems
+            items: filteredItems,
+            walls: transformedWalls,
+            doors: transformedDoors
           }
         })
       })
