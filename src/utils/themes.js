@@ -218,8 +218,8 @@ export const themes = {
       input: '#2e5544',             // 従来のインプット背景
       inputText: '#b8d4c2',         // 従来のインプットテキスト
       border: '#0b412a',            // 境界線
-      helpHeading: '#4ecdc4',       // ヘルプダイアログ見出し色（HelpDialog.jsx - セクション見出し）
-      helpToolColor: '#5afae2',     // ヘルプダイアログツール色（HelpDialog.jsx - ツール名強調）
+      helpHeading: '#f0fdfc',       // ヘルプダイアログ見出し色（HelpDialog.jsx - セクション見出し）
+      helpToolColor: '#b8fffa',     // ヘルプダイアログツール色（HelpDialog.jsx - ツール名強調）
       resetButton: '#a93a3a',       // リセットボタン色（Header.jsx - リセット系ボタン背景）
       resetButtonHover: '#bb4c4c',  // リセットボタンホバー色（Header.jsx - リセット系ボタンホバー）
       resetButtonText: '#ffffff',   // リセットボタンテキスト色（Header.jsx - リセット系ボタン文字）
