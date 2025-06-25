@@ -136,6 +136,71 @@ export const themes = {
       inputText: '#f0ebe0',         // 薄いセピア
       border: '#3d2b1f',            // ブロンズ色
     }
+  },
+
+  Yggdrasill: {
+    name: 'Yggdrasill',
+    
+    grid: {
+      background: '#e8f2f8',        // より薄い青色の背景（グリッド描写範囲内）
+      canvasBackground: '#bbe1f5',  // 少し濃い青色のキャンバス背景（グリッド全体背景）
+      lines: '#5a7c8a',             // 青灰色のグリッド線
+      cellBorder: '#5a7c8a',        // セル境界線
+    },
+    
+    header: {
+      background: '#a5c2d3',        // 暗い緑色ヘッダー背景
+      text: '#143f59',              // 白色テキスト（視認性向上）
+      border: '#1a2f26',            // 濃い緑色境界線
+      corner: '#bbe1f5',            // 角の装飾（明るめ）
+    },
+    
+    items: {
+      teleport: '#1ba1d6',          // 暗いターコイズ（ワープポイント）
+      teleportBorder: '#0f2525',    // より暗いシアン
+      event: '#d63031',             // 濃い赤（イベント）
+      elevator: '#e17055',          // オレンジ（エレベーター）
+      stairs: '#6c5ce7',            // 濃い紫（階段）
+      chest: '#e17055',             // オレンジ（宝箱）
+      currentPosition: '#d63031',   // 濃い赤（現在位置）
+      arrow: '#0984e3',             // 濃い青（矢印）
+      note: '#ffffff',              // 白（ノート背景）
+      noteBorder: '#2d3436',        // 濃いグレー（ノート枠）
+      noteTriangle: '#d63031',      // 濃い赤（ノート三角）
+      shute: '#7986cb',             // 青紫（シュート）
+      darkZone: 'rgba(62, 92, 105, 0.6)',  // 暗い青灰色のオーバーレイ
+    },
+    
+    walls: {
+      stroke: '#3e5c69',            // 青灰色の壁
+      strokeWidth: 2,
+    },
+    
+    doors: {
+      open: {
+        background: '#ffffff',      // 白（開いたドア）
+        border: '#3e5c69',          // 青灰色
+      },
+      closed: {
+        background: '#3e5c69',      // 青灰色（閉じたドア）
+        border: '#3e5c69',          // 青灰色枠
+      },
+    },
+    
+    ui: {
+      panel: '#0b412a',             // 暗い緑色パネル
+      panelText: '#5afae2',         // 薄い緑色テキスト
+      button: '#0b412a',            // 濃い緑色ボタン背景
+      buttonHover: '#3a5d50',       // ボタンホバー（少し明るい緑）
+      buttonActive: '#4a9d8e',      // アクティブボタン（緑寄りのターコイズ）
+      buttonActiveHover: '#3a7d6e', // アクティブボタンホバー
+      groupHeader: '#1a2f26',       // グループヘッダー
+      background: '#ffffff',        // 入力フィールド背景（白）
+      text: '#2d4a3e',              // 入力フィールドテキスト（暗い緑）
+      input: '#2e5544',             // 従来のインプット背景
+      inputText: '#b8d4c2',         // 従来のインプットテキスト
+      border: '#0b412a',            // 境界線
+    }
   }
 }
 

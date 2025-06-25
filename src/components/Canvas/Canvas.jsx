@@ -913,7 +913,6 @@ const Canvas = ({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onContextMenu={(e) => e.preventDefault()}
-        onSelectStart={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
         style={{ 
           touchAction: 'none',

@@ -280,7 +280,6 @@ const Items = ({
             data-note-col={note.col}
             title={showNoteTooltips ? note.text : ''}
             onContextMenu={(e) => e.preventDefault()}
-            onSelectStart={(e) => e.preventDefault()}
             onDragStart={(e) => e.preventDefault()}
           />
           {/* Custom tooltip for notes */}
