@@ -172,7 +172,7 @@ export const themes = {
     },
     
     walls: {
-      stroke: '#3e5c69',            // 青灰色の壁
+      stroke: '#042749',            // 青灰色の壁
       strokeWidth: 2,
     },
     
