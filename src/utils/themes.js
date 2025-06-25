@@ -160,8 +160,8 @@ export const themes = {
     name: 'Yggdrasill',
     
     grid: {
-      background: '#e8f2f8',        // より薄い青色の背景（グリッド描写範囲内）
-      canvasBackground: '#bbe1f5',  // 少し濃い青色のキャンバス背景（グリッド全体背景）
+      background: '#c6dbe7',        // より薄い青色の背景（グリッド描写範囲内）
+      canvasBackground: '#ecf9f7',  // 少し濃い青色のキャンバス背景（グリッド全体背景）
       lines: '#5a7c8a',             // 青灰色のグリッド線
       cellBorder: '#5a7c8a',        // セル境界線
     },
