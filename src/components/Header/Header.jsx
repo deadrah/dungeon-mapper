@@ -198,11 +198,11 @@ const Header = ({
             onClick={handleResetFloor}
             className="px-2 py-1.5 rounded text-sm h-8 w-8 flex items-center justify-center transition-colors"
             style={{ 
-              backgroundColor: themeName === 'dungeon' ? '#a0522d' : '#dc2626', 
-              color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+              backgroundColor: theme.ui.resetButton, 
+              color: theme.ui.resetButtonText
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#8b4513' : '#b91c1c'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#a0522d' : '#dc2626'}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.resetButtonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.resetButton}
             title={`Reset Floor ${currentFloor}`}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ pointerEvents: 'none' }}>
@@ -305,11 +305,11 @@ const Header = ({
             onClick={() => setIsHelpOpen(true)}
             className="px-2 py-1 rounded text-sm w-8 md:block hidden transition-colors"
             style={{ 
-              backgroundColor: themeName === 'dungeon' ? '#cd853f' : '#b45309', 
-              color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+              backgroundColor: theme.ui.helpButton, 
+              color: theme.ui.helpButtonText
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#b8860b' : '#92400e'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#cd853f' : '#b45309'}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.helpButtonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.helpButton}
             title="ヘルプ"
           >
             ?
@@ -332,11 +332,11 @@ const Header = ({
             onClick={() => setIsHelpOpen(true)}
             className="px-2 py-1.5 rounded text-sm w-8 h-8 md:hidden transition-colors"
             style={{ 
-              backgroundColor: themeName === 'dungeon' ? '#cd853f' : '#b45309', 
-              color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+              backgroundColor: theme.ui.helpButton, 
+              color: theme.ui.helpButtonText
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#b8860b' : '#92400e'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#cd853f' : '#b45309'}
+            onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.helpButtonHover}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.helpButton}
             title="ヘルプ"
           >
             ?
@@ -452,11 +452,11 @@ const Header = ({
                       onClick={handleGridSizeChange}
                       className="w-full px-2 py-1 rounded text-sm transition-colors"
                       style={{ 
-                        backgroundColor: themeName === 'dungeon' ? '#daa520' : '#dc2626', 
-                        color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+                        backgroundColor: theme.ui.resetButton, 
+                        color: theme.ui.resetButtonText
                       }}
-                      onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#b8860b' : '#b91c1c'}
-                      onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#daa520' : '#dc2626'}
+                      onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.resetButtonHover}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.resetButton}
                     >
                       Apply Grid Size Change
                     </button>
@@ -466,7 +466,7 @@ const Header = ({
 
               {/* Dungeon selection */}
               <div>
-                <span className="text-sm font-semibold" style={{ color: theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520' }}>Dungeon Save/Load</span>
+                <span className="text-sm font-semibold" style={{ color: theme.ui.menuSectionHeading }}>Dungeon Save/Load</span>
                 <select
                   value={selectedDungeonForExport}
                   onChange={(e) => setSelectedDungeonForExport(parseInt(e.target.value))}
@@ -518,7 +518,7 @@ const Header = ({
               <hr className="border-gray-300" />
               
               <div>
-                <span className="text-sm font-semibold" style={{ color: theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520' }}>All Data Backup</span>
+                <span className="text-sm font-semibold" style={{ color: theme.ui.menuSectionHeading }}>All Data Backup</span>
               </div>
               <button
                 onClick={handleDesktopExport}
@@ -544,17 +544,17 @@ const Header = ({
               <hr className="border-gray-300" />
               
               <div>
-                <span className="text-sm font-semibold" style={{ color: theme.ui.panel === '#1f2937' ? '#ef4444' : '#dc2626' }}>All Dungeon Reset</span>
+                <span className="text-sm font-semibold" style={{ color: theme.ui.resetButton }}>All Dungeon Reset</span>
               </div>
               <button
                 onClick={handleResetAllDungeons}
                 className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
                 style={{ 
-                  backgroundColor: themeName === 'dungeon' ? '#a0522d' : '#dc2626', 
-                  color: themeName === 'dungeon' ? '#f0ebe0' : '#ffffff' 
+                  backgroundColor: theme.ui.resetButton, 
+                  color: theme.ui.resetButtonText
                 }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#8b4513' : '#b91c1c'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = themeName === 'dungeon' ? '#a0522d' : '#dc2626'}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.resetButtonHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.resetButton}
               >
                 Reset All Dungeons
               </button>

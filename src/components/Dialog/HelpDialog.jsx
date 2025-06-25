@@ -41,19 +41,19 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         tools: {
           title: 'ツール説明',
           items: [
-            { name: '壁描画（Line）:', desc: 'セルの境界線に壁を描画します。クリック&ドラッグで連続描画が可能です。', color: 'text-purple-600' },
-            { name: '色塗り（Fill）:', desc: 'セルに色を塗ります。右下のカラーピッカーで色を選択できます。踏破済、ダークゾーン、魔法禁止エリアなどの塗分けに使用できます。', color: 'text-green-600' },
-            { name: 'ダークゾーン:', desc: 'セルをグレーで塗ります。', color: 'text-gray-600' },
-            { name: '階段:', desc: '上り階段（▲）と下り階段（▼）を配置します。', color: 'text-blue-600' },
-            { name: '宝箱:', desc: '宝物の場所を示すマーカーです。', color: 'text-yellow-600' },
-            { name: 'テレポートポイント:', desc: '右下の文字入力欄で最大2文字の識別子を設定できます。複数のテレポート先を管理可能です。', color: 'text-purple-600' },
-            { name: 'シュート・ピット:', desc: '落下地点を示します。右下のプルダウンでシュート（●）またはピット（○）を選択できます。', color: 'text-gray-600' },
-            { name: 'イベントマーカー:', desc: '特殊イベントの発生場所を示します。', color: 'text-yellow-600' },
-            { name: '現在位置:', desc: 'プレイヤーの現在位置を示します（1フロアにつき1つのみ）。', color: 'text-red-600' },
-            { name: 'ドア:', desc: '既存の壁に開いたドア（□）または閉じたドア（■）を配置します。', color: 'text-orange-600' },
-            { name: '矢印:', desc: 'セルまたは壁に一方通行や強制移動矢印を配置します。', color: 'text-indigo-600' },
-            { name: 'ノート:', desc: 'セルにメモを追加します。どのアイテムと重複しても配置可能で、左上角の赤い三角で表示されます。どのツール選択時でもクリック（編集）・ドラッグ（移動）が可能です。削除はノートツール選択時の右クリック、消去ツール、またはダイアログ内削除ボタンで行えます。', color: 'text-pink-600' },
-            { name: '消去ツール（Eraser）:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。(スマホで右クリック消去できないので仮対応)', color: 'text-red-500' }
+            { name: '壁描画（Line）:', desc: 'セルの境界線に壁を描画します。クリック&ドラッグで連続描画が可能です。' },
+            { name: '色塗り（Fill）:', desc: 'セルに色を塗ります。右下のカラーピッカーで色を選択できます。踏破済、ダークゾーン、魔法禁止エリアなどの塗分けに使用できます。' },
+            { name: 'ダークゾーン:', desc: 'セルをグレーで塗ります。' },
+            { name: '階段:', desc: '上り階段（▲）と下り階段（▼）を配置します。' },
+            { name: '宝箱:', desc: '宝物の場所を示すマーカーです。' },
+            { name: 'テレポートポイント:', desc: '右下の文字入力欄で最大2文字の識別子を設定できます。複数のテレポート先を管理可能です。' },
+            { name: 'シュート・ピット:', desc: '落下地点を示します。右下のプルダウンでシュート（●）またはピット（○）を選択できます。' },
+            { name: 'イベントマーカー:', desc: '特殊イベントの発生場所を示します。' },
+            { name: '現在位置:', desc: 'プレイヤーの現在位置を示します（1フロアにつき1つのみ）。' },
+            { name: 'ドア:', desc: '既存の壁に開いたドア（□）または閉じたドア（■）を配置します。' },
+            { name: '矢印:', desc: 'セルまたは壁に一方通行や強制移動矢印を配置します。' },
+            { name: 'ノート:', desc: 'セルにメモを追加します。どのアイテムと重複しても配置可能で、左上角の赤い三角で表示されます。どのツール選択時でもクリック（編集）・ドラッグ（移動）が可能です。削除はノートツール選択時の右クリック、消去ツール、またはダイアログ内削除ボタンで行えます。' },
+            { name: '消去ツール（Eraser）:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。(スマホで右クリック消去できないので仮対応)' }
           ]
         },
         mapManagement: {
@@ -96,6 +96,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.6.1', date: '2025-06-25', changes: ['Yggdrasillテーマを追加：樹と水をイメージした新テーマ'] },
             { version: 'v1.6.0', date: '2025-06-24', changes: ['メモドラッグ移動機能を追加：すべてのツールでメモをドラッグして別セルに移動可能(PCマウスのみ)'] },
             { version: 'v1.5.2', date: '2025-06-24', changes: ['メモツール刷新：どのアイテムと重複しても配置可能に', 'メモ表示を左上角の赤い三角に変更'] },
             { version: 'v1.5.1', date: '2025-06-24', changes: ['Grid Sizeコントロールをヘッダーからメニューに移動', 'モバイル・デスクトップメニューを統合', '全ダンジョンリセット機能を追加', 'Grid拡張・縮小時のLine系要素位置ずれを修正', 'Grid Size変更に実行ボタンと確認ダイアログを追加'] },
@@ -155,19 +156,19 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         tools: {
           title: 'Tool Description',
           items: [
-            { name: 'Wall Drawing (Line):', desc: 'Draw walls on cell boundaries. Click & drag for continuous drawing.', color: 'text-purple-600' },
-            { name: 'Color Fill (Fill):', desc: 'Fill cells with colors. Use the color picker in the bottom right. Can be used to mark explored areas, dark zones, magic-restricted areas, etc.', color: 'text-green-600' },
-            { name: 'Dark Zone:', desc: 'Fill cells with gray color.', color: 'text-gray-600' },
-            { name: 'Stairs:', desc: 'Place up stairs (▲) and down stairs (▼).', color: 'text-blue-600' },
-            { name: 'Chest:', desc: 'Mark treasure locations.', color: 'text-yellow-600' },
-            { name: 'Teleport Point:', desc: 'Use the text input in the bottom right to set up to 2 character identifiers. Manage multiple teleport destinations.', color: 'text-purple-600' },
-            { name: 'Shute & Pit:', desc: 'Mark fall points. Use the dropdown in the bottom right to select Shute (●) or Pit (○).', color: 'text-gray-600' },
-            { name: 'Event Marker:', desc: 'Mark special event locations.', color: 'text-yellow-600' },
-            { name: 'Current Position:', desc: 'Mark player\'s current location (only one per floor).', color: 'text-red-600' },
-            { name: 'Doors:', desc: 'Place open doors (□) or closed doors (■) on existing walls.', color: 'text-orange-600' },
-            { name: 'Arrows:', desc: 'Place one-way or forced movement arrows on cells or walls.', color: 'text-indigo-600' },
-            { name: 'Notes:', desc: 'Add text memos to cells. Can be placed on any cell even with existing items, displayed as red triangles in the top-left corner. Notes can be edited by clicking or moved by dragging regardless of the selected tool. Delete via right-click with Note tool selected, Eraser tool, or delete button in the dialog.', color: 'text-pink-600' },
-            { name: 'Eraser Tool:', desc: 'Delete all objects with left click/drag. Mobile-friendly tool that doesn\'t require right-click.', color: 'text-red-500' }
+            { name: 'Wall Drawing (Line):', desc: 'Draw walls on cell boundaries. Click & drag for continuous drawing.' },
+            { name: 'Color Fill (Fill):', desc: 'Fill cells with colors. Use the color picker in the bottom right. Can be used to mark explored areas, dark zones, magic-restricted areas, etc.' },
+            { name: 'Dark Zone:', desc: 'Fill cells with gray color.' },
+            { name: 'Stairs:', desc: 'Place up stairs (▲) and down stairs (▼).' },
+            { name: 'Chest:', desc: 'Mark treasure locations.' },
+            { name: 'Teleport Point:', desc: 'Use the text input in the bottom right to set up to 2 character identifiers. Manage multiple teleport destinations.' },
+            { name: 'Shute & Pit:', desc: 'Mark fall points. Use the dropdown in the bottom right to select Shute (●) or Pit (○).' },
+            { name: 'Event Marker:', desc: 'Mark special event locations.' },
+            { name: 'Current Position:', desc: 'Mark player\'s current location (only one per floor).' },
+            { name: 'Doors:', desc: 'Place open doors (□) or closed doors (■) on existing walls.' },
+            { name: 'Arrows:', desc: 'Place one-way or forced movement arrows on cells or walls.' },
+            { name: 'Notes:', desc: 'Add text memos to cells. Can be placed on any cell even with existing items, displayed as red triangles in the top-left corner. Notes can be edited by clicking or moved by dragging regardless of the selected tool. Delete via right-click with Note tool selected, Eraser tool, or delete button in the dialog.' },
+            { name: 'Eraser Tool:', desc: 'Delete all objects with left click/drag. Mobile-friendly tool that doesn\'t require right-click.' }
           ]
         },
         mapManagement: {
@@ -210,6 +211,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.6.1', date: '2025-06-25', changes: ['Added Yggdrasill theme: New theme inspired by trees and water'] },
             { version: 'v1.6.0', date: '2025-06-24', changes: ['Added note drag-and-drop functionality: Notes can be dragged to move between cells with any tool selected (PC mouse only)'] },
             { version: 'v1.5.2', date: '2025-06-24', changes: ['Note tool overhaul: Can now be placed on any cell even with existing items', 'Changed note display to red triangles in top-left corners'] },
             { version: 'v1.5.1', date: '2025-06-24', changes: ['Moved Grid Size controls from header to menu', 'Unified mobile and desktop menus', 'Added Reset All Dungeons feature', 'Fixed Line elements positioning issues during grid resize', 'Added apply button and confirmation dialog for Grid Size changes (improved safety for destructive operations)'] },
@@ -238,16 +240,14 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
 
   const currentContent = content[language]
 
-  // より見やすい見出し色を計算
+  // テーマから見出し色を取得
   const getHeadingColor = () => {
-    // defaultテーマでは明るいブルー、dungeonテーマでは明るいゴールド
-    return theme.ui.panel === '#1f2937' ? '#60a5fa' : '#daa520'  // light blue : goldenrod
+    return theme.ui.helpHeading
   }
 
-  // ツール名用の落ち着いた色
+  // テーマからツール色を取得
   const getToolColor = () => {
-    // defaultテーマでは少し暗いブルー、dungeonテーマでは少し暗いゴールド
-    return theme.ui.panel === '#1f2937' ? '#93c5fd' : '#b8860b'  // blue-300 : dark goldenrod
+    return theme.ui.helpToolColor
   }
 
   return (

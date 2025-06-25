@@ -1,75 +1,84 @@
-// Theme definitions for DMapper
-// Each theme contains all color values used throughout the application
+// DMapperのテーマ定義
+// 各テーマはアプリケーション全体で使用される全ての色の値を含む
 
 export const themes = {
   default: {
     name: 'Default',
     
-    // Grid colors
+    // グリッド色（Grid.jsx使用）
     grid: {
-      background: '#d7e2f6',        // Main grid background
-      canvasBackground: '#f8f8f8',  // Canvas background (outside grid)
-      lines: '#bfbfbf',             // Grid line color
-      cellBorder: '#dbdbdb',        // Individual cell borders
+      background: '#d7e2f6',        // メイングリッド背景（Grid.jsx - グリッド描画エリア）
+      canvasBackground: '#f8f8f8',  // キャンバス背景（Grid.jsx - グリッド外部エリア）
+      lines: '#bfbfbf',             // グリッド線の色（Grid.jsx - 縦横の線）
+      cellBorder: '#dbdbdb',        // 各セルの境界線（Grid.jsx - 色塗りセルの枠線）
     },
     
-    // Header colors
+    // ヘッダー色（Grid.jsx使用）
     header: {
-      background: '#f5f5f5',        // Header row/column background
-      text: '#374151',              // Header text color
-      border: '#d1d5db',            // Header borders
-      corner: '#e5e7eb',            // Corner decoration background
+      background: '#f5f5f5',        // ヘッダー行/列の背景（Grid.jsx - 行番号・列番号エリア）
+      text: '#374151',              // ヘッダーテキスト色（Grid.jsx - 行番号・列番号の文字）
+      border: '#d1d5db',            // ヘッダー境界線（Grid.jsx - ヘッダーエリアの境界）
+      corner: '#e5e7eb',            // 角装飾の背景（未使用）
     },
     
-    // Item colors
+    // アイテム色（Items.jsx使用）
     items: {
-      teleport: '#2fb8d4',          // Teleport point fill
-      teleportBorder: '#0c4b5b',    // Teleport point border
-      event: '#ca0101',             // Event marker
-      elevator: '#b8860b',          // Elevator
-      stairs: '#0000ff',            // Stairs
-      chest: '#d4a017',             // Chest
-      currentPosition: '#dc143c',   // Current position marker
-      arrow: '#345dd1',             // Arrow color
-      note: '#ffffff',              // Note background
-      noteBorder: '#000000',        // Note border
-      noteTriangle: '#dc2626',      // Note triangle (red)
-      shute: '#800080',             // Shute/pit color
-      darkZone: 'rgba(0,0,0,0.6)',  // Dark zone overlay
+      teleport: '#2fb8d4',          // ワープポイントの塗りつぶし（Items.jsx - テレポートアイテム）
+      teleportBorder: '#0c4b5b',    // ワープポイントの境界線（Items.jsx - テレポートアイテム枠）
+      event: '#ca0101',             // イベントマーカー（Items.jsx - イベントアイテム）
+      elevator: '#b8860b',          // エレベーター（Items.jsx - エレベーターアイテム）
+      stairs: '#0000ff',            // 階段（Items.jsx - 階段アイテム）
+      chest: '#d4a017',             // 宝箱（Items.jsx - 宝箱アイテム）
+      currentPosition: '#dc143c',   // 現在位置マーカー（Items.jsx - 現在位置アイテム）
+      arrow: '#345dd1',             // 矢印の色（Items.jsx - 矢印アイテム）
+      note: '#ffffff',              // ノート背景（Items.jsx - ノートアイテム背景）
+      noteBorder: '#000000',        // ノート境界線（Items.jsx - ノートアイテム枠）
+      noteTriangle: '#dc2626',      // ノート三角（Items.jsx - ノート角の赤三角）
+      shute: '#800080',             // シュート/ピット色（Items.jsx - シュートアイテム）
+      darkZone: 'rgba(0,0,0,0.6)',  // ダークゾーンオーバーレイ（Items.jsx - ダークゾーン塗りつぶし）
     },
     
-    // Wall colors
+    // 壁の色（Walls.jsx使用）
     walls: {
-      stroke: '#000000',            // Wall line color
-      strokeWidth: 2,               // Wall line width
+      stroke: '#000000',            // 壁線の色（Walls.jsx - 壁描画の線色）
+      strokeWidth: 2,               // 壁線の幅（Walls.jsx - 壁描画の線幅）
     },
     
-    // Door colors
+    // ドアの色（Doors.jsx使用）
     doors: {
       open: {
-        background: '#ffffff',      // Open door background
-        border: '#000000',          // Open door border
+        background: '#ffffff',      // 開いたドア背景（Doors.jsx - 開放ドア塗りつぶし）
+        border: '#000000',          // 開いたドア境界線（Doors.jsx - 開放ドア枠線）
       },
       closed: {
-        background: '#000000',      // Closed door background
-        border: '#000000',          // Closed door border
+        background: '#000000',      // 閉じたドア背景（Doors.jsx - 閉鎖ドア塗りつぶし）
+        border: '#000000',          // 閉じたドア境界線（Doors.jsx - 閉鎖ドア枠線）
       },
     },
     
-    // UI colors
+    // UI色（Header.jsx、ToolPanel.jsx、HelpDialog.jsx使用）
     ui: {
-      panel: '#1f2937',             // Tool panel background
-      panelText: '#ffffff',         // Tool panel text
-      button: '#1f2937',            // Button background
-      buttonHover: '#4b5563',       // Button hover
-      buttonActive: '#496fc1',      // Active button
-      buttonActiveHover: '#3b5998', // Active button hover (darker blue)
-      groupHeader: '#374151',       // Tool group header background
-      background: '#ffffff',        // Light background for inputs
-      text: '#374151',              // Dark text for inputs
-      input: '#374151',             // Input background
-      inputText: '#ffffff',         // Input text
-      border: '#374151',            // General borders
+      panel: '#1f2937',             // ツールパネル背景（Header.jsx、ToolPanel.jsx - パネル背景色）
+      panelText: '#ffffff',         // ツールパネルテキスト（Header.jsx、ToolPanel.jsx - パネル内文字色）
+      button: '#1f2937',            // ボタン背景（Header.jsx、ToolPanel.jsx - 通常ボタン背景）
+      buttonHover: '#4b5563',       // ボタンホバー（Header.jsx、ToolPanel.jsx - ボタンホバー時背景）
+      buttonActive: '#496fc1',      // アクティブボタン（Header.jsx、ToolPanel.jsx - 選択中ボタン背景）
+      buttonActiveHover: '#3b5998', // アクティブボタンホバー（Header.jsx、ToolPanel.jsx - 選択中ボタンホバー）
+      groupHeader: '#374151',       // ツールグループヘッダー背景（ToolPanel.jsx - グループ見出し背景）
+      background: '#ffffff',        // 入力フィールド用明るい背景（Header.jsx - 入力欄背景）
+      text: '#374151',              // 入力フィールド用暗いテキスト（Header.jsx - 入力欄文字色）
+      input: '#374151',             // 入力背景（Header.jsx - セレクトボックス背景）
+      inputText: '#ffffff',         // 入力テキスト（Header.jsx - セレクトボックス文字色）
+      border: '#374151',            // 一般的な境界線（Header.jsx - 各種境界線）
+      helpHeading: '#60a5fa',       // ヘルプダイアログ見出し色（HelpDialog.jsx - セクション見出し）
+      helpToolColor: '#93c5fd',     // ヘルプダイアログツール色（HelpDialog.jsx - ツール名強調）
+      resetButton: '#dc2626',       // リセットボタン色（Header.jsx - リセット系ボタン背景）
+      resetButtonHover: '#b91c1c',  // リセットボタンホバー色（Header.jsx - リセット系ボタンホバー）
+      resetButtonText: '#ffffff',   // リセットボタンテキスト色（Header.jsx - リセット系ボタン文字）
+      helpButton: '#b45309',        // ヘルプボタン色（Header.jsx - ヘルプボタン背景）
+      helpButtonHover: '#92400e',   // ヘルプボタンホバー色（Header.jsx - ヘルプボタンホバー）
+      helpButtonText: '#ffffff',    // ヘルプボタンテキスト色（Header.jsx - ヘルプボタン文字）
+      menuSectionHeading: '#60a5fa', // メニューセクション見出し色（Header.jsx - メニュー内セクション見出し）
     }
   },
   
@@ -135,6 +144,15 @@ export const themes = {
       input: '#5d4e37',             // ダークブラウン
       inputText: '#f0ebe0',         // 薄いセピア
       border: '#3d2b1f',            // ブロンズ色
+      helpHeading: '#daa520',       // ヘルプダイアログ見出し色（HelpDialog.jsx - セクション見出し）
+      helpToolColor: '#b8860b',     // ヘルプダイアログツール色（HelpDialog.jsx - ツール名強調）
+      resetButton: '#a0522d',       // リセットボタン色（Header.jsx - リセット系ボタン背景）
+      resetButtonHover: '#8b4513',  // リセットボタンホバー色（Header.jsx - リセット系ボタンホバー）
+      resetButtonText: '#f0ebe0',   // リセットボタンテキスト色（Header.jsx - リセット系ボタン文字）
+      helpButton: '#cd853f',        // ヘルプボタン色（Header.jsx - ヘルプボタン背景）
+      helpButtonHover: '#b8860b',   // ヘルプボタンホバー色（Header.jsx - ヘルプボタンホバー）
+      helpButtonText: '#f0ebe0',    // ヘルプボタンテキスト色（Header.jsx - ヘルプボタン文字）
+      menuSectionHeading: '#daa520', // メニューセクション見出し色（Header.jsx - メニュー内セクション見出し）
     }
   },
 
@@ -200,21 +218,30 @@ export const themes = {
       input: '#2e5544',             // 従来のインプット背景
       inputText: '#b8d4c2',         // 従来のインプットテキスト
       border: '#0b412a',            // 境界線
+      helpHeading: '#4ecdc4',       // ヘルプダイアログ見出し色（HelpDialog.jsx - セクション見出し）
+      helpToolColor: '#5afae2',     // ヘルプダイアログツール色（HelpDialog.jsx - ツール名強調）
+      resetButton: '#a93a3a',       // リセットボタン色（Header.jsx - リセット系ボタン背景）
+      resetButtonHover: '#bb4c4c',  // リセットボタンホバー色（Header.jsx - リセット系ボタンホバー）
+      resetButtonText: '#ffffff',   // リセットボタンテキスト色（Header.jsx - リセット系ボタン文字）
+      helpButton: '#4ecdc4',        // ヘルプボタン色（Header.jsx - ヘルプボタン背景）
+      helpButtonHover: '#3a7d6e',   // ヘルプボタンホバー色（Header.jsx - ヘルプボタンホバー）
+      helpButtonText: '#0b412a',    // ヘルプボタンテキスト色（Header.jsx - ヘルプボタン文字）
+      menuSectionHeading: '#4ecdc4', // メニューセクション見出し色（Header.jsx - メニュー内セクション見出し）
     }
   }
 }
 
-// Helper function to get a theme by name
+// 名前でテーマを取得するヘルパー関数
 export const getTheme = (themeName) => {
   return themes[themeName] || themes.default
 }
 
-// Get list of available theme names
+// 利用可能なテーマ名のリストを取得
 export const getThemeNames = () => {
   return Object.keys(themes)
 }
 
-// Get list of theme objects with name and display name
+// テーマオブジェクトと表示名のリストを取得
 export const getThemeOptions = () => {
   return Object.entries(themes).map(([key, theme]) => ({
     value: key,
