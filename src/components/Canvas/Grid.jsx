@@ -76,11 +76,11 @@ const Grid = ({
       <div className="absolute left-0 top-0 z-10 border-r" style={{ backgroundColor: theme.header.background, borderColor: theme.header.border }}>
         {Array.from({ length: endRow - startRow }, (_, i) => startRow + i).map((row, index) => {
           const displayRow = gridSize.rows - 1 - row;
-          const isFirst = index === 0;
+          const isLast = index === endRow - startRow - 1;
           return (
             <div
               key={`row-header-${row}`}
-              className={`text-xs px-1 border-b flex items-center justify-center font-mono ${isFirst ? 'border-t' : ''}`}
+              className={`text-xs px-1 flex items-center justify-center font-mono ${isLast ? '' : 'border-b'}`}
               style={{
                 position: 'absolute',
                 top: Math.round(offset.y + row * cellSize + 24),
@@ -99,34 +99,37 @@ const Grid = ({
 
       {/* Column headers */}
       <div className="absolute left-0 top-0 z-10 border-b" style={{ backgroundColor: theme.header.background, borderColor: theme.header.border }}>
-        {Array.from({ length: endCol - startCol }, (_, i) => startCol + i).map((col, index) => (
-          <div
-            key={`col-header-${col}`}
-            className={`text-xs py-1 border-r flex items-center justify-center font-mono ${index === 0 ? 'border-l' : ''}`}
-            style={{
-              position: 'absolute',
-              left: Math.round(offset.x + col * cellSize + 24),
-              width: cellSize,
-              height: '24px',
-              fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
-              color: theme.header.text,
-              borderColor: theme.header.border
-            }}
-          >
-            {col < 10 ? `0${col}` : col}
-          </div>
-        ))}
+        {Array.from({ length: endCol - startCol }, (_, i) => startCol + i).map((col, index) => {
+          const isLast = index === endCol - startCol - 1;
+          return (
+            <div
+              key={`col-header-${col}`}
+              className={`text-xs py-1 flex items-center justify-center font-mono ${isLast ? '' : 'border-r'}`}
+              style={{
+                position: 'absolute',
+                left: Math.round(offset.x + col * cellSize + 24),
+                width: cellSize,
+                height: '24px',
+                fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
+                color: theme.header.text,
+                borderColor: theme.header.border
+              }}
+            >
+              {col < 10 ? `0${col}` : col}
+            </div>
+          );
+        })}
       </div>
 
       {/* Right row headers */}
       <div className="absolute left-0 top-0 z-10 border-l" style={{ backgroundColor: theme.header.background, borderColor: theme.header.border }}>
         {Array.from({ length: endRow - startRow }, (_, i) => startRow + i).map((row, index) => {
           const displayRow = gridSize.rows - 1 - row;
-          const isFirst = index === 0;
+          const isLast = index === endRow - startRow - 1;
           return (
             <div
               key={`row-header-right-${row}`}
-              className={`text-xs px-1 border-b flex items-center justify-center font-mono ${isFirst ? 'border-t' : ''}`}
+              className={`text-xs px-1 flex items-center justify-center font-mono ${isLast ? '' : 'border-b'}`}
               style={{
                 position: 'absolute',
                 left: offset.x + gridSize.cols * cellSize + 24,
@@ -146,73 +149,28 @@ const Grid = ({
 
       {/* Bottom column headers */}
       <div className="absolute z-10 border-t" style={{ top: offset.y + gridSize.rows * cellSize + 24, backgroundColor: theme.header.background, borderColor: theme.header.border }}>
-        {Array.from({ length: endCol - startCol }, (_, i) => startCol + i).map((col, index) => (
-          <div
-            key={`col-header-bottom-${col}`}
-            className={`text-xs py-1 border-r flex items-center justify-center font-mono ${index === 0 ? 'border-l' : ''}`}
-            style={{
-              position: 'absolute',
-              left: Math.round(offset.x + col * cellSize + 24),
-              width: cellSize,
-              height: '24px',
-              fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
-              color: theme.header.text,
-              borderColor: theme.header.border
-            }}
-          >
-            {col < 10 ? `0${col}` : col}
-          </div>
-        ))}
+        {Array.from({ length: endCol - startCol }, (_, i) => startCol + i).map((col, index) => {
+          const isLast = index === endCol - startCol - 1;
+          return (
+            <div
+              key={`col-header-bottom-${col}`}
+              className={`text-xs py-1 flex items-center justify-center font-mono ${isLast ? '' : 'border-r'}`}
+              style={{
+                position: 'absolute',
+                left: Math.round(offset.x + col * cellSize + 24),
+                width: cellSize,
+                height: '24px',
+                fontSize: Math.max(8, Math.min(12, cellSize * 0.3)),
+                color: theme.header.text,
+                borderColor: theme.header.border
+              }}
+            >
+              {col < 10 ? `0${col}` : col}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Corner decorations */}
-      {/* Top-left corner */}
-      <div 
-        className="absolute z-10" 
-        style={{
-          left: offset.x,
-          top: offset.y,
-          width: '24px',
-          height: '24px',
-          backgroundColor: theme.header.corner
-        }}
-      />
-      
-      {/* Top-right corner */}
-      <div 
-        className="absolute z-10" 
-        style={{
-          left: offset.x + gridSize.cols * cellSize + 24,
-          top: offset.y,
-          width: '24px',
-          height: '24px',
-          backgroundColor: theme.header.corner
-        }}
-      />
-      
-      {/* Bottom-left corner */}
-      <div 
-        className="absolute z-10" 
-        style={{
-          left: offset.x,
-          top: offset.y + gridSize.rows * cellSize + 24,
-          width: '24px',
-          height: '24px',
-          backgroundColor: theme.header.corner
-        }}
-      />
-      
-      {/* Bottom-right corner */}
-      <div 
-        className="absolute z-10" 
-        style={{
-          left: offset.x + gridSize.cols * cellSize + 24,
-          top: offset.y + gridSize.rows * cellSize + 24,
-          width: '24px',
-          height: '24px',
-          backgroundColor: theme.header.corner
-        }}
-      />
 
       <svg
         width={viewportSize.width}

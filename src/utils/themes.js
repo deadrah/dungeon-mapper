@@ -151,7 +151,7 @@ export const themes = {
     header: {
       background: '#a5c2d3',        // 暗い緑色ヘッダー背景
       text: '#143f59',              // 白色テキスト（視認性向上）
-      border: '#1a2f26',            // 濃い緑色境界線
+      border: '#5a7c8a',            // 濃い緑色境界線
       corner: '#bbe1f5',            // 角の装飾（明るめ）
     },
     
