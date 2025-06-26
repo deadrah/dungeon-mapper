@@ -78,6 +78,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       .note-text { font-family: Arial, sans-serif; font-size: 8px; fill: ${colors.noteText}; }
       .title-text { font-family: Arial, sans-serif; font-size: 14px; fill: ${colors.titleText}; font-weight: bold; }
       .header-text { font-family: Arial, sans-serif; font-size: 10px; fill: ${colors.headerText}; text-anchor: middle; }
+      .copyright-text { font-family: Arial, sans-serif; font-size: 10px; fill: ${colors.headerText}; opacity: 0.8; }
     </style>
   </defs>
   
@@ -501,7 +502,16 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
   }
 
   // Close SVG
-  svg += '  </g>\n</svg>'
+  svg += '  </g>\n\n'
+  
+  // Add copyright in bottom right corner
+  const currentYear = new Date().getFullYear()
+  const copyrightText = `© ${currentYear} DMapper`
+  const copyrightX = svgWidth - 10 // 5px from right edge
+  const copyrightY = svgHeight - 10 // 5px from bottom
+  svg += `  <!-- Copyright -->\n`
+  svg += `  <text x="${copyrightX}" y="${copyrightY}" text-anchor="end" class="copyright-text">${copyrightText}</text>\n`
+  svg += '</svg>'
 
   return svg
 }
