@@ -25,6 +25,7 @@ export const MESSAGES = {
     
     // All data operations
     importAllData: '全データをインポートしますか？現在のすべてのダンジョンと設定が置き換えられます。',
+    restoreImportedGridSize: 'インポートされたグリッドサイズ（{newRows}x{newCols}）に復元しますか？\n\n「はい」：グリッドサイズを復元（座標変換なし）\n「いいえ」：現在のサイズ（{oldRows}x{oldCols}）を維持（座標変換あり）',
     importCompleted: 'インポートが正常に完了しました',
     exportFailed: 'エクスポートに失敗しました',
     importFailed: 'インポートに失敗しました',
@@ -58,6 +59,7 @@ export const MESSAGES = {
     
     // All data operations
     importAllData: 'Import all data? This will replace all current dungeons and settings.',
+    restoreImportedGridSize: 'Restore imported grid size ({newRows}x{newCols})?\n\n"Yes": Restore grid size (no coordinate transformation)\n"No": Keep current size ({oldRows}x{oldCols}) (with coordinate transformation)',
     importCompleted: 'Import completed successfully',
     exportFailed: 'Export failed',
     importFailed: 'Import failed',

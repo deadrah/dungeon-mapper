@@ -429,20 +429,32 @@ const Header = ({
                 <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>Grid Size</h4>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm" style={{ color: theme.ui.panelText }}>Size:</span>
+                    <span className="text-sm" style={{ color: theme.ui.panelText }}>幅:</span>
                     <input
                       type="number"
                       value={pendingGridSize.cols}
                       onChange={(e) => {
-                        const size = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
-                        setPendingGridSize({ rows: size, cols: size })
+                        const cols = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
+                        setPendingGridSize(prev => ({ ...prev, cols }))
                       }}
                       className="px-2 py-1 rounded text-sm w-12"
                       style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
                       min="5"
                       max="50"
                     />
-                    <span className="text-sm" style={{ color: theme.ui.panelText }}>x{pendingGridSize.rows}</span>
+                    <span className="text-sm" style={{ color: theme.ui.panelText }}>高さ:</span>
+                    <input
+                      type="number"
+                      value={pendingGridSize.rows}
+                      onChange={(e) => {
+                        const rows = Math.max(5, Math.min(50, parseInt(e.target.value) || 20))
+                        setPendingGridSize(prev => ({ ...prev, rows }))
+                      }}
+                      className="px-2 py-1 rounded text-sm w-12"
+                      style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
+                      min="5"
+                      max="50"
+                    />
                   </div>
                   <div className="text-xs" style={{ color: theme.ui.panelText, opacity: 0.7 }}>
                     Current: {gridSize.cols}x{gridSize.rows}

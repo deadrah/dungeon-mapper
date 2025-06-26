@@ -111,13 +111,18 @@ const transformFloorToNewGridSize = (floor, oldGridSize, newGridSize) => {
     }
   })
   
+  // Filter notes to remove those outside new grid bounds
+  const transformedNotes = (floor.notes || []).filter(
+    note => note.row < newGridSize.rows && note.col < newGridSize.cols
+  )
+  
   return {
     ...floor,
     grid: newGrid,
     items: transformedItems,
     walls: transformedWalls,
     doors: transformedDoors,
-    notes: floor.notes || []
+    notes: transformedNotes
   }
 }
 
@@ -868,22 +873,40 @@ export const useAppState = () => {
             return
           }
           
-          // Transform all floors to match current grid size if different
+          // Handle grid size differences
           if (processedState.gridSize.rows !== state.gridSize.rows || processedState.gridSize.cols !== state.gridSize.cols) {
-            Object.keys(processedState.dungeons).forEach(dungeonKey => {
-              const dungeon = processedState.dungeons[dungeonKey]
-              if (dungeon.floors) {
-                Object.keys(dungeon.floors).forEach(floorKey => {
-                  processedState.dungeons[dungeonKey].floors[floorKey] = transformFloorToNewGridSize(
-                    dungeon.floors[floorKey],
-                    processedState.gridSize,
-                    state.gridSize
-                  )
-                })
-              }
+            const importedGridSize = processedState.gridSize
+            const currentGridSize = state.gridSize
+            
+            // Ask user whether to restore imported grid size or keep current one
+            const restoreGridSizeMessage = getMessage(state.language, 'restoreImportedGridSize', {
+              oldRows: currentGridSize.rows,
+              oldCols: currentGridSize.cols,
+              newRows: importedGridSize.rows,
+              newCols: importedGridSize.cols
             })
-            // Update grid size to current one
-            processedState.gridSize = state.gridSize
+            
+            const restoreGridSize = window.confirm(restoreGridSizeMessage)
+            
+            if (restoreGridSize) {
+              // Keep imported grid size - no coordinate transformation needed
+              processedState.gridSize = importedGridSize
+            } else {
+              // Keep current grid size - transform coordinates
+              Object.keys(processedState.dungeons).forEach(dungeonKey => {
+                const dungeon = processedState.dungeons[dungeonKey]
+                if (dungeon.floors) {
+                  Object.keys(dungeon.floors).forEach(floorKey => {
+                    processedState.dungeons[dungeonKey].floors[floorKey] = transformFloorToNewGridSize(
+                      dungeon.floors[floorKey],
+                      importedGridSize,
+                      currentGridSize
+                    )
+                  })
+                }
+              })
+              processedState.gridSize = currentGridSize
+            }
           }
           
           setState(processedState)

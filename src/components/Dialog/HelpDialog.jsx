@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
   const content = {
     ja: {
       title: 'DMapper ヘルプ',
-      version: 'バージョン 1.6.3',
+      version: 'バージョン 1.6.4',
       close: '閉じる',
       tabs: {
         guide: '機能説明',
@@ -70,7 +70,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { label: 'ダンジョン名前付け:', desc: 'Renameボタン' },
             { label: '階層切り替え（最大30階）:', desc: 'Floor選択' },
             { label: '現在フロア全削除:', desc: 'Resetボタン' },
-            { label: 'グリッドサイズ調整（5x5〜50x50）:', desc: 'Grid Sizeスライダー' },
+            { label: 'グリッドサイズ調整（5x5〜50x50）:', desc: 'Menu → Grid Sizeで幅・高さを個別設定' },
             { label: 'メモ常時表示切り替え:', desc: 'Noteボタン' }
           ]
         },
@@ -103,6 +103,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.6.4', date: '2025-06-26', changes: ['グリッドサイズ設定を改善：幅・高さを個別に設定可能（長方形グリッド対応）'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['モバイルタッチ操作を改善：同じツールで同じ要素をタッチすると削除（PCでは従来通り）', '削除ツールの優先度システム実装：メモ＞アイテム＞色の順で削除', 'スワイプ操作時のエラーを修正'] },
             { version: 'v1.6.2', date: '2025-06-26', changes: ['ドアアイテムツールを追加：セルに配置可能なドア（開閉選択可能）'] },
             { version: 'v1.6.1', date: '2025-06-25', changes: ['Yggdrasillテーマを追加：樹と水をイメージした新テーマ'] },
@@ -132,7 +133,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     },
     en: {
       title: 'DMapper Help',
-      version: 'Version 1.6.3',
+      version: 'Version 1.6.4',
       close: 'Close',
       tabs: {
         guide: 'User Guide',
@@ -194,7 +195,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { label: 'Rename:', desc: 'Give custom names to your dungeons' },
             { label: 'Floor Selection:', desc: 'Support up to 30 floors per dungeon' },
             { label: 'Reset:', desc: 'Clear all data on current floor' },
-            { label: 'Grid Size:', desc: 'Adjust grid size from 5x5 to 50x50' },
+            { label: 'Grid Size:', desc: 'Adjust width and height individually (5x5 to 50x50) via Menu → Grid Size' },
             { label: 'Note:', desc: 'Toggle note tooltip display on/off (always visible when on)' }
           ]
         },
@@ -227,6 +228,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.6.4', date: '2025-06-26', changes: ['Improved grid size settings: Support for rectangular grids with independent width and height configuration'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['Improved mobile touch controls: Touch same element with same tool to delete (PC maintains original behavior)', 'Implemented priority-based deletion system: Notes > Items > Grid colors', 'Fixed swipe gesture errors'] },
             { version: 'v1.6.2', date: '2025-06-26', changes: ['Added Door Item tool: Placeable door items on cells with open/closed state selection'] },
             { version: 'v1.6.1', date: '2025-06-25', changes: ['Added Yggdrasill theme: New theme inspired by trees and water'] },
