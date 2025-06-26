@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
   const content = {
     ja: {
       title: 'DMapper ヘルプ',
-      version: 'バージョン 1.6.2',
+      version: 'バージョン 1.6.3',
       close: '閉じる',
       tabs: {
         guide: '機能説明',
@@ -60,7 +60,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: '矢印:', desc: '一方通行や強制移動矢印を配置します。画面右下のオプションで方向を選択できます。' },
             { name: 'ドアアイテム:', desc: 'ドアアイテムを配置します。画面右下のオプションで開いたドア・閉じたドアを選択できます。デフォルトは閉じたドアです。' },
             { name: 'ノート:', desc: 'メモを追加します。全てのアイテムと重複して配置可能で、左上角の赤い三角で表示されます。全てのツール選択時でもクリック（編集）・ドラッグ（移動）が可能です。削除はノートツール選択時の右クリック、またはダイアログ内削除ボタンで行えます。' },
-            { name: '消去ツール:', desc: '左クリックで優先度順に1つずつオブジェクトを削除します。（メモ＞その他アイテム＞塗った色の順）' }
+            { name: '消去ツール:', desc: '左クリックでオブジェクトを削除します。' }
           ]
         },
         mapManagement: {
@@ -103,6 +103,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.6.3', date: '2025-06-26', changes: ['モバイルタッチ操作を改善：同じツールで同じ要素をタッチすると削除（PCでは従来通り）', '削除ツールの優先度システム実装：メモ＞アイテム＞色の順で削除', 'スワイプ操作時のエラーを修正'] },
             { version: 'v1.6.2', date: '2025-06-26', changes: ['ドアアイテムツールを追加：セルに配置可能なドア（開閉選択可能）'] },
             { version: 'v1.6.1', date: '2025-06-25', changes: ['Yggdrasillテーマを追加：樹と水をイメージした新テーマ'] },
             { version: 'v1.6.0', date: '2025-06-24', changes: ['メモドラッグ移動機能を追加：すべてのツールでメモをドラッグして別セルに移動可能(PCマウスのみ)'] },
@@ -131,7 +132,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     },
     en: {
       title: 'DMapper Help',
-      version: 'Version 1.6.2',
+      version: 'Version 1.6.3',
       close: 'Close',
       tabs: {
         guide: 'User Guide',
@@ -183,7 +184,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: 'Arrows:', desc: 'Place one-way or forced movement arrows. Use the options in the bottom right to select direction.' },
             { name: 'Door Item:', desc: 'Place door items. Use the options in the bottom right to select open or closed door state. Default is closed door.' },
             { name: 'Notes:', desc: 'Add memos. Can be placed on any cell with all existing items, displayed as red triangles in the top-left corner. Notes can be edited by clicking or moved by dragging with any tool selected. Delete via right-click with Note tool selected, or delete button in the dialog.' },
-            { name: 'Eraser Tool:', desc: 'Delete objects one at a time in priority order with left click. (Notes > Items > Grid colors)' }
+            { name: 'Eraser Tool:', desc: 'Delete objects with left click.' }
           ]
         },
         mapManagement: {
@@ -226,6 +227,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.6.3', date: '2025-06-26', changes: ['Improved mobile touch controls: Touch same element with same tool to delete (PC maintains original behavior)', 'Implemented priority-based deletion system: Notes > Items > Grid colors', 'Fixed swipe gesture errors'] },
             { version: 'v1.6.2', date: '2025-06-26', changes: ['Added Door Item tool: Placeable door items on cells with open/closed state selection'] },
             { version: 'v1.6.1', date: '2025-06-25', changes: ['Added Yggdrasill theme: New theme inspired by trees and water'] },
             { version: 'v1.6.0', date: '2025-06-24', changes: ['Added note drag-and-drop functionality: Notes can be dragged to move between cells with any tool selected (PC mouse only)'] },

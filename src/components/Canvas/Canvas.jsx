@@ -289,7 +289,7 @@ const Canvas = ({
       const timeSinceStart = Date.now() - singleTouchStart.time
       if (!isSingleFingerPanning && distance > 10 && timeSinceStart < 500) {
         setIsSingleFingerPanning(true)
-        e.preventDefault()
+        // Remove preventDefault to fix passive event listener error
       }
       
       // Continue panning if active
@@ -303,7 +303,7 @@ const Canvas = ({
         }))
         
         setLastMousePos({ x: touch.clientX, y: touch.clientY })
-        e.preventDefault()
+        // Remove preventDefault to fix passive event listener error
       }
     }
   }, [lastMousePos, isPanning, initialPinchDistance, initialZoom, getDistance, setZoom, singleTouchStart, isSingleFingerPanning])
@@ -455,6 +455,17 @@ const Canvas = ({
       }
     }
     
+    // Helper function to detect if the event is from touch (mobile) vs mouse (PC)
+    const isTouchEvent = event && (
+      event.type === 'touchstart' || 
+      event.type === 'touchend' || 
+      event.pointerType === 'touch' ||
+      (event.sourceCapabilities && event.sourceCapabilities.firesTouchEvents) ||
+      // Additional check for mobile user agent as fallback
+      (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    );
+    
+    
     // Coordinate transformation
     let actualRow;
     if (isVertical) {
@@ -531,7 +542,12 @@ const Canvas = ({
             y: event.clientY - rect.top
           })
         }
+      } else if (isTouchEvent) {
+        // Existing wall found and touch event - delete it (mobile touch improvement)
+        const newWalls = floorData.walls.filter((_, index) => index !== existingWallIndex)
+        updateCurrentFloorData('walls', newWalls)
       }
+      // For PC mouse click on existing wall, do nothing (maintain existing behavior)
     } else {
       // For Door and Arrow tools, use the same line-based placement as Line tool
       // The isVertical parameter determines if this is a vertical or horizontal line click
@@ -581,17 +597,26 @@ const Canvas = ({
           const newDoors = [...(floorData.doors || []), newDoor]
           updateCurrentFloorData('doors', newDoors)
         } else {
-          // Replace existing door with new type (overwrite)
-          const newDoors = [...(floorData.doors || [])]
-          newDoors[existingDoorIndex] = {
-            type: appState.activeTool,
-            startRow: actualRow,
-            startCol: col,
-            endRow: endRow,
-            endCol: endCol,
-            id: Date.now() + Math.random()
+          // Check if existing door is the same type as current tool
+          const existingDoor = floorData.doors[existingDoorIndex]
+          
+          if (existingDoor.type === appState.activeTool && isTouchEvent) {
+            // Same tool type and touch event - delete the existing door (mobile touch improvement)
+            const newDoors = floorData.doors.filter((_, index) => index !== existingDoorIndex)
+            updateCurrentFloorData('doors', newDoors)
+          } else {
+            // Different tool type, or PC mouse click - replace existing door with new type
+            const newDoors = [...(floorData.doors || [])]
+            newDoors[existingDoorIndex] = {
+              type: appState.activeTool,
+              startRow: actualRow,
+              startCol: col,
+              endRow: endRow,
+              endCol: endCol,
+              id: Date.now() + Math.random()
+            }
+            updateCurrentFloorData('doors', newDoors)
           }
-          updateCurrentFloorData('doors', newDoors)
         }
       }
     }
@@ -657,6 +682,17 @@ const Canvas = ({
       return;
     }
     
+    // Helper function to detect if the event is from touch (mobile) vs mouse (PC)
+    const isTouchEvent = _event && (
+      _event.type === 'touchstart' || 
+      _event.type === 'touchend' || 
+      _event.pointerType === 'touch' ||
+      (_event.sourceCapabilities && _event.sourceCapabilities.firesTouchEvents) ||
+      // Additional check for mobile user agent as fallback
+      (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    );
+    
+    
     // Don't handle grid clicks if we're in the middle of dragging a note
     if (isDraggingNote) {
       return;
@@ -711,11 +747,30 @@ const Canvas = ({
     
     if (appState.activeTool === TOOLS.BLOCK_COLOR || appState.activeTool === TOOLS.DARK_ZONE) {
       const newGrid = [...(floorData.grid || [])]
-      if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
-        newGrid[actualRow] = [...newGrid[actualRow]]
+      // Ensure grid structure exists
+      if (!newGrid[actualRow]) {
+        newGrid[actualRow] = []
+      }
+      
+      if (actualRow >= 0 && actualRow < appState.gridSize.rows) {
+        newGrid[actualRow] = [...(newGrid[actualRow] || [])]
+        
         // Use gray color for DARK_ZONE, otherwise use selected color
         const colorToUse = appState.activeTool === TOOLS.DARK_ZONE ? '#b0b0b0' : selectedColor
-        newGrid[actualRow][col] = colorToUse
+        const existingColor = newGrid[actualRow][col]
+        
+        // If same color exists and it's a touch event, delete it (mobile touch improvement)
+        if (existingColor === colorToUse && isTouchEvent) {
+          delete newGrid[actualRow][col]
+          // Clean up empty row if needed
+          if (Object.keys(newGrid[actualRow]).length === 0) {
+            delete newGrid[actualRow]
+          }
+        } else {
+          // Different color, no color, or PC mouse click - apply new color
+          newGrid[actualRow][col] = colorToUse
+        }
+        
         updateCurrentFloorData('grid', newGrid)
       }
       // Note: Door tools should be handled via handleLineClick, not handleGridClick
@@ -766,24 +821,42 @@ const Canvas = ({
           const newItems = [...(floorData.items || []), newItem]
           updateCurrentFloorData('items', newItems)
         } else {
-          // Replace existing item with new type
-          const newItems = [...(floorData.items || [])]
-          newItems[existingItemIndex] = {
-            type: appState.activeTool === TOOLS.ARROW ? `arrow_${arrowDirection}` : appState.activeTool,
-            row: actualRow,
-            col,
-            id: Date.now() + Math.random(),
-            ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
-            ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
-            ...(appState.activeTool === TOOLS.ARROW && { arrowDirection }),
-            ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText }),
-            ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState })
+          // Check if existing item is the same type as current tool
+          const existingItem = floorData.items[existingItemIndex]
+          const currentToolType = appState.activeTool === TOOLS.ARROW ? `arrow_${arrowDirection}` : appState.activeTool
+          
+          // For arrow tools, also check if it's the same direction
+          const isSameArrowType = appState.activeTool === TOOLS.ARROW && 
+            existingItem.type === currentToolType
+          
+          // For other tools, check if type matches exactly
+          const isSameType = appState.activeTool !== TOOLS.ARROW && 
+            existingItem.type === currentToolType
+          
+          if ((isSameArrowType || isSameType) && isTouchEvent) {
+            // Same tool type and touch event - delete the existing item (mobile touch improvement)
+            const newItems = floorData.items.filter((_, index) => index !== existingItemIndex)
+            updateCurrentFloorData('items', newItems)
+          } else {
+            // Different tool type, or PC mouse click - replace existing item with new type
+            const newItems = [...(floorData.items || [])]
+            newItems[existingItemIndex] = {
+              type: currentToolType,
+              row: actualRow,
+              col,
+              id: Date.now() + Math.random(),
+              ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
+              ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
+              ...(appState.activeTool === TOOLS.ARROW && { arrowDirection }),
+              ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText }),
+              ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState })
+            }
+            updateCurrentFloorData('items', newItems)
           }
-          updateCurrentFloorData('items', newItems)
         }
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, deleteNoteAt])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, doorState, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, deleteNoteAt])
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog
