@@ -267,10 +267,6 @@ const Grid = ({
                   cursor: 'pointer',
                   touchAction: 'manipulation'
                 }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleCellClick(e, row, col)
-                }}
                 onMouseDown={(e) => {
                   e.stopPropagation()
                   handleCellClick(e, row, col)
@@ -316,10 +312,6 @@ const Grid = ({
                   pointerEvents: (isTwoFingerActive || isSingleFingerPanning) ? 'none' : 'all',
                   cursor: 'pointer',
                   touchAction: 'manipulation'
-                }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleCellClick(e, row, col)
                 }}
                 onMouseDown={(e) => {
                   e.stopPropagation()

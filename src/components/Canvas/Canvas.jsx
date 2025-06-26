@@ -107,6 +107,37 @@ const Canvas = ({
     }
   }, [handleWheel])
 
+  // Helper functions for deletion priority
+  const getNextGridDeletionTarget = useCallback((row, col) => {
+    // 1. メモチェック
+    const existingNote = getNoteAt(row, col)
+    if (existingNote) return 'note'
+    
+    // 2. アイテムチェック  
+    const item = (floorData.items || []).find(item => item.row === row && item.col === col)
+    if (item) return 'item'
+    
+    // 3. グリッド塗りチェック
+    if (floorData.grid?.[row]?.[col]) return 'grid'
+    
+    return null
+  }, [floorData.items, floorData.grid, getNoteAt])
+
+  const getNextLineDeletionTarget = useCallback((row, col) => {
+    // 1. ライン系ツール（ドア、矢印）チェック
+    const door = (floorData.doors || []).find(door => 
+      door.startRow === row && door.startCol === col
+    )
+    if (door) return 'door'
+    
+    // 2. ライン（壁）チェック
+    const wall = (floorData.walls || []).find(wall => 
+      wall.startRow === row && wall.startCol === col
+    )
+    if (wall) return 'wall'
+    
+    return null
+  }, [floorData.doors, floorData.walls])
 
   const handleMouseDown = useCallback((e) => {
     // Prevent context menu on right click
@@ -446,18 +477,23 @@ const Canvas = ({
       }
     })
     
-    // Handle eraser tool for lines
+    // Handle eraser tool for lines with priority-based deletion
     if (appState.activeTool === TOOLS.ERASER) {
-      // Remove walls at this position
-      if (existingWallIndex !== -1) {
-        const newWalls = (floorData.walls || []).filter((_, index) => index !== existingWallIndex)
-        updateCurrentFloorData('walls', newWalls)
+      const deletionTarget = getNextLineDeletionTarget(actualRow, col)
+      
+      if (deletionTarget === 'door') {
+        // Remove doors at this position (higher priority)
+        const newDoors = (floorData.doors || []).filter(door => 
+          !(door.startRow === actualRow && door.startCol === col)
+        )
+        updateCurrentFloorData('doors', newDoors)
+      } else if (deletionTarget === 'wall') {
+        // Remove walls at this position (lower priority)
+        if (existingWallIndex !== -1) {
+          const newWalls = (floorData.walls || []).filter((_, index) => index !== existingWallIndex)
+          updateCurrentFloorData('walls', newWalls)
+        }
       }
-      // Remove doors at this position
-      const newDoors = (floorData.doors || []).filter(door => 
-        !(door.startRow === actualRow && door.startCol === col)
-      )
-      updateCurrentFloorData('doors', newDoors)
       return;
     }
     
@@ -650,20 +686,26 @@ const Canvas = ({
       }
     }
     
-    // Handle eraser tool
+    // Handle eraser tool with priority-based deletion
     if (appState.activeTool === TOOLS.ERASER) {
-      // Remove grid fill
-      const newGrid = [...(floorData.grid || [])]
-      if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
-        newGrid[actualRow] = [...newGrid[actualRow]]
-        newGrid[actualRow][col] = null
-        updateCurrentFloorData('grid', newGrid)
+      const deletionTarget = getNextGridDeletionTarget(actualRow, col)
+      
+      if (deletionTarget === 'note') {
+        // Remove notes at this position (highest priority)
+        deleteNoteAt(actualRow, col)
+      } else if (deletionTarget === 'item') {
+        // Remove items at this position
+        const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
+        updateCurrentFloorData('items', newItems)
+      } else if (deletionTarget === 'grid') {
+        // Remove grid fill (lowest priority)
+        const newGrid = [...(floorData.grid || [])]
+        if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
+          newGrid[actualRow] = [...newGrid[actualRow]]
+          newGrid[actualRow][col] = null
+          updateCurrentFloorData('grid', newGrid)
+        }
       }
-      // Remove items at this position
-      const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
-      updateCurrentFloorData('items', newItems)
-      // Remove notes at this position (new notes system)
-      deleteNoteAt(actualRow, col)
       return;
     }
     
@@ -770,7 +812,7 @@ const Canvas = ({
     const lineTools = ['line'];
     const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
     const fillTools = [TOOLS.BLOCK_COLOR, TOOLS.DARK_ZONE];
-    const otherGridTools = ['chest', 'warp_point', 'shute', 'elevator', 'stairs_up_svg', 'stairs_down_svg', 'current_position', 'event_marker', 'note', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west', 'arrow'];
+    const otherGridTools = ['chest', 'warp_point', 'shute', 'elevator', 'stairs_up_svg', 'stairs_down_svg', 'current_position', 'event_marker', 'note', 'door_item', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west', 'arrow'];
     
     if (fillTools.includes(appState.activeTool)) {
       // Fill category: Remove fill color only
