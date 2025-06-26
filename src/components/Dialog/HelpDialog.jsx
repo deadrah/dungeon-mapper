@@ -59,8 +59,8 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: '現在位置:', desc: 'プレイヤーの現在位置を示します（1フロアにつき1つのみ）。' },
             { name: '矢印:', desc: '一方通行や強制移動矢印を配置します。画面右下のオプションで方向を選択できます。' },
             { name: 'ドアアイテム:', desc: 'ドアアイテムを配置します。画面右下のオプションで開いたドア・閉じたドアを選択できます。デフォルトは閉じたドアです。' },
-            { name: 'ノート:', desc: 'メモを追加します。全てのアイテムと重複して配置可能で、左上角の赤い三角で表示されます。全てのツール選択時でもクリック（編集）・ドラッグ（移動）が可能です。削除はノートツール選択時の右クリック、消去ツール、またはダイアログ内削除ボタンで行えます。' },
-            { name: '消去ツール:', desc: '左クリック・ドラッグですべてのオブジェクトを削除できます。' }
+            { name: 'ノート:', desc: 'メモを追加します。全てのアイテムと重複して配置可能で、左上角の赤い三角で表示されます。全てのツール選択時でもクリック（編集）・ドラッグ（移動）が可能です。削除はノートツール選択時の右クリック、またはダイアログ内削除ボタンで行えます。' },
+            { name: '消去ツール:', desc: '左クリックで優先度順に1つずつオブジェクトを削除します。（メモ＞その他アイテム＞塗った色の順）' }
           ]
         },
         mapManagement: {
@@ -182,8 +182,8 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: 'Current Position:', desc: 'Mark player\'s current location (only one per floor).' },
             { name: 'Arrows:', desc: 'Place one-way or forced movement arrows. Use the options in the bottom right to select direction.' },
             { name: 'Door Item:', desc: 'Place door items. Use the options in the bottom right to select open or closed door state. Default is closed door.' },
-            { name: 'Notes:', desc: 'Add memos. Can be placed on any cell with all existing items, displayed as red triangles in the top-left corner. Notes can be edited by clicking or moved by dragging with any tool selected. Delete via right-click with Note tool selected, Eraser tool, or delete button in the dialog.' },
-            { name: 'Eraser Tool:', desc: 'Delete all objects with left click/drag.' }
+            { name: 'Notes:', desc: 'Add memos. Can be placed on any cell with all existing items, displayed as red triangles in the top-left corner. Notes can be edited by clicking or moved by dragging with any tool selected. Delete via right-click with Note tool selected, or delete button in the dialog.' },
+            { name: 'Eraser Tool:', desc: 'Delete objects one at a time in priority order with left click. (Notes > Items > Grid colors)' }
           ]
         },
         mapManagement: {
