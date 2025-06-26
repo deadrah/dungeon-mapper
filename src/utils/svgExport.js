@@ -4,8 +4,8 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
   const cellSize = GRID_SIZE
   const headerSize = 40
   const padding = 20
-  const svgWidth = gridSize.cols * cellSize + padding * 2 + headerSize
-  const svgHeight = gridSize.rows * cellSize + padding * 2 + headerSize
+  const svgWidth = gridSize.cols * cellSize + padding * 2 + headerSize + 30
+  const svgHeight = gridSize.rows * cellSize + padding * 2 + headerSize + 30
 
   // Use theme colors or fallback to defaults
   const colors = theme ? {
