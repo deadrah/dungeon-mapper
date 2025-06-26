@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import { useAppState } from './hooks/useAppState'
 import Header from './components/Header/Header'
 import ToolPanel, { getToolKeyMappings, getToolName } from './components/ToolPanel/ToolPanel'

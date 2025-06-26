@@ -11,8 +11,8 @@ const Header = ({
   setCurrentFloor,
   dungeonNames,
   setDungeonName,
-  zoom, 
-  setZoom,
+  // zoom, // 将来のズーム表示機能で使用予定
+  // setZoom, // 将来のズーム操作機能で使用予定
   onExport,
   onImport,
   onExportDungeon,
@@ -31,7 +31,7 @@ const Header = ({
   theme,
   themeName,
   onThemeChange,
-  activeTool,
+  // activeTool, // 将来のツール状態表示で使用予定
   toolName
 }) => {
   const [editingMapId, setEditingMapId] = useState(null)

@@ -44,22 +44,12 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
     })
   })
 
-  // Create a key-to-tool mapping for external use
-  const getKeyToToolMapping = () => {
-    const keyMap = {}
-    allTools.forEach(tool => {
-      if (tool.key && !tool.isDisabled) {
-        keyMap[tool.key.toLowerCase()] = tool.id
-      }
-    })
-    return keyMap
-  }
 
   return (
     <div className="md:w-48 w-full flex flex-col md:max-h-none max-h-44" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
      
       <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
-        {TOOL_GROUPS.map((group, groupIndex) => (
+        {TOOL_GROUPS.map((group) => (
           <div key={group.name} className="md:block">
             <div className="px-2 py-2 text-sm font-bold border-b md:block hidden" style={{ backgroundColor: theme.ui.groupHeader, borderColor: theme.ui.border }}>
               {group.name}

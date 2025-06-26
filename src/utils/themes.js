@@ -32,7 +32,7 @@ export const themes = {
       currentPosition: '#dc143c',   // 現在位置マーカー（Items.jsx - 現在位置アイテム）
       arrow: '#345dd1',             // 矢印の色（Items.jsx - 矢印アイテム）
       note: '#ffffff',              // ノート背景（Items.jsx - ノートアイテム背景）
-      noteBorder: '#000000',        // ノート境界線（Items.jsx - ノートアイテム枠）
+      noteBorder: '#333333',        // ノート境界線（Items.jsx - ノートアイテム枠）
       noteTriangle: '#dc2626',      // ノート三角（Items.jsx - ノート角の赤三角）
       shute: '#800080',             // シュート/ピット色（Items.jsx - シュートアイテム）
       darkZone: 'rgba(0,0,0,0.6)',  // ダークゾーンオーバーレイ（Items.jsx - ダークゾーン塗りつぶし）
@@ -162,14 +162,14 @@ export const themes = {
     grid: {
       background: '#c6dbe7',        // より薄い青色の背景（グリッド描写範囲内）
       canvasBackground: '#ecf9f7',  // 少し濃い青色のキャンバス背景（グリッド全体背景）
-      lines: '#5a7c8a',             // 青灰色のグリッド線
-      cellBorder: '#5a7c8a',        // セル境界線
+      lines: '#a5bbc5',             // 青灰色のグリッド線
+      cellBorder: '#a5bbc5',        // セル境界線
     },
     
     header: {
       background: '#a5c2d3',        // 暗い緑色ヘッダー背景
       text: '#143f59',              // 白色テキスト（視認性向上）
-      border: '#5a7c8a',            // 濃い緑色境界線
+      border: '#a5bbc5',            // 濃い緑色境界線
       corner: '#bbe1f5',            // 角の装飾（明るめ）
     },
     

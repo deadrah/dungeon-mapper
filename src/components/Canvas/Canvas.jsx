@@ -614,7 +614,7 @@ const Canvas = ({
     }
   }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.walls, floorData.doors, updateCurrentFloorData])
 
-  const handleGridClick = useCallback((row, col, event = null) => {
+  const handleGridClick = useCallback((row, col, _event = null) => {
     // Ensure coordinates are within bounds
     if (row < 0 || row >= appState.gridSize.rows || col < 0 || col >= appState.gridSize.cols) {
       return;
@@ -738,7 +738,7 @@ const Canvas = ({
         }
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, setNoteAt, deleteNoteAt])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, deleteNoteAt])
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog

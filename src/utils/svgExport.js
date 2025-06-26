@@ -19,6 +19,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     stairs: theme.items.stairs,
     currentPosition: theme.items.currentPosition,
     event: theme.items.event,
+    elevator: theme.items.elevator,
     teleport: theme.items.teleport,
     teleportBorder: theme.items.teleportBorder,
     darkZone: theme.items.darkZone,
@@ -41,6 +42,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     stairs: '#0000ff',
     currentPosition: '#dc143c',
     event: '#ca0101',
+    elevator: '#b8860b',
     teleport: '#06b6d4',
     teleportBorder: '#0891b2',
     darkZone: '#000000',
@@ -60,7 +62,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
   <defs>
     <style>
       .grid-line { stroke: ${colors.gridLine}; stroke-width: 1; opacity: 0.7; }
-      .wall-line { stroke: ${colors.wallLine}; stroke-width: 3; stroke-linecap: round; }
+      .wall-line { stroke: ${colors.wallLine}; stroke-width: ${theme?.walls?.strokeWidth || 3}; stroke-linecap: round; }
       .door-open { fill: ${colors.doorOpen}; stroke: ${colors.doorOpenBorder}; stroke-width: 2; }
       .door-closed { fill: ${colors.doorClosed}; stroke: ${colors.doorClosedBorder}; stroke-width: 2; }
       .chest { fill: ${colors.chest}; stroke: ${colors.chest}; stroke-width: 1; }
@@ -259,9 +261,9 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     svg += '    </g>\n\n'
   }
 
-  // Add notes (new memo system)
+  // Add note triangles (new memo system)
   if (floorData.notes && floorData.notes.length > 0) {
-    svg += '    <!-- Notes -->\n    <g class="notes">\n'
+    svg += '    <!-- Note Triangles -->\n    <g class="note-triangles">\n'
     
     floorData.notes.forEach(note => {
       const displayRow = gridSize.rows - 1 - note.row
@@ -271,19 +273,6 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       
       // Red triangle in top-left corner
       svg += `      <polygon points="${triangleX},${triangleY} ${triangleX + triangleSize},${triangleY} ${triangleX},${triangleY + triangleSize}" fill="${colors.noteTriangle}"/>\n`
-      
-      // Tooltip (centered in cell)
-      if (note.text) {
-        const centerX = note.col * cellSize + cellSize / 2
-        const centerY = displayRow * cellSize + cellSize / 2
-        const tooltipText = note.text.length > 7 ? `${note.text.slice(0, 7)}...` : note.text
-        
-        // Tooltip background
-        svg += `      <rect x="${centerX - 25}" y="${centerY - 8}" width="50" height="16" fill="${colors.noteTooltipBg}" stroke="${colors.noteText}" stroke-width="1" rx="2"/>\n`
-        
-        // Tooltip text
-        svg += `      <text x="${centerX}" y="${centerY + 2}" text-anchor="middle" font-size="8" fill="${colors.noteText}">${tooltipText}</text>\n`
-      }
     })
     
     svg += '    </g>\n\n'
@@ -300,87 +289,121 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
       const itemSize = cellSize * 0.6
       
       switch (item.type) {
-        case TOOLS.CHEST:
-          // Chest SVG rendering to match canvas
-          const chestSize = itemSize * 0.8
-          svg += `      <g transform="translate(${centerX - chestSize/2}, ${centerY - chestSize/2})" viewBox="0 0 24 24">\n`
+        case TOOLS.CHEST: {
+          // Chest SVG rendering to match canvas (cellSize * 0.8)
+          const chestSize = cellSize * 0.8
+          svg += `      <svg x="${centerX - chestSize/2}" y="${centerY - chestSize/2}" width="${chestSize}" height="${chestSize}" viewBox="0 0 24 24">\n`
           // Chest base
-          svg += `        <rect x="${chestSize * 4/24}" y="${chestSize * 12/24}" width="${chestSize * 16/24}" height="${chestSize * 8/24}" stroke="${colors.chest}" stroke-width="1.5" fill="none" rx="${chestSize * 1/24}"/>\n`
+          svg += `        <rect x="4" y="12" width="16" height="8" stroke="${colors.chest}" stroke-width="1.5" fill="none" rx="1"/>\n`
           // Chest lid
-          svg += `        <path d="M${chestSize * 4/24} ${chestSize * 12/24} Q${chestSize * 4/24} ${chestSize * 8/24} ${chestSize * 12/24} ${chestSize * 8/24} Q${chestSize * 20/24} ${chestSize * 8/24} ${chestSize * 20/24} ${chestSize * 12/24}" stroke="${colors.chest}" stroke-width="1.5" fill="none"/>\n`
+          svg += `        <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke="${colors.chest}" stroke-width="1.5" fill="none"/>\n`
           // Chest lock
-          svg += `        <circle cx="${chestSize * 12/24}" cy="${chestSize * 12/24}" r="${chestSize * 1.5/24}" stroke="${colors.chest}" stroke-width="1" fill="${colors.chest}"/>\n`
+          svg += `        <circle cx="12" cy="12" r="1.5" stroke="${colors.chest}" stroke-width="1" fill="${colors.chest}"/>\n`
           // Chest hinges
-          svg += `        <rect x="${chestSize * 6/24}" y="${chestSize * 11/24}" width="${chestSize * 1/24}" height="${chestSize * 2/24}" fill="${colors.chest}"/>\n`
-          svg += `        <rect x="${chestSize * 17/24}" y="${chestSize * 11/24}" width="${chestSize * 1/24}" height="${chestSize * 2/24}" fill="${colors.chest}"/>\n`
-          svg += `      </g>\n`
+          svg += `        <rect x="6" y="11" width="1" height="2" fill="${colors.chest}"/>\n`
+          svg += `        <rect x="17" y="11" width="1" height="2" fill="${colors.chest}"/>\n`
+          svg += `      </svg>\n`
           break
+        }
         
-        case TOOLS.STAIRS_UP_SVG:
-          // Up stairs SVG (from up.svg)
-          const upSize = itemSize
-          svg += `      <g transform="translate(${centerX - upSize/2}, ${centerY - upSize/2})">\n`
-          svg += `        <rect width="${upSize}" height="${upSize}" fill="transparent" />\n`
-          svg += `        <rect x="${upSize * 0.1}" y="${upSize * 0.7}" width="${upSize * 0.19}" height="${upSize * 0.2}" fill="gray" />\n`
-          svg += `        <rect x="${upSize * 0.3}" y="${upSize * 0.5}" width="${upSize * 0.19}" height="${upSize * 0.4}" fill="gray" />\n`
-          svg += `        <rect x="${upSize * 0.5}" y="${upSize * 0.3}" width="${upSize * 0.19}" height="${upSize * 0.6}" fill="gray" />\n`
-          svg += `        <rect x="${upSize * 0.7}" y="${upSize * 0.1}" width="${upSize * 0.19}" height="${upSize * 0.8}" fill="gray" />\n`
-          svg += `      </g>\n`
+        case TOOLS.STAIRS_UP_SVG: {
+          // Up stairs SVG to match canvas (cellSize * 0.7, viewBox="0 0 100 100")
+          const upSize = cellSize * 0.7
+          svg += `      <svg x="${centerX - upSize/2}" y="${centerY - upSize/2}" width="${upSize}" height="${upSize}" viewBox="0 0 100 100">\n`
+          svg += `        <rect width="100" height="100" fill="transparent" />\n`
+          svg += `        <rect x="10" y="70" width="19" height="20" fill="gray" />\n`
+          svg += `        <rect x="30" y="50" width="19" height="40" fill="gray" />\n`
+          svg += `        <rect x="50" y="30" width="19" height="60" fill="gray" />\n`
+          svg += `        <rect x="70" y="10" width="19" height="80" fill="gray" />\n`
+          svg += `      </svg>\n`
           if (item.stairsText && item.stairsText.trim() !== '') {
-            svg += `      <text x="${centerX}" y="${centerY + 7}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.5)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.stairsText}</text>\n`
+            // テキスト位置をメイン画面と一致（top: '60%', left: '62%'）
+            const textX = centerX + (upSize * 0.12) // 62% - 50% = 12% offset from center
+            const textY = centerY + (upSize * 0.1) + (Math.max(8, cellSize * 0.4) * 0.35)  // 60% + text height adjustment
+            svg += `      <text x="${textX}" y="${textY}" text-anchor="middle" font-size="${Math.max(8, cellSize * 0.4)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.stairsText}</text>\n`
           }
           break
+        }
         
-        case TOOLS.STAIRS_DOWN_SVG:
-          // Down stairs SVG (from down.svg)
-          const downSize = itemSize
-          svg += `      <g transform="translate(${centerX - downSize/2}, ${centerY - downSize/2})">\n`
-          svg += `        <rect width="${downSize}" height="${downSize}" fill="#333" />\n`
-          svg += `        <rect x="${downSize * 0.1}" y="${downSize * 0.1}" width="${downSize * 0.18}" height="${downSize * 0.8}" fill="#eee" />\n`
-          svg += `        <rect x="${downSize * 0.3}" y="${downSize * 0.25}" width="${downSize * 0.18}" height="${downSize * 0.65}" fill="#ccc" />\n`
-          svg += `        <rect x="${downSize * 0.5}" y="${downSize * 0.4}" width="${downSize * 0.18}" height="${downSize * 0.5}" fill="#aaa" />\n`
-          svg += `        <rect x="${downSize * 0.7}" y="${downSize * 0.55}" width="${downSize * 0.18}" height="${downSize * 0.35}" fill="#888" />\n`
-          svg += `      </g>\n`
+        case TOOLS.STAIRS_DOWN_SVG: {
+          // Down stairs SVG to match canvas (cellSize * 0.7, viewBox="0 0 100 100")
+          const downSize = cellSize * 0.7
+          svg += `      <svg x="${centerX - downSize/2}" y="${centerY - downSize/2}" width="${downSize}" height="${downSize}" viewBox="0 0 100 100">\n`
+          svg += `        <rect width="100" height="100" fill="#333" />\n`
+          svg += `        <rect x="10" y="10" width="18" height="80" fill="#eee" />\n`
+          svg += `        <rect x="30" y="25" width="18" height="65" fill="#ccc" />\n`
+          svg += `        <rect x="50" y="40" width="18" height="50" fill="#aaa" />\n`
+          svg += `        <rect x="70" y="55" width="18" height="35" fill="#888" />\n`
+          svg += `      </svg>\n`
           if (item.stairsText && item.stairsText.trim() !== '') {
-            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(8, itemSize * 0.5)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.stairsText}</text>\n`
+            // テキスト位置をメイン画面と一致（top: '60%', left: '62%'）
+            const textX = centerX + (downSize * 0.12) // 62% - 50% = 12% offset from center
+            const textY = centerY + (downSize * 0.1) + (Math.max(8, cellSize * 0.4) * 0.35)  // 60% + text height adjustment
+            svg += `      <text x="${textX}" y="${textY}" text-anchor="middle" font-size="${Math.max(8, cellSize * 0.4)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.stairsText}</text>\n`
           }
           break
+        }
         
         case TOOLS.CURRENT_POSITION:
-          svg += `      <circle cx="${centerX}" cy="${centerY}" r="${itemSize/4}" class="current-position"/>\n`
+          // Match canvas fontSize: Math.max(8, cellSize * 0.4)
+          const currentPosFontSize = Math.max(8, cellSize * 0.4)
+          const currentPosY = centerY + (currentPosFontSize * 0.35)
+          svg += `      <text x="${centerX}" y="${currentPosY}" text-anchor="middle" font-size="${currentPosFontSize}" fill="${colors.currentPosition}" font-weight="bold">●</text>\n`
           break
         
         case TOOLS.EVENT_MARKER:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#ca0101" font-weight="bold">!</text>\n`
+          // Match canvas fontSize: Math.max(12, cellSize * 0.6)
+          const eventFontSize = Math.max(12, cellSize * 0.6)
+          const eventY = centerY + (eventFontSize * 0.35) // Proper baseline adjustment
+          svg += `      <text x="${centerX}" y="${eventY}" text-anchor="middle" font-size="${eventFontSize}" fill="${colors.event}" font-weight="bold">!</text>\n`
           break
         
         case TOOLS.WARP_POINT:
-          // Diamond background
-          svg += `      <polygon points="${centerX},${centerY - itemSize/2} ${centerX + itemSize/3},${centerY} ${centerX},${centerY + itemSize/2} ${centerX - itemSize/3},${centerY}" class="warp-point"/>\n`
-          // Text overlay if warpText exists
+          // Diamond background using ◆ symbol to match canvas  
+          const diamondFontSize = Math.max(12, cellSize * 0.7)
+          const diamondY = centerY + (diamondFontSize * 0.35) // Adjust for text baseline
+          svg += `      <text x="${centerX}" y="${diamondY}" text-anchor="middle" font-size="${diamondFontSize}" fill="${colors.teleport}" font-weight="bold">◆</text>\n`
+          // Text overlay if warpText exists - rendered on top of diamond
           if (item.warpText) {
-            svg += `      <text x="${centerX}" y="${centerY + 3}" text-anchor="middle" font-size="${Math.max(6, itemSize * 0.4)}" fill="white" font-weight="bold" style="text-shadow: 0 0 4px rgba(0,0,0,1)">${item.warpText}</text>\n`
+            const textFontSize = Math.max(10, cellSize * 0.40)
+            const textY = centerY + (textFontSize * 0.35) // Center text properly
+            svg += `      <text x="${centerX}" y="${textY}" text-anchor="middle" font-size="${textFontSize}" fill="white" font-weight="bold" style="text-shadow: 0 0 3px rgba(0,0,0,1)">${item.warpText}</text>\n`
           }
           break
         
         case TOOLS.ARROW_NORTH:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">↑</text>\n`
+          // Match canvas fontSize: Math.max(12, cellSize * 0.6)
+          const arrowNorthFontSize = Math.max(12, cellSize * 0.6)
+          const arrowNorthY = centerY + (arrowNorthFontSize * 0.35)
+          svg += `      <text x="${centerX}" y="${arrowNorthY}" text-anchor="middle" font-size="${arrowNorthFontSize}" fill="${colors.arrow}" font-weight="bold">↑</text>\n`
           break
         
         case TOOLS.ARROW_SOUTH:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">↓</text>\n`
+          // Match canvas fontSize: Math.max(12, cellSize * 0.6)
+          const arrowSouthFontSize = Math.max(12, cellSize * 0.6)
+          const arrowSouthY = centerY + (arrowSouthFontSize * 0.35)
+          svg += `      <text x="${centerX}" y="${arrowSouthY}" text-anchor="middle" font-size="${arrowSouthFontSize}" fill="${colors.arrow}" font-weight="bold">↓</text>\n`
           break
         
         case TOOLS.ARROW_EAST:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">→</text>\n`
+          // Match canvas fontSize: Math.max(12, cellSize * 0.6)
+          const arrowEastFontSize = Math.max(12, cellSize * 0.6)
+          const arrowEastY = centerY + (arrowEastFontSize * 0.35)
+          svg += `      <text x="${centerX}" y="${arrowEastY}" text-anchor="middle" font-size="${arrowEastFontSize}" fill="${colors.arrow}" font-weight="bold">→</text>\n`
           break
         
         case TOOLS.ARROW_WEST:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000" font-weight="bold">←</text>\n`
+          // Match canvas fontSize: Math.max(12, cellSize * 0.6)
+          const arrowWestFontSize = Math.max(12, cellSize * 0.6)
+          const arrowWestY = centerY + (arrowWestFontSize * 0.35)
+          svg += `      <text x="${centerX}" y="${arrowWestY}" text-anchor="middle" font-size="${arrowWestFontSize}" fill="${colors.arrow}" font-weight="bold">←</text>\n`
           break
         
         case TOOLS.ARROW_ROTATE:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#000000">⟲</text>\n`
+          // Match canvas fontSize: Math.max(12, cellSize * 0.6) but normal weight
+          const arrowRotateFontSize = Math.max(12, cellSize * 0.6)
+          const arrowRotateY = centerY + (arrowRotateFontSize * 0.35)
+          svg += `      <text x="${centerX}" y="${arrowRotateY}" text-anchor="middle" font-size="${arrowRotateFontSize}" fill="${colors.arrow}">⟲</text>\n`
           break
         
         case TOOLS.NOTE:
@@ -406,13 +429,45 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           break
         
         case TOOLS.ELEVATOR:
-          svg += `      <text x="${centerX}" y="${centerY + 4}" text-anchor="middle" font-size="${itemSize * 0.8}" fill="#b8860b" font-weight="900">E</text>\n`
+          // Match canvas fontSize: Math.max(12, cellSize * 0.6)
+          const elevatorFontSize = Math.max(12, cellSize * 0.6)
+          const elevatorY = centerY + (elevatorFontSize * 0.35)
+          svg += `      <text x="${centerX}" y="${elevatorY}" text-anchor="middle" font-size="${elevatorFontSize}" fill="${colors.elevator}" font-weight="900">E</text>\n`
           break
+      }
+    })
+    
+    svg += '    </g>\n\n'
+  }
+
+  // Add note tooltips last to ensure they appear on top
+  if (floorData.notes && floorData.notes.length > 0) {
+    svg += '    <!-- Note Tooltips (rendered last for z-index) -->\n    <g class="note-tooltips">\n'
+    
+    floorData.notes.forEach(note => {
+      // Only render tooltip if note has text
+      if (note.text) {
+        const displayRow = gridSize.rows - 1 - note.row
+        const centerX = note.col * cellSize + cellSize / 2
+        const centerY = displayRow * cellSize + cellSize / 2
+        const tooltipText = note.text.length > 7 ? `${note.text.slice(0, 7)}...` : note.text
         
+        // Calculate tooltip background size based on text length to match canvas (9px font)
+        const fontSize = 9 // Match canvas fontSize
+        const charWidth = fontSize * 0.8 // Conservative character width estimation for safety
+        const paddingHorizontal = 10 // Extra horizontal padding (5px on each side for safety)
+        const paddingVertical = 6 // Extra vertical padding (3px on each side for safety)
+        const tooltipWidth = Math.max(40, tooltipText.length * charWidth + paddingHorizontal)
+        const tooltipHeight = fontSize + paddingVertical
         
-        case TOOLS.CURRENT_POSITION:
-          svg += `      <circle cx="${centerX}" cy="${centerY}" r="${itemSize/4}" fill="#dc143c"/>\n`
-          break
+        // Tooltip background with dynamic width
+        const bgX = centerX - tooltipWidth / 2
+        const bgY = centerY - tooltipHeight / 2
+        svg += `      <rect x="${bgX}" y="${bgY}" width="${tooltipWidth}" height="${tooltipHeight}" fill="${colors.noteTooltipBg}" stroke="${colors.noteText}" stroke-width="1" rx="2"/>\n`
+        
+        // Tooltip text with proper vertical centering
+        const textY = centerY + (fontSize * 0.35) // Proper baseline adjustment for centering
+        svg += `      <text x="${centerX}" y="${textY}" text-anchor="middle" font-size="${fontSize}" fill="${colors.noteText}">${tooltipText}</text>\n`
       }
     })
     

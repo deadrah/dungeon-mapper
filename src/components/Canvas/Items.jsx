@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { GRID_SIZE, TOOLS } from '../../utils/constants'
 
 const ITEM_ICONS = {
@@ -78,13 +78,13 @@ const Items = ({
           {item.warpText && (
             <div style={{
               position: 'absolute',
-              fontSize: Math.max(10, cellSize * 0.45),
+              fontSize: Math.max(10, cellSize * 0.40),
               color: 'white',
               fontWeight: 'bold',
               textAlign: 'center',
               lineHeight: '1',
-              textShadow: '0 0 4px rgba(0,0,0,1)',
-              top: '45%',
+              textShadow: '0 0 3px rgba(0,0,0,1)',
+              top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)'
             }}>
@@ -143,14 +143,14 @@ const Items = ({
           {item.stairsText && (
             <div style={{
               position: 'absolute',
-              fontSize: Math.max(8, cellSize * 0.5),
+              fontSize: Math.max(8, cellSize * 0.4),
               color: 'white',
               fontWeight: 'bold',
               textAlign: 'center',
               lineHeight: '1',
               textShadow: '0 0 4px rgba(0,0,0,1)',
-              top: '50%',
-              left: '50%',
+              top: '60%',
+              left: '62%',
               transform: 'translate(-50%, -50%)'
             }}>
               {item.stairsText}
@@ -285,12 +285,13 @@ const Items = ({
           {/* Custom tooltip for notes */}
           {showNoteTooltips && note.text && (
             <div
-              className="rounded px-1 py-1 shadow-lg"
+              className="rounded shadow-lg"
               style={{
                 position: 'absolute',
                 left: offset.x + note.col * cellSize + 24 + cellSize / 2,
                 top: offset.y + (gridSize.rows - 1 - note.row) * cellSize + 24 + cellSize / 2,
-                fontSize: '8px',
+                padding: '2px 4px',
+                fontSize: '9px',
                 whiteSpace: 'nowrap',
                 maxWidth: `${cellSize * 2}px`,
                 overflow: 'hidden',
