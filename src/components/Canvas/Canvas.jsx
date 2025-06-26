@@ -28,6 +28,7 @@ const Canvas = ({
   const [shuteStyle, setShuteStyle] = useState('filled') // 'filled' (●) or 'outline' (○)
   const [arrowDirection, setArrowDirection] = useState('north') // 'north', 'south', 'east', 'west', 'rotate'
   const [stairsText, setStairsText] = useState('') // Text for stairs
+  const [doorState, setDoorState] = useState('closed') // 'closed' or 'open'
   const [isDraggingLine, setIsDraggingLine] = useState(false)
   const [dragLineType, setDragLineType] = useState(null) // 'horizontal' or 'vertical'
   const [isDraggingErase, setIsDraggingErase] = useState(false)
@@ -717,7 +718,8 @@ const Canvas = ({
             ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
             ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
             ...(appState.activeTool === TOOLS.ARROW && { arrowDirection }),
-            ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText })
+            ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText }),
+            ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState })
           }
           const newItems = [...(floorData.items || []), newItem]
           updateCurrentFloorData('items', newItems)
@@ -732,7 +734,8 @@ const Canvas = ({
             ...(appState.activeTool === TOOLS.WARP_POINT && { warpText }),
             ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
             ...(appState.activeTool === TOOLS.ARROW && { arrowDirection }),
-            ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText })
+            ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText }),
+            ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState })
           }
           updateCurrentFloorData('items', newItems)
         }
@@ -1050,6 +1053,21 @@ const Canvas = ({
             <option value="west">←</option>
             <option value="east">→</option>
             <option value="rotate">⟲</option>
+          </select>
+        </div>
+      )}
+
+      {/* Door state selector */}
+      {appState.activeTool === TOOLS.DOOR_ITEM && (
+        <div className="absolute bottom-16 right-4 p-2 rounded shadow-lg z-50" style={{ backgroundColor: theme.ui.panel }}>
+          <select
+            value={doorState}
+            onChange={(e) => setDoorState(e.target.value)}
+            className="w-8 h-8 rounded border text-center text-xs"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}`, fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
+          >
+            <option value="closed">■</option>
+            <option value="open">□</option>
           </select>
         </div>
       )}

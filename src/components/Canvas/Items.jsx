@@ -15,6 +15,7 @@ const ITEM_ICONS = {
   [TOOLS.EVENT_MARKER]: '!',
   [TOOLS.NOTE]: '📝',
   [TOOLS.DOOR]: '┤',
+  [TOOLS.DOOR_ITEM]: '🚪',
   [TOOLS.ARROW_NORTH]: '↑',
   [TOOLS.ARROW_SOUTH]: '↓',
   [TOOLS.ARROW_EAST]: '→',
@@ -99,6 +100,36 @@ const Items = ({
     if (item.type === TOOLS.SHUTE) {
       const icon = item.shuteStyle === 'outline' ? '○' : '●'
       return icon
+    }
+    
+    // Special rendering for Door Item with SVG
+    if (item.type === TOOLS.DOOR_ITEM) {
+      const isOpen = item.doorState === 'open'
+      return (
+        <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 24 24" fill="none">
+          {isOpen ? (
+            // Open door SVG
+            <>
+              <rect x="1" y="2" width="2" height="20" fill="#666"/>
+              <rect x="19" y="2" width="2" height="20" fill="#666"/>
+              <rect x="3" y="2" width="16" height="20" fill="#333"/>
+              <line x1="3" y1="2" x2="3" y2="22" stroke="#aaa" strokeWidth="2"/>
+              <line x1="19" y1="2" x2="19" y2="22" stroke="#aaa" strokeWidth="2"/>
+            </>
+          ) : (
+            // Closed door SVG
+            <>
+              <rect x="1" y="2" width="2" height="20" fill="#666"/>
+              <rect x="19" y="2" width="2" height="20" fill="#666"/>
+              <rect x="3" y="2" width="8" height="20" fill="#ccc"/>
+              <rect x="11" y="2" width="8" height="20" fill="#ccc"/>
+              <line x1="11" y1="2" x2="11" y2="22" stroke="#999" strokeWidth="1"/>
+              <circle cx="9" cy="12" r="0.5" fill="#666"/>
+              <circle cx="13" cy="12" r="0.5" fill="#666"/>
+            </>
+          )}
+        </svg>
+      )
     }
     
     // Special rendering for Stairs with SVG and text overlay

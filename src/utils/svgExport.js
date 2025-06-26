@@ -434,6 +434,32 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           const elevatorY = centerY + (elevatorFontSize * 0.35)
           svg += `      <text x="${centerX}" y="${elevatorY}" text-anchor="middle" font-size="${elevatorFontSize}" fill="${colors.elevator}" font-weight="900">E</text>\n`
           break
+        
+        case TOOLS.DOOR_ITEM: {
+          // Door item SVG rendering to match canvas (cellSize * 0.8)
+          const doorSize = cellSize * 0.8
+          const isOpen = item.doorState === 'open'
+          svg += `      <svg x="${centerX - doorSize/2}" y="${centerY - doorSize/2}" width="${doorSize}" height="${doorSize}" viewBox="0 0 24 24">\n`
+          if (isOpen) {
+            // Open door SVG
+            svg += `        <rect x="1" y="2" width="2" height="20" fill="#666"/>\n`
+            svg += `        <rect x="19" y="2" width="2" height="20" fill="#666"/>\n`
+            svg += `        <rect x="3" y="2" width="16" height="20" fill="#333"/>\n`
+            svg += `        <line x1="3" y1="2" x2="3" y2="22" stroke="#aaa" stroke-width="2"/>\n`
+            svg += `        <line x1="19" y1="2" x2="19" y2="22" stroke="#aaa" stroke-width="2"/>\n`
+          } else {
+            // Closed door SVG
+            svg += `        <rect x="1" y="2" width="2" height="20" fill="#666"/>\n`
+            svg += `        <rect x="19" y="2" width="2" height="20" fill="#666"/>\n`
+            svg += `        <rect x="3" y="2" width="8" height="20" fill="#ccc"/>\n`
+            svg += `        <rect x="11" y="2" width="8" height="20" fill="#ccc"/>\n`
+            svg += `        <line x1="11" y1="2" x2="11" y2="22" stroke="#999" stroke-width="1"/>\n`
+            svg += `        <circle cx="9" cy="12" r="0.5" fill="#666"/>\n`
+            svg += `        <circle cx="13" cy="12" r="0.5" fill="#666"/>\n`
+          }
+          svg += `      </svg>\n`
+          break
+        }
       }
     })
     

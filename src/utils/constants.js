@@ -15,6 +15,7 @@ export const TOOLS = {
   NOTE: 'note',
   DOOR_OPEN: 'door_open',
   DOOR_CLOSED: 'door_closed',
+  DOOR_ITEM: 'door_item', // New door item tool
   LINE_ARROW_NORTH: 'line_arrow_north',
   LINE_ARROW_SOUTH: 'line_arrow_south',
   LINE_ARROW_EAST: 'line_arrow_east',

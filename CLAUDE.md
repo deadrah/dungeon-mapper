@@ -99,6 +99,32 @@ npm run preview # Preview production build
 ✅ Mouse controls (wheel zoom, shift+drag pan)
 ⚠️ Line tool for walls (not yet implemented)
 
+## Git Commit Guidelines
+
+**IMPORTANT**: All commit messages must be written in English.
+
+### Commit Message Format
+- Use English for all commit messages
+- Start with a verb in imperative mood (Add, Fix, Update, Remove, etc.)
+- Keep the first line under 50 characters
+- Add detailed description if needed
+- Always include the Claude Code footer
+
+### Example Commit Message
+```
+Add door item tool with open/closed state selection
+
+- New feature: Door items placeable on grid cells
+- State selection: Choose between open (□) and closed (■) doors
+- SVG export support: Maintains door state in exported files
+- Help updates: Reorganized tools into Line/Grid categories
+- UI improvements: Unified terminology to "options in bottom right"
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
 ## Usage
 - Use mouse wheel to zoom in/out
 - Shift+click and drag to pan around the grid

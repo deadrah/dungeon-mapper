@@ -28,7 +28,8 @@ const TOOL_GROUPS = [
       { id: TOOLS.STAIRS_DOWN_SVG, name: 'Stairs Down', icon: '▼', description: 'Stairs going down', key: '' },
       { id: TOOLS.EVENT_MARKER, name: 'Event', icon: '!', description: 'Event marker', key: '' },
       { id: TOOLS.NOTE, name: 'Note', icon: 'NOTE_SVG', description: 'Text memo', key: '' },
-      { id: TOOLS.ARROW, name: 'Arrow', icon: '✛', description: 'Direction arrow (select direction in panel)', key: '' },
+      { id: TOOLS.ARROW, name: 'Arrow', icon: '✛', description: 'Direction arrow (select direction in options)', key: '' },
+      { id: TOOLS.DOOR_ITEM, name: 'Door', icon: 'DOOR_ITEM_SVG', description: 'Door item (select open/closed in options)', key: '' },
       { id: TOOLS.CURRENT_POSITION, name: 'CurrentPos [q]', icon: '●', description: 'Current position marker', key: 'q' },
       { id: TOOLS.ERASER, name: 'Eraser [e]', icon: '⌫', description: 'Erase objects with left click/drag', key: 'e' }
     ]
@@ -90,7 +91,15 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                       ) : tool.icon === 'DOOR_CLOSED_SVG' ? (
                         <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="currentColor"/>
-                          <path d="M8 2v12" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                          <path d="M8 2v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon === 'DOOR_ITEM_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
+                          <rect x="1" y="2" width="2" height="20" fill="currentColor"/>
+                          <rect x="19" y="2" width="2" height="20" fill="currentColor"/>
+                          <line x1="11" y1="2" x2="11" y2="22" stroke="currentColor" strokeWidth="1"/>
+                          <circle cx="8" cy="12" r="0.5" fill="currentColor"/>
+                          <circle cx="14" cy="12" r="0.5" fill="currentColor"/>
                         </svg>
                       ) : tool.icon}
                     </span>
@@ -142,7 +151,15 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                       ) : tool.icon === 'DOOR_CLOSED_SVG' ? (
                         <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
                           <rect x="3" y="3" width="10" height="10" stroke="currentColor" strokeWidth="1.5" fill="currentColor"/>
-                          <path d="M8 2v12" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                          <path d="M8 2v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                        </svg>
+                      ) : tool.icon === 'DOOR_ITEM_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
+                          <rect x="1" y="2" width="2" height="20" fill="currentColor"/>
+                          <rect x="19" y="2" width="2" height="20" fill="currentColor"/>
+                          <line x1="11" y1="2" x2="11" y2="22" stroke="currentColor" strokeWidth="1"/>
+                          <circle cx="8" cy="12" r="0.5" fill="currentColor"/>
+                          <circle cx="14" cy="12" r="0.5" fill="currentColor"/>
                         </svg>
                       ) : tool.icon}
                     </span>
