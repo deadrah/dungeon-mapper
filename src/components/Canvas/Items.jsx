@@ -309,7 +309,7 @@ const Items = ({
             }}
             data-note-row={note.row}
             data-note-col={note.col}
-            title={showNoteTooltips ? note.text : ''}
+            title={note.text}
             onContextMenu={(e) => e.preventDefault()}
             onDragStart={(e) => e.preventDefault()}
           />
