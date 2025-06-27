@@ -152,7 +152,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         const displayRow = gridSize.rows - 1 - row
         
         if (color) {
-          svg += `      <rect x="${col * cellSize + 1}" y="${displayRow * cellSize + 1}" width="${cellSize - 2}" height="${cellSize - 2}" fill="${color}" opacity="0.7"/>\n`
+          svg += `      <rect x="${col * cellSize + 1}" y="${displayRow * cellSize + 1}" width="${cellSize - 2}" height="${cellSize - 2}" fill="${color}"/>\n`
         } else {
           // Default light blue background for empty cells
           svg += `      <rect x="${col * cellSize + 1}" y="${displayRow * cellSize + 1}" width="${cellSize - 2}" height="${cellSize - 2}" fill="#d7e2f6" opacity="0.5"/>\n`
