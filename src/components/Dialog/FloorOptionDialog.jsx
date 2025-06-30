@@ -30,7 +30,18 @@ const FloorOptionDialog = ({
   const getFloorDisplayName = (floorId) => {
     const floorData = floors[floorId]
     const customName = floorData?.name
-    return customName || `B${floorId}F`
+    const baseName = customName || `B${floorId}F`
+    
+    // Check if floor has any data
+    const hasData = floorData && (
+      (floorData.grid && floorData.grid.some(row => row.some(cell => cell !== null))) ||
+      (floorData.walls && floorData.walls.length > 0) ||
+      (floorData.items && floorData.items.length > 0) ||
+      (floorData.doors && floorData.doors.length > 0) ||
+      (floorData.notes && floorData.notes.length > 0)
+    )
+    
+    return hasData ? `*${baseName}` : baseName
   }
 
   const handleRename = () => {

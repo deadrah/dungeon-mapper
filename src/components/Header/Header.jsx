@@ -144,7 +144,19 @@ const Header = ({
             {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floor => {
               const floorData = floors[floor]
               const customName = floorData?.name
-              const displayName = customName || `B${floor}F`
+              const baseName = customName || `B${floor}F`
+              
+              // Check if floor has any data
+              const hasData = floorData && (
+                (floorData.grid && floorData.grid.some(row => row.some(cell => cell !== null))) ||
+                (floorData.walls && floorData.walls.length > 0) ||
+                (floorData.items && floorData.items.length > 0) ||
+                (floorData.doors && floorData.doors.length > 0) ||
+                (floorData.notes && floorData.notes.length > 0)
+              )
+              
+              const displayName = hasData ? `*${baseName}` : baseName
+              
               return (
                 <option key={floor} value={floor}>
                   {displayName}
