@@ -17,7 +17,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
       sections: {
         about: {
           title: 'DMapperについて',
-          content: 'DMapperは3Dダンジョンゲーム用のWebベースグリッドマッピングツールです。サーバー不要のクライアントサイドのみで動作し、ブラウザのローカルストレージにデータを保存します。'
+          content: 'DMapperは3Dダンジョンゲーム用のWebベースグリッドマッピングツールです。\nサーバー不要のクライアントサイドのみで動作し、ブラウザのローカルストレージにデータを保存します。\n1つのダンジョンは複数のフロア（B1F〜B30F）で構成されており、各フロアで独立したマップを作成できます。\nダンジョンごとに個別のグリッドサイズ設定が可能で、複数のダンジョンを並行して管理できます。'
         },
         controls: {
           title: '基本操作',
@@ -64,7 +64,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
           ]
         },
         dungeonOptions: {
-          title: 'Dungeon Option機能',
+          title: 'ダンジョンオプション',
           items: [
             { label: 'ダンジョン選択:', desc: '編集対象のダンジョンを選択' },
             { label: 'ダンジョン名変更:', desc: 'ダンジョンにカスタム名を設定' },
@@ -75,7 +75,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
           ]
         },
         floorOptions: {
-          title: 'Floor Option機能',
+          title: 'フロアオプション',
           items: [
             { label: 'フロア選択:', desc: '編集対象のフロアを選択（B1F形式で表示）' },
             { label: 'フロア名変更:', desc: 'フロアにカスタム名を設定' },
@@ -85,7 +85,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
           ]
         },
         globalOptions: {
-          title: '全体Option機能',
+          title: '全般オプション機能',
           items: [
             { label: 'テーマ変更:', desc: 'デフォルト・ダンジョンテーマを切り替え' },
             { label: '全データエクスポート:', desc: 'すべてのダンジョンデータをJSONファイルでダウンロード' },
@@ -116,7 +116,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
-            { version: 'v1.7.0', date: '2025-06-30', changes: ['UI再編成', 'Dungeon Optionポップアップ：ダンジョン選択・名前変更・グリッドサイズ・保存・読み込み・リセットを統合', 'Floor Optionポップアップ：フロア選択・名前変更・SVGエクスポート・リセットを統合', 'フロア名変更機能を追加：カスタム名またはデフォルトB1F表示', 'フロアコピー機能を追加：Floor Optionから他のダンジョン・フロアにマップデータをコピー可能'] },
+            { version: 'v1.7.0', date: '2025-06-30', changes: ['UI再編成', 'ダンジョンオプションポップアップ：ダンジョン選択・名前変更・グリッドサイズ・保存・読み込み・リセットを統合', 'フロアオプションポップアップ：フロア選択・名前変更・SVGエクスポート・リセットを統合', 'フロア名変更機能を追加：カスタム名またはデフォルトB1F表示', 'フロアコピー機能を追加：Floor Optionから他のダンジョン・フロアにマップデータをコピー可能'] },
             { version: 'v1.6.4', date: '2025-06-26', changes: ['グリッドサイズ設定を改善：幅・高さを個別に設定可能（長方形グリッド対応）'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['モバイルタッチ操作を改善：同じツールで同じ要素をタッチすると削除（PCでは従来通り）', '削除ツールの優先度システム実装：メモ＞アイテム＞色の順で削除', 'スワイプ操作時のエラーを修正'] },
             { version: 'v1.6.2', date: '2025-06-26', changes: ['ドアアイテムツールを追加：セルに配置可能なドア（開閉選択可能）'] },
@@ -156,7 +156,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
       sections: {
         about: {
           title: 'About DMapper',
-          content: 'DMapper is a web-based grid mapping tool for 3D dungeon games. It operates entirely client-side without requiring a server and stores data in the browser\'s local storage.'
+          content: 'DMapper is a web-based grid mapping tool for 3D dungeon games.\nIt operates entirely client-side without requiring a server and stores data in the browser\'s local storage.\nEach dungeon consists of multiple floors (B1F to B30F), allowing you to create independent maps for each floor.\nEach dungeon can have individual grid size settings, and you can manage multiple dungeons simultaneously.'
         },
         controls: {
           title: 'Basic Controls',
@@ -413,7 +413,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
               {/* About */}
               <section>
                 <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.about.title}</h3>
-                <p style={{ color: theme.ui.panelText }}>{currentContent.sections.about.content}</p>
+                <p style={{ color: theme.ui.panelText, whiteSpace: 'pre-wrap' }}>{currentContent.sections.about.content}</p>
               </section>
 
               {/* Settings */}

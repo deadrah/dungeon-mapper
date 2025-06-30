@@ -68,7 +68,7 @@ const Header = ({
   
 
   const handleResetAllDungeons = () => {
-    const message = getMessage(language, 'resetAllDungeons')
+    const message = getMessage(language, 'resetAllDungeonsConfirm')
     if (window.confirm(message)) {
       onResetAllDungeons()
       closeMenu()
@@ -102,7 +102,7 @@ const Header = ({
 
   return (
     <div className="md:h-12 h-auto md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
-      <div className="flex md:items-center md:space-x-4 gap-2 md:gap-0 justify-between md:justify-start">
+      <div className="flex md:items-center md:space-x-4 gap-2 md:gap-0 flex-wrap md:justify-start">
         <h1 className="text-lg font-bold md:mb-0 mb-1">DMapper</h1>
         
         <div className="flex items-center space-x-2 md:flex-row">
@@ -432,7 +432,7 @@ const Header = ({
                 onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.resetButtonHover}
                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.resetButton}
               >
-                {getMessage(language, 'resetAllDungeons')}
+                {getMessage(language, 'resetAllDungeonsButton')}
               </button>
 
             </div>

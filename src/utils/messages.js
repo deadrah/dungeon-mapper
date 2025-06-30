@@ -9,7 +9,6 @@ export const MESSAGES = {
     
     // Floor operations
     resetFloor: 'B{floor}Fのすべてのデータを削除しますか？この操作は元に戻せません。',
-    resetAllDungeons: 'すべてのダンジョンデータを初期化しますか？この操作は元に戻せません。',
     changeGridSize: 'グリッドサイズを{oldRows}x{oldCols}から{newRows}x{newCols}に変更しますか？\n\n範囲外の壁・ドア・アイテムが削除される可能性があります。この操作は元に戻せません。',
     resetDungeon: 'Dungeon {dungeonId} の全てのフロアをリセットしますか？この操作は元に戻せません。',
     resetCurrentFloor: '{floorName} のすべてのデータを削除しますか？この操作は元に戻せません。',
@@ -24,7 +23,7 @@ export const MESSAGES = {
     copyFloorGridSizeWarning: '\n\n⚠️ GridSize が異なります：\n元: {sourceCols}x{sourceRows}\nコピー先: {targetCols}x{targetRows}\n\n座標が自動変換されます。',
     
     // UI Labels
-    dungeon: '操作対象ダンジョン',
+    dungeon: '操作対象',
     dungeonName: 'ダンジョン名',
     dungeonOptions: 'ダンジョンオプション',
     dungeonRename: 'ダンジョン名変更',
@@ -35,7 +34,7 @@ export const MESSAGES = {
     applyGridSizeChange: 'グリッドサイズ変更を適用',
     current: '現在',
     
-    floor: '操作対象フロア',
+    floor: '操作対象',
     floorName: 'フロア名',
     floorOptions: 'フロアオプション',
     floorRename: 'フロア名変更',
@@ -53,11 +52,12 @@ export const MESSAGES = {
     allDataBackup: '全データバックアップ',
     exportAllData: '全データエクスポート',
     importAllData: '全データインポート',
-    allDungeonReset: '全ダンジョンリセット',
-    resetAllDungeons: '全ダンジョンリセット',
+    allDungeonReset: '全データ初期化',
+    resetAllDungeonsButton: '全データ初期化',
+    resetAllDungeonsConfirm: 'すべてのデータを初期化しますか？この操作は元に戻せません。',
     
     // Section headers
-    dungeonSaveLoad: 'ダンジョン保存/読み込み',
+    dungeonSaveLoad: '保存/読み込み',
     
     // Dungeon operations
     loadDungeon: '"{name}" をスロット {slot} に読み込みますか？',
@@ -90,7 +90,6 @@ export const MESSAGES = {
     
     // Floor operations
     resetFloor: 'Delete all data on B{floor}F? This action cannot be undone.',
-    resetAllDungeons: 'Reset all dungeon data? This action cannot be undone.',
     changeGridSize: 'Change grid size from {oldRows}x{oldCols} to {newRows}x{newCols}?\n\nWalls, doors, and items outside the new bounds may be deleted. This action cannot be undone.',
     resetDungeon: 'Reset all floors of Dungeon {dungeonId}? This action cannot be undone.',
     resetCurrentFloor: 'Delete all data on {floorName}? This action cannot be undone.',
@@ -134,8 +133,9 @@ export const MESSAGES = {
     allDataBackup: 'All Data Backup',
     exportAllData: 'Export All Data',
     importAllData: 'Import All Data',
-    allDungeonReset: 'All Dungeon Reset',
-    resetAllDungeons: 'Reset All Dungeons',
+    allDungeonReset: 'All Data Reset',
+    resetAllDungeonsButton: 'Reset All Data',
+    resetAllDungeonsConfirm: 'Reset all data? This action cannot be undone.',
     
     // Section headers
     dungeonSaveLoad: 'Dungeon Save/Load',
