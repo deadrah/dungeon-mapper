@@ -86,7 +86,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
   <rect width="${svgWidth}" height="${svgHeight}" fill="${colors.background}"/>
   
   <!-- Title -->
-  <text x="${padding}" y="${padding}" class="title-text">${mapName} - Floor ${floorNumber}</text>
+  <text x="${padding}" y="${padding}" class="title-text">${mapName} - Floor B${floorNumber}F</text>
   
   <!-- Grid container -->
   <g transform="translate(${padding + headerSize}, ${padding + headerSize})">

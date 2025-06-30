@@ -11,9 +11,11 @@ function App() {
     setCurrentDungeon,
     setCurrentFloor,
     setDungeonName,
+    setFloorName,
     setZoom,
     setActiveTool,
     setGridSize,
+    setDungeonGridSize,
     toggleNoteTooltips,
     setLanguage,
     setTheme,
@@ -23,12 +25,14 @@ function App() {
     undo,
     redo,
     resetCurrentFloor,
+    resetDungeon,
     resetAllDungeons,
     exportState,
     importState,
     exportDungeon,
     importDungeon,
     exportFloorSVG,
+    copyFloor,
     getNoteAt,
     setNoteAt,
     deleteNoteAt,
@@ -95,10 +99,15 @@ function App() {
         setCurrentFloor={setCurrentFloor}
         dungeonNames={state.dungeonNames || {}}
         setDungeonName={setDungeonName}
+        setFloorName={setFloorName}
+        floors={state.dungeons[state.currentDungeon]?.floors || {}}
+        allDungeons={state.dungeons}
         zoom={state.zoom}
         setZoom={setZoom}
-        gridSize={state.gridSize}
+        gridSize={state.dungeons[state.currentDungeon]?.gridSize || state.gridSize}
         onGridSizeChange={setGridSize}
+        onDungeonGridSizeChange={setDungeonGridSize}
+        onDungeonReset={resetDungeon}
         onExport={exportState}
         onImport={importState}
         onExportDungeon={exportDungeon}
@@ -108,6 +117,7 @@ function App() {
         onResetFloor={resetCurrentFloor}
         onResetAllDungeons={resetAllDungeons}
         onExportSVG={exportFloorSVG}
+        onFloorCopy={copyFloor}
         showNoteTooltips={state.showNoteTooltips}
         onToggleNoteTooltips={toggleNoteTooltips}
         language={state.language}

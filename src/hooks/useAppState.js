@@ -9,7 +9,8 @@ const createEmptyFloor = (gridSize) => ({
   walls: [],
   items: [],
   doors: [],
-  notes: []
+  notes: [],
+  name: null // Floor custom name
 })
 
 const createEmptyDungeon = (gridSize) => {
@@ -17,7 +18,7 @@ const createEmptyDungeon = (gridSize) => {
   for (let i = 1; i <= MAX_FLOORS; i++) {
     floors[i] = createEmptyFloor(gridSize)
   }
-  return floors
+  return { floors, gridSize }
 }
 
 // Transform floor data to match new grid size
@@ -122,7 +123,8 @@ const transformFloorToNewGridSize = (floor, oldGridSize, newGridSize) => {
     items: transformedItems,
     walls: transformedWalls,
     doors: transformedDoors,
-    notes: transformedNotes
+    notes: transformedNotes,
+    name: floor.name || null // Preserve floor name
   }
 }
 
@@ -138,7 +140,7 @@ const INITIAL_STATE = {
   dungeons: {
     1: {
       name: 'Dungeon 1',
-      floors: createEmptyDungeon({ rows: 20, cols: 20 })
+      ...createEmptyDungeon({ rows: 20, cols: 20 })
     }
   },
   dungeonNames: {
@@ -170,7 +172,8 @@ const loadStateFromStorage = () => {
           dungeons: {
             1: {
               name: 'Dungeon 1',
-              floors: {}
+              floors: {},
+              gridSize: parsedState.gridSize || { rows: 20, cols: 20 }
             }
           },
           dungeonNames: {
@@ -186,6 +189,9 @@ const loadStateFromStorage = () => {
           }
           if (!floor.notes) {
             floor.notes = []
+          }
+          if (!floor.name) {
+            floor.name = null
           }
           // Migrate existing note items to notes array
           if (floor.items) {
@@ -276,6 +282,12 @@ const loadStateFromStorage = () => {
       if (parsedState.dungeons) {
         Object.keys(parsedState.dungeons).forEach(dungeonKey => {
           const dungeon = parsedState.dungeons[dungeonKey]
+          
+          // Ensure dungeon has gridSize property
+          if (!dungeon.gridSize) {
+            dungeon.gridSize = { rows: 20, cols: 20 }
+          }
+          
           if (dungeon.floors) {
             Object.keys(dungeon.floors).forEach(floorKey => {
               const floor = dungeon.floors[floorKey]
@@ -284,6 +296,9 @@ const loadStateFromStorage = () => {
               }
               if (!floor.notes) {
                 floor.notes = []
+              }
+              if (!floor.name) {
+                floor.name = null
               }
               // Migrate existing note items to notes array
               if (floor.items) {
@@ -382,21 +397,32 @@ export const useAppState = () => {
   const setCurrentDungeon = useCallback((dungeonId) => {
     updateState(state => {
       if (!state.dungeons[dungeonId]) {
+        const dungeonGridSize = { rows: 20, cols: 20 } // Use default 20x20 for new dungeons
         state.dungeons[dungeonId] = {
           name: `Dungeon ${dungeonId}`,
-          floors: createEmptyDungeon(state.gridSize)
+          ...createEmptyDungeon(dungeonGridSize)
         }
         state.dungeonNames[dungeonId] = `Dungeon ${dungeonId}`
       }
-      return { ...state, currentDungeon: dungeonId }
+      
+      // Ensure the dungeon has a gridSize property
+      if (!state.dungeons[dungeonId].gridSize) {
+        state.dungeons[dungeonId].gridSize = { rows: 20, cols: 20 }
+      }
+      
+      // Update global gridSize to match the selected dungeon's gridSize
+      const selectedDungeonGridSize = state.dungeons[dungeonId].gridSize
+      
+      return { ...state, currentDungeon: dungeonId, gridSize: selectedDungeonGridSize }
     })
   }, [updateState])
 
   const setCurrentFloor = useCallback((floor) => {
     updateState(state => {
       const currentDungeon = state.dungeons[state.currentDungeon]
+      const dungeonGridSize = currentDungeon.gridSize || state.gridSize
       if (!currentDungeon.floors[floor]) {
-        currentDungeon.floors[floor] = createEmptyFloor(state.gridSize)
+        currentDungeon.floors[floor] = createEmptyFloor(dungeonGridSize)
       }
       return { ...state, currentFloor: floor }
     })
@@ -419,21 +445,86 @@ export const useAppState = () => {
     }))
   }, [updateState])
 
+  const setFloorName = useCallback((dungeonId, floorId, name) => {
+    updateState(state => {
+      const dungeon = state.dungeons[dungeonId]
+      if (!dungeon || !dungeon.floors[floorId]) return state
+
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [dungeonId]: {
+            ...dungeon,
+            floors: {
+              ...dungeon.floors,
+              [floorId]: {
+                ...dungeon.floors[floorId],
+                name: name && name.trim() ? name.trim() : null
+              }
+            }
+          }
+        }
+      }
+    })
+  }, [updateState])
+
+  const setDungeonGridSize = useCallback((dungeonId, newSize) => {
+    updateState(state => {
+      const newState = { ...state }
+      const dungeon = newState.dungeons[dungeonId]
+      
+      if (!dungeon) return state
+      
+      const oldGridSize = dungeon.gridSize || state.gridSize
+      
+      // Update dungeon's grid size
+      newState.dungeons[dungeonId] = {
+        ...dungeon,
+        gridSize: newSize
+      }
+      
+      // If this is the current dungeon, update global gridSize as well
+      if (dungeonId === state.currentDungeon) {
+        newState.gridSize = newSize
+      }
+      
+      // Update all floors in this dungeon to match new grid size
+      Object.keys(dungeon.floors).forEach(floorKey => {
+        newState.dungeons[dungeonId].floors[floorKey] = transformFloorToNewGridSize(
+          dungeon.floors[floorKey], 
+          oldGridSize, 
+          newSize
+        )
+      })
+      
+      return newState
+    })
+  }, [updateState])
+
   const setGridSize = useCallback((newSize) => {
     updateState(state => {
       const newState = { ...state, gridSize: newSize }
+      const currentDungeonId = state.currentDungeon
+      const dungeon = newState.dungeons[currentDungeonId]
       
-      // Update all floors in all dungeons to match new grid size
-      Object.keys(newState.dungeons).forEach(dungeonKey => {
-        const dungeon = newState.dungeons[dungeonKey]
-        Object.keys(dungeon.floors).forEach(floorKey => {
-          const oldGridSize = { rows: dungeon.floors[floorKey].grid?.length || state.gridSize.rows, cols: state.gridSize.cols }
-          newState.dungeons[dungeonKey].floors[floorKey] = transformFloorToNewGridSize(
-            dungeon.floors[floorKey], 
-            oldGridSize, 
-            newSize
-          )
-        })
+      if (!dungeon) return newState
+      
+      const oldGridSize = dungeon.gridSize || state.gridSize
+      
+      // Update current dungeon's grid size
+      newState.dungeons[currentDungeonId] = {
+        ...dungeon,
+        gridSize: newSize
+      }
+      
+      // Update all floors in current dungeon only to match new grid size
+      Object.keys(dungeon.floors).forEach(floorKey => {
+        newState.dungeons[currentDungeonId].floors[floorKey] = transformFloorToNewGridSize(
+          dungeon.floors[floorKey], 
+          oldGridSize, 
+          newSize
+        )
       })
       
       return newState
@@ -643,7 +734,7 @@ export const useAppState = () => {
             return
           }
 
-          // Ensure all floors have doors and notes properties, migrate notes, and transform coordinates if needed
+          // Ensure all floors have doors and notes properties, migrate notes
           if (dungeonData.data && dungeonData.data.floors) {
             const importedGridSize = importedData.gridSize || { rows: 20, cols: 20 }
             
@@ -669,31 +760,31 @@ export const useAppState = () => {
                   floor.items = nonNoteItems
                 }
               }
-              
-              // Transform floor data to match current grid size if different
-              if (importedGridSize.rows !== state.gridSize.rows || importedGridSize.cols !== state.gridSize.cols) {
-                dungeonData.data.floors[floorKey] = transformFloorToNewGridSize(
-                  floor,
-                  importedGridSize,
-                  state.gridSize
-                )
-              }
             })
+            
+            // Set the dungeon's gridSize to the imported gridSize
+            dungeonData.data.gridSize = importedGridSize
           }
 
           // Import the dungeon
-          updateState(state => ({
-            ...state,
-            dungeons: {
-              ...state.dungeons,
-              [targetDungeonId]: dungeonData.data
-            },
-            dungeonNames: {
-              ...state.dungeonNames,
-              [targetDungeonId]: dungeonData.name
-            },
-            currentDungeon: targetDungeonId
-          }))
+          updateState(state => {
+            const importedGridSize = importedData.gridSize || { rows: 20, cols: 20 }
+            
+            return {
+              ...state,
+              dungeons: {
+                ...state.dungeons,
+                [targetDungeonId]: dungeonData.data
+              },
+              dungeonNames: {
+                ...state.dungeonNames,
+                [targetDungeonId]: dungeonData.name
+              },
+              currentDungeon: targetDungeonId,
+              // Update global gridSize to match the imported dungeon
+              gridSize: importedGridSize
+            }
+          })
 
           alert(getMessage(state.language, 'dungeonLoadSuccess', { slot: targetDungeonId }))
         } catch (error) {
@@ -734,7 +825,8 @@ export const useAppState = () => {
               dungeons: {
                 1: {
                   name: 'Dungeon 1',
-                  floors: {}
+                  floors: {},
+                  gridSize: processedState.gridSize || { rows: 20, cols: 20 }
                 }
               },
               dungeonNames: {
@@ -793,7 +885,8 @@ export const useAppState = () => {
               const map = importedState.maps[mapKey]
               processedState.dungeons[mapKey] = {
                 name: map.name ? map.name.replace(/^Map /, 'Dungeon ') : `Dungeon ${mapKey}`,
-                floors: map.floors || {}
+                floors: map.floors || {},
+                gridSize: processedState.gridSize || { rows: 20, cols: 20 }
               }
               
               // Ensure doors and notes properties exist for all floors, and migrate notes
@@ -805,6 +898,9 @@ export const useAppState = () => {
                   }
                   if (!floor.notes) {
                     floor.notes = []
+                  }
+                  if (!floor.name) {
+                    floor.name = null
                   }
                   // Migrate existing note items to notes array
                   if (floor.items) {
@@ -869,44 +965,23 @@ export const useAppState = () => {
           }
           
           // Confirm import operation
-          if (!window.confirm(getMessage(state.language, 'importAllData'))) {
+          if (!window.confirm(getMessage(state.language, 'importAllDataConfirm'))) {
             return
           }
           
-          // Handle grid size differences
-          if (processedState.gridSize.rows !== state.gridSize.rows || processedState.gridSize.cols !== state.gridSize.cols) {
-            const importedGridSize = processedState.gridSize
-            const currentGridSize = state.gridSize
-            
-            // Ask user whether to restore imported grid size or keep current one
-            const restoreGridSizeMessage = getMessage(state.language, 'restoreImportedGridSize', {
-              oldRows: currentGridSize.rows,
-              oldCols: currentGridSize.cols,
-              newRows: importedGridSize.rows,
-              newCols: importedGridSize.cols
-            })
-            
-            const restoreGridSize = window.confirm(restoreGridSizeMessage)
-            
-            if (restoreGridSize) {
-              // Keep imported grid size - no coordinate transformation needed
-              processedState.gridSize = importedGridSize
-            } else {
-              // Keep current grid size - transform coordinates
-              Object.keys(processedState.dungeons).forEach(dungeonKey => {
-                const dungeon = processedState.dungeons[dungeonKey]
-                if (dungeon.floors) {
-                  Object.keys(dungeon.floors).forEach(floorKey => {
-                    processedState.dungeons[dungeonKey].floors[floorKey] = transformFloorToNewGridSize(
-                      dungeon.floors[floorKey],
-                      importedGridSize,
-                      currentGridSize
-                    )
-                  })
-                }
-              })
-              processedState.gridSize = currentGridSize
+          // Ensure each dungeon has individual gridSize
+          Object.keys(processedState.dungeons).forEach(dungeonKey => {
+            const dungeon = processedState.dungeons[dungeonKey]
+            if (dungeon && !dungeon.gridSize) {
+              // If dungeon doesn't have gridSize, use the global gridSize
+              dungeon.gridSize = processedState.gridSize || { rows: 20, cols: 20 }
             }
+          })
+          
+          // Set global gridSize to match the current dungeon
+          const currentDungeonId = processedState.currentDungeon
+          if (processedState.dungeons[currentDungeonId]?.gridSize) {
+            processedState.gridSize = processedState.dungeons[currentDungeonId].gridSize
           }
           
           setState(processedState)
@@ -928,31 +1003,71 @@ export const useAppState = () => {
 
   // Reset current floor data
   const resetCurrentFloor = useCallback(() => {
-    updateState(state => ({
-      ...state,
-      dungeons: {
-        ...state.dungeons,
-        [state.currentDungeon]: {
-          ...state.dungeons[state.currentDungeon],
-          floors: {
-            ...state.dungeons[state.currentDungeon].floors,
-            [state.currentFloor]: createEmptyFloor(state.gridSize)
+    updateState(state => {
+      const currentDungeon = state.dungeons[state.currentDungeon]
+      const dungeonGridSize = currentDungeon?.gridSize || { rows: 20, cols: 20 }
+      
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [state.currentDungeon]: {
+            ...state.dungeons[state.currentDungeon],
+            floors: {
+              ...state.dungeons[state.currentDungeon].floors,
+              [state.currentFloor]: createEmptyFloor(dungeonGridSize)
+            }
           }
         }
       }
-    }))
+    })
+  }, [updateState])
+
+  // Reset specific dungeon
+  const resetDungeon = useCallback((dungeonId) => {
+    updateState(state => {
+      const dungeon = state.dungeons[dungeonId]
+      if (!dungeon) return state
+      
+      const defaultGridSize = { rows: 20, cols: 20 }
+      const defaultName = `Dungeon ${dungeonId}`
+      
+      const newState = {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [dungeonId]: {
+            name: defaultName,
+            ...createEmptyDungeon(defaultGridSize)
+          }
+        },
+        dungeonNames: {
+          ...state.dungeonNames,
+          [dungeonId]: defaultName
+        }
+      }
+      
+      // If this is the current dungeon, update global gridSize as well
+      if (dungeonId === state.currentDungeon) {
+        newState.gridSize = defaultGridSize
+      }
+      
+      return newState
+    })
   }, [updateState])
 
   // Reset all dungeons
   const resetAllDungeons = useCallback(() => {
+    const defaultGridSize = { rows: 20, cols: 20 }
     updateState(state => ({
       ...state,
       currentDungeon: 1,
       currentFloor: 1,
+      gridSize: defaultGridSize,
       dungeons: {
         1: {
           name: 'Dungeon 1',
-          floors: createEmptyDungeon(state.gridSize)
+          ...createEmptyDungeon(defaultGridSize)
         }
       },
       dungeonNames: {
@@ -1086,6 +1201,58 @@ export const useAppState = () => {
     })
   }, [updateState])
 
+  // Copy floor from one location to another
+  const copyFloor = useCallback((sourceDungeonId, sourceFloorId, targetDungeonId, targetFloorId) => {
+    updateState(state => {
+      const sourceDungeon = state.dungeons[sourceDungeonId]
+      const targetDungeon = state.dungeons[targetDungeonId]
+      
+      if (!sourceDungeon || !targetDungeon) {
+        console.error('Source or target dungeon not found')
+        return state
+      }
+      
+      const sourceFloor = sourceDungeon.floors[sourceFloorId]
+      if (!sourceFloor) {
+        console.error('Source floor not found')
+        return state
+      }
+      
+      const sourceGridSize = sourceDungeon.gridSize || { rows: 20, cols: 20 }
+      const targetGridSize = targetDungeon.gridSize || { rows: 20, cols: 20 }
+      
+      // Deep copy the source floor
+      let copiedFloor = JSON.parse(JSON.stringify(sourceFloor))
+      
+      // Transform coordinates if grid sizes are different
+      if (sourceGridSize.rows !== targetGridSize.rows || sourceGridSize.cols !== targetGridSize.cols) {
+        copiedFloor = transformFloorToNewGridSize(copiedFloor, sourceGridSize, targetGridSize)
+      }
+      
+      // Generate new IDs for notes to avoid conflicts
+      if (copiedFloor.notes) {
+        copiedFloor.notes = copiedFloor.notes.map(note => ({
+          ...note,
+          id: (Date.now() + Math.random()).toString()
+        }))
+      }
+      
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [targetDungeonId]: {
+            ...targetDungeon,
+            floors: {
+              ...targetDungeon.floors,
+              [targetFloorId]: copiedFloor
+            }
+          }
+        }
+      }
+    })
+  }, [updateState])
+
   // Export current floor as SVG
   const exportFloorSVG = useCallback(() => {
     try {
@@ -1095,7 +1262,7 @@ export const useAppState = () => {
       const svgContent = exportFloorAsSVG(floorData, state.gridSize, dungeonName, state.currentFloor, currentTheme)
       
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
-      const filename = `${dungeonName.replace(/[\\/:*?"<>|]/g, '_')}_Floor_${state.currentFloor}_${timestamp}.svg`
+      const filename = `${dungeonName.replace(/[\\/:*?"<>|]/g, '_')}_Floor_B${state.currentFloor}F_${timestamp}.svg`
       downloadSVG(svgContent, filename)
     } catch (error) {
       console.error('Failed to export SVG:', error)
@@ -1111,9 +1278,11 @@ export const useAppState = () => {
     setCurrentDungeon,
     setCurrentFloor,
     setDungeonName,
+    setFloorName,
     setZoom,
     setActiveTool,
     setGridSize,
+    setDungeonGridSize,
     toggleNoteTooltips,
     setLanguage,
     setTheme,
@@ -1121,12 +1290,14 @@ export const useAppState = () => {
     updateCurrentFloorData,
     getCurrentFloorData,
     resetCurrentFloor,
+    resetDungeon,
     resetAllDungeons,
     exportState,
     importState,
     exportDungeon,
     importDungeon,
     exportFloorSVG,
+    copyFloor,
     getNoteAt,
     setNoteAt,
     deleteNoteAt,

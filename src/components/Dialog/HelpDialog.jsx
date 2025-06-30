@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
   const content = {
     ja: {
       title: 'DMapper ヘルプ',
-      version: 'バージョン 1.6.4',
+      version: 'バージョン 1.7.0',
       close: '閉じる',
       tabs: {
         guide: '機能説明',
@@ -63,34 +63,47 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: '消去ツール:', desc: '左クリックでオブジェクトを削除します。' }
           ]
         },
-        mapManagement: {
-          title: 'ダンジョン管理',
+        dungeonOptions: {
+          title: 'Dungeon Option機能',
           items: [
-            { label: '複数ダンジョン管理（最大10個）:', desc: 'Dungeon選択' },
-            { label: 'ダンジョン名前付け:', desc: 'Renameボタン' },
-            { label: '階層切り替え（最大30階）:', desc: 'Floor選択' },
-            { label: '現在フロア全削除:', desc: 'Resetボタン' },
-            { label: 'グリッドサイズ調整（5x5〜50x50）:', desc: 'Menu → Grid Sizeで幅・高さを個別設定' },
-            { label: 'メモ常時表示切り替え:', desc: 'Noteボタン' }
+            { label: 'ダンジョン選択:', desc: '編集対象のダンジョンを選択' },
+            { label: 'ダンジョン名変更:', desc: 'ダンジョンにカスタム名を設定' },
+            { label: 'グリッドサイズ調整:', desc: '幅・高さを個別設定（1x1〜50x50）' },
+            { label: 'ダンジョンリセット:', desc: '現在のダンジョンを完全初期化' },
+            { label: 'ダンジョン保存:', desc: '選択したダンジョンをJSONファイルでダウンロード' },
+            { label: 'ダンジョン読み込み:', desc: 'JSONファイルからダンジョンデータをインポート' }
           ]
         },
-        dataSaving: {
-          title: 'データ保存',
+        floorOptions: {
+          title: 'Floor Option機能',
           items: [
-            { label: '自動保存:', desc: 'ブラウザのローカルストレージに自動保存' },
-            { label: '全データダウンロード:', desc: 'Export All Dataボタン' },
-            { label: '全データ復元:', desc: 'Import All Dataボタン' },
-            { label: 'ダンジョン単位セーブ:', desc: '選択したダンジョンのみをSave Dungeonボタン' },
-            { label: 'ダンジョン単位ロード:', desc: '選択スロットにLoad Dungeonボタン' },
-            { label: 'SVG画像ダウンロード:', desc: 'SVGボタン' },
-            { label: '全ダンジョンリセット:', desc: 'Reset All Dungeonsボタン - すべてのダンジョンデータを初期化' }
+            { label: 'フロア選択:', desc: '編集対象のフロアを選択（B1F形式で表示）' },
+            { label: 'フロア名変更:', desc: 'フロアにカスタム名を設定' },
+            { label: 'Floor Copy:', desc: '現在のフロアを他のダンジョン・フロアにコピー（GridSize差異時は座標自動変換）' },
+            { label: 'SVG画像ダウンロード:', desc: '現在のフロアをSVG形式でエクスポート' },
+            { label: 'フロアリセット:', desc: '現在のフロアのすべてのデータを削除' }
+          ]
+        },
+        globalOptions: {
+          title: '全体Option機能',
+          items: [
+            { label: 'テーマ変更:', desc: 'デフォルト・ダンジョンテーマを切り替え' },
+            { label: '全データエクスポート:', desc: 'すべてのダンジョンデータをJSONファイルでダウンロード' },
+            { label: '全データインポート:', desc: 'JSONファイルからすべてのデータを復元' },
+            { label: '全ダンジョンリセット:', desc: 'すべてのダンジョンデータを初期化' }
+          ]
+        },
+        otherFeatures: {
+          title: 'その他の機能',
+          items: [
+            { label: 'メモ表示切り替え:', desc: 'Noteボタンでメモ常時表示をオンオフ' },
+            { label: '自動保存:', desc: 'ブラウザのローカルストレージに自動保存' }
           ]
         },
         settings: {
           title: '設定',
           items: [
-            { label: '言語切り替え:', desc: 'ヘルプ画面右上のJP/ENボタンで表示言語を切り替え（メッセージも連動）' },
-            { label: 'テーマ変更:', desc: 'メニュー → テーマ選択でデフォルト・ダンジョンテーマを切り替え' }
+            { label: '言語切り替え:', desc: 'ヘルプ画面右上のJP/ENボタンで表示言語を切り替え（メッセージも連動）' }
           ]
         },
         notes: {
@@ -103,6 +116,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.7.0', date: '2025-06-30', changes: ['UI再編成', 'Dungeon Optionポップアップ：ダンジョン選択・名前変更・グリッドサイズ・保存・読み込み・リセットを統合', 'Floor Optionポップアップ：フロア選択・名前変更・SVGエクスポート・リセットを統合', 'フロア名変更機能を追加：カスタム名またはデフォルトB1F表示', 'フロアコピー機能を追加：Floor Optionから他のダンジョン・フロアにマップデータをコピー可能'] },
             { version: 'v1.6.4', date: '2025-06-26', changes: ['グリッドサイズ設定を改善：幅・高さを個別に設定可能（長方形グリッド対応）'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['モバイルタッチ操作を改善：同じツールで同じ要素をタッチすると削除（PCでは従来通り）', '削除ツールの優先度システム実装：メモ＞アイテム＞色の順で削除', 'スワイプ操作時のエラーを修正'] },
             { version: 'v1.6.2', date: '2025-06-26', changes: ['ドアアイテムツールを追加：セルに配置可能なドア（開閉選択可能）'] },
@@ -133,7 +147,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     },
     en: {
       title: 'DMapper Help',
-      version: 'Version 1.6.4',
+      version: 'Version 1.7.0',
       close: 'Close',
       tabs: {
         guide: 'User Guide',
@@ -188,34 +202,47 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             { name: 'Eraser Tool:', desc: 'Delete objects with left click.' }
           ]
         },
-        mapManagement: {
-          title: 'Dungeon Management',
+        dungeonOptions: {
+          title: 'Dungeon Option Features',
           items: [
-            { label: 'Dungeon Selection:', desc: 'Manage multiple dungeons (up to 10)' },
-            { label: 'Rename:', desc: 'Give custom names to your dungeons' },
-            { label: 'Floor Selection:', desc: 'Support up to 30 floors per dungeon' },
-            { label: 'Reset:', desc: 'Clear all data on current floor' },
-            { label: 'Grid Size:', desc: 'Adjust width and height individually (5x5 to 50x50) via Menu → Grid Size' },
-            { label: 'Note:', desc: 'Toggle note tooltip display on/off (always visible when on)' }
+            { label: 'Dungeon Selection:', desc: 'Select target dungeon for editing' },
+            { label: 'Dungeon Rename:', desc: 'Set custom names for dungeons' },
+            { label: 'Grid Size Adjustment:', desc: 'Set width and height individually (1x1 to 50x50)' },
+            { label: 'Dungeon Reset:', desc: 'Completely initialize current dungeon' },
+            { label: 'Save Dungeon:', desc: 'Download selected dungeon as JSON file' },
+            { label: 'Load Dungeon:', desc: 'Import dungeon data from JSON file' }
           ]
         },
-        dataSaving: {
-          title: 'Data Storage',
+        floorOptions: {
+          title: 'Floor Option Features',
           items: [
-            { label: 'Auto-save:', desc: 'All changes are automatically saved to browser local storage' },
-            { label: 'Export All Data:', desc: 'Download all dungeons as JSON file' },
-            { label: 'Import All Data:', desc: 'Load all dungeons from JSON file' },
-            { label: 'Save Dungeon:', desc: 'Download selected dungeon only as JSON file' },
-            { label: 'Load Dungeon:', desc: 'Load dungeon file to selected slot (with overwrite confirmation)' },
-            { label: 'SVG:', desc: 'Download current floor as SVG image file' },
-            { label: 'Reset All Dungeons:', desc: 'Reset All Dungeons button - Initialize all dungeon data' }
+            { label: 'Floor Selection:', desc: 'Select target floor for editing (displayed in B1F format)' },
+            { label: 'Floor Rename:', desc: 'Set custom names for floors' },
+            { label: 'Floor Copy:', desc: 'Copy current floor to other dungeons/floors (automatic coordinate transformation for GridSize differences)' },
+            { label: 'SVG Image Download:', desc: 'Export current floor as SVG format' },
+            { label: 'Floor Reset:', desc: 'Delete all data on current floor' }
+          ]
+        },
+        globalOptions: {
+          title: 'Global Option Features',
+          items: [
+            { label: 'Theme Change:', desc: 'Switch between Default and Dungeon themes' },
+            { label: 'Export All Data:', desc: 'Download all dungeon data as JSON file' },
+            { label: 'Import All Data:', desc: 'Restore all data from JSON file' },
+            { label: 'Reset All Dungeons:', desc: 'Initialize all dungeon data' }
+          ]
+        },
+        otherFeatures: {
+          title: 'Other Features',
+          items: [
+            { label: 'Note Display Toggle:', desc: 'Toggle note tooltip display on/off with Note button' },
+            { label: 'Auto-save:', desc: 'All changes are automatically saved to browser local storage' }
           ]
         },
         settings: {
           title: 'Settings',
           items: [
-            { label: 'Language Toggle:', desc: 'Switch display language using JP/EN buttons in top-right of help screen (messages also change)' },
-            { label: 'Theme Change:', desc: 'Switch between Default and Dungeon themes via Menu → Theme selection' }
+            { label: 'Language Toggle:', desc: 'Switch display language using JP/EN buttons in top-right of help screen (messages also change)' }
           ]
         },
         notes: {
@@ -228,6 +255,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.7.0', date: '2025-06-30', changes: ['UI reorganization', 'Dungeon Option popup: Consolidates dungeon selection, rename, grid size, save/load, and reset', 'Floor Option popup: Consolidates floor selection, rename, SVG export, and reset', 'Added floor naming functionality: Custom names or default B1F display', 'Added Floor Copy functionality: Copy map data from Floor Option to other dungeons/floors'] },
             { version: 'v1.6.4', date: '2025-06-26', changes: ['Improved grid size settings: Support for rectangular grids with independent width and height configuration'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['Improved mobile touch controls: Touch same element with same tool to delete (PC maintains original behavior)', 'Implemented priority-based deletion system: Notes > Items > Grid colors', 'Fixed swipe gesture errors'] },
             { version: 'v1.6.2', date: '2025-06-26', changes: ['Added Door Item tool: Placeable door items on cells with open/closed state selection'] },
@@ -444,21 +472,41 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
                 </div>
               </section>
 
-              {/* Map Management */}
+              {/* Dungeon Options */}
               <section>
-                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.mapManagement.title}</h3>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.dungeonOptions.title}</h3>
                 <div className="space-y-2">
-                  {currentContent.sections.mapManagement.items.map((item, index) => (
+                  {currentContent.sections.dungeonOptions.items.map((item, index) => (
                     <div key={index}><strong>{item.label}</strong> {item.desc}</div>
                   ))}
                 </div>
               </section>
 
-              {/* Data Saving */}
+              {/* Floor Options */}
               <section>
-                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.dataSaving.title}</h3>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.floorOptions.title}</h3>
                 <div className="space-y-2">
-                  {currentContent.sections.dataSaving.items.map((item, index) => (
+                  {currentContent.sections.floorOptions.items.map((item, index) => (
+                    <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Global Options */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.globalOptions.title}</h3>
+                <div className="space-y-2">
+                  {currentContent.sections.globalOptions.items.map((item, index) => (
+                    <div key={index}><strong>{item.label}</strong> {item.desc}</div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Other Features */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.otherFeatures.title}</h3>
+                <div className="space-y-2">
+                  {currentContent.sections.otherFeatures.items.map((item, index) => (
                     <div key={index}><strong>{item.label}</strong> {item.desc}</div>
                   ))}
                 </div>
