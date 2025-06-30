@@ -77,7 +77,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         floorOptions: {
           title: 'フロアオプション',
           items: [
-            { label: 'フロア選択:', desc: '編集対象のフロアを選択（B1F形式で表示）' },
+            { label: 'フロア選択:', desc: '編集対象のフロアを選択（データが存在するフロアには*マークが表示されます）' },
             { label: 'フロア名変更:', desc: 'フロアにカスタム名を設定' },
             { label: 'Floor Copy:', desc: '現在のフロアを他のダンジョン・フロアにコピー（GridSize差異時は座標自動変換）' },
             { label: 'SVG画像ダウンロード:', desc: '現在のフロアをSVG形式でエクスポート' },
@@ -216,7 +216,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         floorOptions: {
           title: 'Floor Option Features',
           items: [
-            { label: 'Floor Selection:', desc: 'Select target floor for editing (displayed in B1F format)' },
+            { label: 'Floor Selection:', desc: 'Select target floor for editing (floors with data are marked with * prefix)' },
             { label: 'Floor Rename:', desc: 'Set custom names for floors' },
             { label: 'Floor Copy:', desc: 'Copy current floor to other dungeons/floors (automatic coordinate transformation for GridSize differences)' },
             { label: 'SVG Image Download:', desc: 'Export current floor as SVG format' },
