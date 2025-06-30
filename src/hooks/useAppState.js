@@ -21,6 +21,12 @@ const createEmptyDungeon = (gridSize) => {
   return { floors, gridSize }
 }
 
+// Detect browser language for initial setup
+const detectBrowserLanguage = () => {
+  const lang = navigator.language || navigator.languages?.[0] || 'en'
+  return lang.startsWith('ja') ? 'ja' : 'en'
+}
+
 // Transform floor data to match new grid size
 const transformFloorToNewGridSize = (floor, oldGridSize, newGridSize) => {
   if (!floor || !oldGridSize || !newGridSize) return floor
@@ -135,7 +141,7 @@ const INITIAL_STATE = {
   zoom: 1.0,
   activeTool: 'block_color',
   showNoteTooltips: true,
-  language: 'ja',
+  language: detectBrowserLanguage(),
   theme: 'default',
   dungeons: {
     1: {

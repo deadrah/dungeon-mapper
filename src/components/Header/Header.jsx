@@ -379,9 +379,20 @@ const Header = ({
                 </select>
               </div>
 
+              {/* Language Selection */}
+              <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
+                <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>{getMessage(language, 'language')}</h4>
+                <select
+                  value={language}
+                  onChange={(e) => onLanguageChange(e.target.value)}
+                  className="px-2 py-1 rounded text-sm w-full"
+                  style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
+                >
+                  <option value="ja">日本語</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
 
-
-              
               <div>
                 <span className="text-sm font-semibold" style={{ color: theme.ui.menuSectionHeading }}>{getMessage(language, 'allDataBackup')}</span>
               </div>
