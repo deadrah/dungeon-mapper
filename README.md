@@ -9,23 +9,31 @@ This application operates entirely client-side without requiring a server and st
 
 ## ✨ Features
 
-### Core Mapping Tools
+### Line Tools (Grid Boundaries)
 - **Wall Drawing**: Draw walls on grid boundaries with click & drag for continuous drawing
+- **Doors**: Place open doors (□) or closed doors (■) on walls
+- **Line Arrows**: Place directional arrows on wall segments
+
+### Grid Tools (Cell Content)
 - **Block Color Fill**: Fill grid cells with colors using the color picker
 - **Dark Zone**: Mark dark areas with gray shading
-- **Stairs**: Place up stairs (▲) and down stairs (▼)
-- **Items**: Place treasure chests, warp points, and event markers
+- **Stairs**: Place up stairs (▲) and down stairs (▼) with 2-character identifiers
+- **Treasure Chests**: Mark treasure locations
+- **Teleport Points**: Place teleport markers with 2-character identifiers
+- **Shoots & Pits**: Mark falling points with selectable shoot (●) or pit (○) styles
+- **Event Markers**: Mark special event locations
 - **Current Position**: Mark player's current location (one per floor)
-- **Doors**: Place open doors (□) or closed doors (■) on existing walls
-- **Arrows**: Place directional arrows on grid cells or walls
-- **Notes**: Add text memos to cells with tooltip display
+- **Grid Arrows**: Place directional arrows in grid cells
+- **Door Items**: Place door items in cells with open/closed state selection
+- **Notes**: Add text memos to cells with red triangle indicators and tooltip display
 - **Eraser Tool**: Mobile-friendly tool for deleting objects
 
 ### Dungeon Management
 - **Multiple Dungeons**: Manage up to 10 dungeons with custom names
-- **Multi-Floor Support**: Up to 30 floors per dungeon
-- **Floor Navigation**: Easy switching between floors with F notation (1F, 2F, etc.)
-- **Grid Customization**: Adjustable grid size from 5x5 to 50x50
+- **Multi-Floor Support**: Up to 30 floors per dungeon (B1F to B30F format)
+- **Floor Navigation**: Easy switching between floors with data indicators (* prefix for floors with content)
+- **Grid Customization**: Adjustable grid size from 1x1 to 50x50 per dungeon
+- **Floor Copy**: Copy floors between different dungeons with automatic coordinate transformation
 
 ### Data Management
 - **Auto-save**: Automatic saving to browser local storage
@@ -36,11 +44,13 @@ This application operates entirely client-side without requiring a server and st
 - **Backward Compatibility**: Supports legacy data formats
 
 ### User Experience
-- **Multi-language Support**: Japanese and English interface
+- **Multi-language Support**: Japanese and English interface with automatic browser language detection
+- **Theme Support**: Default and Dungeon themes for different visual preferences
 - **Mobile Responsive**: Optimized for both desktop and mobile devices
 - **Touch Controls**: Single finger for tools, two fingers for map navigation
 - **Keyboard Shortcuts**: Quick tool selection (1-5, Q, E) and operations (Ctrl+Z/Y)
 - **Zoom & Pan**: Mouse wheel zoom and Shift+drag panning
+- **Note Management**: Always-visible note tooltips with toggle option
 
 ## 🎮 Controls
 
@@ -65,10 +75,10 @@ This application operates entirely client-side without requiring a server and st
 ## 🚀 Getting Started
 
 1. Visit [https://deadrah.github.io/dungeon-mapper/](https://deadrah.github.io/dungeon-mapper/)
-2. Select your preferred language (JP/EN) in the help dialog
-3. Choose a drawing tool from the left panel
-4. Start mapping your dungeon!
-5. Use the File menu for save/load operations
+2. Language is automatically detected from your browser (Japanese for 'ja' locales, English for others)
+3. Choose a drawing tool from the left panel (Line tools for boundaries, Grid tools for cell content)
+4. Start mapping your dungeon! Use the * indicators to see which floors contain data
+5. Access save/load and other options through the option menu (hamburger icon)
 
 ## 💾 Data Storage
 
@@ -97,7 +107,9 @@ npm run build
 
 - Data is stored in browser local storage and will be lost if browser data is cleared
 - Regular backups using the Export function are recommended for important dungeon maps
-- Doors and wall arrows can only be placed on existing walls
+- Line tools (doors, line arrows) can only be placed on existing walls
+- Each dungeon can have its own grid size settings
+- Floor copy automatically handles coordinate transformation for different grid sizes
 
 ## 📄 License
 
