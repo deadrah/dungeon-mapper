@@ -4,8 +4,7 @@ import HelpDialog from '../Dialog/HelpDialog'
 import DungeonOptionDialog from '../Dialog/DungeonOptionDialog'
 import FloorOptionDialog from '../Dialog/FloorOptionDialog'
 import CopyFloorDialog from '../Dialog/CopyFloorDialog'
-import { getMessage } from '../../utils/messages'
-import { getThemeOptions } from '../../utils/themes'
+import OptionDialog from '../Dialog/OptionDialog'
 
 const Header = ({ 
   currentDungeon,
@@ -50,45 +49,6 @@ const Header = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [copyFloorSource, setCopyFloorSource] = useState({ dungeonId: 1, floorId: 1 })
 
-  const closeMenu = () => setIsMenuOpen(false)
-  
-  const handleDesktopExport = () => {
-    onExport()
-    closeMenu()
-  }
-
-  const handleDesktopImport = () => {
-    handleImportClick()
-    closeMenu()
-  }
-
-
-
-
-  
-
-  const handleResetAllDungeons = () => {
-    const message = getMessage(language, 'resetAllDungeonsConfirm')
-    if (window.confirm(message)) {
-      onResetAllDungeons()
-      closeMenu()
-    }
-  }
-
-
-  
-  const handleImportClick = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.json'
-    input.onchange = (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        onImport(file)
-      }
-    }
-    input.click()
-  }
 
   const handleOpenCopyFloor = (sourceDungeon, sourceFloor) => {
     setCopyFloorSource({ dungeonId: sourceDungeon, floorId: sourceFloor })
@@ -359,98 +319,19 @@ const Header = ({
       />
       
 
-      {/* Option Modal */}
-      {isMenuOpen && (
-        <div 
-          className="fixed inset-0 flex items-center justify-center z-50" 
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-          onClick={closeMenu}
-        >
-          <div 
-            className="rounded-lg p-4 w-64 max-w-full mx-4"
-            style={{ backgroundColor: theme.ui.panel }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>{getMessage(language, 'option')}</h3>
-            
-            <div className="space-y-2">
-              {/* Theme Selection */}
-              <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
-                <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>{getMessage(language, 'theme')}</h4>
-                <select
-                  value={themeName}
-                  onChange={(e) => onThemeChange(e.target.value)}
-                  className="px-2 py-1 rounded text-sm w-full"
-                  style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
-                >
-                  {getThemeOptions().map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Language Selection */}
-              <div className="border-b pb-2 mb-2" style={{ borderColor: theme.ui.border }}>
-                <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>{getMessage(language, 'language')}</h4>
-                <select
-                  value={language}
-                  onChange={(e) => onLanguageChange(e.target.value)}
-                  className="px-2 py-1 rounded text-sm w-full"
-                  style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
-                >
-                  <option value="ja">日本語</option>
-                  <option value="en">English</option>
-                </select>
-              </div>
-
-              <div>
-                <span className="text-sm font-semibold" style={{ color: theme.ui.menuSectionHeading }}>{getMessage(language, 'allDataBackup')}</span>
-              </div>
-              <button
-                onClick={handleDesktopExport}
-                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
-                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
-                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
-              >
-                {getMessage(language, 'exportAllData')}
-              </button>
-              
-              <button
-                onClick={handleDesktopImport}
-                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
-                style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonActiveHover}
-                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
-              >
-                {getMessage(language, 'importAllData')}
-              </button>
-
-              {/* HR separator */}
-              <hr className="border-gray-300" />
-              
-              <div>
-                <span className="text-sm font-semibold" style={{ color: theme.ui.resetButton }}>{getMessage(language, 'allDungeonReset')}</span>
-              </div>
-              <button
-                onClick={handleResetAllDungeons}
-                className="w-full px-3 py-2 rounded text-sm text-left transition-colors"
-                style={{ 
-                  backgroundColor: theme.ui.resetButton, 
-                  color: theme.ui.resetButtonText
-                }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.resetButtonHover}
-                onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.resetButton}
-              >
-                {getMessage(language, 'resetAllDungeonsButton')}
-              </button>
-
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Option Dialog */}
+      <OptionDialog
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onExport={onExport}
+        onImport={onImport}
+        onResetAllDungeons={onResetAllDungeons}
+        language={language}
+        onLanguageChange={onLanguageChange}
+        theme={theme}
+        themeName={themeName}
+        onThemeChange={onThemeChange}
+      />
 
       {/* Help Dialog */}
       <HelpDialog
