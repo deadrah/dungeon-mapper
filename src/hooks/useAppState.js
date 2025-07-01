@@ -31,6 +31,11 @@ const detectBrowserLanguage = () => {
 const transformFloorToNewGridSize = (floor, oldGridSize, newGridSize) => {
   if (!floor || !oldGridSize || !newGridSize) return floor
   
+  // Check if grid size actually changed - if not, return floor as-is
+  if (oldGridSize.rows === newGridSize.rows && oldGridSize.cols === newGridSize.cols) {
+    return floor
+  }
+  
   const oldRows = oldGridSize.rows
   const newGrid = new Array(newGridSize.rows).fill(null).map(() => new Array(newGridSize.cols).fill(null))
   

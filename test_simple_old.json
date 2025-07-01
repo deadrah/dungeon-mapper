@@ -1,0 +1,35 @@
+{
+  "currentFloor": 1,
+  "gridSize": {"rows": 16, "cols": 16},
+  "zoom": 1.0,
+  "activeTool": "block_color",
+  "floors": {
+    "1": {
+      "grid": [
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,"red","red",null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,"red","red",null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
+      ],
+      "walls": [
+        {"startRow": 5, "startCol": 2, "endRow": 5, "endCol": 8, "id": "wall1"},
+        {"startRow": 10, "startCol": 2, "endRow": 10, "endCol": 8, "id": "wall2"}
+      ],
+      "items": [
+        {"type": "stairs_up", "row": 7, "col": 5, "id": "item1", "text": "階段テスト"}
+      ]
+    }
+  }
+}

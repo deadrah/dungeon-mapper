@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
   const content = {
     ja: {
       title: 'DMapper ヘルプ',
-      version: 'バージョン 1.7.0',
+      version: 'バージョン 1.7.1',
       close: '閉じる',
       tabs: {
         guide: '機能説明',
@@ -116,6 +116,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.7.1', date: '2025-07-01', changes: ['古いバージョンデータインポート時のLine系データ座標ずれ問題を修正'] },
             { version: 'v1.7.0', date: '2025-06-30', changes: ['UI再編成', 'ダンジョンオプションポップアップ：ダンジョン選択・名前変更・グリッドサイズ・保存・読み込み・リセットを統合', 'フロアオプションポップアップ：フロア選択・名前変更・SVGエクスポート・リセットを統合', 'フロア名変更機能を追加：カスタム名またはデフォルトB1F表示', 'フロアコピー機能を追加：Floor Optionから他のダンジョン・フロアにマップデータをコピー可能'] },
             { version: 'v1.6.4', date: '2025-06-26', changes: ['グリッドサイズ設定を改善：幅・高さを個別に設定可能（長方形グリッド対応）'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['モバイルタッチ操作を改善：同じツールで同じ要素をタッチすると削除（PCでは従来通り）', '削除ツールの優先度システム実装：メモ＞アイテム＞色の順で削除', 'スワイプ操作時のエラーを修正'] },
@@ -147,7 +148,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     },
     en: {
       title: 'DMapper Help',
-      version: 'Version 1.7.0',
+      version: 'Version 1.7.1',
       close: 'Close',
       tabs: {
         guide: 'User Guide',
@@ -255,6 +256,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.7.1', date: '2025-07-01', changes: ['Fixed Line data coordinate offset issue when importing old version data'] },
             { version: 'v1.7.0', date: '2025-06-30', changes: ['UI reorganization', 'Dungeon Option popup: Consolidates dungeon selection, rename, grid size, save/load, and reset', 'Floor Option popup: Consolidates floor selection, rename, SVG export, and reset', 'Added floor naming functionality: Custom names or default B1F display', 'Added Floor Copy functionality: Copy map data from Floor Option to other dungeons/floors'] },
             { version: 'v1.6.4', date: '2025-06-26', changes: ['Improved grid size settings: Support for rectangular grids with independent width and height configuration'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['Improved mobile touch controls: Touch same element with same tool to delete (PC maintains original behavior)', 'Implemented priority-based deletion system: Notes > Items > Grid colors', 'Fixed swipe gesture errors'] },
