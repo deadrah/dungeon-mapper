@@ -30,7 +30,8 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     noteTooltipBg: theme.items.note,
     titleText: theme.header.text,
     headerText: theme.header.text,
-    background: theme.grid.background
+    background: theme.grid.canvasBackground,
+    gridBackground: theme.grid.background
   } : {
     gridLine: '#d1d5db',
     wallLine: '#1f2937',
@@ -53,7 +54,8 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     noteTooltipBg: '#ffffff',
     titleText: '#1f2937',
     headerText: '#374151',
-    background: '#ffffff'
+    background: '#ffffff',
+    gridBackground: '#d7e2f6'
   }
 
   // SVG header
@@ -90,6 +92,8 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
   
   <!-- Grid container -->
   <g transform="translate(${padding + headerSize}, ${padding + headerSize})">
+    <!-- Grid area background -->
+    <rect x="0" y="0" width="${gridSize.cols * cellSize}" height="${gridSize.rows * cellSize}" fill="${colors.gridBackground}"/>
 `
 
   // Add grid lines
@@ -154,8 +158,8 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         if (color) {
           svg += `      <rect x="${col * cellSize + 1}" y="${displayRow * cellSize + 1}" width="${cellSize - 2}" height="${cellSize - 2}" fill="${color}"/>\n`
         } else {
-          // Default light blue background for empty cells
-          svg += `      <rect x="${col * cellSize + 1}" y="${displayRow * cellSize + 1}" width="${cellSize - 2}" height="${cellSize - 2}" fill="#d7e2f6" opacity="0.5"/>\n`
+          // Default background for empty cells using theme
+          svg += `      <rect x="${col * cellSize + 1}" y="${displayRow * cellSize + 1}" width="${cellSize - 2}" height="${cellSize - 2}" fill="${colors.gridBackground}" opacity="0.5"/>\n`
         }
       }
     }

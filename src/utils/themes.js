@@ -86,7 +86,7 @@ export const themes = {
     name: 'Dungeon',
     
     grid: {
-      background: '#f7f3e9',        // 古い羊皮紙のような背景
+      background: '#e1d7be',        // 古い羊皮紙のような背景
       canvasBackground: '#ede7d9',  // キャンバス背景（グリッド外）
       lines: '#a0956b',             // セピア調のグリッド線
       cellBorder: '#c4b896',        // 薄いセピアの境界線
