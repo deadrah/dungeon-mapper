@@ -116,7 +116,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
-            { version: 'v1.7.1', date: '2025-07-01', changes: ['古いバージョンデータインポート時のLine系データ座標ずれ問題を修正'] },
+            { version: 'v1.7.1', date: '2025-07-01', changes: ['旧バージョンのデータインポート時、Line系データ座標がずれる問題を修正'] },
             { version: 'v1.7.0', date: '2025-06-30', changes: ['UI再編成', 'ダンジョンオプションポップアップ：ダンジョン選択・名前変更・グリッドサイズ・保存・読み込み・リセットを統合', 'フロアオプションポップアップ：フロア選択・名前変更・SVGエクスポート・リセットを統合', 'フロア名変更機能を追加：カスタム名またはデフォルトB1F表示', 'フロアコピー機能を追加：Floor Optionから他のダンジョン・フロアにマップデータをコピー可能'] },
             { version: 'v1.6.4', date: '2025-06-26', changes: ['グリッドサイズ設定を改善：幅・高さを個別に設定可能（長方形グリッド対応）'] },
             { version: 'v1.6.3', date: '2025-06-26', changes: ['モバイルタッチ操作を改善：同じツールで同じ要素をタッチすると削除（PCでは従来通り）', '削除ツールの優先度システム実装：メモ＞アイテム＞色の順で削除', 'スワイプ操作時のエラーを修正'] },
@@ -356,10 +356,10 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
             </div>
             <button
               onClick={onClose}
-              className="text-2xl font-bold transition-colors"
-              style={{ color: theme.ui.panelText }}
-              onMouseEnter={(e) => e.target.style.opacity = '0.7'}
-              onMouseLeave={(e) => e.target.style.opacity = '1'}
+              className="px-3 py-1 rounded transition-colors"
+              style={{ backgroundColor: theme.ui.button, color: theme.ui.panelText }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
+              onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.button}
               title={currentContent.close}
             >
               ×
@@ -573,10 +573,10 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         <div className="flex justify-end mt-4">
           <button
             onClick={onClose}
-            className="px-6 py-2 rounded transition-colors"
-            style={{ backgroundColor: theme.ui.buttonActive, color: theme.ui.panelText }}
+            className="px-4 py-2 rounded transition-colors"
+            style={{ backgroundColor: theme.ui.button, color: theme.ui.panelText }}
             onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.buttonHover}
-            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.buttonActive}
+            onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.button}
           >
             {currentContent.close}
           </button>
