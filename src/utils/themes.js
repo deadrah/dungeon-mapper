@@ -228,6 +228,81 @@ export const themes = {
       helpButtonText: '#0b412a',    // ヘルプボタンテキスト色（Header.jsx - ヘルプボタン文字）
       menuSectionHeading: '#4ecdc4', // メニューセクション見出し色（Header.jsx - メニュー内セクション見出し）
     }
+  },
+
+  hell: {
+    name: 'Hell',
+    
+    grid: {
+      background: '#3e1414',        // 暗い茶色の背景（地下室風）
+      canvasBackground: '#000',  // さらに暗い背景（キャンバス外）
+      lines: '#4a2817',             // 暗い赤茶色のグリッド線
+      cellBorder: '#ddd2cc',        // 暗いオレンジ茶色の境界線
+    },
+    
+    header: {
+      background: '#3a201a',        // 暗い赤茶色ヘッダー
+      text: '#e1bc45',              // ゴールド色のテキスト
+      border: '#4a2817',            // 暗い赤茶色の境界線
+      corner: '#2a1810',            // 角の装飾
+    },
+    
+    items: {
+      teleport: '#b22222',          // ダークレッド（ワープポイント）
+      teleportBorder: '#8b0000',    // より暗い赤
+      event: '#ff4500',             // オレンジレッド（イベント）
+      elevator: '#cd853f',          // ペルー色（エレベーター）
+      stairs: '#a0522d',            // サドルブラウン（階段）
+      chest: '#b99624',             // ゴールド（宝箱）
+      chestBackground: '#fff3d0',   // ゴールド（宝箱背景）
+      currentPosition: '#dc143c',   // クリムゾン（現在位置）
+      arrow: '#b22222',             // ダークレッド（矢印）
+      note: '#fff8dc',              // コーンシルク（ノート背景）
+      noteBorder: '#8b4513',        // サドルブラウン（ノート枠）
+      noteTriangle: '#dc143c',      // クリムゾン（ノート三角）
+      shute: '#8b0000',             // ダークレッド（シュート）
+      darkZone: 'rgba(139, 0, 0, 0.7)',  // 暗い赤のオーバーレイ
+    },
+    
+    walls: {
+      stroke: '#d50a0a',            // ダークレッドの壁
+      strokeWidth: 2,
+    },
+    
+    doors: {
+      open: {
+        background: '#fff8dc',      // コーンシルク（開いたドア）
+        border: '#b90000',          // サドルブラウン
+      },
+      closed: {
+        background: '#8b0000',      // ダークレッド（閉じたドア）
+        border: '#b90000',          // サドルブラウン枠
+      },
+    },
+    
+    ui: {
+      panel: '#1a0a0a',             // 非常に暗い赤パネル
+      panelText: '#e1bc45',         // ゴールド色テキスト
+      button: '#1a0a0a',            // 暗い赤ボタン背景
+      buttonHover: '#4a1a1a',       // ボタンホバー（少し明るい赤）
+      buttonActive: '#8b0000',      // アクティブボタン（ダークレッド）
+      buttonActiveHover: '#a52a2a', // アクティブボタンホバー（ブラウン）
+      groupHeader: '#2a0f0f',       // グループヘッダー（暗い赤）
+      background: '#f5deb3',        // 麦色背景（入力フィールド用）
+      text: '#68250b',              // サドルブラウンテキスト（入力フィールド用）
+      input: '#68250b',             // サドルブラウン
+      inputText: '#f5deb3',         // 麦色テキスト
+      border: '#000',            // ダークレッド境界線
+      helpHeading: '#ffd700',       // ゴールド色（ヘルプ見出し）
+      helpToolColor: '#ff6347',     // トマト色（ヘルプツール色）
+      resetButton: '#5a0000',       // ダークレッド（リセットボタン）
+      resetButtonHover: '#7a0000',  // ブラウン（リセットボタンホバー）
+      resetButtonText: '#e1bc45',   // ゴールド色（リセットボタンテキスト）
+      helpButton: '#b8860b',        // ダークゴールドロッド（ヘルプボタン）
+      helpButtonHover: '#daa520',   // ゴールドロッド（ヘルプボタンホバー）
+      helpButtonText: '#1a0a0a',    // 暗い赤（ヘルプボタンテキスト）
+      menuSectionHeading: '#ff6347', // トマト色（メニューセクション見出し）
+    }
   }
 }
 

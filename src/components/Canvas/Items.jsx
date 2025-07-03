@@ -44,9 +44,9 @@ const Items = ({
       return (
         <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 24 24" fill="none">
           {/* Chest base */}
-          <rect x="4" y="12" width="16" height="8" stroke={theme.items.chest} strokeWidth="1.5" fill="none" rx="1"/>
+          <rect x="4" y="12" width="16" height="8" stroke={theme.items.chest} strokeWidth="1.5" fill={theme.items.chestBackground || "none"} rx="1"/>
           {/* Chest lid */}
-          <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke={theme.items.chest} strokeWidth="1.5" fill="none"/>
+          <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke={theme.items.chest} strokeWidth="1.5" fill={theme.items.chestBackground || "none"}/>
           {/* Chest lock */}
           <circle cx="12" cy="12" r="1.5" stroke={theme.items.chest} strokeWidth="1" fill={theme.items.chest}/>
           {/* Chest hinges */}
