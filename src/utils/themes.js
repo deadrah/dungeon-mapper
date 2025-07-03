@@ -303,6 +303,81 @@ export const themes = {
       helpButtonText: '#1a0a0a',    // 暗い赤（ヘルプボタンテキスト）
       menuSectionHeading: '#ff6347', // トマト色（メニューセクション見出し）
     }
+  },
+
+  monochrome: {
+    name: 'Monochrome',
+    
+    grid: {
+      background: '#e3e3e3',        // 明るいグレー（紙地図風）
+      canvasBackground: '#ffffff',  // 純白（清潔感）
+      lines: '#c0c0c0',             // 中間グレー（グリッド線）
+      cellBorder: '#a0a0a0',        // やや濃いグレー（セル境界）
+    },
+    
+    header: {
+      background: '#d8d8d8',        // より濃いグレー（コントラスト向上）
+      text: '#000000',              // 黒（最高コントラスト）
+      border: '#808080',            // より濃いグレー（境界を明確に）
+      corner: '#d0d0d0',            // 角の装飾
+    },
+    
+    items: {
+      teleport: '#515b81',          // 中間グレー（ワープポイント）
+      teleportBorder: '#404040',    // 濃いグレー
+      event: '#8d0808',             // やや濃いグレー（イベント）
+      elevator: '#816851',          // 中グレー（エレベーター）
+      stairs: '#555555',            // 濃いグレー（階段）
+      chest: '#404040',             // 非常に濃いグレー（宝箱・重要）
+      chestBackground: '#d0d0d0',   // 薄いグレー背景（宝箱背景）
+      currentPosition: '#8d0808',   // 黒（最重要・現在位置）
+      arrow: '#333',             // 中濃いグレー（矢印）
+      note: '#ffffff',              // 白背景（ノート）
+      noteBorder: '#333333',        // 濃いグレー枠（ノート枠）
+      noteTriangle: '#8d0808',      // 黒（目立たせる・ノート三角）
+      shute: '#404040',             // 中間グレー（シュート）
+      darkZone: 'rgba(0,0,0,0.4)',  // 半透明黒（ダークゾーン）
+    },
+    
+    walls: {
+      stroke: '#000000',            // 黒（壁・指定通り）
+      strokeWidth: 2,
+    },
+    
+    doors: {
+      open: {
+        background: '#ffffff',      // 白（開いたドア）
+        border: '#000000',          // 黒
+      },
+      closed: {
+        background: '#000000',      // 中間グレー（閉じたドア）
+        border: '#000000',          // 黒枠
+      },
+    },
+    
+    ui: {
+      panel: '#000',             // 濃いグレーパネル
+      panelText: '#ffffff',         // 明るいグレーテキスト
+      button: '#000',            // 濃いグレーボタン背景
+      buttonHover: '#505050',       // やや明るいグレー（ボタンホバー）
+      buttonActive: '#3a425e',      // 中間グレー（アクティブボタン）
+      buttonActiveHover: '#4b5578', // やや濃いグレー（アクティブボタンホバー）
+      groupHeader: '#2a2a2a',       // 非常に濃いグレー（グループヘッダー）
+      background: '#ffffff',        // 白（入力フィールド背景）
+      text: '#333333',              // 濃いグレー（入力テキスト）
+      input: '#404040',             // 濃いグレー
+      inputText: '#f0f0f0',         // 明るいグレー
+      border: '#000000',            // 黒（境界線）
+      helpHeading: '#e0e0e0',       // 明るいグレー（ヘルプ見出し）
+      helpToolColor: '#c0c0c0',     // 中間グレー（ヘルプツール色）
+      resetButton: '#6a1212',       // 濃いグレー（リセットボタン）
+      resetButtonHover: '#871717',  // やや明るいグレー（リセットボタンホバー）
+      resetButtonText: '#f0f0f0',   // 明るいグレー（リセットボタンテキスト）
+      helpButton: '#606060',        // 中間グレー（ヘルプボタン）
+      helpButtonHover: '#707070',   // やや明るいグレー（ヘルプボタンホバー）
+      helpButtonText: '#ffffff',    // 白（ヘルプボタンテキスト）
+      menuSectionHeading: '#c0c0c0', // 中間グレー（メニューセクション見出し）
+    }
   }
 }
 
