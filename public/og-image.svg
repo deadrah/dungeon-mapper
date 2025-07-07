@@ -1,75 +1,52 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background gradient -->
-  <defs>
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1f2937;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#111827;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#bgGradient)"/>
-  
-  <!-- Grid pattern background -->
-  <g stroke="#374151" stroke-width="2" opacity="0.3">
-    <!-- Vertical lines -->
-    <line x1="200" y1="50" x2="200" y2="580"/>
-    <line x1="300" y1="50" x2="300" y2="580"/>
-    <line x1="400" y1="50" x2="400" y2="580"/>
-    <line x1="500" y1="50" x2="500" y2="580"/>
-    <line x1="600" y1="50" x2="600" y2="580"/>
-    <line x1="700" y1="50" x2="700" y2="580"/>
-    <line x1="800" y1="50" x2="800" y2="580"/>
-    <line x1="900" y1="50" x2="900" y2="580"/>
-    <line x1="1000" y1="50" x2="1000" y2="580"/>
-    
-    <!-- Horizontal lines -->
-    <line x1="150" y1="150" x2="1050" y2="150"/>
-    <line x1="150" y1="250" x2="1050" y2="250"/>
-    <line x1="150" y1="350" x2="1050" y2="350"/>
-    <line x1="150" y1="450" x2="1050" y2="450"/>
-  </g>
-  
-  <!-- Main dungeon structure (scaled up favicon design) -->
-  <g transform="translate(350, 150)">
-    <!-- Outer room -->
-    <rect x="0" y="0" width="500" height="350" fill="none" stroke="#60a5fa" stroke-width="8"/>
-    
-    <!-- Inner walls -->
-    <g stroke="#60a5fa" stroke-width="8" stroke-linecap="round">
-      <line x1="250" y1="0" x2="250" y2="200"/>
-      <line x1="0" y1="175" x2="500" y2="175"/>
-    </g>
-    
-    <!-- Room fills -->
-    <rect x="10" y="10" width="230" height="155" fill="#3b82f6" opacity="0.15"/>
-    <rect x="260" y="10" width="230" height="155" fill="#10b981" opacity="0.15"/>
-    <rect x="10" y="185" width="480" height="155" fill="#8b5cf6" opacity="0.15"/>
-    
-    <!-- Door opening -->
-    <rect x="225" y="175" width="50" height="20" fill="#1f2937"/>
-    
-    <!-- Items -->
-    <!-- Treasure chest -->
-    <rect x="80" y="60" width="60" height="40" fill="#fbbf24" stroke="#f59e0b" stroke-width="3" rx="8"/>
-    <rect x="90" y="45" width="40" height="15" fill="#f59e0b" rx="8"/>
-    
-    <!-- Player position -->
-    <circle cx="350" cy="80" r="25" fill="#ef4444" stroke="#dc2626" stroke-width="4"/>
-    <circle cx="350" cy="80" r="15" fill="#fca5a5"/>
-    
-    <!-- Stairs -->
-    <rect x="300" y="250" width="80" height="60" fill="#10b981" stroke="#059669" stroke-width="3" rx="8"/>
-    <g fill="#34d399">
-      <rect x="310" y="260" width="15" height="40"/>
-      <rect x="330" y="270" width="15" height="30"/>
-      <rect x="350" y="280" width="15" height="20"/>
-    </g>
-  </g>
-  
-  <!-- Title -->
-  <text x="600" y="580" font-family="Arial, sans-serif" font-size="72" font-weight="bold" text-anchor="middle" fill="#f9fafb">
-    DMapper
-  </text>
-  <text x="600" y="610" font-family="Arial, sans-serif" font-size="32" text-anchor="middle" fill="#9ca3af">
-    3D Dungeon Mapping Tool
-  </text>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="480px"
+	 height="480px" viewBox="0 0 480 480" enable-background="new 0 0 480 480" xml:space="preserve">
+<g id="レイヤー_2">
+	<rect x="45" y="45" stroke="#000000" stroke-width="30" stroke-miterlimit="10" width="390" height="390"/>
+</g>
+<g id="レイヤー_3">
+	<line fill="none" stroke="#FFFFFF" stroke-width="30" stroke-miterlimit="10" x1="30" y1="241" x2="149" y2="241"/>
+	<line fill="none" stroke="#FFFFFF" stroke-width="30" stroke-miterlimit="10" x1="348" y1="241" x2="450" y2="241"/>
+</g>
+<g id="レイヤー_1">
+	<g>
+		<path fill="#FFFFFF" d="M248.01,137.106c57.868,0,104.885,46.89,104.885,104.884c0,25.691-9.229,49.387-24.816,67.596
+			c-1.872,2.244-3.867,4.488-5.988,6.609C303.133,335.275,276.942,347,248.01,347H143V137.106H248.01z M180.414,309.586h67.596
+			c37.165,0,67.471-30.306,67.471-67.596c0-37.165-30.306-67.471-67.471-67.471h-67.596V309.586z"/>
+	</g>
+	<path fill="none" stroke="#FFFFFF" stroke-width="30" stroke-miterlimit="10" d="M427,240"/>
+	<path fill="none" stroke="#000000" stroke-width="30" stroke-miterlimit="10" d="M53,240"/>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+	<g>
+	</g>
+</g>
 </svg>
