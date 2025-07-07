@@ -37,6 +37,7 @@ jobs:
         env:
           VITE_GA_TRACKING_ID: ${{ vars.VITE_GA_TRACKING_ID }}
           VITE_PRODUCTION_URL: ${{ vars.VITE_PRODUCTION_URL }}
+          VITE_GOOGLE_SITE_VERIFICATION: ${{ vars.VITE_GOOGLE_SITE_VERIFICATION }}
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
