@@ -30,7 +30,7 @@ const TOOL_GROUPS = [
       { id: TOOLS.NOTE, name: 'Note', icon: 'NOTE_SVG', description: 'Text memo', key: '' },
       { id: TOOLS.ARROW, name: 'Arrow', icon: '✛', description: 'Direction arrow (select direction in options)', key: '' },
       { id: TOOLS.DOOR_ITEM, name: 'Door', icon: 'DOOR_ITEM_SVG', description: 'Door item (select open/closed in options)', key: '' },
-      { id: TOOLS.CURRENT_POSITION, name: 'CurrentPos [q]', icon: '●', description: 'Current position marker', key: 'q' },
+      { id: TOOLS.CURRENT_POSITION, name: 'CurrentPos [q]', icon: '🞄️', description: 'Current position marker', key: 'q' },
       { id: TOOLS.ERASER, name: 'Eraser [e]', icon: '⌫', description: 'Erase objects with left click/drag', key: 'e' }
     ]
   }
@@ -52,13 +52,14 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
       <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
         {TOOL_GROUPS.map((group) => (
           <div key={group.name} className="md:block">
-            <div className="px-2 py-2 text-sm font-bold border-b md:block hidden" style={{ backgroundColor: theme.ui.groupHeader, borderColor: theme.ui.border }}>
+            {group.name === 'Line Tools' ? (<hr className="md:hidden mt-2 mb-1" style={{ borderColor: theme.ui.border }} />) : ''}
+            <div className="px-2 py-2 text-sm font-bold md:block hidden" style={{ backgroundColor: theme.ui.groupHeader, borderColor: theme.ui.border }}>
               {group.name}
             </div>
             <div className={`md:grid md:grid-cols-2 md:p-0 p-2 ${
               group.name === 'Grid Tools' 
                 ? 'grid grid-cols-8 gap-0' // モバイルでGrid Toolsは8列グリッド（16個のツールを2行で表示）
-                : 'flex gap-0' // Line Toolsは従来通り横スクロール
+                : 'grid grid-cols-8 gap-0' // Line Toolsは従来通り横スクロール
             }`}>
               {group.tools.map((tool) => {
                 // Handle spacer items (non-interactive)
@@ -66,7 +67,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                   return (
                     <div
                       key={tool.id}
-                      className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b md:block hidden ${
+                      className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs md:block hidden ${
                         group.name === 'Grid Tools' ? 'md:min-w-0' : 'md:min-w-0 min-w-12'
                       }`}
                       style={{ 
@@ -112,7 +113,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                   <button
                     key={tool.id}
                     onClick={() => setActiveTool(tool.id)}
-                    className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs border-b transition-all duration-200 rounded md:rounded-none ${
+                    className={`md:py-1 py-1 flex flex-col items-center justify-center text-xs transition-all duration-200 rounded md:rounded-none ${
                       group.name === 'Grid Tools' 
                         ? 'md:min-w-0' // Grid Toolsはグリッド表示
                         : 'md:min-w-0 min-w-12' // Line Toolsは最小幅設定
@@ -168,6 +169,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                 )
               })}
             </div>
+            {group.name === 'Line Tools' ? (<hr className="md:hidden mt-1" style={{ borderColor: theme.ui.border }} />) : ''}
           </div>
         ))}
       </div>

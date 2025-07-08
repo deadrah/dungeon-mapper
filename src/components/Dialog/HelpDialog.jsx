@@ -8,7 +8,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
   const content = {
     ja: {
       title: 'DMapper ヘルプ',
-      version: 'バージョン 1.7.3',
+      version: 'バージョン 1.7.4',
       close: '閉じる',
       tabs: {
         guide: '機能説明',
@@ -116,6 +116,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: '更新履歴',
           items: [
+            { version: 'v1.7.4', date: '2025-07-08', changes: ['レイアウト・テーマ微調整'] },
             { version: 'v1.7.3', date: '2025-07-03', changes: ['Monochromeテーマを追加：グレースケールの高コントラスト新テーマ（印刷・アクセシビリティ重視）'] },
             { version: 'v1.7.2', date: '2025-07-02', changes: ['Hellテーマを追加：ダークで赤い色調の新テーマ'] },
             { version: 'v1.7.1', date: '2025-07-01', changes: ['旧バージョンのデータインポート時、Line系データ座標がずれる問題を修正'] },
@@ -150,7 +151,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     },
     en: {
       title: 'DMapper Help',
-      version: 'Version 1.7.3',
+      version: 'Version 1.7.4',
       close: 'Close',
       tabs: {
         guide: 'User Guide',
@@ -258,6 +259,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
         changelog: {
           title: 'Update History',
           items: [
+            { version: 'v1.7.4', date: '2025-07-08', changes: ['Layout and theme adjustments'] },
             { version: 'v1.7.3', date: '2025-07-03', changes: ['Added Monochrome theme: New grayscale high-contrast theme for print and accessibility'] },
             { version: 'v1.7.2', date: '2025-07-02', changes: ['Added Hell theme: New dark red theme'] },
             { version: 'v1.7.1', date: '2025-07-01', changes: ['Fixed Line data coordinate offset issue when importing old version data'] },

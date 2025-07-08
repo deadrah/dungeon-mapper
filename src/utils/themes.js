@@ -143,7 +143,7 @@ export const themes = {
       text: '#3d2415',              // ダークブラウンテキスト（入力フィールド用）
       input: '#5d4e37',             // ダークブラウン
       inputText: '#f0ebe0',         // 薄いセピア
-      border: '#3d2b1f',            // ブロンズ色
+      border: '#584436',            // ブロンズ色
       helpHeading: '#daa520',       // ヘルプダイアログ見出し色（HelpDialog.jsx - セクション見出し）
       helpToolColor: '#b8860b',     // ヘルプダイアログツール色（HelpDialog.jsx - ツール名強調）
       resetButton: '#a0522d',       // リセットボタン色（Header.jsx - リセット系ボタン背景）
@@ -210,18 +210,18 @@ export const themes = {
       panelText: '#5afae2',         // 薄い緑色テキスト
       button: '#0b412a',            // 濃い緑色ボタン背景
       buttonHover: '#3a5d50',       // ボタンホバー（少し明るい緑）
-      buttonActive: '#4a9d8e',      // アクティブボタン（緑寄りのターコイズ）
-      buttonActiveHover: '#3a7d6e', // アクティブボタンホバー
+      buttonActive: '#3a7d6e',      // アクティブボタン（緑寄りのターコイズ）
+      buttonActiveHover: '#4a9d8e', // アクティブボタンホバー
       groupHeader: '#1a2f26',       // グループヘッダー
       background: '#ffffff',        // 入力フィールド背景（白）
       text: '#2d4a3e',              // 入力フィールドテキスト（暗い緑）
       input: '#2e5544',             // 従来のインプット背景
       inputText: '#b8d4c2',         // 従来のインプットテキスト
-      border: '#0b412a',            // 境界線
+      border: '#0f5e3d',            // 境界線
       helpHeading: '#f0fdfc',       // ヘルプダイアログ見出し色（HelpDialog.jsx - セクション見出し）
       helpToolColor: '#b8fffa',     // ヘルプダイアログツール色（HelpDialog.jsx - ツール名強調）
-      resetButton: '#a93a3a',       // リセットボタン色（Header.jsx - リセット系ボタン背景）
-      resetButtonHover: '#bb4c4c',  // リセットボタンホバー色（Header.jsx - リセット系ボタンホバー）
+      resetButton: '#893131',       // リセットボタン色（Header.jsx - リセット系ボタン背景）
+      resetButtonHover: '#a33a3a',  // リセットボタンホバー色（Header.jsx - リセット系ボタンホバー）
       resetButtonText: '#ffffff',   // リセットボタンテキスト色（Header.jsx - リセット系ボタン文字）
       helpButton: '#4ecdc4',        // ヘルプボタン色（Header.jsx - ヘルプボタン背景）
       helpButtonHover: '#3a7d6e',   // ヘルプボタンホバー色（Header.jsx - ヘルプボタンホバー）
@@ -292,7 +292,7 @@ export const themes = {
       text: '#68250b',              // サドルブラウンテキスト（入力フィールド用）
       input: '#68250b',             // サドルブラウン
       inputText: '#f5deb3',         // 麦色テキスト
-      border: '#000',            // ダークレッド境界線
+      border: '#5a0000',            // ダークレッド境界線
       helpHeading: '#ffd700',       // ゴールド色（ヘルプ見出し）
       helpToolColor: '#ff6347',     // トマト色（ヘルプツール色）
       resetButton: '#5a0000',       // ダークレッド（リセットボタン）
@@ -334,7 +334,7 @@ export const themes = {
       arrow: '#333',             // 中濃いグレー（矢印）
       note: '#ffffff',              // 白背景（ノート）
       noteBorder: '#333333',        // 濃いグレー枠（ノート枠）
-      noteTriangle: '#8d0808',      // 黒（目立たせる・ノート三角）
+      noteTriangle: '#bb1818',      // 黒（目立たせる・ノート三角）
       shute: '#404040',             // 中間グレー（シュート）
       darkZone: 'rgba(0,0,0,0.4)',  // 半透明黒（ダークゾーン）
     },
@@ -367,7 +367,7 @@ export const themes = {
       text: '#333333',              // 濃いグレー（入力テキスト）
       input: '#404040',             // 濃いグレー
       inputText: '#f0f0f0',         // 明るいグレー
-      border: '#000000',            // 黒（境界線）
+      border: '#333',            // 黒（境界線）
       helpHeading: '#e0e0e0',       // 明るいグレー（ヘルプ見出し）
       helpToolColor: '#c0c0c0',     // 中間グレー（ヘルプツール色）
       resetButton: '#6a1212',       // 濃いグレー（リセットボタン）

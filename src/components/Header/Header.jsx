@@ -62,8 +62,8 @@ const Header = ({
 
   return (
     <div className="md:h-12 h-auto md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
-      <div className="flex md:items-center md:space-x-4 gap-2 md:gap-0 flex-wrap md:justify-start">
-        <svg width="112" height="15" viewBox="0 0 112 15" className="h-5 md:mb-1 mt-1">
+      <div className="flex md:items-center md:space-x-4 gap-2 md:gap-0 flex-wrap md:justify-start justify-between">
+        <svg width="112" height="15" viewBox="0 0 112 15" className="h-5 md:mb-1 mt-1" style={{ marginTop: '6px' }}>
           <g fill={theme.ui.panelText} transform="translate(1,0)">
             <path d="M11.002,1.004c3.858,0,6.994,3.126,6.994,6.994c0,1.713-0.615,3.293-1.655,4.507c-0.125,0.15-0.258,0.3-0.399,0.441
               C14.678,14.218,12.932,15,11.002,15H4V1.004H11.002z M6.495,12.505h4.507c2.478,0,4.499-2.021,4.499-4.507
@@ -93,11 +93,11 @@ const Header = ({
           <line fill="none" stroke={theme.ui.panelText} strokeWidth="3" x1="17" y1="8.33" x2="24" y2="8.33"/>
         </svg>
         
-        <div className="flex items-center space-x-2 md:flex-row">
+        <div className="flex items-center md:space-x-2 space-x-1 md:flex-row">
           <select
             value={currentDungeon}
             onChange={(e) => setCurrentDungeon(parseInt(e.target.value))}
-            className="px-2 py-1.5 rounded text-sm h-8"
+            className="md:px-2 px-1 py-1.5 rounded text-sm h-8"
             style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
           >
             {Array.from({ length: MAX_DUNGEONS }, (_, i) => i + 1).map(dungeonId => (
@@ -122,11 +122,11 @@ const Header = ({
           </button>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center md:space-x-2 space-x-1">
           <select
             value={currentFloor}
             onChange={(e) => setCurrentFloor(parseInt(e.target.value))}
-            className="px-2 py-1.5 rounded text-sm h-8"
+            className="md:px-2 px-1 py-1.5 rounded text-sm h-8"
             style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
           >
             {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floor => {

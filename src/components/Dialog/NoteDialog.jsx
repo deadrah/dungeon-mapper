@@ -62,14 +62,14 @@ const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme
                 onClick={handleDelete}
                 className="px-4 py-2 rounded transition-colors"
                 style={{
-                  backgroundColor: '#dc2626',
-                  color: '#ffffff'
+                  backgroundColor: theme?.ui?.resetButton || '#dc2626',
+                  color: theme?.ui?.resetButtonText || '#ffffff'
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#b91c1c'
+                  e.target.style.backgroundColor = theme?.ui?.resetButtonHover || '#b91c1c'
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = '#dc2626'
+                  e.target.style.backgroundColor = theme?.ui?.resetButton || '#dc2626'
                 }}
               >
                 削除
