@@ -177,7 +177,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
       {/* 固定リンクエリア（PC表示のみ） */}
       <div className="md:flex hidden px-2 py-2 flex-shrink-0 gap-1" style={{ borderColor: theme.ui.border }}>
         <a 
-          href="/help/" 
+          href="./help/" 
           target="_blank" 
           rel="noopener noreferrer"
           className="flex-1 text-xs text-center py-1 rounded transition-colors"
@@ -190,7 +190,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
           help
         </a>
         <a 
-          href="/help/changelog/" 
+          href="./help/changelog/" 
           target="_blank" 
           rel="noopener noreferrer"
           className="flex-1 text-xs text-center py-1 rounded transition-colors"

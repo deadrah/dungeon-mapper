@@ -452,22 +452,22 @@ function generateHtmlTemplate(lang, contentData, pageType = 'help') {
 <body>
     <div class="container">
         <nav class="nav">
-            <a href="/">${lang === 'en' ? 'Back to DMapper App' : 'DMapper アプリに戻る'}</a>
+            <a href="../">${lang === 'en' ? 'Back to DMapper App' : 'DMapper アプリに戻る'}</a>
             ${isHelp 
               ? (lang === 'en' 
-                ? '<a href="/help/en/changelog/">Changelog</a>' 
-                : '<a href="/help/changelog/">更新履歴</a>')
+                ? '<a href="./changelog/">Changelog</a>' 
+                : '<a href="./changelog/">更新履歴</a>')
               : (lang === 'en' 
-                ? '<a href="/help/en/">Help</a>' 
-                : '<a href="/help/">ヘルプ</a>')
+                ? '<a href="../">Help</a>' 
+                : '<a href="../">ヘルプ</a>')
             }
             ${lang === 'en'
               ? (isHelp 
-                ? '<a href="/help/">日本語</a>'
-                : '<a href="/help/changelog/">日本語</a>')
+                ? '<a href="../../help/">日本語</a>'
+                : '<a href="../../help/changelog/">日本語</a>')
               : (isHelp 
-                ? '<a href="/help/en/">English</a>'
-                : '<a href="/help/en/changelog/">English</a>')
+                ? '<a href="./en/">English</a>'
+                : '<a href="./en/changelog/">English</a>')
             }
         </nav>
         
@@ -476,7 +476,7 @@ function generateHtmlTemplate(lang, contentData, pageType = 'help') {
         </main>
         
         <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666;">
-            <p><a href="/">DMapper</a> - 3D Dungeon Mapping Tool</p>
+            <p><a href="../">DMapper</a> - 3D Dungeon Mapping Tool</p>
         </footer>
     </div>
 </body>
