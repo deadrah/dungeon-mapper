@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://deadrah.github.io/dungeon-mapper/sitemap.xml
+
+# Help pages
+Allow: /help/
+Allow: /help/en/
+Allow: /help/changelog/
+Allow: /help/en/changelog/
