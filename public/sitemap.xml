@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://deadrah.github.io/dungeon-mapper/</loc>
+    <lastmod>2025-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://deadrah.github.io/dungeon-mapper/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deadrah.github.io/dungeon-mapper/" />
+  </url>
+  <url>
+    <loc>https://deadrah.github.io/dungeon-mapper/help/</loc>
+    <lastmod>2025-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://deadrah.github.io/dungeon-mapper/help/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deadrah.github.io/dungeon-mapper/help/en/" />
+  </url>
+  <url>
+    <loc>https://deadrah.github.io/dungeon-mapper/help/en/</loc>
+    <lastmod>2025-07-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://deadrah.github.io/dungeon-mapper/help/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deadrah.github.io/dungeon-mapper/help/en/" />
+  </url>
+  <url>
+    <loc>https://deadrah.github.io/dungeon-mapper/help/changelog/</loc>
+    <lastmod>2025-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://deadrah.github.io/dungeon-mapper/help/changelog/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deadrah.github.io/dungeon-mapper/help/en/changelog/" />
+  </url>
+  <url>
+    <loc>https://deadrah.github.io/dungeon-mapper/help/en/changelog/</loc>
+    <lastmod>2025-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://deadrah.github.io/dungeon-mapper/help/changelog/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deadrah.github.io/dungeon-mapper/help/en/changelog/" />
+  </url>
+</urlset>

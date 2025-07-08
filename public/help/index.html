@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMapper ヘルプ | DMapper</title>
+    <meta name="description" content="3Dダンジョンマッピングツール DMapper の詳細な使い方と操作方法。基本操作、キーボードショートカット、ツールの説明など。">
+    <meta name="keywords" content="DMapper,使い方,操作方法,ヘルプ,チュートリアル,3Dダンジョン,マッピングツール,ウィザードリィライク,dungeon mapping,tutorial,help">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="DMapper ヘルプ | DMapper">
+    <meta property="og:description" content="3Dダンジョンマッピングツール DMapper の詳細な使い方と操作方法。基本操作、キーボードショートカット、ツールの説明など。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deadrah.github.io/dungeon-mapper/help/">
+    <meta property="og:site_name" content="DMapper">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="DMapper ヘルプ | DMapper">
+    <meta name="twitter:description" content="3Dダンジョンマッピングツール DMapper の詳細な使い方と操作方法。基本操作、キーボードショートカット、ツールの説明など。">
+    
+    <link rel="canonical" href="https://deadrah.github.io/dungeon-mapper/help/">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fafafa;
+            font-size: 14px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 0;
+            box-shadow: none;
+            border: 1px solid #e0e0e0;
+        }
+        h1 { 
+            color: #2c2c2c; 
+            border-bottom: 2px solid #666; 
+            padding-bottom: 10px; 
+            font-weight: 600;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        h2 { 
+            color: #404040; 
+            margin-top: 30px; 
+            margin-bottom: 12px;
+            font-weight: 500;
+            font-size: 18px;
+        }
+        h3 { color: #555; font-size: 16px; }
+        .nav { 
+            margin-bottom: 30px; 
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .nav a { 
+            display: inline-block; 
+            margin-right: 20px; 
+            padding: 8px 16px; 
+            background: #666; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 0;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+        .nav a:hover { background: #444; }
+        .changelog-item {
+            border-left: 3px solid #666;
+            padding-left: 20px;
+            margin-bottom: 25px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .version { 
+            font-weight: 600; 
+            color: #2c2c2c; 
+            font-size: 15px;
+        }
+        .date { 
+            color: #888; 
+            font-size: 12px; 
+            margin-bottom: 6px;
+        }
+        ul { 
+            padding-left: 20px; 
+            margin-top: 8px;
+        }
+        li { 
+            margin-bottom: 4px; 
+            color: #444;
+            font-size: 14px;
+        }
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 12px;
+            margin: 15px 0;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+        .control-label { 
+            font-weight: 500; 
+            color: #2c2c2c;
+            font-size: 14px;
+        }
+        p {
+            margin-bottom: 10px;
+            color: #444;
+            font-size: 14px;
+        }
+        strong {
+            color: #2c2c2c;
+        }
+        @media (max-width: 600px) {
+            .controls-grid { 
+                grid-template-columns: 1fr; 
+                gap: 8px; 
+                padding: 15px;
+            }
+            .control-label { margin-top: 15px; }
+            .container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="/">DMapper アプリに戻る</a>
+            <a href="/help/changelog/">更新履歴</a>
+            <a href="/help/en/">English</a>
+        </nav>
+        
+        <main>
+            <h1>DMapper ヘルプ</h1><p><strong>バージョン 1.7.4</strong></p><section><h2>DMapperについて</h2><p>DMapperは3Dダンジョンゲーム用のWebベースグリッドマッピングツールです。</p><p>サーバー不要のクライアントサイドのみで動作し、ブラウザのローカルストレージにデータを保存します。</p><p>1つのダンジョンは複数のフロア（B1F〜B30F）で構成されており、各フロアで独立したマップを作成できます。</p><p>ダンジョンごとに個別のグリッドサイズ設定が可能で、複数のダンジョンを並行して管理できます。</p></section><section><h2>基本操作</h2><div class="controls-grid"><div class="control-label">マップ拡大縮小:</div><div>マウスホイール / ピンチインアウト</div><div class="control-label">マップ画面移動:</div><div>Shift + ドラッグ / フリック</div><div class="control-label">アイテム配置・色塗り・壁描画:</div><div>左クリック / タップ</div><div class="control-label">アイテム削除・色消去・壁削除:</div><div>右クリック / 消去ツール</div><div class="control-label">メモ編集:</div><div>既存メモをクリック（任意のツール状態で可能）</div><div class="control-label">メモ移動:</div><div>既存メモをドラッグして別のセルに移動（PCマウスのみ/任意のツール状態で可能）</div></div></section><section><h2>キーボードショートカット</h2><div class="controls-grid"><div class="control-label">ツール選択:</div><div>1-5, Q, E</div><div class="control-label">元に戻す:</div><div>Ctrl + Z</div><div class="control-label">やり直し:</div><div>Ctrl + Y</div></div></section><section><h2>Line系ツール（セル境界）</h2><ul><li><strong>壁（Line）:</strong> セルの境界線に壁を描画します。クリック&ドラッグで連続描画が可能です。</li><li><strong>ドア:</strong> 壁に開いたドア（□）または閉じたドア（■）を配置します。</li><li><strong>矢印:</strong> 壁に一方通行矢印を配置します。</li></ul></section><section><h2>Grid系ツール（セル内）</h2><ul><li><strong>色塗り（Fill）:</strong> セルを色で塗りつぶします。右下のオプションで色を選択できます。探索済みエリア、暗闇地帯、魔法禁止エリアなどの表現に使用します。</li><li><strong>ダークゾーン:</strong> セルをグレー色で塗りつぶします。</li><li><strong>階段:</strong> 上り階段（▲）と下り階段（▼）を配置します。右下のオプションで2文字までの識別子を設定できます。</li><li><strong>宝箱:</strong> 宝箱の位置をマークします。</li><li><strong>テレポートポイント:</strong> 右下のオプションで2文字までの識別子を設定できます。複数のテレポート先を管理できます。</li><li><strong>シュート＆ピット:</strong> 落下ポイントをマークします。右下のオプションでシュート（●）またはピット（○）を選択できます。</li><li><strong>イベントマーカー:</strong> 特別なイベント発生地点をマークします。</li><li><strong>現在位置:</strong> プレイヤーの現在位置をマークします（フロアごとに1つまで）。</li><li><strong>矢印:</strong> 一方通行や強制移動の矢印を配置します。右下のオプションで方向を選択できます。</li><li><strong>ドアアイテム:</strong> ドアアイテムを配置します。右下のオプションで開いた状態または閉じた状態を選択できます。デフォルトは閉じたドアです。</li><li><strong>メモ:</strong> メモを追加します。既存のアイテムがあるセルにも配置可能で、左上角の赤い三角で表示されます。メモはどのツールでもクリックで編集、ドラッグで移動できます。Noteツール選択時の右クリックまたはダイアログ内の削除ボタンで削除できます。</li><li><strong>消去ツール:</strong> 左クリックでオブジェクトを削除します。</li></ul></section><section><h2>ダンジョンオプション</h2><ul><li><strong>ダンジョン選択:</strong> 編集対象のダンジョンを選択</li><li><strong>ダンジョン名変更:</strong> ダンジョンにカスタム名を設定</li><li><strong>グリッドサイズ調整:</strong> 幅と高さを個別に設定（1x1〜50x50）</li><li><strong>ダンジョンリセット:</strong> 現在のダンジョンを完全に初期化</li><li><strong>ダンジョン保存:</strong> 選択したダンジョンをJSONファイルでダウンロード</li><li><strong>ダンジョン読み込み:</strong> JSONファイルからダンジョンデータをインポート</li></ul></section><section><h2>フロアオプション</h2><ul><li><strong>フロア選択:</strong> 編集対象のフロアを選択（データがあるフロアは*印で表示）</li><li><strong>フロア名変更:</strong> フロアにカスタム名を設定</li><li><strong>フロアコピー:</strong> 現在のフロアを他のダンジョン・フロアにコピー（GridSize差異は自動座標変換）</li><li><strong>SVG画像ダウンロード:</strong> 現在のフロアをSVG形式でエクスポート</li><li><strong>フロアリセット:</strong> 現在のフロアのデータをすべて削除</li></ul></section><section><h2>全般オプション機能</h2><ul><li><strong>テーマ変更:</strong> Default、Dungeon、Hell、Yggdrasill、Monochromeテーマの切り替え</li><li><strong>全データエクスポート:</strong> すべてのダンジョンデータをJSONファイルでダウンロード</li><li><strong>全データインポート:</strong> JSONファイルからすべてのデータを復元</li><li><strong>全ダンジョンリセット:</strong> すべてのダンジョンデータを初期化</li></ul></section><section><h2>その他の機能</h2><ul><li><strong>メモ表示切り替え:</strong> Noteボタンでメモのツールチップ表示をオン/オフ切り替え</li><li><strong>自動保存:</strong> ブラウザのローカルストレージに自動保存</li></ul></section><section><h2>設定</h2><ul><li><strong>言語切り替え:</strong> ヘルプ画面右上のJP/ENボタンで表示言語を切り替え（メッセージも連動）</li></ul></section><section><h2>注意事項</h2><ul><li>データはブラウザのローカルストレージに保存されるため、ブラウザデータを削除すると消失します</li><li>重要なダンジョンマップは定期的にExport機能でバックアップを取ることを推奨します</li></ul></section>
+        </main>
+        
+        <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666;">
+            <p><a href="/">DMapper</a> - 3D Dungeon Mapping Tool</p>
+        </footer>
+    </div>
+</body>
+</html>

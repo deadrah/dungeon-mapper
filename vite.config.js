@@ -7,5 +7,11 @@ export default defineConfig({
   base: './',
   css: {
     postcss: './postcss.config.js'
+  },
+  server: {
+    // 開発時にhelp/配下のHTMLファイルを正しく提供
+    fs: {
+      allow: ['..']
+    }
   }
 })
