@@ -463,8 +463,8 @@ function generateHtmlTemplate(lang, contentData, pageType = 'help') {
             }
             ${lang === 'en'
               ? (isHelp 
-                ? '<a href="../../help/">日本語</a>'
-                : '<a href="../../help/changelog/">日本語</a>')
+                ? '<a href="../">日本語</a>'
+                : '<a href="../../changelog/">日本語</a>')
               : (isHelp 
                 ? '<a href="./en/">English</a>'
                 : '<a href="./en/changelog/">English</a>')
