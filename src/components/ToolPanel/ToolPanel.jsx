@@ -175,32 +175,19 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
       </div>
       
       {/* 固定リンクエリア（PC表示のみ） */}
-      <div className="md:flex hidden px-2 py-2 flex-shrink-0 gap-1" style={{ borderColor: theme.ui.border }}>
+      <div className="md:block hidden text-center px-2 py-2" style={{ borderColor: theme.ui.border }}>
         <a 
           href="./help/" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="flex-1 text-xs text-center py-1 rounded transition-colors"
+          className="text-xs text-center rounded"
           style={{ 
             color: theme.ui.panelText, 
             opacity: 0.3,
             textDecoration: 'none'
           }}
         >
-          help
-        </a>
-        <a 
-          href="./help/changelog/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex-1 text-xs text-center py-1 rounded transition-colors"
-          style={{ 
-            color: theme.ui.panelText, 
-            opacity: 0.3,
-            textDecoration: 'none'
-          }}
-        >
-          changelog
+          &copy;2025 DMapper
         </a>
       </div>
     </div>
