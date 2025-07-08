@@ -452,7 +452,7 @@ function generateHtmlTemplate(lang, contentData, pageType = 'help') {
 <body>
     <div class="container">
         <nav class="nav">
-            <a href="../">${lang === 'en' ? 'Back to DMapper App' : 'DMapper アプリに戻る'}</a>
+            <a href="${lang === 'en' ? (isHelp ? '../../' : '../../../') : (isHelp ? '../' : '../../')}">${lang === 'en' ? 'Back to DMapper App' : 'DMapper アプリに戻る'}</a>
             ${isHelp 
               ? (lang === 'en' 
                 ? '<a href="./changelog/">Changelog</a>' 
@@ -467,7 +467,7 @@ function generateHtmlTemplate(lang, contentData, pageType = 'help') {
                 : '<a href="../../changelog/">日本語</a>')
               : (isHelp 
                 ? '<a href="./en/">English</a>'
-                : '<a href="./en/changelog/">English</a>')
+                : '<a href="../en/changelog/">English</a>')
             }
         </nav>
         
