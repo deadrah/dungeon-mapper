@@ -17,7 +17,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
       sections: {
         about: {
           title: 'DMapperについて',
-          content: 'DMapperは3Dダンジョンゲーム用のWebベースグリッドマッピングツールです。\nサーバー不要のクライアントサイドのみで動作し、ブラウザのローカルストレージにデータを保存します。\n1つのダンジョンは複数のフロア（B1F〜B30F）で構成されており、各フロアで独立したマップを作成できます。\nダンジョンごとに個別のグリッドサイズ設定が可能で、複数のダンジョンを並行して管理できます。'
+          content: 'DMapperは3Dダンジョンゲーム用のWebベースグリッドマッピングツールです。\nサーバー不要のクライアントサイドのみで動作し、ブラウザのローカルストレージにデータを保存します。\n1つのダンジョンは複数のフロア（B1F〜B30F）で構成されており、各フロアで独立したマップを作成できます。\nダンジョンごとに個別のグリッドサイズ設定が可能で、複数のダンジョンを並行して管理できます。ウィザードリィライクゲームのマッピング等に最適です。'
         },
         controls: {
           title: '基本操作',
@@ -160,7 +160,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
       sections: {
         about: {
           title: 'About DMapper',
-          content: 'DMapper is a web-based grid mapping tool for 3D dungeon games.\nIt operates entirely client-side without requiring a server and stores data in the browser\'s local storage.\nEach dungeon consists of multiple floors (B1F to B30F), allowing you to create independent maps for each floor.\nEach dungeon can have individual grid size settings, and you can manage multiple dungeons simultaneously.'
+          content: 'DMapper is a web-based grid mapping tool for 3D dungeon games.\nIt operates entirely client-side without requiring a server and stores data in the browser\'s local storage.\nEach dungeon consists of multiple floors (B1F to B30F), allowing you to create independent maps for each floor.\nEach dungeon can have individual grid size settings, and you can manage multiple dungeons simultaneously. Perfect for mapping Wizardry-like games and similar dungeon crawlers.'
         },
         controls: {
           title: 'Basic Controls',
