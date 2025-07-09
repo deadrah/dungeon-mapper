@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.7.4',
+    version: 'バージョン 1.7.5',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -11,7 +11,7 @@ export const helpContent = {
     sections: {
       about: {
         title: 'DMapperについて',
-        content: 'DMapperは3Dダンジョンゲーム用のWebベースグリッドマッピングツールです。\nサーバー不要のクライアントサイドのみで動作し、ブラウザのローカルストレージにデータを保存します。\n1つのダンジョンは複数のフロア（B1F〜B30F）で構成されており、各フロアで独立したマップを作成できます。\nダンジョンごとに個別のグリッドサイズ設定が可能で、複数のダンジョンを並行して管理できます。\nウィザードリィライクゲームのマッピング等に最適です。'
+        content: 'DMapperは3Dダンジョンゲーム用のWebベースグリッドマッピングツールです。\nサーバー不要のクライアントサイドのみで動作し、ブラウザのローカルストレージにデータを保存します。\n1つのダンジョンは複数のフロア（B1F〜B100F可変）で構成されており、各フロアで独立したマップを作成できます。\nダンジョンごとに個別のグリッドサイズ設定が可能で、複数のダンジョンを並行して管理できます。\nウィザードリィライクゲームのマッピング等に最適です。'
       },
       controls: {
         title: '基本操作',
@@ -63,6 +63,7 @@ export const helpContent = {
           { label: 'ダンジョン選択:', desc: '編集対象のダンジョンを選択' },
           { label: 'ダンジョン名変更:', desc: 'ダンジョンにカスタム名を設定' },
           { label: 'グリッドサイズ調整:', desc: '幅と高さを個別に設定（1x1〜50x50）' },
+          { label: 'フロア数設定:', desc: '各ダンジョンのフロア数を1-100の範囲で設定（デフォルト20）' },
           { label: 'ダンジョンリセット:', desc: '現在のダンジョンを完全に初期化' },
           { label: 'ダンジョン保存:', desc: '選択したダンジョンをJSONファイルでダウンロード' },
           { label: 'ダンジョン読み込み:', desc: 'JSONファイルからダンジョンデータをインポート' }
@@ -110,6 +111,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.7.5', date: '2025-07-09', changes: ['フロア数可変機能を追加：各ダンジョンのフロア数を1-100の範囲で設定可能（デフォルト20）'] },
           { version: 'v1.7.4', date: '2025-07-08', changes: ['レイアウト・テーマ微調整'] },
           { version: 'v1.7.3', date: '2025-07-03', changes: ['Monochromeテーマを追加：グレースケールの高コントラスト新テーマ（印刷・アクセシビリティ重視）'] },
           { version: 'v1.7.2', date: '2025-07-02', changes: ['Hellテーマを追加：ダークで赤い色調の新テーマ'] },
@@ -145,7 +147,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.7.4',
+    version: 'Version 1.7.5',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -154,7 +156,7 @@ export const helpContent = {
     sections: {
       about: {
         title: 'About DMapper',
-        content: 'DMapper is a web-based grid mapping tool for 3D dungeon games.\nIt operates entirely client-side without requiring a server and stores data in the browser\'s local storage.\nEach dungeon consists of multiple floors (B1F to B30F), allowing you to create independent maps for each floor.\nEach dungeon can have individual grid size settings, and you can manage multiple dungeons simultaneously.\nPerfect for mapping Wizardry-like games and similar dungeon crawlers.'
+        content: 'DMapper is a web-based grid mapping tool for 3D dungeon games.\nIt operates entirely client-side without requiring a server and stores data in the browser\'s local storage.\nEach dungeon consists of multiple floors (B1F to B100F), allowing you to create independent maps for each floor.\nEach dungeon can have individual grid size settings, and you can manage multiple dungeons simultaneously.\nPerfect for mapping Wizardry-like games and similar dungeon crawlers.'
       },
       controls: {
         title: 'Basic Controls',
@@ -206,6 +208,7 @@ export const helpContent = {
           { label: 'Dungeon Selection:', desc: 'Select target dungeon for editing' },
           { label: 'Dungeon Rename:', desc: 'Set custom names for dungeons' },
           { label: 'Grid Size Adjustment:', desc: 'Set width and height individually (1x1 to 50x50)' },
+          { label: 'Floor Count Setting:', desc: 'Set the number of floors for each dungeon (1-100 range, default 20)' },
           { label: 'Dungeon Reset:', desc: 'Completely initialize current dungeon' },
           { label: 'Save Dungeon:', desc: 'Download selected dungeon as JSON file' },
           { label: 'Load Dungeon:', desc: 'Import dungeon data from JSON file' }
@@ -253,6 +256,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.7.5', date: '2025-07-09', changes: ['Added variable floor count feature: Set the number of floors for each dungeon (1-100 range, default 20)'] },
       { version: 'v1.7.4', date: '2025-07-08', changes: ['Layout and theme adjustments'] },
       { version: 'v1.7.3', date: '2025-07-03', changes: ['Added Monochrome theme: New grayscale high-contrast theme for print and accessibility'] },
       { version: 'v1.7.2', date: '2025-07-02', changes: ['Added Hell theme: New dark red theme'] },

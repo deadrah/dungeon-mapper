@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { MAX_FLOORS, MAX_DUNGEONS } from '../../utils/constants'
+import { MAX_FLOORS, MAX_DUNGEONS, DEFAULT_MAX_FLOORS } from '../../utils/constants'
 import HelpDialog from '../Dialog/HelpDialog'
 import DungeonOptionDialog from '../Dialog/DungeonOptionDialog'
 import FloorOptionDialog from '../Dialog/FloorOptionDialog'
@@ -27,6 +27,8 @@ const Header = ({
   gridSize,
   onGridSizeChange,
   onDungeonGridSizeChange,
+  maxFloors,
+  onMaxFloorsChange,
   onDungeonReset,
   onResetFloor,
   onResetAllDungeons,
@@ -129,7 +131,19 @@ const Header = ({
             className="md:px-2 px-1 py-1.5 rounded text-sm h-8"
             style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}` }}
           >
-            {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floor => {
+            {(() => {
+              // Calculate effective max floors: use maxFloors if set, otherwise use the larger of DEFAULT_MAX_FLOORS and highest existing floor
+              let effectiveMaxFloors = maxFloors || DEFAULT_MAX_FLOORS
+              if (!maxFloors && floors) {
+                // Find the highest floor number that exists (regardless of data)
+                const floorNumbers = Object.keys(floors).map(Number).filter(num => !isNaN(num))
+                if (floorNumbers.length > 0) {
+                  const actualMaxFloor = Math.max(...floorNumbers)
+                  effectiveMaxFloors = Math.max(DEFAULT_MAX_FLOORS, actualMaxFloor)
+                }
+              }
+              return Array.from({ length: effectiveMaxFloors }, (_, i) => i + 1)
+            })().map(floor => {
               const floorData = floors[floor]
               const customName = floorData?.name
               const baseName = customName || `B${floor}F`
@@ -308,6 +322,8 @@ const Header = ({
         onDungeonRename={setDungeonName}
         gridSize={gridSize}
         onGridSizeChange={onDungeonGridSizeChange}
+        maxFloors={maxFloors}
+        onMaxFloorsChange={onMaxFloorsChange}
         onDungeonReset={onDungeonReset}
         onDungeonExport={onExportDungeon}
         onDungeonImport={onImportDungeon}
@@ -324,6 +340,7 @@ const Header = ({
         dungeonNames={dungeonNames}
         floors={floors}
         allDungeons={allDungeons}
+        maxFloors={maxFloors}
         onFloorChange={setCurrentFloor}
         onFloorRename={setFloorName}
         onFloorReset={onResetFloor}

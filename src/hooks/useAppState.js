@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { MAX_FLOORS, MAX_DUNGEONS } from '../utils/constants'
+import { MAX_FLOORS, MAX_DUNGEONS, DEFAULT_MAX_FLOORS } from '../utils/constants'
 import { exportFloorAsSVG, downloadSVG } from '../utils/svgExport'
 import { getMessage } from '../utils/messages'
 import { getTheme } from '../utils/themes'
@@ -13,12 +13,12 @@ const createEmptyFloor = (gridSize) => ({
   name: null // Floor custom name
 })
 
-const createEmptyDungeon = (gridSize) => {
+const createEmptyDungeon = (gridSize, maxFloors = DEFAULT_MAX_FLOORS) => {
   const floors = {}
-  for (let i = 1; i <= MAX_FLOORS; i++) {
+  for (let i = 1; i <= maxFloors; i++) {
     floors[i] = createEmptyFloor(gridSize)
   }
-  return { floors, gridSize }
+  return { floors, gridSize, maxFloors }
 }
 
 // Detect browser language for initial setup
@@ -151,7 +151,7 @@ const INITIAL_STATE = {
   dungeons: {
     1: {
       name: 'Dungeon 1',
-      ...createEmptyDungeon({ rows: 20, cols: 20 })
+      ...createEmptyDungeon({ rows: 20, cols: 20 }, DEFAULT_MAX_FLOORS)
     }
   },
   dungeonNames: {
@@ -170,6 +170,11 @@ const loadStateFromStorage = () => {
       
       // Check if it's old format (has floors property directly)
       if (parsedState.floors && !parsedState.dungeons && !parsedState.maps) {
+        // Find the highest floor number that exists in the old format
+        const floorNumbers = Object.keys(parsedState.floors).map(Number).filter(num => !isNaN(num))
+        const actualMaxFloor = floorNumbers.length > 0 ? Math.max(...floorNumbers) : 0
+        const maxFloors = Math.max(DEFAULT_MAX_FLOORS, actualMaxFloor)
+        
         // Convert old format to new format
         const convertedState = {
           currentDungeon: 1,
@@ -184,7 +189,8 @@ const loadStateFromStorage = () => {
             1: {
               name: 'Dungeon 1',
               floors: {},
-              gridSize: parsedState.gridSize || { rows: 20, cols: 20 }
+              gridSize: parsedState.gridSize || { rows: 20, cols: 20 },
+              maxFloors: maxFloors
             }
           },
           dungeonNames: {
@@ -247,9 +253,15 @@ const loadStateFromStorage = () => {
         // Convert maps to dungeons
         Object.keys(parsedState.maps).forEach(mapKey => {
           const map = parsedState.maps[mapKey]
+          // Find the highest floor number that exists in this map
+          const floorNumbers = Object.keys(map.floors || {}).map(Number).filter(num => !isNaN(num))
+          const actualMaxFloor = floorNumbers.length > 0 ? Math.max(...floorNumbers) : 0
+          const maxFloors = Math.max(DEFAULT_MAX_FLOORS, actualMaxFloor)
+          
           convertedState.dungeons[mapKey] = {
             name: map.name ? map.name.replace(/^Map /, 'Dungeon ') : `Dungeon ${mapKey}`,
-            floors: map.floors || {}
+            floors: map.floors || {},
+            maxFloors: maxFloors
           }
           
           // Ensure doors and notes properties exist for all floors, and migrate notes
@@ -297,6 +309,14 @@ const loadStateFromStorage = () => {
           // Ensure dungeon has gridSize property
           if (!dungeon.gridSize) {
             dungeon.gridSize = { rows: 20, cols: 20 }
+          }
+          
+          // Ensure dungeon has maxFloors property (backward compatibility)
+          if (!dungeon.maxFloors) {
+            // Find the highest floor number that exists in this dungeon
+            const floorNumbers = Object.keys(dungeon.floors || {}).map(Number).filter(num => !isNaN(num))
+            const actualMaxFloor = floorNumbers.length > 0 ? Math.max(...floorNumbers) : 0
+            dungeon.maxFloors = Math.max(DEFAULT_MAX_FLOORS, actualMaxFloor)
           }
           
           if (dungeon.floors) {
@@ -823,6 +843,11 @@ export const useAppState = () => {
           
           // Check if it's old format (has floors property directly)
           if (importedState.floors && !importedState.dungeons && !importedState.maps) {
+            // Find the highest floor number that exists in the old format
+            const floorNumbers = Object.keys(importedState.floors).map(Number).filter(num => !isNaN(num))
+            const actualMaxFloor = floorNumbers.length > 0 ? Math.max(...floorNumbers) : 0
+            const maxFloors = Math.max(DEFAULT_MAX_FLOORS, actualMaxFloor)
+            
             // Convert old format to new format
             processedState = {
               currentDungeon: 1,
@@ -837,7 +862,8 @@ export const useAppState = () => {
                 1: {
                   name: 'Dungeon 1',
                   floors: {},
-                  gridSize: processedState.gridSize || { rows: 20, cols: 20 }
+                  gridSize: importedState.gridSize || { rows: 20, cols: 20 },
+                  maxFloors: maxFloors
                 }
               },
               dungeonNames: {
@@ -894,10 +920,16 @@ export const useAppState = () => {
             // Convert maps to dungeons
             Object.keys(importedState.maps).forEach(mapKey => {
               const map = importedState.maps[mapKey]
+              // Find the highest floor number that exists in this map
+              const floorNumbers = Object.keys(map.floors || {}).map(Number).filter(num => !isNaN(num))
+              const actualMaxFloor = floorNumbers.length > 0 ? Math.max(...floorNumbers) : 0
+              const maxFloors = Math.max(DEFAULT_MAX_FLOORS, actualMaxFloor)
+              
               processedState.dungeons[mapKey] = {
                 name: map.name ? map.name.replace(/^Map /, 'Dungeon ') : `Dungeon ${mapKey}`,
                 floors: map.floors || {},
-                gridSize: processedState.gridSize || { rows: 20, cols: 20 }
+                gridSize: processedState.gridSize || { rows: 20, cols: 20 },
+                maxFloors: maxFloors
               }
               
               // Ensure doors and notes properties exist for all floors, and migrate notes
@@ -942,6 +974,15 @@ export const useAppState = () => {
             processedState = importedState
             Object.keys(processedState.dungeons).forEach(dungeonKey => {
               const dungeon = processedState.dungeons[dungeonKey]
+              
+              // Ensure dungeon has maxFloors property (backward compatibility)
+              if (!dungeon.maxFloors) {
+                // Find the highest floor number that exists in this dungeon
+                const floorNumbers = Object.keys(dungeon.floors || {}).map(Number).filter(num => !isNaN(num))
+                const actualMaxFloor = floorNumbers.length > 0 ? Math.max(...floorNumbers) : 0
+                dungeon.maxFloors = Math.max(DEFAULT_MAX_FLOORS, actualMaxFloor)
+              }
+              
               if (dungeon.floors) {
                 Object.keys(dungeon.floors).forEach(floorKey => {
                   const floor = dungeon.floors[floorKey]
@@ -980,12 +1021,16 @@ export const useAppState = () => {
             return
           }
           
-          // Ensure each dungeon has individual gridSize
+          // Ensure each dungeon has individual gridSize and maxFloors
           Object.keys(processedState.dungeons).forEach(dungeonKey => {
             const dungeon = processedState.dungeons[dungeonKey]
             if (dungeon && !dungeon.gridSize) {
               // If dungeon doesn't have gridSize, use the global gridSize
               dungeon.gridSize = processedState.gridSize || { rows: 20, cols: 20 }
+            }
+            if (dungeon && !dungeon.maxFloors) {
+              // If dungeon doesn't have maxFloors, use the default
+              dungeon.maxFloors = DEFAULT_MAX_FLOORS
             }
           })
           
@@ -1264,6 +1309,104 @@ export const useAppState = () => {
     })
   }, [updateState])
 
+  // Check if floor has any data (not empty)
+  const hasFloorData = useCallback((floor) => {
+    if (!floor) return false
+    
+    // Check grid data
+    if (floor.grid && floor.grid.some(row => row.some(cell => cell !== null))) {
+      return true
+    }
+    
+    // Check walls
+    if (floor.walls && floor.walls.length > 0) {
+      return true
+    }
+    
+    // Check items
+    if (floor.items && floor.items.length > 0) {
+      return true
+    }
+    
+    // Check doors
+    if (floor.doors && floor.doors.length > 0) {
+      return true
+    }
+    
+    // Check notes
+    if (floor.notes && floor.notes.length > 0) {
+      return true
+    }
+    
+    return false
+  }, [])
+
+  // Set dungeon max floors
+  const setDungeonMaxFloors = useCallback((dungeonId, newMaxFloors, onWarning) => {
+    const executeChange = () => {
+      updateState(state => {
+        const dungeon = state.dungeons[dungeonId]
+        if (!dungeon) return state
+        
+        const currentMaxFloors = dungeon.maxFloors || DEFAULT_MAX_FLOORS
+        const updatedDungeon = { ...dungeon }
+        const updatedFloors = { ...updatedDungeon.floors }
+        
+        if (newMaxFloors > currentMaxFloors) {
+          // Add new empty floors
+          for (let i = currentMaxFloors + 1; i <= newMaxFloors; i++) {
+            updatedFloors[i] = createEmptyFloor(dungeon.gridSize)
+          }
+        } else if (newMaxFloors < currentMaxFloors) {
+          // Remove floors beyond new max
+          for (let i = newMaxFloors + 1; i <= currentMaxFloors; i++) {
+            delete updatedFloors[i]
+          }
+        }
+        
+        updatedDungeon.floors = updatedFloors
+        updatedDungeon.maxFloors = newMaxFloors
+        
+        // If current floor is beyond new max, switch to floor 1
+        const newCurrentFloor = state.currentFloor > newMaxFloors ? 1 : state.currentFloor
+        
+        return {
+          ...state,
+          currentFloor: newCurrentFloor,
+          dungeons: {
+            ...state.dungeons,
+            [dungeonId]: updatedDungeon
+          }
+        }
+      })
+    }
+    
+    // Get current dungeon state
+    const dungeon = state.dungeons[dungeonId]
+    if (!dungeon) return
+    
+    const currentMaxFloors = dungeon.maxFloors || DEFAULT_MAX_FLOORS
+    
+    // If reducing floors, check for data in floors that will be removed
+    if (newMaxFloors < currentMaxFloors) {
+      const floorsToRemove = []
+      for (let i = newMaxFloors + 1; i <= currentMaxFloors; i++) {
+        if (dungeon.floors[i] && hasFloorData(dungeon.floors[i])) {
+          floorsToRemove.push(i)
+        }
+      }
+      
+      if (floorsToRemove.length > 0 && onWarning) {
+        // Call warning callback with floors that have data
+        onWarning(floorsToRemove, executeChange)
+        return
+      }
+    }
+    
+    // If increasing floors or no data conflicts, proceed with change
+    executeChange()
+  }, [updateState, hasFloorData, state.dungeons])
+
   // Export current floor as SVG
   const exportFloorSVG = useCallback(() => {
     try {
@@ -1309,6 +1452,7 @@ export const useAppState = () => {
     importDungeon,
     exportFloorSVG,
     copyFloor,
+    setDungeonMaxFloors,
     getNoteAt,
     setNoteAt,
     deleteNoteAt,

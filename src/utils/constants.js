@@ -49,3 +49,5 @@ export const MIN_ZOOM = 0.1
 export const MAX_ZOOM = 5
 export const MAX_FLOORS = 30
 export const MAX_DUNGEONS = 10
+export const MAX_FLOORS_LIMIT = 100 // Maximum number of floors (upper limit)
+export const DEFAULT_MAX_FLOORS = 20 // Default number of floors for new dungeons
