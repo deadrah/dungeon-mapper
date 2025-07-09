@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { MAX_DUNGEONS } from '../../utils/constants'
+import { MAX_DUNGEONS, MAX_FLOORS_LIMIT, DEFAULT_MAX_FLOORS } from '../../utils/constants'
 import { getMessage } from '../../utils/messages'
 
 const DungeonOptionDialog = ({
@@ -11,6 +11,8 @@ const DungeonOptionDialog = ({
   onDungeonRename,
   gridSize,
   onGridSizeChange,
+  maxFloors,
+  onMaxFloorsChange,
   onDungeonReset,
   onDungeonExport,
   onDungeonImport,
@@ -21,6 +23,7 @@ const DungeonOptionDialog = ({
   const [editingName, setEditingName] = useState('')
   const [isRenameMode, setIsRenameMode] = useState(false)
   const [pendingGridSize, setPendingGridSize] = useState({ rows: gridSize.rows, cols: gridSize.cols })
+  const [pendingMaxFloors, setPendingMaxFloors] = useState(maxFloors || DEFAULT_MAX_FLOORS)
 
   // Update selected dungeon when currentDungeon changes
   useEffect(() => {
@@ -31,6 +34,11 @@ const DungeonOptionDialog = ({
   useEffect(() => {
     setPendingGridSize({ rows: gridSize.rows, cols: gridSize.cols })
   }, [gridSize.rows, gridSize.cols])
+
+  // Update pending max floors when actual max floors changes
+  useEffect(() => {
+    setPendingMaxFloors(maxFloors || DEFAULT_MAX_FLOORS)
+  }, [maxFloors])
 
   const handleRename = () => {
     setEditingName(dungeonNames[selectedDungeon] || `Dungeon ${selectedDungeon}`)
@@ -60,6 +68,27 @@ const DungeonOptionDialog = ({
     if (window.confirm(message)) {
       onGridSizeChange(selectedDungeon, pendingGridSize)
     }
+  }
+
+  const handleMaxFloorsChange = () => {
+    const currentMaxFloors = maxFloors || DEFAULT_MAX_FLOORS
+    
+    // If increasing floors or no data conflicts, execute directly
+    if (pendingMaxFloors > currentMaxFloors) {
+      onMaxFloorsChange(selectedDungeon, pendingMaxFloors)
+      return
+    }
+    
+    // If reducing floors, check for data conflicts
+    onMaxFloorsChange(selectedDungeon, pendingMaxFloors, (floorsToRemove, confirmCallback) => {
+      const message = `${getMessage(language, 'floorsWillBeDeleted')}\n\n${getMessage(language, 'affectedFloors')}: ${floorsToRemove.join(', ')}`
+      
+      if (window.confirm(message)) {
+        confirmCallback()
+      } else {
+        setPendingMaxFloors(maxFloors || DEFAULT_MAX_FLOORS)
+      }
+    })
   }
 
   const handleDungeonReset = () => {
@@ -203,9 +232,14 @@ const DungeonOptionDialog = ({
 
         {/* Grid Size Section */}
         <div className="mb-4">
-          <h4 className="text-sm font-semibold mb-2" style={{ color: theme.ui.panelText }}>
-            {getMessage(language, 'gridSize')}
-          </h4>
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="text-sm font-semibold" style={{ color: theme.ui.panelText }}>
+              {getMessage(language, 'gridSize')}
+            </h4>
+            <div className="text-xs" style={{ color: theme.ui.panelText, opacity: 0.7 }}>
+              {getMessage(language, 'current')}: {gridSize.cols}x{gridSize.rows}
+            </div>
+          </div>
           <div className="flex items-center space-x-2 mb-2">
             <span className="text-sm" style={{ color: theme.ui.panelText }}>X:</span>
             <input
@@ -242,9 +276,6 @@ const DungeonOptionDialog = ({
               max="50"
             />
           </div>
-          <div className="text-xs mb-2" style={{ color: theme.ui.panelText, opacity: 0.7 }}>
-            {getMessage(language, 'current')}: {gridSize.cols}x{gridSize.rows}
-          </div>
           {(pendingGridSize.rows !== gridSize.rows || pendingGridSize.cols !== gridSize.cols) && (
             <button
               onClick={handleGridSizeChange}
@@ -257,6 +288,58 @@ const DungeonOptionDialog = ({
               onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.resetButton}
             >
               {getMessage(language, 'applyGridSizeChange')}
+            </button>
+          )}
+        </div>
+
+        <hr className="my-3" style={{ borderColor: theme.ui.border, opacity: 0.5 }} />
+
+        {/* Max Floors Section */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="text-sm font-semibold" style={{ color: theme.ui.panelText }}>
+              {getMessage(language, 'maxFloors')}
+            </h4>
+            <div className="text-xs" style={{ color: theme.ui.panelText, opacity: 0.7 }}>
+              {getMessage(language, 'current')}: {maxFloors || DEFAULT_MAX_FLOORS}
+            </div>
+          </div>
+          <div className="flex items-center space-x-2 mb-2">
+            <span className="text-sm" style={{ color: theme.ui.panelText }}>
+              {getMessage(language, 'floors')}:
+            </span>
+            <input
+              type="number"
+              value={pendingMaxFloors}
+              onChange={(e) => {
+                const floors = Math.max(1, Math.min(MAX_FLOORS_LIMIT, parseInt(e.target.value) || DEFAULT_MAX_FLOORS))
+                setPendingMaxFloors(floors)
+              }}
+              className="px-2 py-1 rounded text-sm w-16"
+              style={{ 
+                backgroundColor: theme.ui.input, 
+                color: theme.ui.inputText, 
+                border: `1px solid ${theme.ui.border}` 
+              }}
+              min="1"
+              max={MAX_FLOORS_LIMIT}
+            />
+            <span className="text-xs" style={{ color: theme.ui.panelText, opacity: 0.7 }}>
+              (1-{MAX_FLOORS_LIMIT})
+            </span>
+          </div>
+          {pendingMaxFloors !== (maxFloors || DEFAULT_MAX_FLOORS) && (
+            <button
+              onClick={handleMaxFloorsChange}
+              className="w-full px-2 py-1 rounded text-sm transition-colors"
+              style={{ 
+                backgroundColor: theme.ui.resetButton, 
+                color: theme.ui.resetButtonText
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = theme.ui.resetButtonHover}
+              onMouseLeave={(e) => e.target.style.backgroundColor = theme.ui.resetButton}
+            >
+              {getMessage(language, 'applyMaxFloorsChange')}
             </button>
           )}
         </div>

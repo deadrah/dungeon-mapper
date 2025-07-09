@@ -16,6 +16,7 @@ function App() {
     setActiveTool,
     setGridSize,
     setDungeonGridSize,
+    setDungeonMaxFloors,
     toggleNoteTooltips,
     setLanguage,
     setTheme,
@@ -107,6 +108,8 @@ function App() {
         gridSize={state.dungeons[state.currentDungeon]?.gridSize || state.gridSize}
         onGridSizeChange={setGridSize}
         onDungeonGridSizeChange={setDungeonGridSize}
+        maxFloors={state.dungeons[state.currentDungeon]?.maxFloors}
+        onMaxFloorsChange={setDungeonMaxFloors}
         onDungeonReset={resetDungeon}
         onExport={exportState}
         onImport={importState}

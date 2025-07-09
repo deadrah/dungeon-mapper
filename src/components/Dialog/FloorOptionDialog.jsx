@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { MAX_FLOORS, MAX_DUNGEONS } from '../../utils/constants'
+import { MAX_FLOORS, MAX_DUNGEONS, DEFAULT_MAX_FLOORS } from '../../utils/constants'
 import { getMessage } from '../../utils/messages'
 
 const FloorOptionDialog = ({
@@ -10,6 +10,7 @@ const FloorOptionDialog = ({
   dungeonNames,
   floors,
   allDungeons,
+  maxFloors,
   onFloorChange,
   onFloorRename,
   onFloorReset,
@@ -120,7 +121,7 @@ const FloorOptionDialog = ({
               border: `1px solid ${theme.ui.border}` 
             }}
           >
-            {Array.from({ length: MAX_FLOORS }, (_, i) => i + 1).map(floorId => (
+            {Array.from({ length: maxFloors || DEFAULT_MAX_FLOORS }, (_, i) => i + 1).map(floorId => (
               <option key={floorId} value={floorId}>
                 {getFloorDisplayName(floorId)}
               </option>

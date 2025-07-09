@@ -32,6 +32,11 @@ export const MESSAGES = {
     loadDungeonButton: 'ダンジョン読み込み',
     gridSize: 'グリッドサイズ',
     applyGridSizeChange: 'グリッドサイズ変更を適用',
+    maxFloors: 'フロア数',
+    floors: 'フロア',
+    applyMaxFloorsChange: 'フロア数変更を適用',
+    floorsWillBeDeleted: 'フロア数を減らすと、該当するフロアのデータが削除されます。',
+    affectedFloors: '影響を受けるフロア',
     current: '現在',
     
     floor: '操作対象',
@@ -113,6 +118,11 @@ export const MESSAGES = {
     loadDungeonButton: 'Dungeon Load',
     gridSize: 'Grid Size',
     applyGridSizeChange: 'Apply Grid Size Change',
+    maxFloors: 'Number of Floors',
+    floors: 'Floors',
+    applyMaxFloorsChange: 'Apply Floor Count Change',
+    floorsWillBeDeleted: 'Reducing the number of floors will delete data on the affected floors.',
+    affectedFloors: 'Affected Floors',
     current: 'Current',
     
     floor: 'Target Floor',
