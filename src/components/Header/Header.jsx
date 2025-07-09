@@ -55,6 +55,7 @@ const Header = ({
   const handleOpenCopyFloor = (sourceDungeon, sourceFloor) => {
     setCopyFloorSource({ dungeonId: sourceDungeon, floorId: sourceFloor })
     setIsCopyFloorOpen(true)
+    setIsFloorOptionOpen(false) // フロアオプションダイアログを閉じる
   }
 
   const handleCloseCopyFloor = () => {

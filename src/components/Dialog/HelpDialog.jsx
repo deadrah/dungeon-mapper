@@ -1,8 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { helpContent } from '../../data/helpContent'
 
 const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme }) => {
+  const modalRef = useRef(null)
+  const mouseDownInsideRef = useRef(false)
   const [activeTab, setActiveTab] = useState('guide')
+
+  // Handle mouse events to prevent modal closing on drag selections
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleMouseDown = (e) => {
+      if (modalRef.current?.contains(e.target)) {
+        mouseDownInsideRef.current = true
+      } else {
+        mouseDownInsideRef.current = false
+      }
+    }
+
+    const handleMouseUp = (e) => {
+      const clickedOutside = !modalRef.current?.contains(e.target)
+
+      if (clickedOutside && !mouseDownInsideRef.current) {
+        onClose()
+      }
+
+      mouseDownInsideRef.current = false
+    }
+
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isOpen, onClose])
 
   if (!isOpen) return null
 
@@ -22,12 +55,11 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
     <div 
       className="fixed inset-0 flex items-center justify-center z-50" 
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-      onClick={onClose}
     >
       <div 
+        ref={modalRef}
         className="rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto"
         style={{ backgroundColor: theme.ui.panel }}
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
           <div>

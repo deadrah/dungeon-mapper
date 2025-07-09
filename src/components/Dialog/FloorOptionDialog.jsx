@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { MAX_FLOORS, MAX_DUNGEONS, DEFAULT_MAX_FLOORS } from '../../utils/constants'
 import { getMessage } from '../../utils/messages'
 
@@ -19,6 +19,8 @@ const FloorOptionDialog = ({
   theme,
   language = 'ja'
 }) => {
+  const modalRef = useRef(null)
+  const mouseDownInsideRef = useRef(false)
   const [selectedFloor, setSelectedFloor] = useState(currentFloor)
   const [editingName, setEditingName] = useState('')
   const [isRenameMode, setIsRenameMode] = useState(false)
@@ -27,6 +29,37 @@ const FloorOptionDialog = ({
   useEffect(() => {
     setSelectedFloor(currentFloor)
   }, [currentFloor])
+
+  // Handle mouse events to prevent modal closing on drag selections
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleMouseDown = (e) => {
+      if (modalRef.current?.contains(e.target)) {
+        mouseDownInsideRef.current = true
+      } else {
+        mouseDownInsideRef.current = false
+      }
+    }
+
+    const handleMouseUp = (e) => {
+      const clickedOutside = !modalRef.current?.contains(e.target)
+
+      if (clickedOutside && !mouseDownInsideRef.current) {
+        onClose()
+      }
+
+      mouseDownInsideRef.current = false
+    }
+
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isOpen, onClose])
 
   const getFloorDisplayName = (floorId) => {
     const floorData = floors[floorId]
@@ -95,12 +128,11 @@ const FloorOptionDialog = ({
     <div 
       className="fixed inset-0 flex items-center justify-center z-50" 
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-      onClick={handleClose}
     >
       <div 
+        ref={modalRef}
         className="rounded-lg p-6 w-80 max-w-full mx-4"
         style={{ backgroundColor: theme.ui.panel }}
-        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>
           {getMessage(language, 'floorOptions')}

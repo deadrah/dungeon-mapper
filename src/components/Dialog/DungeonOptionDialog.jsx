@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { MAX_DUNGEONS, MAX_FLOORS_LIMIT, DEFAULT_MAX_FLOORS } from '../../utils/constants'
 import { getMessage } from '../../utils/messages'
 
@@ -19,6 +19,8 @@ const DungeonOptionDialog = ({
   theme,
   language = 'ja'
 }) => {
+  const modalRef = useRef(null)
+  const mouseDownInsideRef = useRef(false)
   const [selectedDungeon, setSelectedDungeon] = useState(currentDungeon)
   const [editingName, setEditingName] = useState('')
   const [isRenameMode, setIsRenameMode] = useState(false)
@@ -39,6 +41,37 @@ const DungeonOptionDialog = ({
   useEffect(() => {
     setPendingMaxFloors(maxFloors || DEFAULT_MAX_FLOORS)
   }, [maxFloors])
+
+  // Handle mouse events to prevent modal closing on drag selections
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleMouseDown = (e) => {
+      if (modalRef.current?.contains(e.target)) {
+        mouseDownInsideRef.current = true
+      } else {
+        mouseDownInsideRef.current = false
+      }
+    }
+
+    const handleMouseUp = (e) => {
+      const clickedOutside = !modalRef.current?.contains(e.target)
+
+      if (clickedOutside && !mouseDownInsideRef.current) {
+        onClose()
+      }
+
+      mouseDownInsideRef.current = false
+    }
+
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isOpen, onClose])
 
   const handleRename = () => {
     setEditingName(dungeonNames[selectedDungeon] || `Dungeon ${selectedDungeon}`)
@@ -127,12 +160,11 @@ const DungeonOptionDialog = ({
     <div 
       className="fixed inset-0 flex items-center justify-center z-50" 
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-      onClick={handleClose}
     >
       <div 
+        ref={modalRef}
         className="rounded-lg p-6 w-80 max-w-full mx-4"
         style={{ backgroundColor: theme.ui.panel }}
-        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>
           {getMessage(language, 'dungeonOptions')}

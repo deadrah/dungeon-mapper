@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { MAX_FLOORS, MAX_DUNGEONS, DEFAULT_MAX_FLOORS } from '../../utils/constants'
 import { getMessage } from '../../utils/messages'
 
@@ -13,6 +13,8 @@ const CopyFloorDialog = ({
   theme,
   language = 'ja'
 }) => {
+  const modalRef = useRef(null)
+  const mouseDownInsideRef = useRef(false)
   const [copyTargetDungeon, setCopyTargetDungeon] = useState(1)
   const [copyTargetFloor, setCopyTargetFloor] = useState(1)
 
@@ -23,6 +25,37 @@ const CopyFloorDialog = ({
       setCopyTargetFloor(1)
     }
   }, [isOpen])
+
+  // Handle mouse events to prevent modal closing on drag selections
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleMouseDown = (e) => {
+      if (modalRef.current?.contains(e.target)) {
+        mouseDownInsideRef.current = true
+      } else {
+        mouseDownInsideRef.current = false
+      }
+    }
+
+    const handleMouseUp = (e) => {
+      const clickedOutside = !modalRef.current?.contains(e.target)
+
+      if (clickedOutside && !mouseDownInsideRef.current) {
+        onClose()
+      }
+
+      mouseDownInsideRef.current = false
+    }
+
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isOpen, onClose])
 
   const getSourceFloorDisplayName = () => {
     const floorData = allDungeons[sourceDungeon]?.floors[sourceFloor]
@@ -99,12 +132,11 @@ const CopyFloorDialog = ({
     <div 
       className="fixed inset-0 flex items-center justify-center" 
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 60 }}
-      onClick={handleClose}
     >
       <div 
+        ref={modalRef}
         className="rounded-lg p-6 w-80 max-w-full mx-4"
         style={{ backgroundColor: theme.ui.panel }}
-        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold mb-4" style={{ color: theme.ui.panelText }}>
           {getMessage(language, 'copyFloorTitle')}

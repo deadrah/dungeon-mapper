@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme }) => {
+  const modalRef = useRef(null)
+  const mouseDownInsideRef = useRef(false)
   const [text, setText] = useState(initialText)
 
   useEffect(() => {
@@ -8,6 +10,37 @@ const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme
       setText(initialText)
     }
   }, [isOpen, initialText])
+
+  // Handle mouse events to prevent modal closing on drag selections
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleMouseDown = (e) => {
+      if (modalRef.current?.contains(e.target)) {
+        mouseDownInsideRef.current = true
+      } else {
+        mouseDownInsideRef.current = false
+      }
+    }
+
+    const handleMouseUp = (e) => {
+      const clickedOutside = !modalRef.current?.contains(e.target)
+
+      if (clickedOutside && !mouseDownInsideRef.current) {
+        onClose()
+      }
+
+      mouseDownInsideRef.current = false
+    }
+
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mouseup', handleMouseUp)
+
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [isOpen, onClose])
 
   const handleSave = () => {
     onSave(text)
@@ -32,12 +65,11 @@ const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme
     <div 
       className="fixed inset-0 flex items-center justify-center z-50" 
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-      onClick={handleCancel}
     >
       <div 
+        ref={modalRef}
         className="rounded-lg p-6 w-96 max-w-full mx-4"
         style={{ backgroundColor: theme?.ui?.panel || '#ffffff' }}
-        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold mb-4" style={{ color: theme?.ui?.panelText || '#000000' }}>メモを入力</h2>
         
