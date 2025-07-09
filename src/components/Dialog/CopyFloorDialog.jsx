@@ -15,16 +15,16 @@ const CopyFloorDialog = ({
 }) => {
   const modalRef = useRef(null)
   const mouseDownInsideRef = useRef(false)
-  const [copyTargetDungeon, setCopyTargetDungeon] = useState(1)
+  const [copyTargetDungeon, setCopyTargetDungeon] = useState(sourceDungeon)
   const [copyTargetFloor, setCopyTargetFloor] = useState(1)
 
   // Reset target selections when dialog opens
   useEffect(() => {
     if (isOpen) {
-      setCopyTargetDungeon(1)
+      setCopyTargetDungeon(sourceDungeon)
       setCopyTargetFloor(1)
     }
-  }, [isOpen])
+  }, [isOpen, sourceDungeon])
 
   // Handle mouse events to prevent modal closing on drag selections
   useEffect(() => {
