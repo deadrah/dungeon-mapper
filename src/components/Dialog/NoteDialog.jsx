@@ -3,11 +3,18 @@ import React, { useState, useEffect, useRef } from 'react'
 const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme }) => {
   const modalRef = useRef(null)
   const mouseDownInsideRef = useRef(false)
+  const justOpenedRef = useRef(false)
+  const mouseDownPosRef = useRef({ x: 0, y: 0 })
   const [text, setText] = useState(initialText)
 
   useEffect(() => {
     if (isOpen) {
       setText(initialText)
+      justOpenedRef.current = true
+      // Reset the justOpened flag after a longer delay to prevent premature closing
+      setTimeout(() => {
+        justOpenedRef.current = false
+      }, 300)
     }
   }, [isOpen, initialText])
 
@@ -16,6 +23,7 @@ const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme
     if (!isOpen) return
 
     const handleMouseDown = (e) => {
+      mouseDownPosRef.current = { x: e.clientX, y: e.clientY }
       if (modalRef.current?.contains(e.target)) {
         mouseDownInsideRef.current = true
       } else {
@@ -25,8 +33,14 @@ const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme
 
     const handleMouseUp = (e) => {
       const clickedOutside = !modalRef.current?.contains(e.target)
+      
+      // Calculate mouse movement distance to detect dragging
+      const deltaX = e.clientX - mouseDownPosRef.current.x
+      const deltaY = e.clientY - mouseDownPosRef.current.y
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+      const isDragging = distance > 15 // Same threshold as Canvas
 
-      if (clickedOutside && !mouseDownInsideRef.current) {
+      if (clickedOutside && !mouseDownInsideRef.current && !justOpenedRef.current && !isDragging) {
         onClose()
       }
 

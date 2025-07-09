@@ -176,12 +176,12 @@ const Canvas = ({
   const handleMouseMove = useCallback((e) => {
     // Handle note dragging
     if (draggedNote && !isDraggingNote) {
-      // Check if mouse moved enough to start dragging (5px threshold)
+      // Check if mouse moved enough to start dragging (increased threshold to 15px)
       const deltaX = e.clientX - dragStartPos.x
       const deltaY = e.clientY - dragStartPos.y
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
       
-      if (distance > 5) {
+      if (distance > 15) {
         setIsDraggingNote(true)
         setDragCurrentPos({ x: e.clientX, y: e.clientY })
       }
@@ -699,7 +699,15 @@ const Canvas = ({
     }
     
     // Don't handle grid clicks if a note drag has been initiated (but not yet in dragging mode)
-    if (draggedNote) {
+    // Exception: Allow NOTE tool to proceed for opening dialog
+    if (draggedNote && appState.activeTool !== TOOLS.NOTE) {
+      return;
+    }
+    
+    // For NOTE tool, always allow grid clicks to proceed - but handle existing notes carefully
+    if (appState.activeTool === TOOLS.NOTE && draggedNote) {
+      // If note tool is active and we have a dragged note, it means we clicked on an existing note
+      // Let the mouseUp handler deal with it - don't open dialog here
       return;
     }
     
