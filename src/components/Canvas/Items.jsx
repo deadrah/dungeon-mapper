@@ -199,9 +199,9 @@ const Items = ({
             width: cellSize * 0.8, 
             height: cellSize * 0.8,
             backgroundColor: theme.items.event,
-            WebkitMask: 'url(/combat_simple.svg) no-repeat center',
+            WebkitMask: 'url(./combat_simple.svg) no-repeat center',
             WebkitMaskSize: 'contain',
-            mask: 'url(/combat_simple.svg) no-repeat center',
+            mask: 'url(./combat_simple.svg) no-repeat center',
             maskSize: 'contain'
           }} />
         )
@@ -211,9 +211,9 @@ const Items = ({
             width: cellSize * 0.8, 
             height: cellSize * 0.8,
             backgroundColor: theme.items.fountain,
-            WebkitMask: 'url(/fountain_simple.svg) no-repeat center',
+            WebkitMask: 'url(./fountain_simple.svg) no-repeat center',
             WebkitMaskSize: 'contain',
-            mask: 'url(/fountain_simple.svg) no-repeat center',
+            mask: 'url(./fountain_simple.svg) no-repeat center',
             maskSize: 'contain'
           }} />
         )
