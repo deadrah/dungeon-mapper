@@ -26,6 +26,7 @@ export const themes = {
       teleport: '#2fb8d4',          // ワープポイントの塗りつぶし（Items.jsx - テレポートアイテム）
       teleportBorder: '#0c4b5b',    // ワープポイントの境界線（Items.jsx - テレポートアイテム枠）
       event: '#ca0101',             // イベントマーカー（Items.jsx - イベントアイテム）
+      fountain: '#22c55e',          // 回復の泉（Items.jsx - 回復イベント）
       elevator: '#b8860b',          // エレベーター（Items.jsx - エレベーターアイテム）
       stairs: '#0000ff',            // 階段（Items.jsx - 階段アイテム）
       chest: '#d4a017',             // 宝箱（Items.jsx - 宝箱アイテム）
@@ -103,6 +104,7 @@ export const themes = {
       teleport: '#8b7355',          // 古いブロンズ色
       teleportBorder: '#5d4e37',    // ダークブラウン
       event: '#a0522d',             // 古いレンガ色
+      fountain: '#6b8e5a',          // 古い緑色（回復の泉）
       elevator: '#cd853f',          // アンティークゴールド
       stairs: '#6b5b73',            // 古い石の色
       chest: '#b8860b',             // 古い金色
@@ -177,6 +179,7 @@ export const themes = {
       teleport: '#1ba1d6',          // 暗いターコイズ（ワープポイント）
       teleportBorder: '#0f2525',    // より暗いシアン
       event: '#d63031',             // 濃い赤（イベント）
+      fountain: '#00b894',          // 明るい緑（回復の泉）
       elevator: '#e17055',          // オレンジ（エレベーター）
       stairs: '#6c5ce7',            // 濃い紫（階段）
       chest: '#e17055',             // オレンジ（宝箱）
@@ -251,6 +254,7 @@ export const themes = {
       teleport: '#b22222',          // ダークレッド（ワープポイント）
       teleportBorder: '#8b0000',    // より暗い赤
       event: '#ff4500',             // オレンジレッド（イベント）
+      fountain: '#556b2f',          // ダークオリーブグリーン（回復の泉）
       elevator: '#cd853f',          // ペルー色（エレベーター）
       stairs: '#a0522d',            // サドルブラウン（階段）
       chest: '#b99624',             // ゴールド（宝箱）
@@ -326,6 +330,7 @@ export const themes = {
       teleport: '#515b81',          // 中間グレー（ワープポイント）
       teleportBorder: '#404040',    // 濃いグレー
       event: '#8d0808',             // やや濃いグレー（イベント）
+      fountain: '#708566',          // 緑みグレー（回復の泉）
       elevator: '#816851',          // 中グレー（エレベーター）
       stairs: '#555555',            // 濃いグレー（階段）
       chest: '#404040',             // 非常に濃いグレー（宝箱・重要）

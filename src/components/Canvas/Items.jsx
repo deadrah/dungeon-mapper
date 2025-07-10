@@ -191,6 +191,36 @@ const Items = ({
       )
     }
     
+    // Special rendering for Event Marker with different types
+    if (item.type === TOOLS.EVENT_MARKER) {
+      if (item.eventType === 'combat') {
+        return (
+          <div style={{ 
+            width: cellSize * 0.8, 
+            height: cellSize * 0.8,
+            backgroundColor: theme.items.event,
+            WebkitMask: 'url(/combat_simple.svg) no-repeat center',
+            WebkitMaskSize: 'contain',
+            mask: 'url(/combat_simple.svg) no-repeat center',
+            maskSize: 'contain'
+          }} />
+        )
+      } else if (item.eventType === 'healing') {
+        return (
+          <div style={{ 
+            width: cellSize * 0.8, 
+            height: cellSize * 0.8,
+            backgroundColor: theme.items.fountain,
+            WebkitMask: 'url(/fountain_simple.svg) no-repeat center',
+            WebkitMaskSize: 'contain',
+            mask: 'url(/fountain_simple.svg) no-repeat center',
+            maskSize: 'contain'
+          }} />
+        )
+      }
+      return '!' // Default event marker
+    }
+    
     // Default text rendering
     return ITEM_ICONS[item.type] || '?'
   }

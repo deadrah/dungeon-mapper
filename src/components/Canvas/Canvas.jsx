@@ -29,6 +29,7 @@ const Canvas = ({
   const [arrowDirection, setArrowDirection] = useState('north') // 'north', 'south', 'east', 'west', 'rotate'
   const [stairsText, setStairsText] = useState('') // Text for stairs
   const [doorState, setDoorState] = useState('closed') // 'closed' or 'open'
+  const [eventType, setEventType] = useState('default') // 'default', 'combat', 'healing'
   const [isDraggingLine, setIsDraggingLine] = useState(false)
   const [dragLineType, setDragLineType] = useState(null) // 'horizontal' or 'vertical'
   const [isDraggingErase, setIsDraggingErase] = useState(false)
@@ -824,7 +825,8 @@ const Canvas = ({
             ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
             ...(appState.activeTool === TOOLS.ARROW && { arrowDirection }),
             ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText }),
-            ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState })
+            ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState }),
+            ...(appState.activeTool === TOOLS.EVENT_MARKER && { eventType })
           }
           const newItems = [...(floorData.items || []), newItem]
           updateCurrentFloorData('items', newItems)
@@ -857,14 +859,15 @@ const Canvas = ({
               ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle }),
               ...(appState.activeTool === TOOLS.ARROW && { arrowDirection }),
               ...((appState.activeTool === TOOLS.STAIRS_UP_SVG || appState.activeTool === TOOLS.STAIRS_DOWN_SVG) && { stairsText }),
-              ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState })
+              ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState }),
+              ...(appState.activeTool === TOOLS.EVENT_MARKER && { eventType })
             }
             updateCurrentFloorData('items', newItems)
           }
         }
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, doorState, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, deleteNoteAt])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, doorState, eventType, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, deleteNoteAt])
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog
@@ -1191,6 +1194,22 @@ const Canvas = ({
           >
             <option value="closed">■</option>
             <option value="open">□</option>
+          </select>
+        </div>
+      )}
+
+      {/* Event type selector */}
+      {appState.activeTool === TOOLS.EVENT_MARKER && (
+        <div className="absolute bottom-16 right-4 p-2 rounded shadow-lg z-50" style={{ backgroundColor: theme.ui.panel }}>
+          <select
+            value={eventType}
+            onChange={(e) => setEventType(e.target.value)}
+            className="w-8 h-8 rounded border text-center text-xs"
+            style={{ backgroundColor: theme.ui.input, color: theme.ui.inputText, border: `1px solid ${theme.ui.border}`, fontSize: '14px', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', fontWeight: 'bold' }}
+          >
+            <option value="default">!</option>
+            <option value="combat">×</option>
+            <option value="healing">◎</option>
           </select>
         </div>
       )}

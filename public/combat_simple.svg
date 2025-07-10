@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Crossed swords simple design -->
+  <!-- Left sword -->
+  <path d="M4 20L17 7" stroke="currentColor" stroke-width="2"/>
+  <polygon points="18.4,5.5 17.7,7.7 16.25,6.3" fill="currentColor"/>
+  <circle cx="4.5" cy="19.5" r="1.5" fill="currentColor"/>
+  <rect x="9" y="16" width="8" height="1" rx="0" fill="currentColor" transform="rotate(45 12 10)"/>
+
+  <!-- Right sword -->
+  <path d="M20 20L7 7" stroke="currentColor" stroke-width="2"/>
+  <polygon points="7.8,6.3 6.3,7.7 5.5,5.5" fill="currentColor"/>
+  <circle cx="19.5" cy="19.5" r="1.5" fill="currentColor"/>
+  <rect x="6.5" y="16" width="8" height="1" rx="0" fill="currentColor" transform="rotate(-45 12 10)"/>
+</svg>

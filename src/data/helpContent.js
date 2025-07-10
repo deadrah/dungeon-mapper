@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.7.5',
+    version: 'バージョン 1.7.6',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -49,7 +49,7 @@ export const helpContent = {
           { name: '宝箱:', desc: '宝箱の位置をマークします。' },
           { name: 'テレポートポイント:', desc: '右下のオプションで2文字までの識別子を設定できます。複数のテレポート先を管理できます。' },
           { name: 'シュート＆ピット:', desc: '落下ポイントをマークします。右下のオプションでシュート（●）またはピット（○）を選択できます。' },
-          { name: 'イベントマーカー:', desc: '特別なイベント発生地点をマークします。' },
+          { name: 'イベントマーカー:', desc: 'イベント発生地点をマークします。右下のオプションでイベントタイプを選択できます：デフォルト、戦闘、回復の泉。' },
           { name: '現在位置:', desc: 'プレイヤーの現在位置をマークします（フロアごとに1つまで）。' },
           { name: '矢印:', desc: '一方通行や強制移動の矢印を配置します。右下のオプションで方向を選択できます。' },
           { name: 'ドアアイテム:', desc: 'ドアアイテムを配置します。右下のオプションで開いた状態または閉じた状態を選択できます。デフォルトは閉じたドアです。' },
@@ -111,6 +111,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.7.6', date: '2025-07-10', changes: ['イベントマーカーにオプション機能を追加：右下のオプションパネルでイベントタイプを選択可能（デフォルト！、戦闘、回復の泉）'] },
           { version: 'v1.7.5', date: '2025-07-09', changes: ['フロア数可変機能を追加：各ダンジョンのフロア数を1-100の範囲で設定可能（デフォルト20）'] },
           { version: 'v1.7.4', date: '2025-07-08', changes: ['レイアウト・テーマ微調整'] },
           { version: 'v1.7.3', date: '2025-07-03', changes: ['Monochromeテーマを追加：グレースケールの高コントラスト新テーマ（印刷・アクセシビリティ重視）'] },
@@ -147,7 +148,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.7.5',
+    version: 'Version 1.7.6',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -194,7 +195,7 @@ export const helpContent = {
           { name: 'Chest:', desc: 'Mark treasure locations.' },
           { name: 'Teleport Point:', desc: 'Use the options in the bottom right to set up to 2 character identifiers. Manage multiple teleport destinations.' },
           { name: 'Shute & Pit:', desc: 'Mark fall points. Use the options in the bottom right to select Shute (●) or Pit (○).' },
-          { name: 'Event Marker:', desc: 'Mark special event locations.' },
+          { name: 'Event Marker:', desc: 'Mark event locations. Use the options in the bottom right to select event type: Default, Combat, Healing Fountain.' },
           { name: 'Current Position:', desc: 'Mark player\'s current location (only one per floor).' },
           { name: 'Arrows:', desc: 'Place one-way or forced movement arrows. Use the options in the bottom right to select direction.' },
           { name: 'Door Item:', desc: 'Place door items. Use the options in the bottom right to select open or closed door state. Default is closed door.' },
@@ -256,6 +257,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.7.6', date: '2025-07-10', changes: ['Added Event Marker options: Select event type in bottom-right options panel (Default !, Combat, Healing Fountain)'] },
       { version: 'v1.7.5', date: '2025-07-09', changes: ['Added variable floor count feature: Set the number of floors for each dungeon (1-100 range, default 20)'] },
       { version: 'v1.7.4', date: '2025-07-08', changes: ['Layout and theme adjustments'] },
       { version: 'v1.7.3', date: '2025-07-03', changes: ['Added Monochrome theme: New grayscale high-contrast theme for print and accessibility'] },

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple healing fountain design -->
+  <!-- Base pool (double ellipse) -->
+  <ellipse cx="12" cy="19" rx="11" ry="2" stroke="currentColor" stroke-width="1" fill="none"/>
+  <ellipse cx="12" cy="19.5" rx="7" ry="1" stroke="currentColor" stroke-width="0.5" fill="currentColor"/>
+  
+  <circle cx="8" cy="8" r="0.8" fill="currentColor"/>
+  <circle cx="16" cy="8" r="0.8" fill="currentColor"/>
+
+  <circle cx="10" cy="6" r="1" fill="currentColor"/>
+  <circle cx="14" cy="6" r="1" fill="currentColor"/>
+
+  <circle cx="12" cy="8" r="1" fill="currentColor"/>
+  <circle cx="12" cy="11" r="1" fill="currentColor"/>
+  <circle cx="12" cy="14" r="1" fill="currentColor"/>
+  <!-- Simple water arc at top 
+  <path d="M10 5Q12 3 14 5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>-->
+</svg>
