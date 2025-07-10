@@ -19,6 +19,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     stairs: theme.items.stairs,
     currentPosition: theme.items.currentPosition,
     event: theme.items.event,
+    fountain: theme.items.fountain,
     elevator: theme.items.elevator,
     teleport: theme.items.teleport,
     teleportBorder: theme.items.teleportBorder,
@@ -43,6 +44,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     stairs: '#0000ff',
     currentPosition: '#dc143c',
     event: '#ca0101',
+    fountain: '#22c55e',
     elevator: '#b8860b',
     teleport: '#06b6d4',
     teleportBorder: '#0891b2',
@@ -357,10 +359,45 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           break
         
         case TOOLS.EVENT_MARKER:
-          // Match canvas fontSize: Math.max(12, cellSize * 0.6)
-          const eventFontSize = Math.max(12, cellSize * 0.6)
-          const eventY = centerY + (eventFontSize * 0.35) // Proper baseline adjustment
-          svg += `      <text x="${centerX}" y="${eventY}" text-anchor="middle" font-size="${eventFontSize}" fill="${colors.event}" font-weight="bold">!</text>\n`
+          if (item.eventType === 'combat') {
+            // Combat event - embedded combat SVG
+            const iconSize = cellSize * 0.8
+            const iconX = centerX - iconSize / 2
+            const iconY = centerY - iconSize / 2
+            svg += `      <g transform="translate(${iconX}, ${iconY}) scale(${iconSize / 24})">
+        <path d="M4 20L17 7" stroke="${colors.event}" stroke-width="2"/>
+        <polygon points="18.4,5.5 17.7,7.7 16.25,6.3" fill="${colors.event}"/>
+        <circle cx="4.5" cy="19.5" r="1.5" fill="${colors.event}"/>
+        <rect x="9" y="16" width="8" height="1" rx="0" fill="${colors.event}" transform="rotate(45 12 10)"/>
+        <path d="M20 20L7 7" stroke="${colors.event}" stroke-width="2"/>
+        <polygon points="7.8,6.3 6.3,7.7 5.5,5.5" fill="${colors.event}"/>
+        <circle cx="19.5" cy="19.5" r="1.5" fill="${colors.event}"/>
+        <rect x="6.5" y="16" width="8" height="1" rx="0" fill="${colors.event}" transform="rotate(-45 12 10)"/>
+      </g>\n`
+          } else if (item.eventType === 'healing') {
+            // Healing fountain event - embedded fountain SVG
+            const iconSize = cellSize * 0.8
+            const iconX = centerX - iconSize / 2
+            const iconY = centerY - iconSize / 2
+            // Use fountain colors if available, otherwise event color
+            const fountainColor = colors.fountain || colors.event
+            svg += `      <g transform="translate(${iconX}, ${iconY}) scale(${iconSize / 24})">
+        <ellipse cx="12" cy="19" rx="11" ry="2" stroke="${fountainColor}" stroke-width="1" fill="none"/>
+        <ellipse cx="12" cy="19.5" rx="7" ry="1" stroke="${fountainColor}" stroke-width="0.5" fill="${fountainColor}"/>
+        <circle cx="8" cy="8" r="0.8" fill="${fountainColor}"/>
+        <circle cx="16" cy="8" r="0.8" fill="${fountainColor}"/>
+        <circle cx="10" cy="6" r="1" fill="${fountainColor}"/>
+        <circle cx="14" cy="6" r="1" fill="${fountainColor}"/>
+        <circle cx="12" cy="8" r="1" fill="${fountainColor}"/>
+        <circle cx="12" cy="11" r="1" fill="${fountainColor}"/>
+        <circle cx="12" cy="14" r="1" fill="${fountainColor}"/>
+      </g>\n`
+          } else {
+            // Default event - exclamation mark
+            const eventFontSize = Math.max(12, cellSize * 0.6)
+            const eventY = centerY + (eventFontSize * 0.35) // Proper baseline adjustment
+            svg += `      <text x="${centerX}" y="${eventY}" text-anchor="middle" font-size="${eventFontSize}" fill="${colors.event}" font-weight="bold">!</text>\n`
+          }
           break
         
         case TOOLS.WARP_POINT:

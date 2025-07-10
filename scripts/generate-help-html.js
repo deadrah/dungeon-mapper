@@ -54,11 +54,13 @@ function generateHtmlTemplate(lang, contentData, pageType = 'help') {
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://deadrah.github.io/dungeon-mapper${canonicalUrl}">
     <meta property="og:site_name" content="DMapper">
+    <meta property="og:image" content="https://deadrah.github.io/dungeon-mapper/og-image.png" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="${title}">
     <meta name="twitter:description" content="${description}">
+    <meta name="twitter:image" content="https://deadrah.github.io/dungeon-mapper/twitter-card.png" />
     
     <link rel="canonical" href="https://deadrah.github.io/dungeon-mapper${canonicalUrl}">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
