@@ -57,6 +57,10 @@ export const helpContent = {
           { name: '消去ツール:', desc: '左クリックでオブジェクトを削除します。' }
         ]
       },
+      clickCycling: {
+        title: '複数のオプションアイテムを持つツール',
+        content: 'シュート、イベントマーカー、矢印、ドアアイテムは、同箇所をクリック/タップする事で順次切り替わり配置されます。'
+      },
       dungeonOptions: {
         title: 'ダンジョンオプション',
         items: [
@@ -111,7 +115,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
-          { version: 'v1.7.6', date: '2025-07-10', changes: ['イベントマーカーにオプション機能を追加：右下のオプションパネルでイベントタイプを選択可能（デフォルト！、戦闘、回復の泉）'] },
+          { version: 'v1.7.6', date: '2025-07-10', changes: ['イベントマーカーにオプション機能を追加：右下のオプションパネルでイベントタイプを選択可能（デフォルト！、戦闘、回復の泉）','複数のオプションアイテムを持つツールでクリックにより順次選択を可能に'] },
           { version: 'v1.7.5', date: '2025-07-09', changes: ['フロア数可変機能を追加：各ダンジョンのフロア数を1-100の範囲で設定可能（デフォルト20）'] },
           { version: 'v1.7.4', date: '2025-07-08', changes: ['レイアウト・テーマ微調整'] },
           { version: 'v1.7.3', date: '2025-07-03', changes: ['Monochromeテーマを追加：グレースケールの高コントラスト新テーマ（印刷・アクセシビリティ重視）'] },
@@ -203,6 +207,10 @@ export const helpContent = {
           { name: 'Eraser Tool:', desc: 'Delete objects with left click.' }
         ]
       },
+      clickCycling: {
+        title: 'Tools with Multiple Options',
+        content: 'Shute, Event Marker, Arrows, and Door Item tools can be sequentially switched by clicking/tapping the same location.'
+      },
       dungeonOptions: {
         title: 'Dungeon Option Features',
         items: [
@@ -257,7 +265,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
-      { version: 'v1.7.6', date: '2025-07-10', changes: ['Added Event Marker options: Select event type in bottom-right options panel (Default !, Combat, Healing Fountain)'] },
+      { version: 'v1.7.6', date: '2025-07-10', changes: ['Added Event Marker options: Select event type in bottom-right options panel (Default !, Combat, Healing Fountain)', 'Enabled sequential selection through clicking for tools with multiple option items'] },
       { version: 'v1.7.5', date: '2025-07-09', changes: ['Added variable floor count feature: Set the number of floors for each dungeon (1-100 range, default 20)'] },
       { version: 'v1.7.4', date: '2025-07-08', changes: ['Layout and theme adjustments'] },
       { version: 'v1.7.3', date: '2025-07-03', changes: ['Added Monochrome theme: New grayscale high-contrast theme for print and accessibility'] },

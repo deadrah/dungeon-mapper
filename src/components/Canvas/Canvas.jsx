@@ -6,6 +6,14 @@ import Doors from './Doors'
 import NoteDialog from '../Dialog/NoteDialog'
 import { GRID_SIZE, MIN_ZOOM, MAX_ZOOM, TOOLS } from '../../utils/constants'
 
+// Tool options definitions for cycling functionality
+const TOOL_OPTIONS = {
+  [TOOLS.SHUTE]: ['filled', 'outline'],
+  [TOOLS.EVENT_MARKER]: ['default', 'combat', 'healing'],
+  [TOOLS.ARROW]: ['north', 'south', 'east', 'west', 'rotate'],
+  [TOOLS.DOOR_ITEM]: ['closed', 'open']
+}
+
 const Canvas = ({ 
   appState, 
   setZoom, 
@@ -682,6 +690,40 @@ const Canvas = ({
     if (row < 0 || row >= appState.gridSize.rows || col < 0 || col >= appState.gridSize.cols) {
       return;
     }
+
+    // Helper function to get current option for a tool
+    const getCurrentOption = (tool) => {
+      switch(tool) {
+        case TOOLS.SHUTE: return shuteStyle
+        case TOOLS.EVENT_MARKER: return eventType
+        case TOOLS.ARROW: return arrowDirection
+        case TOOLS.DOOR_ITEM: return doorState
+        default: return null
+      }
+    }
+
+    // Helper function to get option from existing item
+    const getOptionFromItem = (item, tool) => {
+      switch(tool) {
+        case TOOLS.SHUTE: return item.shuteStyle || 'filled'
+        case TOOLS.EVENT_MARKER: return item.eventType || 'default'
+        case TOOLS.ARROW: return item.arrowDirection || item.type.replace('arrow_', '')
+        case TOOLS.DOOR_ITEM: return item.doorState || 'closed'
+        default: return null
+      }
+    }
+
+    // Helper function to get next option in cycle
+    const getNextOption = (tool, currentOption) => {
+      const options = TOOL_OPTIONS[tool]
+      if (!options) return null
+      
+      const currentIndex = options.indexOf(currentOption)
+      if (currentIndex === -1) return options[0] // fallback to first option
+      
+      const nextIndex = (currentIndex + 1) % options.length
+      return nextIndex === 0 ? 'DELETE' : options[nextIndex]
+    }
     
     // Helper function to detect if the event is from touch (mobile) vs mouse (PC)
     const isTouchEvent = _event && (
@@ -831,10 +873,66 @@ const Canvas = ({
           const newItems = [...(floorData.items || []), newItem]
           updateCurrentFloorData('items', newItems)
         } else {
-          // Check if existing item is the same type as current tool
+          // Check if current tool has cycling options
           const existingItem = floorData.items[existingItemIndex]
           const currentToolType = appState.activeTool === TOOLS.ARROW ? `arrow_${arrowDirection}` : appState.activeTool
+          const hasOptions = TOOL_OPTIONS[appState.activeTool]
           
+          // For tools with options, check if same tool + same option for cycling
+          if (hasOptions) {
+            const isSameTool = (appState.activeTool === TOOLS.ARROW && existingItem.type.startsWith('arrow_')) ||
+                              (appState.activeTool !== TOOLS.ARROW && existingItem.type === appState.activeTool)
+            
+            if (isSameTool) {
+              const existingOption = getOptionFromItem(existingItem, appState.activeTool)
+              const currentOption = getCurrentOption(appState.activeTool)
+              
+              // Same tool + same option → cycle to next option
+              if (existingOption === currentOption) {
+                const nextOption = getNextOption(appState.activeTool, currentOption)
+                
+                if (nextOption === 'DELETE') {
+                  // Delete the item and cycle back to first option
+                  const newItems = floorData.items.filter((_, index) => index !== existingItemIndex)
+                  updateCurrentFloorData('items', newItems)
+                  
+                  // Update state to first option for next click
+                  const firstOption = TOOL_OPTIONS[appState.activeTool][0]
+                  switch(appState.activeTool) {
+                    case TOOLS.SHUTE: setShuteStyle(firstOption); break
+                    case TOOLS.EVENT_MARKER: setEventType(firstOption); break
+                    case TOOLS.ARROW: setArrowDirection(firstOption); break
+                    case TOOLS.DOOR_ITEM: setDoorState(firstOption); break
+                  }
+                } else {
+                  // Replace with next option
+                  const newItems = [...(floorData.items || [])]
+                  newItems[existingItemIndex] = {
+                    ...existingItem,
+                    type: appState.activeTool === TOOLS.ARROW ? `arrow_${nextOption}` : appState.activeTool,
+                    ...(appState.activeTool === TOOLS.SHUTE && { shuteStyle: nextOption }),
+                    ...(appState.activeTool === TOOLS.ARROW && { arrowDirection: nextOption, type: `arrow_${nextOption}` }),
+                    ...(appState.activeTool === TOOLS.DOOR_ITEM && { doorState: nextOption }),
+                    ...(appState.activeTool === TOOLS.EVENT_MARKER && { eventType: nextOption }),
+                    id: Date.now() + Math.random()
+                  }
+                  updateCurrentFloorData('items', newItems)
+                  
+                  // Update state to match new option
+                  switch(appState.activeTool) {
+                    case TOOLS.SHUTE: setShuteStyle(nextOption); break
+                    case TOOLS.EVENT_MARKER: setEventType(nextOption); break
+                    case TOOLS.ARROW: setArrowDirection(nextOption); break
+                    case TOOLS.DOOR_ITEM: setDoorState(nextOption); break
+                  }
+                }
+                return // Exit early to prevent normal replacement logic
+              }
+              // Same tool + different option → continue to normal replacement logic below
+            }
+          }
+          
+          // Normal replacement logic for different tools or touch events
           // For arrow tools, also check if it's the same direction
           const isSameArrowType = appState.activeTool === TOOLS.ARROW && 
             existingItem.type === currentToolType
@@ -867,7 +965,7 @@ const Canvas = ({
         }
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, doorState, eventType, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, deleteNoteAt])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, selectedColor, warpText, shuteStyle, arrowDirection, stairsText, doorState, eventType, updateCurrentFloorData, isDraggingNote, draggedNote, getNoteAt, deleteNoteAt, setShuteStyle, setEventType, setArrowDirection, setDoorState])
 
   const handleNoteDialogSave = useCallback((text) => {
     const { row, col } = noteDialog

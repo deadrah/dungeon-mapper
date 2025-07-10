@@ -224,6 +224,16 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
                 </div>
               </section>
 
+              {/* Click Cycling */}
+              <section>
+                <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.clickCycling.title}</h3>
+                <div style={{ color: theme.ui.panelText }}>
+                  {currentContent.sections.clickCycling.content.split('\n').map((line, index) => (
+                    <p key={index} className={index === 0 ? 'mb-3' : 'mb-1'}>{line}</p>
+                  ))}
+                </div>
+              </section>
+
               {/* Dungeon Options */}
               <section>
                 <h3 className="text-lg font-semibold mb-2" style={{ color: getHeadingColor() }}>{currentContent.sections.dungeonOptions.title}</h3>
