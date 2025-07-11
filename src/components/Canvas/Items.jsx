@@ -113,6 +113,8 @@ const Items = ({
               <rect x="1" y="2" width="2" height="20" fill={theme.items.stairs}/>
               <rect x="19" y="2" width="2" height="20" fill={theme.items.stairs}/>
               <rect x="3" y="2" width="16" height="20" fill={theme.items.stairs}/>
+              <rect x="3" y="2" width="16" height="1" fill={theme.items.stairs}/>
+              <rect x="3" y="21" width="16" height="1" fill={theme.items.stairs}/>
               <line x1="3" y1="2" x2="3" y2="22" stroke="#aaa" strokeWidth="2"/>
               <line x1="19" y1="2" x2="19" y2="22" stroke="#aaa" strokeWidth="2"/>
             </>
@@ -121,9 +123,11 @@ const Items = ({
             <>
               <rect x="1" y="2" width="2" height="20" fill={theme.items.stairs}/>
               <rect x="19" y="2" width="2" height="20" fill={theme.items.stairs}/>
-              <rect x="3" y="2" width="8" height="20" fill="#ccc"/>
-              <rect x="11" y="2" width="8" height="20" fill="#ccc"/>
-              <line x1="11" y1="2" x2="11" y2="22" stroke="#999" strokeWidth="1"/>
+              <rect x="3" y="2" width="16" height="1" fill={theme.items.stairs}/>
+              <rect x="3" y="21" width="16" height="1" fill={theme.items.stairs}/>
+              <rect x="3" y="3" width="8" height="18" fill="#ccc"/>
+              <rect x="11" y="3" width="8" height="18" fill="#ccc"/>
+              <line x1="11" y1="3" x2="11" y2="21" stroke="#999" strokeWidth="1"/>
               <circle cx="9" cy="12" r="0.5" fill={theme.items.stairs}/>
               <circle cx="13" cy="12" r="0.5" fill={theme.items.stairs}/>
             </>
