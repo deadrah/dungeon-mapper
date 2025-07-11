@@ -151,13 +151,14 @@ const Items = ({
             viewBox="0 0 100 100"
           >
             {isUp ? (
-              // Up stairs SVG (from up.svg)
+              // Up stairs SVG (updated design)
               <g>
-                <rect width="100" height="100" fill="transparent" />
-                <rect x="10" y="70" width="19" height="20" fill="gray" />
-                <rect x="30" y="50" width="19" height="40" fill="gray" />
-                <rect x="50" y="30" width="19" height="60" fill="gray" />
-                <rect x="70" y="10" width="19" height="80" fill="gray" />
+                <rect x="5" y="5" width="90" height="90" fill="none" stroke="#000000" stroke-width="6"></rect>
+                <rect x="10" y="70" width="21" height="20" fill="#aaa"></rect>
+                <rect x="30" y="50" width="21" height="40" fill="#aaa"></rect>
+                <rect x="50" y="30" width="21" height="60" fill="#aaa"></rect>
+                <rect x="70" y="10" width="20" height="80" fill="#aaa"></rect>
+                <polygon points="40,90 90,40 90,90" fill="black"/>
               </g>
             ) : (
               // Down stairs SVG (from down.svg)
