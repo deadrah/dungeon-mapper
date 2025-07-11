@@ -217,6 +217,18 @@ const Items = ({
             maskSize: 'contain'
           }} />
         )
+      } else if (item.eventType === 'trash') {
+        return (
+          <div style={{ 
+            width: cellSize * 0.8, 
+            height: cellSize * 0.8,
+            backgroundColor: theme.items.trash,
+            WebkitMask: 'url(./trash_simple.svg) no-repeat center',
+            WebkitMaskSize: 'contain',
+            mask: 'url(./trash_simple.svg) no-repeat center',
+            maskSize: 'contain'
+          }} />
+        )
       }
       return '!' // Default event marker
     }

@@ -9,7 +9,7 @@ import { GRID_SIZE, MIN_ZOOM, MAX_ZOOM, TOOLS } from '../../utils/constants'
 // Tool options definitions for cycling functionality
 const TOOL_OPTIONS = {
   [TOOLS.SHUTE]: ['filled', 'outline'],
-  [TOOLS.EVENT_MARKER]: ['default', 'combat', 'healing'],
+  [TOOLS.EVENT_MARKER]: ['default', 'combat', 'healing', 'trash'],
   [TOOLS.ARROW]: ['north', 'south', 'east', 'west', 'rotate'],
   [TOOLS.DOOR_ITEM]: ['closed', 'open']
 }
@@ -1308,6 +1308,7 @@ const Canvas = ({
             <option value="default">!</option>
             <option value="combat">×</option>
             <option value="healing">◎</option>
+            <option value="trash">🗑️</option>
           </select>
         </div>
       )}

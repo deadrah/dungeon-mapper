@@ -20,6 +20,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     currentPosition: theme.items.currentPosition,
     event: theme.items.event,
     fountain: theme.items.fountain,
+    trash: theme.items.trash,
     elevator: theme.items.elevator,
     teleport: theme.items.teleport,
     teleportBorder: theme.items.teleportBorder,
@@ -45,6 +46,7 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
     currentPosition: '#dc143c',
     event: '#ca0101',
     fountain: '#22c55e',
+    trash: '#6b7280',
     elevator: '#b8860b',
     teleport: '#06b6d4',
     teleportBorder: '#0891b2',
@@ -391,6 +393,16 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
         <circle cx="12" cy="8" r="1" fill="${fountainColor}"/>
         <circle cx="12" cy="11" r="1" fill="${fountainColor}"/>
         <circle cx="12" cy="14" r="1" fill="${fountainColor}"/>
+      </g>\n`
+          } else if (item.eventType === 'trash') {
+            // Trash event - embedded trash SVG
+            const iconSize = cellSize * 0.8
+            const iconX = centerX - iconSize / 2
+            const iconY = centerY - iconSize / 2
+            svg += `      <g transform="translate(${iconX}, ${iconY}) scale(${iconSize / 24})">
+        <rect x="5" y="5" width="14" height="2" fill="${colors.trash}"/>
+        <rect x="10" y="3" width="4" height="2" fill="${colors.trash}"/>
+        <path d="M6 8L18 8L17 20L7 20Z" fill="${colors.trash}"/>
       </g>\n`
           } else {
             // Default event - exclamation mark

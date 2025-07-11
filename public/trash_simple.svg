@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple trash can design -->
+  <!-- Lid -->
+  <rect x="5" y="5" width="14" height="2" fill="currentColor"/>
+  
+  <!-- Handle -->
+  <rect x="10" y="3" width="4" height="2" fill="currentColor"/>
+  
+  <!-- Main body -->
+  <path d="M6 8L18 8L17 20L7 20Z" fill="currentColor"/>
+</svg>
