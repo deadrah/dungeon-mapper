@@ -319,11 +319,12 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           // Up stairs SVG to match canvas (cellSize * 0.7, viewBox="0 0 100 100")
           const upSize = cellSize * 0.7
           svg += `      <svg x="${centerX - upSize/2}" y="${centerY - upSize/2}" width="${upSize}" height="${upSize}" viewBox="0 0 100 100">\n`
-          svg += `        <rect width="100" height="100" fill="transparent" />\n`
-          svg += `        <rect x="10" y="70" width="19" height="20" fill="gray" />\n`
-          svg += `        <rect x="30" y="50" width="19" height="40" fill="gray" />\n`
-          svg += `        <rect x="50" y="30" width="19" height="60" fill="gray" />\n`
-          svg += `        <rect x="70" y="10" width="19" height="80" fill="gray" />\n`
+          svg += `        <rect x="5" y="5" width="90" height="90" fill="none" stroke="${colors.stairs}" stroke-width="6"/>\n`
+          svg += `        <rect x="10" y="70" width="21" height="20" fill="#aaa"/>\n`
+          svg += `        <rect x="30" y="50" width="21" height="40" fill="#aaa"/>\n`
+          svg += `        <rect x="50" y="30" width="21" height="60" fill="#aaa"/>\n`
+          svg += `        <rect x="70" y="10" width="20" height="80" fill="#aaa"/>\n`
+          svg += `        <polygon points="40,90 90,40 90,90" fill="${colors.stairs}"/>\n`
           svg += `      </svg>\n`
           if (item.stairsText && item.stairsText.trim() !== '') {
             // テキスト位置をメイン画面と一致（top: '60%', left: '62%'）
@@ -338,11 +339,11 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           // Down stairs SVG to match canvas (cellSize * 0.7, viewBox="0 0 100 100")
           const downSize = cellSize * 0.7
           svg += `      <svg x="${centerX - downSize/2}" y="${centerY - downSize/2}" width="${downSize}" height="${downSize}" viewBox="0 0 100 100">\n`
-          svg += `        <rect width="100" height="100" fill="#333" />\n`
-          svg += `        <rect x="10" y="10" width="18" height="80" fill="#eee" />\n`
-          svg += `        <rect x="30" y="25" width="18" height="65" fill="#ccc" />\n`
-          svg += `        <rect x="50" y="40" width="18" height="50" fill="#aaa" />\n`
-          svg += `        <rect x="70" y="55" width="18" height="35" fill="#888" />\n`
+          svg += `        <rect width="100" height="100" fill="${colors.stairs}"/>\n`
+          svg += `        <rect x="10" y="10" width="18" height="80" fill="#eee"/>\n`
+          svg += `        <rect x="30" y="25" width="18" height="65" fill="#ccc"/>\n`
+          svg += `        <rect x="50" y="40" width="18" height="50" fill="#aaa"/>\n`
+          svg += `        <rect x="70" y="55" width="18" height="35" fill="#888"/>\n`
           svg += `      </svg>\n`
           if (item.stairsText && item.stairsText.trim() !== '') {
             // テキスト位置をメイン画面と一致（top: '60%', left: '62%'）
@@ -496,20 +497,24 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           svg += `      <svg x="${centerX - doorSize/2}" y="${centerY - doorSize/2}" width="${doorSize}" height="${doorSize}" viewBox="0 0 24 24">\n`
           if (isOpen) {
             // Open door SVG
-            svg += `        <rect x="1" y="2" width="2" height="20" fill="#666"/>\n`
-            svg += `        <rect x="19" y="2" width="2" height="20" fill="#666"/>\n`
-            svg += `        <rect x="3" y="2" width="16" height="20" fill="#333"/>\n`
+            svg += `        <rect x="1" y="2" width="2" height="20" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="19" y="2" width="2" height="20" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="3" y="2" width="16" height="20" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="3" y="2" width="16" height="1" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="3" y="21" width="16" height="1" fill="${colors.stairs}"/>\n`
             svg += `        <line x1="3" y1="2" x2="3" y2="22" stroke="#aaa" stroke-width="2"/>\n`
             svg += `        <line x1="19" y1="2" x2="19" y2="22" stroke="#aaa" stroke-width="2"/>\n`
           } else {
             // Closed door SVG
-            svg += `        <rect x="1" y="2" width="2" height="20" fill="#666"/>\n`
-            svg += `        <rect x="19" y="2" width="2" height="20" fill="#666"/>\n`
-            svg += `        <rect x="3" y="2" width="8" height="20" fill="#ccc"/>\n`
-            svg += `        <rect x="11" y="2" width="8" height="20" fill="#ccc"/>\n`
-            svg += `        <line x1="11" y1="2" x2="11" y2="22" stroke="#999" stroke-width="1"/>\n`
-            svg += `        <circle cx="9" cy="12" r="0.5" fill="#666"/>\n`
-            svg += `        <circle cx="13" cy="12" r="0.5" fill="#666"/>\n`
+            svg += `        <rect x="1" y="2" width="2" height="20" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="19" y="2" width="2" height="20" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="3" y="2" width="16" height="1" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="3" y="21" width="16" height="1" fill="${colors.stairs}"/>\n`
+            svg += `        <rect x="3" y="3" width="8" height="18" fill="#ccc"/>\n`
+            svg += `        <rect x="11" y="3" width="8" height="18" fill="#ccc"/>\n`
+            svg += `        <line x1="11" y1="3" x2="11" y2="21" stroke="#999" stroke-width="1"/>\n`
+            svg += `        <circle cx="9" cy="12" r="0.5" fill="${colors.stairs}"/>\n`
+            svg += `        <circle cx="13" cy="12" r="0.5" fill="${colors.stairs}"/>\n`
           }
           svg += `      </svg>\n`
           break
