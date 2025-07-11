@@ -26,10 +26,10 @@ export const themes = {
       teleport: '#2fb8d4',          // ワープポイントの塗りつぶし（Items.jsx - テレポートアイテム）
       teleportBorder: '#0c4b5b',    // ワープポイントの境界線（Items.jsx - テレポートアイテム枠）
       event: '#ca0101',             // イベントマーカー（Items.jsx - イベントアイテム）
-      fountain: '#22c55e',          // 回復の泉（Items.jsx - 回復イベント）
+      fountain: '#21b357',          // 回復の泉（Items.jsx - 回復イベント）
       trash: '#6b7280',             // ゴミ箱（Items.jsx - ゴミ箱イベント）
       elevator: '#b8860b',          // エレベーター（Items.jsx - エレベーターアイテム）
-      stairs: '#0000ff',            // 階段（Items.jsx - 階段アイテム）
+      stairs: '#000',            // 階段（Items.jsx - 階段アイテム）
       chest: '#d4a017',             // 宝箱（Items.jsx - 宝箱アイテム）
       currentPosition: '#dc143c',   // 現在位置マーカー（Items.jsx - 現在位置アイテム）
       arrow: '#345dd1',             // 矢印の色（Items.jsx - 矢印アイテム）
@@ -108,7 +108,7 @@ export const themes = {
       fountain: '#6b8e5a',          // 古い緑色（回復の泉）
       trash: '#8b7355',             // 古いブロンズ色（ゴミ箱）
       elevator: '#cd853f',          // アンティークゴールド
-      stairs: '#6b5b73',            // 古い石の色
+      stairs: '#3d2b1f',            // 古い石の色
       chest: '#b8860b',             // 古い金色
       currentPosition: '#b22222',   // ファイアブリック（赤み強化）
       arrow: '#6b5b73',             // 古い石の色
@@ -184,7 +184,7 @@ export const themes = {
       fountain: '#00b894',          // 明るい緑（回復の泉）
       trash: '#636e72',             // グレー（ゴミ箱）
       elevator: '#e17055',          // オレンジ（エレベーター）
-      stairs: '#6c5ce7',            // 濃い紫（階段）
+      stairs: '#193629',            // 濃い紫（階段）
       chest: '#e17055',             // オレンジ（宝箱）
       currentPosition: '#d63031',   // 濃い赤（現在位置）
       arrow: '#0984e3',             // 濃い青（矢印）
@@ -260,7 +260,7 @@ export const themes = {
       fountain: '#556b2f',          // ダークオリーブグリーン（回復の泉）
       trash: '#708090',             // スレートグレー（ゴミ箱）
       elevator: '#cd853f',          // ペルー色（エレベーター）
-      stairs: '#a0522d',            // サドルブラウン（階段）
+      stairs: '#3e1414',            // サドルブラウン（階段）
       chest: '#b99624',             // ゴールド（宝箱）
       chestBackground: '#fff3d0',   // ゴールド（宝箱背景）
       currentPosition: '#dc143c',   // クリムゾン（現在位置）

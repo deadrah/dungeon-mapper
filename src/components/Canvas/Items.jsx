@@ -110,22 +110,22 @@ const Items = ({
           {isOpen ? (
             // Open door SVG
             <>
-              <rect x="1" y="2" width="2" height="20" fill="#666"/>
-              <rect x="19" y="2" width="2" height="20" fill="#666"/>
-              <rect x="3" y="2" width="16" height="20" fill="#333"/>
+              <rect x="1" y="2" width="2" height="20" fill={theme.items.stairs}/>
+              <rect x="19" y="2" width="2" height="20" fill={theme.items.stairs}/>
+              <rect x="3" y="2" width="16" height="20" fill={theme.items.stairs}/>
               <line x1="3" y1="2" x2="3" y2="22" stroke="#aaa" strokeWidth="2"/>
               <line x1="19" y1="2" x2="19" y2="22" stroke="#aaa" strokeWidth="2"/>
             </>
           ) : (
             // Closed door SVG
             <>
-              <rect x="1" y="2" width="2" height="20" fill="#666"/>
-              <rect x="19" y="2" width="2" height="20" fill="#666"/>
+              <rect x="1" y="2" width="2" height="20" fill={theme.items.stairs}/>
+              <rect x="19" y="2" width="2" height="20" fill={theme.items.stairs}/>
               <rect x="3" y="2" width="8" height="20" fill="#ccc"/>
               <rect x="11" y="2" width="8" height="20" fill="#ccc"/>
               <line x1="11" y1="2" x2="11" y2="22" stroke="#999" strokeWidth="1"/>
-              <circle cx="9" cy="12" r="0.5" fill="#666"/>
-              <circle cx="13" cy="12" r="0.5" fill="#666"/>
+              <circle cx="9" cy="12" r="0.5" fill={theme.items.stairs}/>
+              <circle cx="13" cy="12" r="0.5" fill={theme.items.stairs}/>
             </>
           )}
         </svg>
@@ -153,17 +153,17 @@ const Items = ({
             {isUp ? (
               // Up stairs SVG (updated design)
               <g>
-                <rect x="5" y="5" width="90" height="90" fill="none" stroke="#000000" stroke-width="6"></rect>
+                <rect x="5" y="5" width="90" height="90" fill="none" stroke={theme.items.stairs} stroke-width="6"></rect>
                 <rect x="10" y="70" width="21" height="20" fill="#aaa"></rect>
                 <rect x="30" y="50" width="21" height="40" fill="#aaa"></rect>
                 <rect x="50" y="30" width="21" height="60" fill="#aaa"></rect>
                 <rect x="70" y="10" width="20" height="80" fill="#aaa"></rect>
-                <polygon points="40,90 90,40 90,90" fill="black"/>
+                <polygon points="40,90 90,40 90,90" fill={theme.items.stairs}/>
               </g>
             ) : (
               // Down stairs SVG (from down.svg)
               <g>
-                <rect width="100" height="100" fill="#333" />
+                <rect width="100" height="100" fill={theme.items.stairs} />
                 <rect x="10" y="10" width="18" height="80" fill="#eee" />
                 <rect x="30" y="25" width="18" height="65" fill="#ccc" />
                 <rect x="50" y="40" width="18" height="50" fill="#aaa" />
@@ -196,39 +196,41 @@ const Items = ({
     if (item.type === TOOLS.EVENT_MARKER) {
       if (item.eventType === 'combat') {
         return (
-          <div style={{ 
-            width: cellSize * 0.8, 
-            height: cellSize * 0.8,
-            backgroundColor: theme.items.event,
-            WebkitMask: 'url(./combat_simple.svg) no-repeat center',
-            WebkitMaskSize: 'contain',
-            mask: 'url(./combat_simple.svg) no-repeat center',
-            maskSize: 'contain'
-          }} />
+          <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 24 24" fill="none">
+            {/* Crossed swords */}
+            <path d="M4 20L17 7" stroke={theme.items.event} strokeWidth="2"/>
+            <polygon points="18.4,5.5 17.7,7.7 16.25,6.3" fill={theme.items.event}/>
+            <circle cx="4.5" cy="19.5" r="1.5" fill={theme.items.event}/>
+            <rect x="9" y="16" width="8" height="1" rx="0" fill={theme.items.event} transform="rotate(45 12 10)"/>
+            <path d="M20 20L7 7" stroke={theme.items.event} strokeWidth="2"/>
+            <polygon points="7.8,6.3 6.3,7.7 5.5,5.5" fill={theme.items.event}/>
+            <circle cx="19.5" cy="19.5" r="1.5" fill={theme.items.event}/>
+            <rect x="6.5" y="16" width="8" height="1" rx="0" fill={theme.items.event} transform="rotate(-45 12 10)"/>
+          </svg>
         )
       } else if (item.eventType === 'healing') {
         return (
-          <div style={{ 
-            width: cellSize * 0.8, 
-            height: cellSize * 0.8,
-            backgroundColor: theme.items.fountain,
-            WebkitMask: 'url(./fountain_simple.svg) no-repeat center',
-            WebkitMaskSize: 'contain',
-            mask: 'url(./fountain_simple.svg) no-repeat center',
-            maskSize: 'contain'
-          }} />
+          <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 24 24" fill="none">
+            {/* Healing fountain */}
+            <ellipse cx="12" cy="19" rx="11" ry="2" stroke={theme.items.fountain} strokeWidth="1" fill="none"/>
+            <ellipse cx="12" cy="19.5" rx="7" ry="1" stroke={theme.items.fountain} strokeWidth="0.5" fill={theme.items.fountain}/>
+            <circle cx="8" cy="8" r="0.8" fill={theme.items.fountain}/>
+            <circle cx="16" cy="8" r="0.8" fill={theme.items.fountain}/>
+            <circle cx="10" cy="6" r="1" fill={theme.items.fountain}/>
+            <circle cx="14" cy="6" r="1" fill={theme.items.fountain}/>
+            <circle cx="12" cy="8" r="1" fill={theme.items.fountain}/>
+            <circle cx="12" cy="11" r="1" fill={theme.items.fountain}/>
+            <circle cx="12" cy="14" r="1" fill={theme.items.fountain}/>
+          </svg>
         )
       } else if (item.eventType === 'trash') {
         return (
-          <div style={{ 
-            width: cellSize * 0.8, 
-            height: cellSize * 0.8,
-            backgroundColor: theme.items.trash,
-            WebkitMask: 'url(./trash_simple.svg) no-repeat center',
-            WebkitMaskSize: 'contain',
-            mask: 'url(./trash_simple.svg) no-repeat center',
-            maskSize: 'contain'
-          }} />
+          <svg width={cellSize * 0.8} height={cellSize * 0.8} viewBox="0 0 24 24" fill="none">
+            {/* Trash can */}
+            <rect x="5" y="5" width="14" height="2" fill={theme.items.trash}/>
+            <rect x="10" y="3" width="4" height="2" fill={theme.items.trash}/>
+            <path d="M6 8L18 8L17 20L7 20Z" fill={theme.items.trash}/>
+          </svg>
         )
       }
       return '!' // Default event marker

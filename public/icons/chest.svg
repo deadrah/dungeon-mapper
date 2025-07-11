@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chest base -->
+  <rect x="4" y="12" width="16" height="8" stroke="currentColor" stroke-width="1.5" fill="none" rx="1"/>
+  <!-- Chest lid -->
+  <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <!-- Chest lock -->
+  <circle cx="12" cy="12" r="1.5" stroke="currentColor" stroke-width="1" fill="currentColor"/>
+  <!-- Chest hinges -->
+  <rect x="6" y="11" width="1" height="2" fill="currentColor"/>
+  <rect x="17" y="11" width="1" height="2" fill="currentColor"/>
+</svg>

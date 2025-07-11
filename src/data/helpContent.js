@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.7.6',
+    version: 'バージョン 1.7.7',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -115,6 +115,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.7.7', date: '2025-07-11', changes: ['イベントマーカーにゴミ箱オプションを追加','SVGアイコンを一部調整'] },
           { version: 'v1.7.6', date: '2025-07-10', changes: ['イベントマーカーにオプション機能を追加：右下のオプションパネルでイベントタイプを選択可能（デフォルト！、戦闘、回復の泉）','複数のオプションアイテムを持つツールでクリックにより順次選択を可能に'] },
           { version: 'v1.7.5', date: '2025-07-09', changes: ['フロア数可変機能を追加：各ダンジョンのフロア数を1-100の範囲で設定可能（デフォルト20）'] },
           { version: 'v1.7.4', date: '2025-07-08', changes: ['レイアウト・テーマ微調整'] },
@@ -152,7 +153,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.7.6',
+    version: 'Version 1.7.7',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -265,6 +266,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.7.7', date: '2025-07-11', changes: ['Added trash option to Event Marker', 'Adjusted some SVG icons'] },
       { version: 'v1.7.6', date: '2025-07-10', changes: ['Added Event Marker options: Select event type in bottom-right options panel (Default !, Combat, Healing Fountain)', 'Enabled sequential selection through clicking for tools with multiple option items'] },
       { version: 'v1.7.5', date: '2025-07-09', changes: ['Added variable floor count feature: Set the number of floors for each dungeon (1-100 range, default 20)'] },
       { version: 'v1.7.4', date: '2025-07-08', changes: ['Layout and theme adjustments'] },
