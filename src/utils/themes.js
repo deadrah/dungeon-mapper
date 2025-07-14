@@ -31,6 +31,7 @@ export const themes = {
       elevator: '#b8860b',          // エレベーター（Items.jsx - エレベーターアイテム）
       stairs: '#000',            // 階段（Items.jsx - 階段アイテム）
       chest: '#d4a017',             // 宝箱（Items.jsx - 宝箱アイテム）
+      chestBackground: '#fff3d0',   // ゴールド（宝箱背景）
       currentPosition: '#dc143c',   // 現在位置マーカー（Items.jsx - 現在位置アイテム）
       arrow: '#345dd1',             // 矢印の色（Items.jsx - 矢印アイテム）
       note: '#ffffff',              // ノート背景（Items.jsx - ノートアイテム背景）
@@ -110,6 +111,7 @@ export const themes = {
       elevator: '#cd853f',          // アンティークゴールド
       stairs: '#3d2b1f',            // 古い石の色
       chest: '#b8860b',             // 古い金色
+      chestBackground: '#fff3d0',   // ゴールド（宝箱背景）
       currentPosition: '#b22222',   // ファイアブリック（赤み強化）
       arrow: '#6b5b73',             // 古い石の色
       note: '#faf6f0',              // 非常に薄いセピア
@@ -185,7 +187,8 @@ export const themes = {
       trash: '#636e72',             // グレー（ゴミ箱）
       elevator: '#e17055',          // オレンジ（エレベーター）
       stairs: '#193629',            // 濃い紫（階段）
-      chest: '#e17055',             // オレンジ（宝箱）
+      chest: '#b99624',             // ゴールド（宝箱）
+      chestBackground: '#fff3d0',   // ゴールド（宝箱背景）
       currentPosition: '#d63031',   // 濃い赤（現在位置）
       arrow: '#0984e3',             // 濃い青（矢印）
       note: '#ffffff',              // 白（ノート背景）

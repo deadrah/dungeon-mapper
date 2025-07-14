@@ -48,10 +48,10 @@ const Items = ({
           {/* Chest lid */}
           <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke={theme.items.chest} strokeWidth="1.5" fill={theme.items.chestBackground || "none"}/>
           {/* Chest lock */}
-          <circle cx="12" cy="12" r="1.5" stroke={theme.items.chest} strokeWidth="1" fill={theme.items.chest}/>
+          <polygon points="12,10 14,12 12,14 10,12" stroke={theme.items.chest} strokeWidth="1" fill={theme.items.chest} />
           {/* Chest hinges */}
-          <rect x="6" y="11" width="1" height="2" fill={theme.items.chest}/>
-          <rect x="17" y="11" width="1" height="2" fill={theme.items.chest}/>
+          <rect x="6" y="11" width="1" height="8" fill={theme.items.chest}/>
+          <rect x="17" y="11" width="1" height="8" fill={theme.items.chest}/>
         </svg>
       )
     }
@@ -157,7 +157,7 @@ const Items = ({
             {isUp ? (
               // Up stairs SVG (updated design)
               <g>
-                <rect x="5" y="5" width="90" height="90" fill="none" stroke={theme.items.stairs} stroke-width="6"></rect>
+                <rect x="5" y="5" width="90" height="90" fill="none" stroke={theme.items.stairs} strokeWidth="6"></rect>
                 <rect x="10" y="70" width="21" height="20" fill="#aaa"></rect>
                 <rect x="30" y="50" width="21" height="40" fill="#aaa"></rect>
                 <rect x="50" y="30" width="21" height="60" fill="#aaa"></rect>

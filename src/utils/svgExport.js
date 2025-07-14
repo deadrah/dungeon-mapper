@@ -307,10 +307,10 @@ export const exportFloorAsSVG = (floorData, gridSize, mapName = 'DMapper', floor
           // Chest lid
           svg += `        <path d="M4 12 Q4 8 12 8 Q20 8 20 12" stroke="${colors.chest}" stroke-width="1.5" fill="none"/>\n`
           // Chest lock
-          svg += `        <circle cx="12" cy="12" r="1.5" stroke="${colors.chest}" stroke-width="1" fill="${colors.chest}"/>\n`
+          svg += `        <polygon points="12,10 14,12 12,14 10,12" stroke="${colors.chest}" stroke-width="1" fill="${colors.chest}"/>\n`
           // Chest hinges
-          svg += `        <rect x="6" y="11" width="1" height="2" fill="${colors.chest}"/>\n`
-          svg += `        <rect x="17" y="11" width="1" height="2" fill="${colors.chest}"/>\n`
+          svg += `        <rect x="6" y="11" width="1" height="8" fill="${colors.chest}"/>\n`
+          svg += `        <rect x="17" y="11" width="1" height="8" fill="${colors.chest}"/>\n`
           svg += `      </svg>\n`
           break
         }
