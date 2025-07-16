@@ -187,8 +187,8 @@ export const themes = {
       trash: '#636e72',             // グレー（ゴミ箱）
       elevator: '#e17055',          // オレンジ（エレベーター）
       stairs: '#193629',            // 濃い紫（階段）
-      chest: '#b99624',             // ゴールド（宝箱）
-      chestBackground: '#fff3d0',   // ゴールド（宝箱背景）
+      chest: '#219785',             // ゴールド（宝箱）
+      chestBackground: '#c0fff5',   // ゴールド（宝箱背景）
       currentPosition: '#d63031',   // 濃い赤（現在位置）
       arrow: '#0984e3',             // 濃い青（矢印）
       note: '#ffffff',              // 白（ノート背景）
