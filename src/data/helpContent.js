@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.8.0',
+    version: 'バージョン 1.8.1',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -116,6 +116,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.8.1', date: '2026-03-17', changes: ['MonochromeAltテーマを追加：デフォルト背景色が白のテーマ。踏破床を塗り潰すのが不要な場合などにどうぞ'] },
           { version: 'v1.8.0', date: '2026-03-17', changes: ['座標シフト機能を追加：フロアオプションから配置済全オブジェクトを指定X/Yマス移動可能に'] },
           { version: 'v1.7.7', date: '2025-07-11', changes: ['イベントマーカーにゴミ箱オプションを追加','SVGアイコンを一部調整'] },
           { version: 'v1.7.6', date: '2025-07-10', changes: ['イベントマーカーにオプション機能を追加：右下のオプションパネルでイベントタイプを選択可能（デフォルト！、戦闘、回復の泉）','複数のオプションアイテムを持つツールでクリックにより順次選択を可能に'] },
@@ -155,7 +156,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.8.0',
+    version: 'Version 1.8.1',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -269,6 +270,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.8.1', date: '2026-03-17', changes: ['Added MonochromeAlt theme: A theme with white as the default background color. Use it when you don\'t need to fill in explored floors'] },
       { version: 'v1.8.0', date: '2026-03-17', changes: ['Added coordinate shift feature: all placed objects can be moved by specified X/Y squares from Floor Options'] },
       { version: 'v1.7.7', date: '2025-07-11', changes: ['Added trash option to Event Marker', 'Adjusted some SVG icons'] },
       { version: 'v1.7.6', date: '2025-07-10', changes: ['Added Event Marker options: Select event type in bottom-right options panel (Default !, Combat, Healing Fountain)', 'Enabled sequential selection through clicking for tools with multiple option items'] },
