@@ -83,7 +83,14 @@ export const MESSAGES = {
     importFailed: 'インポートに失敗しました',
     svgExportFailed: 'SVGエクスポートに失敗しました',
     unsupportedFileFormat: 'サポートされていないファイル形式です。DMapperからエクスポートされたJSONファイルを選択してください。',
-    invalidJsonFile: 'ファイルの読み取りに失敗しました。有効なJSONファイルを選択してください。'
+    invalidJsonFile: 'ファイルの読み取りに失敗しました。有効なJSONファイルを選択してください。',
+
+    // Coordinate shift
+    shiftFloor: '座標シフト',
+    shiftX: 'X（横方向）',
+    shiftY: 'Y（縦方向）',
+    applyShift: 'シフト実行',
+    shiftOutOfBoundsConfirm: 'シフトにより{count}個のオブジェクトが範囲外になり削除されます。続行しますか？'
   },
   
   en: {
@@ -169,7 +176,14 @@ export const MESSAGES = {
     importFailed: 'Import failed',
     svgExportFailed: 'SVG export failed',
     unsupportedFileFormat: 'Unsupported file format. Please select a JSON file exported from DMapper.',
-    invalidJsonFile: 'Failed to read file. Please select a valid JSON file.'
+    invalidJsonFile: 'Failed to read file. Please select a valid JSON file.',
+
+    // Coordinate shift
+    shiftFloor: 'Coordinate Shift',
+    shiftX: 'X (Horizontal)',
+    shiftY: 'Y (Vertical)',
+    applyShift: 'Apply Shift',
+    shiftOutOfBoundsConfirm: '{count} object(s) will be deleted as they go out of bounds. Continue?'
   }
 }
 

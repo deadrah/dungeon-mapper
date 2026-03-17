@@ -37,7 +37,8 @@ function App() {
     getNoteAt,
     setNoteAt,
     deleteNoteAt,
-    moveNoteAt
+    moveNoteAt,
+    shiftCurrentFloor
   } = useAppState()
 
 
@@ -118,6 +119,7 @@ function App() {
         onUndo={undo}
         onRedo={redo}
         onResetFloor={resetCurrentFloor}
+        onFloorShift={shiftCurrentFloor}
         onResetAllDungeons={resetAllDungeons}
         onExportSVG={exportFloorSVG}
         onFloorCopy={copyFloor}

@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.7.7',
+    version: 'バージョン 1.8.0',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -80,6 +80,7 @@ export const helpContent = {
           { label: 'フロア名変更:', desc: 'フロアにカスタム名を設定' },
           { label: 'フロアコピー:', desc: '現在のフロアを他のダンジョン・フロアにコピー（GridSize差異は自動座標変換）' },
           { label: 'SVG画像ダウンロード:', desc: '現在のフロアをSVG形式でエクスポート' },
+          { label: '座標シフト:', desc: '配置済みの全オブジェクト（壁・床・アイテム・ドア・メモ）を指定したX/Yマス数分まとめて移動。範囲外になるオブジェクトは削除前に確認ダイアログを表示' },
           { label: 'フロアリセット:', desc: '現在のフロアのデータをすべて削除' }
         ]
       },
@@ -115,6 +116,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.8.0', date: '2026-03-17', changes: ['座標シフト機能を追加：フロアオプションから配置済全オブジェクトを指定X/Yマス移動可能に'] },
           { version: 'v1.7.7', date: '2025-07-11', changes: ['イベントマーカーにゴミ箱オプションを追加','SVGアイコンを一部調整'] },
           { version: 'v1.7.6', date: '2025-07-10', changes: ['イベントマーカーにオプション機能を追加：右下のオプションパネルでイベントタイプを選択可能（デフォルト！、戦闘、回復の泉）','複数のオプションアイテムを持つツールでクリックにより順次選択を可能に'] },
           { version: 'v1.7.5', date: '2025-07-09', changes: ['フロア数可変機能を追加：各ダンジョンのフロア数を1-100の範囲で設定可能（デフォルト20）'] },
@@ -153,7 +155,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.7.7',
+    version: 'Version 1.8.0',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -231,6 +233,7 @@ export const helpContent = {
           { label: 'Floor Rename:', desc: 'Set custom names for floors' },
           { label: 'Floor Copy:', desc: 'Copy current floor to other dungeons/floors (automatic coordinate transformation for GridSize differences)' },
           { label: 'SVG Image Download:', desc: 'Export current floor as SVG format' },
+          { label: 'Coordinate Shift:', desc: 'Move all placed objects (walls, floors, items, doors, notes) by specified X/Y squares at once. A confirmation dialog is shown before deleting objects that go out of bounds' },
           { label: 'Floor Reset:', desc: 'Delete all data on current floor' }
         ]
       },
@@ -266,6 +269,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.8.0', date: '2026-03-17', changes: ['Added coordinate shift feature: all placed objects can be moved by specified X/Y squares from Floor Options'] },
       { version: 'v1.7.7', date: '2025-07-11', changes: ['Added trash option to Event Marker', 'Adjusted some SVG icons'] },
       { version: 'v1.7.6', date: '2025-07-10', changes: ['Added Event Marker options: Select event type in bottom-right options panel (Default !, Combat, Healing Fountain)', 'Enabled sequential selection through clicking for tools with multiple option items'] },
       { version: 'v1.7.5', date: '2025-07-09', changes: ['Added variable floor count feature: Set the number of floors for each dungeon (1-100 range, default 20)'] },

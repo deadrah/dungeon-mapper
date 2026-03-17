@@ -31,6 +31,7 @@ const Header = ({
   onMaxFloorsChange,
   onDungeonReset,
   onResetFloor,
+  onFloorShift,
   onResetAllDungeons,
   onExportSVG,
   onFloorCopy,
@@ -344,7 +345,9 @@ const Header = ({
         maxFloors={maxFloors}
         onFloorChange={setCurrentFloor}
         onFloorRename={setFloorName}
+        gridSize={gridSize}
         onFloorReset={onResetFloor}
+        onFloorShift={onFloorShift}
         onExportSVG={onExportSVG}
         onOpenCopyFloor={handleOpenCopyFloor}
         theme={theme}

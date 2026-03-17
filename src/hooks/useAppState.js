@@ -1424,6 +1424,101 @@ export const useAppState = () => {
     }
   }, [state, getCurrentFloorData])
 
+  const shiftCurrentFloor = useCallback((shiftX, shiftY) => {
+    updateState(state => {
+      const dungeon = state.dungeons[state.currentDungeon]
+      const gridSize = dungeon?.gridSize || state.gridSize
+      const floor = dungeon?.floors[state.currentFloor]
+      if (!floor) return state
+
+      const { rows, cols } = gridSize
+
+      const newGrid = new Array(rows).fill(null).map(() => new Array(cols).fill(null))
+      if (floor.grid) {
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const srcR = r - shiftY
+            const srcC = c - shiftX
+            if (srcR >= 0 && srcR < rows && srcC >= 0 && srcC < cols) {
+              newGrid[r][c] = floor.grid[srcR][srcC]
+            }
+          }
+        }
+      }
+
+      const shiftedItems = (floor.items || [])
+        .map(item => ({ ...item, row: item.row + shiftY, col: item.col + shiftX }))
+        .filter(item => item.row >= 0 && item.row < rows && item.col >= 0 && item.col < cols)
+
+      // Vertical walls use bottom-up row coords; horizontal walls use top-down row coords.
+      // So for horizontal walls/doors, shiftY must be negated.
+      const shiftedWalls = (floor.walls || [])
+        .map(wall => {
+          const isVertical = wall.startCol === wall.endCol
+          const rowDelta = isVertical ? shiftY : -shiftY
+          return {
+            ...wall,
+            startRow: wall.startRow + rowDelta,
+            endRow: wall.endRow + rowDelta,
+            startCol: wall.startCol + shiftX,
+            endCol: wall.endCol + shiftX,
+          }
+        })
+        .filter(wall =>
+          wall.startRow >= 0 && wall.endRow >= 0 &&
+          wall.startRow <= rows && wall.endRow <= rows &&
+          wall.startCol >= 0 && wall.endCol >= 0 &&
+          wall.startCol <= cols && wall.endCol <= cols
+        )
+
+      const shiftedDoors = (floor.doors || [])
+        .map(door => {
+          const isVertical = door.startCol === door.endCol
+          const rowDelta = isVertical ? shiftY : -shiftY
+          return {
+            ...door,
+            startRow: door.startRow + rowDelta,
+            endRow: door.endRow + rowDelta,
+            startCol: door.startCol + shiftX,
+            endCol: door.endCol + shiftX,
+          }
+        })
+        .filter(door =>
+          door.startRow >= 0 && door.endRow >= 0 &&
+          door.startRow <= rows && door.endRow <= rows &&
+          door.startCol >= 0 && door.endCol >= 0 &&
+          door.startCol <= cols && door.endCol <= cols
+        )
+
+      const shiftedNotes = (floor.notes || [])
+        .map(note => ({ ...note, row: note.row + shiftY, col: note.col + shiftX }))
+        .filter(note => note.row >= 0 && note.row < rows && note.col >= 0 && note.col < cols)
+
+      const newFloor = {
+        ...floor,
+        grid: newGrid,
+        items: shiftedItems,
+        walls: shiftedWalls,
+        doors: shiftedDoors,
+        notes: shiftedNotes,
+      }
+
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [state.currentDungeon]: {
+            ...dungeon,
+            floors: {
+              ...dungeon.floors,
+              [state.currentFloor]: newFloor,
+            }
+          }
+        }
+      }
+    })
+  }, [updateState])
+
   return {
     state,
     updateState,
@@ -1456,6 +1551,7 @@ export const useAppState = () => {
     getNoteAt,
     setNoteAt,
     deleteNoteAt,
-    moveNoteAt
+    moveNoteAt,
+    shiftCurrentFloor
   }
 }
