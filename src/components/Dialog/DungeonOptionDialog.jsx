@@ -278,7 +278,7 @@ const DungeonOptionDialog = ({
               type="number"
               value={pendingGridSize.cols}
               onChange={(e) => {
-                const cols = Math.max(1, Math.min(50, parseInt(e.target.value) || 20))
+                const cols = Math.max(1, Math.min(99, parseInt(e.target.value) || 20))
                 setPendingGridSize(prev => ({ ...prev, cols }))
               }}
               className="px-2 py-1 rounded text-sm w-16"
@@ -288,14 +288,14 @@ const DungeonOptionDialog = ({
                 border: `1px solid ${theme.ui.border}` 
               }}
               min="1"
-              max="50"
+              max="99"
             />
             <span className="text-sm" style={{ color: theme.ui.panelText }}>Y:</span>
             <input
               type="number"
               value={pendingGridSize.rows}
               onChange={(e) => {
-                const rows = Math.max(1, Math.min(50, parseInt(e.target.value) || 20))
+                const rows = Math.max(1, Math.min(99, parseInt(e.target.value) || 20))
                 setPendingGridSize(prev => ({ ...prev, rows }))
               }}
               className="px-2 py-1 rounded text-sm w-16"
@@ -305,7 +305,7 @@ const DungeonOptionDialog = ({
                 border: `1px solid ${theme.ui.border}` 
               }}
               min="1"
-              max="50"
+              max="99"
             />
           </div>
           {(pendingGridSize.rows !== gridSize.rows || pendingGridSize.cols !== gridSize.cols) && (

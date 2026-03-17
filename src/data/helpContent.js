@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.8.1',
+    version: 'バージョン 1.8.2',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -66,7 +66,7 @@ export const helpContent = {
         items: [
           { label: 'ダンジョン選択:', desc: '編集対象のダンジョンを選択' },
           { label: 'ダンジョン名変更:', desc: 'ダンジョンにカスタム名を設定' },
-          { label: 'グリッドサイズ調整:', desc: '幅と高さを個別に設定（1x1〜50x50）' },
+          { label: 'グリッドサイズ調整:', desc: '幅と高さを個別に設定（1x1〜99x99）' },
           { label: 'フロア数設定:', desc: '各ダンジョンのフロア数を1-100の範囲で設定（デフォルト20）' },
           { label: 'ダンジョンリセット:', desc: '現在のダンジョンを完全に初期化' },
           { label: 'ダンジョン保存:', desc: '選択したダンジョンをJSONファイルでダウンロード' },
@@ -116,6 +116,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.8.2', date: '2026-03-17', changes: ['グリッドサイズの最大値を50x50から99x99に拡大'] },
           { version: 'v1.8.1', date: '2026-03-17', changes: ['MonochromeAltテーマを追加：デフォルト背景色が白のテーマ。踏破床を塗り潰すのが不要な場合などにどうぞ'] },
           { version: 'v1.8.0', date: '2026-03-17', changes: ['座標シフト機能を追加：フロアオプションから配置済全オブジェクトを指定X/Yマス移動可能に'] },
           { version: 'v1.7.7', date: '2025-07-11', changes: ['イベントマーカーにゴミ箱オプションを追加','SVGアイコンを一部調整'] },
@@ -156,7 +157,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.8.1',
+    version: 'Version 1.8.2',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -220,7 +221,7 @@ export const helpContent = {
         items: [
           { label: 'Dungeon Selection:', desc: 'Select target dungeon for editing' },
           { label: 'Dungeon Rename:', desc: 'Set custom names for dungeons' },
-          { label: 'Grid Size Adjustment:', desc: 'Set width and height individually (1x1 to 50x50)' },
+          { label: 'Grid Size Adjustment:', desc: 'Set width and height individually (1x1 to 99x99)' },
           { label: 'Floor Count Setting:', desc: 'Set the number of floors for each dungeon (1-100 range, default 20)' },
           { label: 'Dungeon Reset:', desc: 'Completely initialize current dungeon' },
           { label: 'Save Dungeon:', desc: 'Download selected dungeon as JSON file' },
@@ -270,6 +271,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.8.2', date: '2026-03-17', changes: ['Expanded maximum grid size from 50x50 to 99x99'] },
       { version: 'v1.8.1', date: '2026-03-17', changes: ['Added MonochromeAlt theme: A theme with white as the default background color. Use it when you don\'t need to fill in explored floors'] },
       { version: 'v1.8.0', date: '2026-03-17', changes: ['Added coordinate shift feature: all placed objects can be moved by specified X/Y squares from Floor Options'] },
       { version: 'v1.7.7', date: '2025-07-11', changes: ['Added trash option to Event Marker', 'Adjusted some SVG icons'] },
