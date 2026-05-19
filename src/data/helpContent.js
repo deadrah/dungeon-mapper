@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.8.2',
+    version: 'バージョン 1.8.3',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -116,6 +116,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.8.3', date: '2026-05-19', changes: ['線や床の描画時、高速でドラッグすると間が抜ける問題の修正'] },
           { version: 'v1.8.2', date: '2026-03-17', changes: ['グリッドサイズの最大値を50x50から99x99に拡大'] },
           { version: 'v1.8.1', date: '2026-03-17', changes: ['MonochromeAltテーマを追加：デフォルト背景色が白のテーマ。踏破床を塗り潰すのが不要な場合などにどうぞ'] },
           { version: 'v1.8.0', date: '2026-03-17', changes: ['座標シフト機能を追加：フロアオプションから配置済全オブジェクトを指定X/Yマス移動可能に'] },
@@ -157,7 +158,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.8.2',
+    version: 'Version 1.8.3',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -271,6 +272,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.8.3', date: '2026-05-19', changes: ['Fixed an issue where fast dragging left gaps between cells when drawing lines or floors'] },
       { version: 'v1.8.2', date: '2026-03-17', changes: ['Expanded maximum grid size from 50x50 to 99x99'] },
       { version: 'v1.8.1', date: '2026-03-17', changes: ['Added MonochromeAlt theme: A theme with white as the default background color. Use it when you don\'t need to fill in explored floors'] },
       { version: 'v1.8.0', date: '2026-03-17', changes: ['Added coordinate shift feature: all placed objects can be moved by specified X/Y squares from Floor Options'] },

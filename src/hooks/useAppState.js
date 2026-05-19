@@ -583,22 +583,27 @@ export const useAppState = () => {
   }, [updateState])
 
   const updateCurrentFloorData = useCallback((dataType, data) => {
-    updateState(state => ({
-      ...state,
-      dungeons: {
-        ...state.dungeons,
-        [state.currentDungeon]: {
-          ...state.dungeons[state.currentDungeon],
-          floors: {
-            ...state.dungeons[state.currentDungeon].floors,
-            [state.currentFloor]: {
-              ...state.dungeons[state.currentDungeon].floors[state.currentFloor],
-              [dataType]: data
+    updateState(state => {
+      const currentFloor = state.dungeons[state.currentDungeon].floors[state.currentFloor] || {}
+      // 関数型 setter 対応：data が関数なら最新の値を渡して評価する（連続呼び出しでの stale closure 回避）
+      const newValue = typeof data === 'function' ? data(currentFloor[dataType]) : data
+      return {
+        ...state,
+        dungeons: {
+          ...state.dungeons,
+          [state.currentDungeon]: {
+            ...state.dungeons[state.currentDungeon],
+            floors: {
+              ...state.dungeons[state.currentDungeon].floors,
+              [state.currentFloor]: {
+                ...currentFloor,
+                [dataType]: newValue
+              }
             }
           }
         }
       }
-    }))
+    })
   }, [updateState])
 
   const getCurrentFloorData = useCallback(() => {

@@ -6,6 +6,26 @@ import Doors from './Doors'
 import NoteDialog from '../Dialog/NoteDialog'
 import { GRID_SIZE, MIN_ZOOM, MAX_ZOOM, TOOLS } from '../../utils/constants'
 
+// 高速ドラッグでセルが抜けないように、(r1,c1)→(r2,c2) の中間セルを Bresenham で列挙する（両端含む）
+const cellsBetween = (r1, c1, r2, c2) => {
+  const cells = []
+  const dr = Math.abs(r2 - r1)
+  const dc = Math.abs(c2 - c1)
+  const sr = r1 < r2 ? 1 : -1
+  const sc = c1 < c2 ? 1 : -1
+  let err = dc - dr
+  let r = r1
+  let c = c1
+  while (true) {
+    cells.push([r, c])
+    if (r === r2 && c === c2) break
+    const e2 = err * 2
+    if (e2 > -dr) { err -= dr; c += sc }
+    if (e2 < dc) { err += dc; r += sr }
+  }
+  return cells
+}
+
 // Tool options definitions for cycling functionality
 const TOOL_OPTIONS = {
   [TOOLS.SHUTE]: ['filled', 'outline'],
@@ -66,6 +86,10 @@ const Canvas = ({
     isDraggingNote: false,
     dragHoverCell: null
   })
+
+  // 高速ドラッグ時のセル抜け補間用：前回処理したセル位置を保持する
+  const lastLineCellRef = useRef(null) // ラインドラッグ用 { row, col }（ライン座標系）
+  const lastFillCellRef = useRef(null) // 塗りつぶしドラッグ用 { row, col }（表示行座標系）
 
   const floorData = getCurrentFloorData() || { grid: [], walls: [], items: [], doors: [] }
 
@@ -153,7 +177,13 @@ const Canvas = ({
     if (e.button === 2) {
       e.preventDefault()
     }
-    
+
+    // 新しいドラッグの開始ごとに補間用 ref を初期化（前回 mouseup を取り逃した場合の保険）
+    // 左ボタン（塗り／ERASER）／右ボタン（削除）どちらの開始でもリセットする
+    if (e.button === 0 || e.button === 2) {
+      lastFillCellRef.current = null
+    }
+
     // Check for note click first
     if (e.target.hasAttribute('data-note-row') && e.target.hasAttribute('data-note-col')) {
       const noteRow = parseInt(e.target.getAttribute('data-note-row'))
@@ -364,20 +394,22 @@ const Canvas = ({
     }
     
     if (isDraggingErase) {
-      // Remove wall at this position
-      const newWalls = (floorData.walls || []).filter(wall => 
-        !(wall.startRow === actualRow && wall.startCol === col &&
-          ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
+      // 関数型 setter で最新の walls を基準に削除する（連続呼び出しでの取りこぼし防止）
+      updateCurrentFloorData('walls', (prevWalls) =>
+        (prevWalls || []).filter(wall =>
+          !(wall.startRow === actualRow && wall.startCol === col &&
+            ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
+        )
       )
-      updateCurrentFloorData('walls', newWalls)
     } else if (isDraggingLine) {
-      const existingWallIndex = (floorData.walls || []).findIndex(wall => 
-        wall.startRow === actualRow && wall.startCol === col &&
-        ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol))
-      )
-      
-      if (existingWallIndex === -1) {
-        // Add new wall/line
+      // 関数型 setter で最新の walls を見て既存壁の重複チェック → 追加（連続呼び出しで stale な walls を見ない）
+      updateCurrentFloorData('walls', (prevWalls) => {
+        const walls = prevWalls || []
+        const exists = walls.some(wall =>
+          wall.startRow === actualRow && wall.startCol === col &&
+          ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol))
+        )
+        if (exists) return walls
         const newWall = isVertical ? {
           startRow: actualRow,
           startCol: col,
@@ -391,11 +423,10 @@ const Canvas = ({
           endCol: col + 1, // Horizontal line
           id: Date.now() + Math.random()
         }
-        const newWalls = [...(floorData.walls || []), newWall]
-        updateCurrentFloorData('walls', newWalls)
-      }
+        return [...walls, newWall]
+      })
     }
-  }, [isDraggingLine, isDraggingErase, dragLineType, appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.walls, updateCurrentFloorData])
+  }, [isDraggingLine, isDraggingErase, dragLineType, appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, updateCurrentFloorData])
 
   const handleMouseUp = useCallback(() => {
     // Get stable references to current drag states
@@ -450,6 +481,9 @@ const Canvas = ({
     setDragStartMousePos(null)
     setDragDirectionDetected(false)
     setIsRightMouseDown(false) // Reset right mouse button state
+    // 補間用の前回セル参照もリセット（次のドラッグの起点を新規にする）
+    lastLineCellRef.current = null
+    lastFillCellRef.current = null
   }, [getNoteAt, deleteNoteAt, setNoteAt, moveNoteAt])
 
   const handleLineClick = useCallback((row, col, isVertical, event = null) => {
@@ -500,19 +534,24 @@ const Canvas = ({
     // Handle eraser tool for lines with priority-based deletion
     if (appState.activeTool === TOOLS.ERASER) {
       const deletionTarget = getNextLineDeletionTarget(actualRow, col)
-      
+
       if (deletionTarget === 'door') {
-        // Remove doors at this position (higher priority)
-        const newDoors = (floorData.doors || []).filter(door => 
-          !(door.startRow === actualRow && door.startCol === col)
+        // 関数型 setter で最新の doors から削除（高速ドラッグでの連続呼び出しに対応）
+        updateCurrentFloorData('doors', (prevDoors) =>
+          (prevDoors || []).filter(door =>
+            !(door.startRow === actualRow && door.startCol === col)
+          )
         )
-        updateCurrentFloorData('doors', newDoors)
       } else if (deletionTarget === 'wall') {
-        // Remove walls at this position (lower priority)
-        if (existingWallIndex !== -1) {
-          const newWalls = (floorData.walls || []).filter((_, index) => index !== existingWallIndex)
-          updateCurrentFloorData('walls', newWalls)
-        }
+        // 同セル・同方向の壁のみ削除（最新の walls 基準）
+        updateCurrentFloorData('walls', (prevWalls) =>
+          (prevWalls || []).filter(wall => !(
+            wall.startRow === actualRow && wall.startCol === col &&
+            (isVertical
+              ? (wall.endRow === actualRow + 1 && wall.endCol === col)
+              : (wall.endRow === actualRow && wall.endCol === col + 1))
+          ))
+        )
       }
       return;
     }
@@ -542,6 +581,7 @@ const Canvas = ({
         setDragStartRow(row)
         setDragStartCol(col)
         setDragDirectionDetected(false)
+        lastLineCellRef.current = { row, col }
         
         // Store initial mouse position for direction detection
         if (event) {
@@ -655,7 +695,8 @@ const Canvas = ({
     setDragStartRow(row)
     setDragStartCol(col)
     setDragDirectionDetected(false)
-    
+    lastLineCellRef.current = { row, col }
+
     // Store initial mouse position for direction detection
     if (event) {
       const rect = event.target.closest('svg').getBoundingClientRect()
@@ -664,26 +705,28 @@ const Canvas = ({
         y: event.clientY - rect.top
       })
     }
-    
+
     // Handle deletion based on active tool
     const lineTools = ['line'];
     const otherLineTools = ['door_open', 'door_closed', 'line_arrow_north', 'line_arrow_south', 'line_arrow_east', 'line_arrow_west'];
     
     if (lineTools.includes(appState.activeTool)) {
-      // Line tool: Remove walls only
-      const newWalls = (floorData.walls || []).filter(wall => 
-        !(wall.startRow === actualRow && wall.startCol === col &&
-          ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
+      // Line tool: Remove walls only（関数型 setter で最新の walls 基準）
+      updateCurrentFloorData('walls', (prevWalls) =>
+        (prevWalls || []).filter(wall =>
+          !(wall.startRow === actualRow && wall.startCol === col &&
+            ((isVertical && wall.endRow !== wall.startRow) || (!isVertical && wall.endCol !== wall.startCol)))
+        )
       )
-      updateCurrentFloorData('walls', newWalls)
     } else if (otherLineTools.includes(appState.activeTool)) {
-      // Door tools: Remove doors only (regardless of wall existence)
-      const newDoors = (floorData.doors || []).filter(door => 
-        !(door.startRow === actualRow && door.startCol === col)
+      // Door tools: Remove doors only（関数型 setter で最新の doors 基準）
+      updateCurrentFloorData('doors', (prevDoors) =>
+        (prevDoors || []).filter(door =>
+          !(door.startRow === actualRow && door.startCol === col)
+        )
       )
-      updateCurrentFloorData('doors', newDoors)
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.walls, floorData.doors, updateCurrentFloorData])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, updateCurrentFloorData])
 
   const handleGridClick = useCallback((row, col, _event = null) => {
     // Ensure coordinates are within bounds
@@ -776,54 +819,101 @@ const Canvas = ({
     // Handle eraser tool with priority-based deletion
     if (appState.activeTool === TOOLS.ERASER) {
       const deletionTarget = getNextGridDeletionTarget(actualRow, col)
-      
+
       if (deletionTarget === 'note') {
         // Remove notes at this position (highest priority)
         deleteNoteAt(actualRow, col)
       } else if (deletionTarget === 'item') {
-        // Remove items at this position
-        const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
-        updateCurrentFloorData('items', newItems)
+        // 関数型 setter で最新の items から削除（高速ドラッグでの連続呼び出しに対応）
+        updateCurrentFloorData('items', (prevItems) =>
+          (prevItems || []).filter(item => !(item.row === actualRow && item.col === col))
+        )
       } else if (deletionTarget === 'grid') {
-        // Remove grid fill (lowest priority)
-        const newGrid = [...(floorData.grid || [])]
-        if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
-          newGrid[actualRow] = [...newGrid[actualRow]]
-          newGrid[actualRow][col] = null
-          updateCurrentFloorData('grid', newGrid)
+        // 高速ドラッグでセルを跨いだ場合は Bresenham 補間で間も消す
+        const prev = lastFillCellRef.current
+        const isDragInterpolation = prev && (prev.row !== row || prev.col !== col)
+
+        if (isDragInterpolation) {
+          const path = cellsBetween(prev.row, prev.col, row, col).slice(1)
+          updateCurrentFloorData('grid', (prevGrid) => {
+            const newGrid = [...(prevGrid || [])]
+            const touchedRows = new Set()
+            for (const [dispRow, c] of path) {
+              if (dispRow < 0 || dispRow >= appState.gridSize.rows) continue
+              if (c < 0 || c >= appState.gridSize.cols) continue
+              const aRow = appState.gridSize.rows - 1 - dispRow
+              if (!newGrid[aRow]) continue
+              if (!touchedRows.has(aRow)) {
+                newGrid[aRow] = [...newGrid[aRow]]
+                touchedRows.add(aRow)
+              }
+              newGrid[aRow][c] = null
+            }
+            return newGrid
+          })
+        } else if (actualRow >= 0 && actualRow < appState.gridSize.rows) {
+          updateCurrentFloorData('grid', (prevGrid) => {
+            const newGrid = [...(prevGrid || [])]
+            if (!newGrid[actualRow]) return newGrid
+            newGrid[actualRow] = [...newGrid[actualRow]]
+            newGrid[actualRow][col] = null
+            return newGrid
+          })
         }
+        lastFillCellRef.current = { row, col }
       }
       return;
     }
     
     if (appState.activeTool === TOOLS.BLOCK_COLOR || appState.activeTool === TOOLS.DARK_ZONE) {
-      const newGrid = [...(floorData.grid || [])]
-      // Ensure grid structure exists
-      if (!newGrid[actualRow]) {
-        newGrid[actualRow] = []
-      }
-      
-      if (actualRow >= 0 && actualRow < appState.gridSize.rows) {
-        newGrid[actualRow] = [...(newGrid[actualRow] || [])]
-        
-        // Use gray color for DARK_ZONE, otherwise use selected color
-        const colorToUse = appState.activeTool === TOOLS.DARK_ZONE ? '#b0b0b0' : selectedColor
-        const existingColor = newGrid[actualRow][col]
-        
-        // If same color exists and it's a touch event, delete it (mobile touch improvement)
-        if (existingColor === colorToUse && isTouchEvent) {
-          delete newGrid[actualRow][col]
-          // Clean up empty row if needed
-          if (Object.keys(newGrid[actualRow]).length === 0) {
-            delete newGrid[actualRow]
+      // Use gray color for DARK_ZONE, otherwise use selected color
+      const colorToUse = appState.activeTool === TOOLS.DARK_ZONE ? '#b0b0b0' : selectedColor
+
+      const prev = lastFillCellRef.current
+      const isDragInterpolation = prev && (prev.row !== row || prev.col !== col)
+
+      if (isDragInterpolation) {
+        // 高速ドラッグでセルを跨いだ場合：前回セルから現在セルまでの中間を全て塗る（前回セルは前フレームで処理済みなので除く）
+        const path = cellsBetween(prev.row, prev.col, row, col).slice(1)
+        // 関数型 setter で必ず最新の grid を基準に塗る（連続呼び出しでの上書き消失を防ぐ）
+        updateCurrentFloorData('grid', (prevGrid) => {
+          const newGrid = [...(prevGrid || [])]
+          const touchedRows = new Set()
+          for (const [dispRow, c] of path) {
+            if (dispRow < 0 || dispRow >= appState.gridSize.rows) continue
+            if (c < 0 || c >= appState.gridSize.cols) continue
+            const aRow = appState.gridSize.rows - 1 - dispRow
+            if (!touchedRows.has(aRow)) {
+              newGrid[aRow] = [...(newGrid[aRow] || [])]
+              touchedRows.add(aRow)
+            }
+            newGrid[aRow][c] = colorToUse
           }
-        } else {
-          // Different color, no color, or PC mouse click - apply new color
-          newGrid[actualRow][col] = colorToUse
-        }
-        
-        updateCurrentFloorData('grid', newGrid)
+          return newGrid
+        })
+      } else if (actualRow >= 0 && actualRow < appState.gridSize.rows) {
+        // 単独クリック / ドラッグの初回セル：従来通り（タッチ同色トグル含む）
+        updateCurrentFloorData('grid', (prevGrid) => {
+          const newGrid = [...(prevGrid || [])]
+          newGrid[actualRow] = [...(newGrid[actualRow] || [])]
+          const existingColor = newGrid[actualRow][col]
+
+          // If same color exists and it's a touch event, delete it (mobile touch improvement)
+          if (existingColor === colorToUse && isTouchEvent) {
+            delete newGrid[actualRow][col]
+            // Clean up empty row if needed
+            if (Object.keys(newGrid[actualRow]).length === 0) {
+              delete newGrid[actualRow]
+            }
+          } else {
+            // Different color, no color, or PC mouse click - apply new color
+            newGrid[actualRow][col] = colorToUse
+          }
+          return newGrid
+        })
       }
+
+      lastFillCellRef.current = { row, col }
       // Note: Door tools should be handled via handleLineClick, not handleGridClick
       // Grid clicks are only for items that go in cell centers
     } else if (appState.activeTool === TOOLS.NOTE) {
@@ -997,36 +1087,65 @@ const Canvas = ({
     const otherGridTools = ['chest', 'warp_point', 'shute', 'elevator', 'stairs_up_svg', 'stairs_down_svg', 'current_position', 'event_marker', 'note', 'door_item', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west', 'arrow'];
     
     if (fillTools.includes(appState.activeTool)) {
-      // Fill category: Remove fill color only
-      const newGrid = [...(floorData.grid || [])]
-      if (newGrid[actualRow] && actualRow >= 0 && actualRow < appState.gridSize.rows) {
-        newGrid[actualRow] = [...newGrid[actualRow]]
-        newGrid[actualRow][col] = null
-        updateCurrentFloorData('grid', newGrid)
+      // Fill category: Remove fill color（高速ドラッグでセルを跨いだ場合は Bresenham 補間で間も消す）
+      const prev = lastFillCellRef.current
+      const isDragInterpolation = prev && (prev.row !== row || prev.col !== col)
+
+      if (isDragInterpolation) {
+        const path = cellsBetween(prev.row, prev.col, row, col).slice(1)
+        updateCurrentFloorData('grid', (prevGrid) => {
+          const newGrid = [...(prevGrid || [])]
+          const touchedRows = new Set()
+          for (const [dispRow, c] of path) {
+            if (dispRow < 0 || dispRow >= appState.gridSize.rows) continue
+            if (c < 0 || c >= appState.gridSize.cols) continue
+            const aRow = appState.gridSize.rows - 1 - dispRow
+            if (!newGrid[aRow]) continue
+            if (!touchedRows.has(aRow)) {
+              newGrid[aRow] = [...newGrid[aRow]]
+              touchedRows.add(aRow)
+            }
+            newGrid[aRow][c] = null
+          }
+          return newGrid
+        })
+      } else if (actualRow >= 0 && actualRow < appState.gridSize.rows) {
+        updateCurrentFloorData('grid', (prevGrid) => {
+          const newGrid = [...(prevGrid || [])]
+          if (!newGrid[actualRow]) return newGrid
+          newGrid[actualRow] = [...newGrid[actualRow]]
+          newGrid[actualRow][col] = null
+          return newGrid
+        })
       }
+
+      lastFillCellRef.current = { row, col }
     } else if (lineTools.includes(appState.activeTool)) {
       // Line category: Remove walls only
-      const newWalls = (floorData.walls || []).filter(wall => 
-        !(wall.startRow === actualRow && wall.startCol === col)
+      updateCurrentFloorData('walls', (prevWalls) =>
+        (prevWalls || []).filter(wall =>
+          !(wall.startRow === actualRow && wall.startCol === col)
+        )
       )
-      updateCurrentFloorData('walls', newWalls)
     } else if (otherLineTools.includes(appState.activeTool)) {
       // Other Line tools category: Remove doors only
-      const newDoors = (floorData.doors || []).filter(door => 
-        !(door.startRow === actualRow && door.startCol === col)
+      updateCurrentFloorData('doors', (prevDoors) =>
+        (prevDoors || []).filter(door =>
+          !(door.startRow === actualRow && door.startCol === col)
+        )
       )
-      updateCurrentFloorData('doors', newDoors)
     } else if (otherGridTools.includes(appState.activeTool)) {
       // Other Grid tools category: Remove items only
-      const newItems = (floorData.items || []).filter(item => !(item.row === actualRow && item.col === col))
-      updateCurrentFloorData('items', newItems)
-      
+      updateCurrentFloorData('items', (prevItems) =>
+        (prevItems || []).filter(item => !(item.row === actualRow && item.col === col))
+      )
+
       // Special case: NOTE tool can delete notes with right-click
       if (appState.activeTool === TOOLS.NOTE) {
         deleteNoteAt(actualRow, col)
       }
     }
-  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, floorData.grid, floorData.items, floorData.walls, floorData.doors, updateCurrentFloorData, deleteNoteAt])
+  }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, updateCurrentFloorData, deleteNoteAt])
 
   useEffect(() => {
     const handleGlobalMouseDown = (e) => {
@@ -1047,6 +1166,7 @@ const Canvas = ({
           setDragStartMousePos(null)
           setDragDirectionDetected(false)
         }
+        lastLineCellRef.current = null
       }
     }
 
@@ -1097,18 +1217,43 @@ const Canvas = ({
           const cellSize = 40 * appState.zoom // GRID_SIZE * zoom
           const col = Math.floor((mouseX - offset.x - 24) / cellSize)
           const row = Math.floor((mouseY - offset.y - 24) / cellSize)
-          
+
           if (dragLineType === 'horizontal') {
             // For horizontal lines, only allow same row as drag start
             const lineY = Math.round((mouseY - offset.y - 24) / cellSize)
             if (lineY === dragStartRow && lineY >= 0 && lineY <= appState.gridSize.rows && col >= 0 && col < appState.gridSize.cols) {
-              handleLineEnter(lineY, col, false)
+              // 前回処理セルと現在セルの間を補間して全セルに対し handleLineEnter を呼ぶ（高速ドラッグでの抜け防止）
+              const prev = lastLineCellRef.current
+              if (prev && prev.row === lineY && prev.col !== col) {
+                const step = prev.col < col ? 1 : -1
+                for (let c = prev.col + step; ; c += step) {
+                  if (c >= 0 && c < appState.gridSize.cols) {
+                    handleLineEnter(lineY, c, false)
+                  }
+                  if (c === col) break
+                }
+              } else {
+                handleLineEnter(lineY, col, false)
+              }
+              lastLineCellRef.current = { row: lineY, col }
             }
           } else if (dragLineType === 'vertical') {
             // For vertical lines, only allow same column as drag start
             const lineX = Math.round((mouseX - offset.x - 24) / cellSize)
             if (lineX === dragStartCol && row >= 0 && row < appState.gridSize.rows && lineX >= 0 && lineX <= appState.gridSize.cols) {
-              handleLineEnter(row, lineX, true)
+              const prev = lastLineCellRef.current
+              if (prev && prev.col === lineX && prev.row !== row) {
+                const step = prev.row < row ? 1 : -1
+                for (let r = prev.row + step; ; r += step) {
+                  if (r >= 0 && r < appState.gridSize.rows) {
+                    handleLineEnter(r, lineX, true)
+                  }
+                  if (r === row) break
+                }
+              } else {
+                handleLineEnter(row, lineX, true)
+              }
+              lastLineCellRef.current = { row, col: lineX }
             }
           }
         }
