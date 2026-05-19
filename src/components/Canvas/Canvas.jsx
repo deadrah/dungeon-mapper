@@ -728,7 +728,7 @@ const Canvas = ({
     }
   }, [appState.activeTool, appState.gridSize.rows, appState.gridSize.cols, updateCurrentFloorData])
 
-  const handleGridClick = useCallback((row, col, _event = null) => {
+  const handleGridClick = useCallback((row, col, _event = null, isDragging = false) => {
     // Ensure coordinates are within bounds
     if (row < 0 || row >= appState.gridSize.rows || col < 0 || col >= appState.gridSize.cols) {
       return;
@@ -829,9 +829,9 @@ const Canvas = ({
           (prevItems || []).filter(item => !(item.row === actualRow && item.col === col))
         )
       } else if (deletionTarget === 'grid') {
-        // 高速ドラッグでセルを跨いだ場合は Bresenham 補間で間も消す
+        // isDragging && 同じボタンの ref のみ補間対象
         const prev = lastFillCellRef.current
-        const isDragInterpolation = prev && (prev.row !== row || prev.col !== col)
+        const isDragInterpolation = isDragging && prev && prev.button === 0 && (prev.row !== row || prev.col !== col)
 
         if (isDragInterpolation) {
           const path = cellsBetween(prev.row, prev.col, row, col).slice(1)
@@ -860,7 +860,8 @@ const Canvas = ({
             return newGrid
           })
         }
-        lastFillCellRef.current = { row, col }
+        // 単発はリセット、ドラッグはボタン付きで保存
+        lastFillCellRef.current = isDragging ? { button: 0, row, col } : null
       }
       return;
     }
@@ -869,8 +870,9 @@ const Canvas = ({
       // Use gray color for DARK_ZONE, otherwise use selected color
       const colorToUse = appState.activeTool === TOOLS.DARK_ZONE ? '#b0b0b0' : selectedColor
 
+      // isDragging && 同じボタンの ref のみ補間対象（単発・ボタン跨ぎは補間しない）
       const prev = lastFillCellRef.current
-      const isDragInterpolation = prev && (prev.row !== row || prev.col !== col)
+      const isDragInterpolation = isDragging && prev && prev.button === 0 && (prev.row !== row || prev.col !== col)
 
       if (isDragInterpolation) {
         // 高速ドラッグでセルを跨いだ場合：前回セルから現在セルまでの中間を全て塗る（前回セルは前フレームで処理済みなので除く）
@@ -913,7 +915,8 @@ const Canvas = ({
         })
       }
 
-      lastFillCellRef.current = { row, col }
+      // 単発はリセット、ドラッグはボタン付きで保存
+      lastFillCellRef.current = isDragging ? { button: 0, row, col } : null
       // Note: Door tools should be handled via handleLineClick, not handleGridClick
       // Grid clicks are only for items that go in cell centers
     } else if (appState.activeTool === TOOLS.NOTE) {
@@ -1072,7 +1075,7 @@ const Canvas = ({
     setNoteDialog({ isOpen: false, row: null, col: null, text: '' })
   }, [])
 
-  const handleGridRightClick = useCallback((row, col) => {
+  const handleGridRightClick = useCallback((row, col, isDragging = false) => {
     // Ensure coordinates are within bounds
     if (row < 0 || row >= appState.gridSize.rows || col < 0 || col >= appState.gridSize.cols) {
       return;
@@ -1087,9 +1090,9 @@ const Canvas = ({
     const otherGridTools = ['chest', 'warp_point', 'shute', 'elevator', 'stairs_up_svg', 'stairs_down_svg', 'current_position', 'event_marker', 'note', 'door_item', 'arrow_north', 'arrow_south', 'arrow_east', 'arrow_west', 'arrow'];
     
     if (fillTools.includes(appState.activeTool)) {
-      // Fill category: Remove fill color（高速ドラッグでセルを跨いだ場合は Bresenham 補間で間も消す）
+      // Fill category: Remove fill color（isDragging && 同じボタンの ref のみ補間対象）
       const prev = lastFillCellRef.current
-      const isDragInterpolation = prev && (prev.row !== row || prev.col !== col)
+      const isDragInterpolation = isDragging && prev && prev.button === 2 && (prev.row !== row || prev.col !== col)
 
       if (isDragInterpolation) {
         const path = cellsBetween(prev.row, prev.col, row, col).slice(1)
@@ -1119,7 +1122,8 @@ const Canvas = ({
         })
       }
 
-      lastFillCellRef.current = { row, col }
+      // 単発はリセット、ドラッグはボタン付きで保存
+      lastFillCellRef.current = isDragging ? { button: 2, row, col } : null
     } else if (lineTools.includes(appState.activeTool)) {
       // Line category: Remove walls only
       updateCurrentFloorData('walls', (prevWalls) =>

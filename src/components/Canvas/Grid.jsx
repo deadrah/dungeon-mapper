@@ -28,29 +28,31 @@ const Grid = ({
   const startRow = Math.max(0, Math.floor(-offset.y / cellSize))
   const endRow = Math.min(gridSize.rows, Math.ceil((-offset.y + viewportSize.height) / cellSize))
 
+  // 第4引数の isDragging で「単発クリック」と「ドラッグ中のセル通過」を区別する。
+  // ドラッグ判定が真のときだけ Canvas 側で Bresenham 補間が走る。
   const handleCellClick = (e, row, col) => {
     e.preventDefault()
     if (e.button === 0) {
-      onGridClick(row, col, e)
+      onGridClick(row, col, e, false)
     } else if (e.button === 2) {
-      onGridRightClick(row, col)
+      onGridRightClick(row, col, false)
     }
   }
 
 
   const handleCellMouseEnter = (e, row, col) => {
     if (e.buttons === 1) { // Left mouse button is pressed
-      onGridClick(row, col, e)
+      onGridClick(row, col, e, true)
     } else if (e.buttons === 2) { // Right mouse button is pressed
-      onGridRightClick(row, col)
+      onGridRightClick(row, col, true)
     }
   }
 
   const handleCellMouseOver = (e, row, col) => {
     if (e.buttons === 1) { // Left mouse button is pressed
-      onGridClick(row, col, e)
+      onGridClick(row, col, e, true)
     } else if (e.buttons === 2) { // Right mouse button is pressed
-      onGridRightClick(row, col)
+      onGridRightClick(row, col, true)
     }
   }
 
@@ -274,7 +276,7 @@ const Grid = ({
                 onContextMenu={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  onGridRightClick(row, col)
+                  onGridRightClick(row, col, false)
                 }}
                 onMouseEnter={(e) => handleCellMouseEnter(e, row, col)}
                 onMouseOver={(e) => handleCellMouseOver(e, row, col)}
