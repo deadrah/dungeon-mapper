@@ -59,7 +59,7 @@ const HelpDialog = ({ isOpen, onClose, language = 'ja', onLanguageChange, theme 
       <div 
         ref={modalRef}
         className="rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto"
-        style={{ backgroundColor: theme.ui.panel }}
+        style={{ backgroundColor: theme.ui.panel, touchAction: 'pan-y' }}
       >
         <div className="flex justify-between items-center mb-4">
           <div>

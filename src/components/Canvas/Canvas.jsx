@@ -96,11 +96,6 @@ const Canvas = ({
   const singleTouchStartRef = useRef({ x: 0, y: 0, time: 0 })
   const isSingleFingerPanningRef = useRef(false)
 
-  // touch ハンドラ参照を ref で常に最新化。
-  // document.addEventListener を「マウント時のみ」登録できるようにすることで、
-  // setOffset によるレンダーごとにリスナーが着脱されて touchmove が drop される問題を回避する。
-  const handleTouchMoveRef = useRef(null)
-  const handleTouchEndRef = useRef(null)
 
   // panning 中の setOffset を requestAnimationFrame で 1 フレーム 1 回にまとめる。
   // touchmove ごとに setOffset を呼ぶと毎フレーム Canvas 再レンダー → 大量 SVG 要素再計算でメインスレッドが詰まり、
@@ -315,8 +310,6 @@ const Canvas = ({
 
   const handleTouchMove = useCallback((e) => {
     if (e.touches.length === 2 && isPanning) {
-      // 2本指 pan / pinch zoom：ブラウザの縦スクロール候補判定を完全に止める
-      if (e.cancelable) e.preventDefault()
       const touch1 = e.touches[0]
       const touch2 = e.touches[1]
       const centerX = (touch1.clientX + touch2.clientX) / 2
@@ -355,9 +348,6 @@ const Canvas = ({
       }
 
       if (isSingleFingerPanningRef.current) {
-        // 1本指 panning 中：ブラウザのネイティブ縦スクロールジェスチャー判定を明示的に止める
-        // （上方向スワイプでブラウザがスクロール候補と判定して touchmove が drop される問題対策）
-        if (e.cancelable) e.preventDefault()
 
         const last = lastTouchPosRef.current
         const panDeltaX = touch.clientX - last.x
@@ -401,10 +391,6 @@ const Canvas = ({
     }
   }, [])
 
-  // 毎レンダーで ref を最新ハンドラに更新する。
-  // useEffect でラップせずに直接代入することで、外部の addEventListener から ref.current 経由で常に最新の関数が呼ばれる。
-  handleTouchMoveRef.current = handleTouchMove
-  handleTouchEndRef.current = handleTouchEnd
 
   const handleLineEnter = useCallback((row, col, isVertical) => {
     if (!isDraggingLine && !isDraggingErase) return;
@@ -1321,24 +1307,11 @@ const Canvas = ({
     }
   }, [handleMouseMove, isDraggingLine, isDraggingErase, isRightMouseDown, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
 
-  // touch リスナーはマウント時に 1 度だけ登録し、以降は ref.current 経由で常に最新のハンドラを呼ぶ。
-  // これにより、setOffset で offset が変わって親の useEffect が再実行されてもリスナー着脱は発生しない。
-  // 「上方向スワイプで 2 回に 1 回止まる」現象は、リスナー着脱中の隙間で touchmove が drop されていたのが原因。
-  useEffect(() => {
-    const onTouchMove = (e) => handleTouchMoveRef.current?.(e)
-    const onTouchEnd = (e) => handleTouchEndRef.current?.(e)
-
-    // passive: false にして、panning 中に preventDefault でブラウザの縦スクロール候補判定を完全に止める
-    document.addEventListener('touchmove', onTouchMove, { passive: false })
-    document.addEventListener('touchend', onTouchEnd)
-    document.addEventListener('touchcancel', onTouchEnd)
-
-    return () => {
-      document.removeEventListener('touchmove', onTouchMove)
-      document.removeEventListener('touchend', onTouchEnd)
-      document.removeEventListener('touchcancel', onTouchEnd)
-    }
-  }, [])
+  // touchmove / touchend は Canvas wrapper の React プロップで受ける。
+  // document リスナーにすると、ダイアログ上のタッチも受け取ってしまい、
+  // マップが「貫通」して動いたり、ダイアログ内スクロールが preventDefault でキャンセルされる問題が起きる。
+  // cell/line click rect を 1 個に集約した現在は、仮想化境界での DOM unmount 問題は解消済みなので
+  // React プロップで十分。
 
   return (
     <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: theme.grid.canvasBackground }}>
@@ -1347,6 +1320,8 @@ const Canvas = ({
         className="w-full h-full"
         onMouseDownCapture={handleMouseDown}
         onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
         style={{ 

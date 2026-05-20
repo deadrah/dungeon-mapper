@@ -49,7 +49,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
   return (
     <div className="md:w-48 w-full flex flex-col md:max-h-none max-h-44 mobile-zoom-90" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
      
-      <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
+      <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden" style={{ touchAction: 'pan-x pan-y' }}>
         {TOOL_GROUPS.map((group) => (
           <div key={group.name} className="md:block">
             {group.name === 'Line Tools' ? (<hr className="md:hidden mt-2 mb-1" style={{ borderColor: theme.ui.border }} />) : ''}
