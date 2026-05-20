@@ -70,8 +70,8 @@ const Canvas = ({
   const [initialPinchDistance, setInitialPinchDistance] = useState(null)
   const [initialZoom, setInitialZoom] = useState(1)
   const [isTwoFingerActive, setIsTwoFingerActive] = useState(false)
-  const [isSingleFingerPanning, setIsSingleFingerPanning] = useState(false)
-  const [singleTouchStart, setSingleTouchStart] = useState({ x: 0, y: 0, time: 0 })
+  // 1本指 panning 状態は state ではなく ref のみで管理。
+  // setIsSingleFingerPanning による React レンダーが panning 中のメインスレッドを占有し、touchmove が drop される問題を回避するため。
   
   // Note dragging states
   const [isDraggingNote, setIsDraggingNote] = useState(false)
@@ -90,6 +90,23 @@ const Canvas = ({
   // 高速ドラッグ時のセル抜け補間用：前回処理したセル位置を保持する
   const lastLineCellRef = useRef(null) // ラインドラッグ用 { row, col }（ライン座標系）
   const lastFillCellRef = useRef(null) // 塗りつぶしドラッグ用 { row, col }（表示行座標系）
+
+  // 1本指スワイプ用：仮想化境界での DOM 再生成と state closure capture を回避するため、追跡情報を ref で保持
+  const lastTouchPosRef = useRef({ x: 0, y: 0 })
+  const singleTouchStartRef = useRef({ x: 0, y: 0, time: 0 })
+  const isSingleFingerPanningRef = useRef(false)
+
+  // touch ハンドラ参照を ref で常に最新化。
+  // document.addEventListener を「マウント時のみ」登録できるようにすることで、
+  // setOffset によるレンダーごとにリスナーが着脱されて touchmove が drop される問題を回避する。
+  const handleTouchMoveRef = useRef(null)
+  const handleTouchEndRef = useRef(null)
+
+  // panning 中の setOffset を requestAnimationFrame で 1 フレーム 1 回にまとめる。
+  // touchmove ごとに setOffset を呼ぶと毎フレーム Canvas 再レンダー → 大量 SVG 要素再計算でメインスレッドが詰まり、
+  // 次の touchmove が drop されるため。
+  const pendingPanDeltaRef = useRef({ x: 0, y: 0 })
+  const panRafScheduledRef = useRef(false)
 
   const floorData = getCurrentFloorData() || { grid: [], walls: [], items: [], doors: [] }
 
@@ -209,6 +226,9 @@ const Canvas = ({
       setIsPanning(true)
       setLastMousePos({ x: e.clientX, y: e.clientY })
       e.preventDefault()
+      // capture phase で発火しているので、bubble で子（Grid セル）の onMouseDown が呼ばれて
+      // 編集処理が走らないように伝播を止める
+      e.stopPropagation()
     }
   }, [getNoteAt, appState.activeTool, deleteNoteAt])
 
@@ -265,39 +285,43 @@ const Canvas = ({
       const touch2 = e.touches[1]
       const centerX = (touch1.clientX + touch2.clientX) / 2
       const centerY = (touch1.clientY + touch2.clientY) / 2
-      
+
       // Initialize pinch zoom
       const distance = getDistance(touch1, touch2)
       setInitialPinchDistance(distance)
       setInitialZoom(appState.zoom)
-      
+
       setIsPanning(true)
       setLastMousePos({ x: centerX, y: centerY })
       setIsTwoFingerActive(true)
-      
+
       // Cancel single finger panning if it was active
-      setIsSingleFingerPanning(false)
-      
+      isSingleFingerPanningRef.current = false
+
       e.preventDefault()
     } else if (e.touches.length === 1) {
       // Single finger touch - prepare for potential panning
       const touch = e.touches[0]
-      setSingleTouchStart({
+      // 追跡情報はすべて ref に書く（closure capture を回避）
+      singleTouchStartRef.current = {
         x: touch.clientX,
         y: touch.clientY,
         time: Date.now()
-      })
-      setLastMousePos({ x: touch.clientX, y: touch.clientY })
+      }
+      lastTouchPosRef.current = { x: touch.clientX, y: touch.clientY }
+      isSingleFingerPanningRef.current = false
     }
   }, [getDistance, appState.zoom])
 
   const handleTouchMove = useCallback((e) => {
     if (e.touches.length === 2 && isPanning) {
+      // 2本指 pan / pinch zoom：ブラウザの縦スクロール候補判定を完全に止める
+      if (e.cancelable) e.preventDefault()
       const touch1 = e.touches[0]
       const touch2 = e.touches[1]
       const centerX = (touch1.clientX + touch2.clientX) / 2
       const centerY = (touch1.clientY + touch2.clientY) / 2
-      
+
       // Handle pinch zoom
       if (initialPinchDistance !== null) {
         const currentDistance = getDistance(touch1, touch2)
@@ -305,47 +329,60 @@ const Canvas = ({
         const newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, initialZoom * scale))
         setZoom(newZoom)
       }
-      
+
       // Handle pan
       const deltaX = centerX - lastMousePos.x
       const deltaY = centerY - lastMousePos.y
-      
+
       setOffset(prev => ({
         x: prev.x + deltaX,
         y: prev.y + deltaY
       }))
-      
+
       setLastMousePos({ x: centerX, y: centerY })
-      e.preventDefault()
     } else if (e.touches.length === 1) {
-      // Single finger touch - check for panning
+      // 1本指スワイプ：ref のみ参照（state の closure capture を避ける）
       const touch = e.touches[0]
-      const deltaX = touch.clientX - singleTouchStart.x
-      const deltaY = touch.clientY - singleTouchStart.y
+      const start = singleTouchStartRef.current
+      const deltaX = touch.clientX - start.x
+      const deltaY = touch.clientY - start.y
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-      
-      // Start panning if moved more than 10 pixels and not too long since touch start
-      const timeSinceStart = Date.now() - singleTouchStart.time
-      if (!isSingleFingerPanning && distance > 10 && timeSinceStart < 500) {
-        setIsSingleFingerPanning(true)
-        // Remove preventDefault to fix passive event listener error
+
+      // 距離だけで判定（時間制限なし）。タップとの区別は他経路で取られているため
+      if (!isSingleFingerPanningRef.current && distance > 10) {
+        isSingleFingerPanningRef.current = true
+        // setState は呼ばない（panning 中の再レンダーで touchmove が drop されるため）
       }
-      
-      // Continue panning if active
-      if (isSingleFingerPanning) {
-        const panDeltaX = touch.clientX - lastMousePos.x
-        const panDeltaY = touch.clientY - lastMousePos.y
-        
-        setOffset(prev => ({
-          x: prev.x + panDeltaX,
-          y: prev.y + panDeltaY
-        }))
-        
-        setLastMousePos({ x: touch.clientX, y: touch.clientY })
-        // Remove preventDefault to fix passive event listener error
+
+      if (isSingleFingerPanningRef.current) {
+        // 1本指 panning 中：ブラウザのネイティブ縦スクロールジェスチャー判定を明示的に止める
+        // （上方向スワイプでブラウザがスクロール候補と判定して touchmove が drop される問題対策）
+        if (e.cancelable) e.preventDefault()
+
+        const last = lastTouchPosRef.current
+        const panDeltaX = touch.clientX - last.x
+        const panDeltaY = touch.clientY - last.y
+
+        // touchmove 毎の setOffset を rAF にまとめる（再レンダー負荷を 60fps に絞る）
+        pendingPanDeltaRef.current.x += panDeltaX
+        pendingPanDeltaRef.current.y += panDeltaY
+        if (!panRafScheduledRef.current) {
+          panRafScheduledRef.current = true
+          requestAnimationFrame(() => {
+            panRafScheduledRef.current = false
+            const dx = pendingPanDeltaRef.current.x
+            const dy = pendingPanDeltaRef.current.y
+            pendingPanDeltaRef.current = { x: 0, y: 0 }
+            if (dx !== 0 || dy !== 0) {
+              setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }))
+            }
+          })
+        }
+
+        lastTouchPosRef.current = { x: touch.clientX, y: touch.clientY }
       }
     }
-  }, [lastMousePos, isPanning, initialPinchDistance, initialZoom, getDistance, setZoom, singleTouchStart, isSingleFingerPanning])
+  }, [isPanning, initialPinchDistance, initialZoom, getDistance, setZoom, lastMousePos])
 
   const handleTouchEnd = useCallback((e) => {
     if (e.touches.length === 0) {
@@ -354,7 +391,7 @@ const Canvas = ({
       setInitialPinchDistance(null)
       setInitialZoom(1)
       setIsTwoFingerActive(false)
-      setIsSingleFingerPanning(false)
+      isSingleFingerPanningRef.current = false
     } else if (e.touches.length < 2) {
       // Less than 2 fingers (end of pinch/two-finger pan)
       setIsPanning(false)
@@ -363,6 +400,11 @@ const Canvas = ({
       setIsTwoFingerActive(false)
     }
   }, [])
+
+  // 毎レンダーで ref を最新ハンドラに更新する。
+  // useEffect でラップせずに直接代入することで、外部の addEventListener から ref.current 経由で常に最新の関数が呼ばれる。
+  handleTouchMoveRef.current = handleTouchMove
+  handleTouchEndRef.current = handleTouchEnd
 
   const handleLineEnter = useCallback((row, col, isVertical) => {
     if (!isDraggingLine && !isDraggingErase) return;
@@ -1269,7 +1311,7 @@ const Canvas = ({
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mousemove', handleGlobalMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
-    
+
     return () => {
       document.removeEventListener('mousedown', handleGlobalMouseDown)
       document.removeEventListener('mouseup', handleGlobalMouseUp)
@@ -1279,15 +1321,32 @@ const Canvas = ({
     }
   }, [handleMouseMove, isDraggingLine, isDraggingErase, isRightMouseDown, dragLineType, dragStartRow, dragStartCol, dragStartMousePos, dragDirectionDetected, offset, appState.zoom, appState.gridSize, handleLineEnter, floorData.walls, updateCurrentFloorData])
 
+  // touch リスナーはマウント時に 1 度だけ登録し、以降は ref.current 経由で常に最新のハンドラを呼ぶ。
+  // これにより、setOffset で offset が変わって親の useEffect が再実行されてもリスナー着脱は発生しない。
+  // 「上方向スワイプで 2 回に 1 回止まる」現象は、リスナー着脱中の隙間で touchmove が drop されていたのが原因。
+  useEffect(() => {
+    const onTouchMove = (e) => handleTouchMoveRef.current?.(e)
+    const onTouchEnd = (e) => handleTouchEndRef.current?.(e)
+
+    // passive: false にして、panning 中に preventDefault でブラウザの縦スクロール候補判定を完全に止める
+    document.addEventListener('touchmove', onTouchMove, { passive: false })
+    document.addEventListener('touchend', onTouchEnd)
+    document.addEventListener('touchcancel', onTouchEnd)
+
+    return () => {
+      document.removeEventListener('touchmove', onTouchMove)
+      document.removeEventListener('touchend', onTouchEnd)
+      document.removeEventListener('touchcancel', onTouchEnd)
+    }
+  }, [])
+
   return (
     <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: theme.grid.canvasBackground }}>
       <div
         ref={canvasRef}
         className="w-full h-full"
-        onMouseDown={handleMouseDown}
+        onMouseDownCapture={handleMouseDown}
         onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
         style={{ 
@@ -1316,7 +1375,8 @@ const Canvas = ({
           dragStartRow={dragStartRow}
           dragStartCol={dragStartCol}
           isTwoFingerActive={isTwoFingerActive}
-          isSingleFingerPanning={isSingleFingerPanning}
+          isSingleFingerPanningRef={isSingleFingerPanningRef}
+          isPanning={isPanning}
           theme={theme}
         />
         

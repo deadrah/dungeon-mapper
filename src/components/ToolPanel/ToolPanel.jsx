@@ -47,7 +47,7 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
 
 
   return (
-    <div className="md:w-48 w-full flex flex-col md:max-h-none max-h-44" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
+    <div className="md:w-48 w-full flex flex-col md:max-h-none max-h-44 mobile-zoom-90" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
      
       <div className="flex-1 overflow-y-auto overflow-x-auto md:overflow-x-hidden">
         {TOOL_GROUPS.map((group) => (

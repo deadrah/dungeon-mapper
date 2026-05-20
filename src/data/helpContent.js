@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.8.3',
+    version: 'バージョン 1.8.4',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -17,7 +17,7 @@ export const helpContent = {
         title: '基本操作',
         items: [
           { label: 'マップ拡大縮小:', desc: 'マウスホイール / ピンチインアウト' },
-          { label: 'マップ画面移動:', desc: 'Shift + ドラッグ / フリック' },
+          { label: 'マップ画面移動:', desc: 'Shift + ドラッグ / ホイールクリック + ドラッグ / フリック' },
           { label: 'アイテム配置・色塗り・壁描画:', desc: '左クリック / タップ' },
           { label: 'アイテム削除・色消去・壁削除:', desc: '右クリック / 消去ツール' },
           { label: 'メモ編集:', desc: '既存メモをクリック（任意のツール状態で可能）' },
@@ -116,6 +116,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.8.4', date: '2026-05-20', changes: ['スクロール処理を見直し。特にスマホでのスワイプを改善。軽量化。', 'スマホ表示時ヘッダーサイズ調整'] },
           { version: 'v1.8.3', date: '2026-05-19', changes: ['線や床の描画時、高速でドラッグすると間が抜ける問題の修正'] },
           { version: 'v1.8.2', date: '2026-03-17', changes: ['グリッドサイズの最大値を50x50から99x99に拡大'] },
           { version: 'v1.8.1', date: '2026-03-17', changes: ['MonochromeAltテーマを追加：デフォルト背景色が白のテーマ。踏破床を塗り潰すのが不要な場合などにどうぞ'] },
@@ -158,7 +159,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.8.3',
+    version: 'Version 1.8.4',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -173,7 +174,7 @@ export const helpContent = {
         title: 'Basic Controls',
         items: [
           { label: 'Zoom in/out:', desc: 'Mouse wheel / Pinch gestures' },
-          { label: 'Pan (move view):', desc: 'Shift + drag / Swipe' },
+          { label: 'Pan (move view):', desc: 'Shift + drag / Middle-click + drag / Swipe' },
           { label: 'Place items, fill colors, draw walls:', desc: 'Left click / Tap' },
           { label: 'Remove items, clear colors, erase walls:', desc: 'Right click / Eraser tool' },
           { label: 'Edit notes:', desc: 'Click existing note (works with any tool)' },
@@ -272,6 +273,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.8.4', date: '2026-05-20', changes: ['Reworked scroll handling: improved smartphone swipe responsiveness and reduced rendering overhead', 'Adjusted header size on mobile display'] },
       { version: 'v1.8.3', date: '2026-05-19', changes: ['Fixed an issue where fast dragging left gaps between cells when drawing lines or floors'] },
       { version: 'v1.8.2', date: '2026-03-17', changes: ['Expanded maximum grid size from 50x50 to 99x99'] },
       { version: 'v1.8.1', date: '2026-03-17', changes: ['Added MonochromeAlt theme: A theme with white as the default background color. Use it when you don\'t need to fill in explored floors'] },

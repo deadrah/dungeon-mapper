@@ -65,7 +65,7 @@ const Header = ({
   
 
   return (
-    <div className="md:h-12 h-auto md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
+    <div className="md:h-12 h-auto md:flex md:items-center md:justify-between px-2 md:px-4 py-2 md:py-0 mobile-zoom-90" style={{ backgroundColor: theme.ui.panel, color: theme.ui.panelText }}>
       <div className="flex md:items-center md:space-x-4 gap-2 md:gap-0 flex-wrap md:justify-start justify-between">
         <svg width="112" height="15" viewBox="0 0 112 15" className="h-5 md:mb-1 mt-1" style={{ marginTop: '6px' }}>
           <g fill={theme.ui.panelText} transform="translate(1,0)">
