@@ -1319,7 +1319,7 @@ export const useAppState = () => {
     if (!floor) return false
     
     // Check grid data
-    if (floor.grid && floor.grid.some(row => row.some(cell => cell !== null))) {
+    if (floor.grid && floor.grid.some(row => row && row.some(cell => cell !== null))) {
       return true
     }
     
