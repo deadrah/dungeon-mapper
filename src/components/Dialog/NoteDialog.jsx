@@ -77,7 +77,7 @@ const NoteDialog = ({ isOpen, onClose, onSave, onDelete, initialText = '', theme
 
   return (
     <div 
-      className="fixed inset-0 flex items-center justify-center z-50" 
+      className="fixed inset-0 flex items-start md:items-center justify-center z-50 pt-8 md:pt-0" 
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
     >
       <div 

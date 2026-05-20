@@ -2,7 +2,7 @@
 export const helpContent = {
   ja: {
     title: 'DMapper ヘルプ',
-    version: 'バージョン 1.8.4',
+    version: 'バージョン 1.8.5',
     close: '閉じる',
     tabs: {
       guide: '機能説明',
@@ -116,6 +116,7 @@ export const helpContent = {
       changelog: {
         title: '更新履歴',
         items: [
+          { version: 'v1.8.5', date: '2026-05-20', changes: ['スマホでメモダイアログを上部に表示（キーボード表示時に入力欄が隠れなくなるよう改善）', '消しゴムツールでアイテム・色塗りが削除できなかった問題の修正', 'ツールパネルのカレントポジションと宝箱アイコンを SVG 化（Android での表示不具合と視認性を改善）'] },
           { version: 'v1.8.4', date: '2026-05-20', changes: ['スクロール処理を見直し。特にスマホでのスワイプを改善。軽量化。', 'スマホ表示時ヘッダーサイズ調整'] },
           { version: 'v1.8.3', date: '2026-05-19', changes: ['線や床の描画時、高速でドラッグすると間が抜ける問題の修正'] },
           { version: 'v1.8.2', date: '2026-03-17', changes: ['グリッドサイズの最大値を50x50から99x99に拡大'] },
@@ -159,7 +160,7 @@ export const helpContent = {
   },
   en: {
     title: 'DMapper Help',
-    version: 'Version 1.8.4',
+    version: 'Version 1.8.5',
     close: 'Close',
     tabs: {
       guide: 'User Guide',
@@ -273,6 +274,7 @@ export const helpContent = {
       changelog: {
         title: 'Update History',
         items: [
+      { version: 'v1.8.5', date: '2026-05-20', changes: ['Show the note dialog at the top of the screen on mobile so the input field stays visible when the keyboard appears', 'Fixed an issue where the eraser tool could not delete items or fill colors', 'Replaced Current Position and Chest icons in the tool panel with SVG (fixes missing icon on Android and improves clarity)'] },
       { version: 'v1.8.4', date: '2026-05-20', changes: ['Reworked scroll handling: improved smartphone swipe responsiveness and reduced rendering overhead', 'Adjusted header size on mobile display'] },
       { version: 'v1.8.3', date: '2026-05-19', changes: ['Fixed an issue where fast dragging left gaps between cells when drawing lines or floors'] },
       { version: 'v1.8.2', date: '2026-03-17', changes: ['Expanded maximum grid size from 50x50 to 99x99'] },
