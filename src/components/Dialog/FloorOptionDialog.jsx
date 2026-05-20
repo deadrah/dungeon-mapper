@@ -126,7 +126,7 @@ const FloorOptionDialog = ({
     
     // Check if floor has any data
     const hasData = floorData && (
-      (floorData.grid && floorData.grid.some(row => row.some(cell => cell !== null))) ||
+      (floorData.grid && floorData.grid.some(row => row && row.some(cell => cell !== null))) ||
       (floorData.walls && floorData.walls.length > 0) ||
       (floorData.items && floorData.items.length > 0) ||
       (floorData.doors && floorData.doors.length > 0) ||
