@@ -20,7 +20,7 @@ const TOOL_GROUPS = [
     tools: [
       { id: TOOLS.BLOCK_COLOR, name: 'Fill [4]', icon: '█', description: 'Fill grid blocks', key: '4' },
       { id: TOOLS.DARK_ZONE, name: 'Dark Zone', icon: 'Ξ', description: 'Dark area', key: '' },
-      { id: TOOLS.CHEST, name: 'Chest [5]', icon: '□', description: 'Treasure chest', key: '5' },
+      { id: TOOLS.CHEST, name: 'Chest [5]', icon: 'CHEST_SVG', description: 'Treasure chest', key: '5' },
       { id: TOOLS.WARP_POINT, name: 'Teleport', icon: '◊', description: 'Teleport point', key: '' },
       { id: TOOLS.SHUTE, name: 'Shute/Pit', icon: '●', description: 'Shute / Pit', key: '' },
       { id: TOOLS.ELEVATOR, name: 'Elevator', icon: 'E', description: 'Elevator', key: '' },
@@ -30,7 +30,7 @@ const TOOL_GROUPS = [
       { id: TOOLS.NOTE, name: 'Note', icon: 'NOTE_SVG', description: 'Text memo', key: '' },
       { id: TOOLS.ARROW, name: 'Arrow', icon: '✛', description: 'Direction arrow (select direction in options)', key: '' },
       { id: TOOLS.DOOR_ITEM, name: 'Door', icon: 'DOOR_ITEM_SVG', description: 'Door item (select open/closed in options)', key: '' },
-      { id: TOOLS.CURRENT_POSITION, name: 'CurrentPos [q]', icon: '🞄️', description: 'Current position marker', key: 'q' },
+      { id: TOOLS.CURRENT_POSITION, name: 'CurrentPos [q]', icon: 'CURRENT_POSITION_SVG', description: 'Current position marker', key: 'q' },
       { id: TOOLS.ERASER, name: 'Eraser [e]', icon: '⌫', description: 'Erase objects with left click/drag', key: 'e' }
     ]
   }
@@ -102,13 +102,24 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                           <circle cx="8" cy="12" r="0.5" fill="currentColor"/>
                           <circle cx="14" cy="12" r="0.5" fill="currentColor"/>
                         </svg>
+                      ) : tool.icon === 'CURRENT_POSITION_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
+                          <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                          <circle cx="8" cy="8" r="2" fill="currentColor"/>
+                        </svg>
+                      ) : tool.icon === 'CHEST_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
+                          <rect x="2" y="8" width="12" height="6" stroke="currentColor" strokeWidth="1.2" fill="none" rx="0.5"/>
+                          <path d="M2 8 Q2 5 8 5 Q14 5 14 8" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+                          <polygon points="8,7 9.5,8.5 8,10 6.5,8.5" stroke="currentColor" strokeWidth="0.8" fill="currentColor"/>
+                        </svg>
                       ) : tool.icon}
                     </span>
                       <span className="text-xs truncate w-full text-center px-1 md:block hidden" style={{ pointerEvents: 'none' }}>{tool.name}</span>
                     </div>
                   )
                 }
-                
+
                 return (
                   <button
                     key={tool.id}
@@ -161,6 +172,17 @@ const ToolPanel = ({ activeTool, setActiveTool, theme }) => {
                           <line x1="11" y1="2" x2="11" y2="22" stroke="currentColor" strokeWidth="1"/>
                           <circle cx="8" cy="12" r="0.5" fill="currentColor"/>
                           <circle cx="14" cy="12" r="0.5" fill="currentColor"/>
+                        </svg>
+                      ) : tool.icon === 'CURRENT_POSITION_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
+                          <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                          <circle cx="8" cy="8" r="2" fill="currentColor"/>
+                        </svg>
+                      ) : tool.icon === 'CHEST_SVG' ? (
+                        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{height: '1.6em', pointerEvents: 'none'}}>
+                          <rect x="2" y="8" width="12" height="6" stroke="currentColor" strokeWidth="1.2" fill="none" rx="0.5"/>
+                          <path d="M2 8 Q2 5 8 5 Q14 5 14 8" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+                          <polygon points="8,7 9.5,8.5 8,10 6.5,8.5" stroke="currentColor" strokeWidth="0.8" fill="currentColor"/>
                         </svg>
                       ) : tool.icon}
                     </span>

@@ -110,7 +110,18 @@ const Grid = ({
 
   const handleLineAreaMouseDown = (e) => {
     const line = pickLineFromEvent(e)
-    if (!line) return
+    if (!line) {
+      // ERASER でライン境界でない場合、 cell-click-area が前面に来ず line-click-area が先に受け取るため、
+      // セル（アイテム・Fill）削除処理に明示的にフォールバックする
+      if (activeTool === TOOLS.ERASER) {
+        const cell = pickCellFromEvent(e)
+        if (!cell) return
+        e.preventDefault()
+        if (e.button === 0) onGridClick(cell.row, cell.col, e, false)
+        else if (e.button === 2) onGridRightClick(cell.row, cell.col, false)
+      }
+      return
+    }
     if (!respectsDragLineType(line)) return
     e.preventDefault()
     if (e.button === 0) {
@@ -124,7 +135,16 @@ const Grid = ({
     if (isPanning || isSingleFingerPanningRef?.current) return
     if (e.buttons !== 1 && e.buttons !== 2) return
     const line = pickLineFromEvent(e)
-    if (!line) return
+    if (!line) {
+      // ERASER ドラッグ中にセル中央を通過した場合のフォールバック
+      if (activeTool === TOOLS.ERASER) {
+        const cell = pickCellFromEvent(e)
+        if (!cell) return
+        if (e.buttons === 1) onGridClick(cell.row, cell.col, e, true)
+        else if (e.buttons === 2) onGridRightClick(cell.row, cell.col, true)
+      }
+      return
+    }
     if (!respectsDragLineType(line)) return
     // ドラッグ中の通過：handleLineEnter 経由（line ドラッグの補間は Canvas 側）
     onLineEnter(line.row, line.col, line.isVertical)
@@ -134,7 +154,14 @@ const Grid = ({
     e.preventDefault()
     e.stopPropagation()
     const line = pickLineFromEvent(e)
-    if (!line) return
+    if (!line) {
+      if (activeTool === TOOLS.ERASER) {
+        const cell = pickCellFromEvent(e)
+        if (!cell) return
+        onGridRightClick(cell.row, cell.col, false)
+      }
+      return
+    }
     if (!respectsDragLineType(line)) return
     onLineRightClick(line.row, line.col, line.isVertical, e)
   }
